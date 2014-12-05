@@ -19,33 +19,12 @@
 \removepagenumbers
 \maketitle
 \mainmatter
-\section*{Preliminaries}
+\section*{Introduction}
 
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris
-purus. Fusce tempor. Nulla facilisi. Sed at turpis. Phasellus eu
-ipsum. Nam porttitor laoreet nulla. Phasellus massa massa, auctor
-rutrum, vehicula ut, porttitor a, massa. Pellentesque fringilla. Duis
-nibh risus, venenatis ac, tempor sed, vestibulum at, tellus. Class
-aptent taciti sociosqu ad litora torquent per conubia nostra, per
-inceptos hymenaeos. Aliquam ligula lectus, volutpat in, rutrum sit
-amet, ultrices at, elit. Aenean consequat facilisis sapien. Nulla
-auctor, wisi vel semper ornare, augue augue facilisis turpis, a
-laoreet quam libero quis erat. Vestibulum sagittis. Duis blandit
-laoreet tortor. Nulla mattis. Morbi eget turpis. Praesent mi. Nunc
-enim leo, blandit ut, sagittis at, pharetra sit amet, dui. Praesent
-porta tortor a ligula rutrum dapibus.
+Many good developers agree that modular development is an important factor of successful software development. To break systems up in modules and having these modules be responsible and take care of well defined tasks enable programmers to develop their products in a more controlled and reliable way. Solving problems in the context of a module with a single responsibility is simpler than solving problems in a context which also does many other things. Furthermore, modules are easy to reuse in many different projects due to the single responsibility nature of modules. Again, many developers have seen the benefits of using modules and as of writing this text there are millions of modules (also called plugins, libraries, components, etc.) online for the world to use. Most development environments enable developers to work in a modular way and usually encourages it. Web programmers are used to using third-party libraries and components to build complex web apps with modular interfaces (i.e. views that consists of smaller modular views).
 
-Integer pellentesque, orci consequat suscipit pharetra, sem eros
-tempor orci, non ultricies massa justo vitae nunc. Nunc sagittis.
-Vestibulum egestas quam at eros. Curabitur consectetuer, magna vel
-gravida varius, tortor augue congue tellus, quis gravida nulla risus
-nec diam. Aliquam commodo dapibus risus. Vestibulum lacinia lectus sed
-nisl. Sed libero purus, tincidunt non, sagittis nec, sodales quis,
-nulla. Sed tortor tortor, viverra et, hendrerit eu, accumsan
-sollicitudin, mi. Suspendisse potenti. Maecenas non wisi sed urna
-mollis dignissim. Aenean at ligula. Vestibulum porta. Donec mauris.
-Donec scelerisque rutrum elit. Aenean ultrices, eros vel sollicitudin
-semper, dui lacus hendrerit metus, id ultricies arcu arcu id mi. In
-eget sapien sed lorem cursus eleifend.
+With the rise of smartphones and tablets, web developers realized that they needed a good way of having their websites adapt to the different devices. The solution came to be responsive web design, which is a technique to make websites react and adapt to the screen size of the viewport, so that the website elements are displayed in a customized way for different viewport sizes. This enables big desktop websites to shrink to smaller and mobile friendly versions when the browser window is resized. This was a huge breakthrough in web development and responsive web design is more popular than ever. The idea of having components and modules morph to more suitable designs given a size is amazing. It is just too bad that the current implementation of responsive web design only takes the viewport into consideration. This limits web developers to build truly modular and responsive interfaces.
+
+Imagine a website displaying a news feed. Each post of the news feed contains a lot of information; title, body, location, time, source, author, etc. The app is responsive, so that when the news feed is viewed on a small screen (less than 600 pixels wide for example) only the important information is shown to the user; title and body. The news feed is a module, so it can easily be integrated into other web apps. But what if another web app just want to have the smaller version of the news feed? If the web app put the news feed module in a container less than 600 pixels wide the news feed would react to the small width and adapt itself to the smaller version, right? Unfortunately not. This is the issue I would like to address in my master thesis. Writing responsive modules that can adapt to parent element sizes instead of viewport sizes is a natural step forward in responsive web design. This way web developers would truly be able to build and use modular web components.
 
 \end{document}
