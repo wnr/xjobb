@@ -6,6 +6,7 @@
 \usepackage[swedish,english]{babel}
 \usepackage{modifications}
 \usepackage{listings}
+\usepackage{hyperref}
 \title{Modular responsive web design}
 
 \subtitle{Allowing responsive web modules to respond to custom criterias instead of only viewport size by implementing \emph{element queries}}
@@ -46,5 +47,45 @@ Web developers are today limited to writing big applications in an entagled mess
 The last couple of years a lot of articles have been written about the problem and how badly we need element queries. As already stated, third-party implementation efforts have been made by small and big players, with moderate success. W3C keep getting requests and questions about it, but the answer seems to lean towards no. An organization called Responsive Issues Community Group (RICG) have started an initial planning regarding element queries. However, things are moving slow and a draft about element queries use cases are still being made.
 
 Solving this problem would push to web forward a big leap, enabling developers to create truly modular components. By studying the problem, identifying approaches and providing a third-party solution the community can take a step closer to solve the problem. If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for W3C to make their verdict. The outcome of this thesis can also be helpful for W3C and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
+
+\section*{Literature study}
+Since the problem is relatively new and unique for the web, my main literature will be web articles and W3C mailing lists. There are many experienced individuals writing good articles about the problem and mostly discusses how an API can look like. The W3C mailing lists are a good resource to get insight into how the browser vendors view the problem. To investigate third-party implementation approaches, I will read the implementation attempts that I can find. To understand the issues with implementing the problem better, I will read books, scientific papers and articles covering how rendering engines work. To solve the circular problems of the third-part implementation I will read scientific papers and articles how other languages have solved similar problems. To make sure I fully understand responsive web development I will read books about the subject. To support my claims that modular development is a good thing, I will research scientific papers and books.
+
+\subsection*{Current literature}
+\emph{This is the literature that I have so far.}
+\subsubsection*{Books}
+\begin{itemize}
+\item Tim Kadlec. Implementing Responsive Design: Building sites for an anywhere, everywhere web. New Riders, 2012.
+\item Frain, Ben. Responsive Web Design with HTML5 and CSS3. Packt Publishing, 2012.
+\end{itemize}
+\subsubsection*{Scientific papers and reports}
+\begin{itemize}
+\item Jerjas, Allan. Building Blocks of Responsive Web Design. KTH, 2013. \url{http://kth.diva-portal.org/smash/get/diva2:699709/FULLTEXT01.pdf}
+\item Tobias Sundqvist, Christoffer Wåhlander. Applikationsutveckling i Responsive Web Design. LIU, 2013. \url{http://liu.diva-portal.org/smash/get/diva2:628224/FULLTEXT01.pdf}
+\item Christopher Grant Jones, Rose Liu, Leo Meyerovich, Krste Asanovic, Rastislav Bodík. Parallelizing the Web Browser. Department of Computer Science, University of California, Berkeley, 2009. \url{https://www.usenix.org/legacy/event/hotpar09/tech/full_papers/jones/jones_html/}
+\item Calin Cas¸caval Seth Fowler Pablo Montesinos Ortego Wayne Piekarski Mehrdad Reshadi Behnam Robatmili Michael Weber Vrajesh Bhavsar. ZOOMM: A Parallel Web Browser Engine for Multicore Mobile Devices. Qualcomm Research Silicon Valley, 2013. \url{http://instartlogic.com/resources/research_papers/mreshadi-zoomm-sigplan2013.pdf}
+\item Alan Grosskurth, Michael W. Godfrey. Architecture and evolution of the
+modern web browser. David R. Cheriton School of Computer Science, University of Waterloo, Waterloo, ON N2L 3G1, Canada, 2006. \url{http://plg.uwaterloo.ca/~migod/papers/2006/jss-browserRefArch.pdf}
+\item Helen J. Wang, Chris Grier, Alexander Moshchuk, Samuel T. King, Piali Choudhury, Herman Venter. Microsoft Research, University of Illinois at Urbana-Champaign, University of Washington, 2009. \url{https://www.usenix.org/legacy/event/sec09/tech/full_papers/wang.pdf}
+\item Lingjun Fan, Weisong Shi, Shibin Tang, Chenggang Yan2 Dongrui Fan. Chinese Academy of Sciences, Wayne State University, 2011. \url{http://ieeexplore.ieee.org.focus.lib.kth.se/stamp/stamp.jsp?tp=&arnumber=6118943&tag=1}
+\end{itemize}
+\subsubsection*{Articels}
+\begin{itemize}
+\item Christopher Grant Jones, Rose Liu, Leo Meyerovich, Krste Asanovic, Rastislav Bodik. The Berkeley Par Lab: Progress in the Parallel Computing Landscape. Chapter 2, Parallelizing the Web Browser. Microsoft Research, The Berkeley Par Lab, 2009. \url{http://research.microsoft.com/en-us/um/redmond/about/collaboration/par-lab-book/chapter-2.pdf}
+\item Carmen Badea, Mohammad R. Haghighat, Alexandru Nicolau, Alexander V. Veidenbaum. Towards Parallelizing the Layout Engine of Firefox. UC Irvine, Intel Corporation, 2010. \url{https://www.usenix.org/legacy/event/hotpar10/tech/full_papers/Badea.pdf}
+\item Tali Garsiel, Paul Irish. How Browsers Work: Behind the scenes of modern web browsers. html5rocks, 2011. \url{http://www.html5rocks.com/en/tutorials/internals/howbrowserswork/}
+\item Dave Hyatt. Layout and Rendering. The WebKit Open Source Project, 2007. \url{http://www.webkit.org/projects/layout/index.html}
+\end{itemize}
+
+\subsubsection{Other}
+\begin{itemize}
+\item Francois Remy. The :min-width/:max-width pseudo-classes. W3C mailing list, 2013. \url{https://lists.w3.org/Archives/Public/www-style/2013Mar/0368.html}
+\item Kevin Mack. Element Query and Selector Media Query Types. W3C mailing list, 2014. \url{https://lists.w3.org/Archives/Public/public-respimg/2014Oct/0005.html}
+\item Responsive Issues Community Group element queries use discussion repository. \url{https://github.com/ResponsiveImagesCG/eq-usecases}. Creating the use cases draft: \url{https://responsiveimagescg.github.io/eq-usecases/}
+\end{itemize}
+
+In addition to the listed literature, I have found numerous web articles regarding element queries. There are around 10 unique open source implementation attempts of element queries to examine. I am still searching for good literature regarding render engines and why element queries are hard to implement natively.
+
+TODO: Write how the literature study will be examined.
 
 \end{document}
