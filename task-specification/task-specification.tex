@@ -7,12 +7,15 @@
 \usepackage{modifications}
 \usepackage{listings}
 \usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage[figuresleft]{rotating}
+\usepackage{geometry}
 \title{Modular responsive web design}
 
 \subtitle{Allowing responsive web modules to respond to custom criterias instead of only viewport size by implementing \emph{element queries}}
 \author{Lucas Wiener \\ \lowercase{lwiener@kth.se}}
 \date{January 2015}
-\blurb{Master's Thesis task specifikation\\\hfill\\ Supervisors at \textsc{evry ab}: Tomas Ekholm \& Stefan Senner\"{o}\\Supervisor at \textsc{csc}: Philipp Haller\\Examiner: Mads Dam}
+\blurb{Master's Thesis task specification\\\hfill\\ Supervisors at \textsc{evry ab}: Tomas Ekholm \& Stefan Senner\"{o}\\Supervisor at \textsc{csc}: Philipp Haller\\Examiner: Mads Dam}
 \trita{}
 \begin{document}
 \frontmatter
@@ -108,5 +111,28 @@ The focus of the thesis lays on developing a third-party framework that realizes
 \item \textsc{ui} and \textsc{ux} design will not be addressed, other than necessary for understanding the problem.
 \item No complete history of browsers, the Internet or responsive web design will be given other than neccesary.
 \end{itemize}
+
+\section*{Timetable}
+The work can be divided into 4 stages:
+\begin{itemize}
+\item \textbf{Literature study:} Search for suitable literature and sources will be performed in 2 weeks (a big part of the literature study has already been done before the writing of this document). Total time of literature study is estimated to 4 weeks.
+\item \textbf{Background:} The background of the problem will be investigated by reading the literature. The background will mainly address responsive web design and modular development.
+\item \textbf{Theory:} In this part the theory will be addressed. Here I will find out what element queries really are and how they relate to \textsc{css} and \textsc{html}. The most time will be spent investigating how rendering engines work and why element queries are hard to implement.
+\item \textbf{Third-party framework:} Here an analyse will be done of different implementation approaches and other implementation attempts will be investigated. The biggest time of this stage will be dedicated to designing an API and implementing the actual framework.
+\end{itemize}
+
+Report writing will occur in parallel to all the stages, as shown in figure~\ref{fig:timetable}.
+
+\clearpage
+\newpage
+
+\newgeometry{left=3cm,top=0.7cm}
+\begin{sidewaysfigure}
+\centering
+\includegraphics{timetable}
+\caption{Box plot of number of positions sent per iteration using this scheme}
+\label{fig:timetable}
+\end{sidewaysfigure}
+\restoregeometry
 
 \end{document}
