@@ -3,9 +3,12 @@
 \usepackage{textcomp}
 \usepackage{lmodern}
 \usepackage[utf8]{inputenc}
+\usepackage{csquotes}
 \usepackage[swedish,english]{babel}
 \usepackage{modifications}
+\usepackage[backend=biber]{biblatex}
 
+\bibliography{bibliography.bib}
 \title{Modular responsive web design}
 \foreigntitle{Modulär responsiv webbutveckling}
 \subtitle{Allowing responsive web modules to respond to custom criterias instead of only viewport size by implementing \emph{element queries}}
@@ -14,71 +17,79 @@
 \blurb{Master's Thesis at \textsc{csc}\\\hfill\\ Supervisors at \textsc{evry ab}: Tomas Ekholm \& Stefan Sennerö\\Supervisor at \textsc{csc}: Philipp Haller\\Examiner: Mads Dam}
 \trita{TRITA xxx yyyy-nn}
 \begin{document}
-\frontmatter
-\pagestyle{empty}
-\removepagenumbers
-\maketitle
-\selectlanguage{english}
-\begin{abstract}
-\end{abstract}
-\clearpage
-\begin{foreignabstract}{swedish}
-\end{foreignabstract}
-\clearpage
-\tableofcontents*
-\mainmatter
-\pagestyle{newchap}
-\chapter{Introduction}
+  \frontmatter
+  \pagestyle{empty}
+  \removepagenumbers
+  \maketitle
+  \selectlanguage{english}
+  \begin{abstract}
+    Abstract goes here.
+  \end{abstract}
+  \clearpage
+  \begin{foreignabstract}{swedish}
+    Sammanfattning ska vara här.
+  \end{foreignabstract}
+  \clearpage
+  \tableofcontents*
+  \mainmatter
+  \pagestyle{newchap}
+  \chapter{Introduction}
+    \section{Targeted audience}
+    \section{Problem statement}
+    \section{Objective}
+    \section{Methodology}
+    \section{Delimitations}
+    \section{Outline}
+  \part{Background}
 
-\section{Targeted audience}
+    \chapter{Browsers} 
+      Browsers and the Internet is something that many people today take for granted.
+      It is not longer the case that only computer scientists are browsing the web.
+      Today the web is becoming increasingly important in both our personal and professional lives.
+      This chapter will give a brief history of browsers and the rise of the web.
+      It will also cover the role of browsers today, and what can be expected in the future. \cite{internetsociety_history_internet}
+      \section{The origin of the web}
+        Before addressing the birth of the web, lets define the meaning of the the concepets of the \emph{Internet}, \emph{Web} and \emph{World Wide Web}.
+        The word internet can be translated to \emph{something between networks}. 
+        When referring to \emph{the Internet} (capitalized) it is usually the global decentralized internet used for communication between millions of networks using \textsc{tcp/ip}.
+        Since the Internet is decentralized, there is no owner.
+        Or in other words, the owners are all the network end-points which means all users of the Internet.
+        One can argue that the owners of the Internet are the ISP's, providing the services and infrastructure making the Internet possible.
+        On the other hand, the backbones of the Internet are usually co-founded by countries and companies.
+        Or is it the ICANN organization which has the responsibility for managing the IP addresses in the Internet namespace?
+        Clearly, the Internet wouldn't be what it is today without all the actors.
+        The Internet lays the ground for many systems and applications, including the World Wide Web, file sharing and telephony.
+        In 2014 the number of Internet users was measured to just below 3 billions, and estimations shows that we have surpassed 3 billions users today (no report for 2015 has been made yet) \cite{internet_live_stats}.
+        Users are here defined as humans having unrestricted acccess to the Internet \cite{internet_live_stats}.
+        If one instead measures the number of connected entities (electronic devices that communicates through the Internet) the numbers are much higher.
+        An estimation for 2015 of 25 billions connected entities has been made, and the estimation for 2020 is 50 billions \cite{internet_of_things}.
+        
+        As already stated, the Word Wide Web (abbreviated WWW or W3) is 
 
-\section{Problem statement}
-
-\section{Objective}
-
-\section{Methodology}
-
-\section{Delimitations}
-
-\section{Outline}
-
-\part{Background}
-
-\chapter{Browsers}
-
-\chapter{Web development}
-
-\chapter{Modular development}
-
-\part{Theory}
-
-\chapter{Rendering engines}
-
-\chapter{Element queries}
-
-\part{Third-party framework}
-
-\chapter{Analysis of approaches}
-
-\section{Current implementations}
-
-\chapter{API design}
-
-\chapter{Implementation}
-
-\part{Result}
-\chapter{Discussion}
-
-\appendix
-\addappheadtotoc
-\chapter{RDF}\label{appA}
-
-\begin{figure}[ht]
-\begin{center}
-And here is a figure
-\caption{\small{Several statements describing the same resource.}}\label{RDF_4}
-\end{center}
-\end{figure}
-
-that we refer to here: \ref{RDF_4}
+    \chapter{Web development}
+      \section{From documents to applications}
+      \section{Responsive web design}
+    \chapter{Modular development}
+      \section{Web Components}
+  \part{Theory}
+    \chapter{Rendering engines}
+    \chapter{Element queries}
+  \part{Third-party framework}
+    \chapter{Analysis of approaches}
+    \section{Current implementations}
+    \chapter{API design}
+    \chapter{Implementation}
+  \part{Result}
+    \chapter{Discussion}
+  \printbibliography
+  \appendix
+  \addappheadtotoc
+  \chapter{RDF}\label{appA}
+    \begin{figure}[ht]
+      \begin{center}
+        And here is a figure
+        \caption{\small{Several statements describing the same resource.}}\label{RDF_4}
+      \end{center}
+    \end{figure}
+  that we refer to here: \ref{RDF_4}
 \end{document}
