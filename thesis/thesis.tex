@@ -8,6 +8,27 @@
 \usepackage{modifications}
 \usepackage[backend=biber]{biblatex}
 
+\newenvironment{metatext}{%
+  \textbf{$\hookrightarrow$}
+  \begin{itshape}
+}{
+  \end{itshape}
+  \newline
+  \newline
+  \useignorespacesandallpars
+}
+
+\def\useignorespacesandallpars#1\ignorespaces\fi{%
+#1\fi\ignorespacesandallpars}
+
+\makeatletter
+\def\ignorespacesandallpars{%
+  \@ifnextchar\par
+    {\expandafter\ignorespacesandallpars\@gobble}%
+    {}%
+}
+\makeatother
+
 \bibliography{bibliography.bib}
 \title{Modular responsive web design}
 \foreigntitle{Modulär responsiv webbutveckling}
@@ -75,13 +96,20 @@
       Multiple related pages compose a \emph{web site} or simply a \emph{site} and are usually hosted from the same domain \cite{oed}.
       To transfer the resources between computers the protocol \textsc{HTTP} is used.
       Typically the way of retrieving resources on the web is by using a \emph{web browser} or simply a \emph{browser}.
-      Browsers handeles the fetching, parsing and rendering of the hypertext (more about this in section~\ref{sec:browsers}).
+      Browsers handles the fetching, parsing and rendering of the hypertext (more about this in section~\ref{sec:browsers}).
       
       \section{The origin of the web}
-        
+        \begin{metatext}
+          Since the web is a system operating on top of the Internet, it is needed to first investigate the origin of the Internet.
+          This can be viewed from many angles and different aspects need to be taken into consideration.
+          With that in mind, the origin of the Internet is not something easily pinned down and what will be presented here will be more of a technically interesting history.
+        \end{metatext}
+
+        In the early 1960's \emph{packet switching} was being researched, which is a fundamental networking technology behing the Internet \cite{overview_of_tcp_ip}.
+        An important ancestor of the Internet is the Advanced Research Projects Agency Network (\textsc{arpanet}) which was the first network to implement the \textsc{tcp/ip} protocol suite.
+        The \textsc{tcp/ip} protocol suite together with packet switching made \textsc{arpanet} the foundation of the Internet.
       \section{The need for browsers}
       \label{sec:browsers}
-
 
     \chapter{Web development}
       \section{From documents to applications}
