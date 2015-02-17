@@ -7,6 +7,7 @@
 \usepackage[swedish,english]{babel}
 \usepackage{modifications}
 \usepackage[backend=biber]{biblatex}
+\bibliography{bibliography.bib}
 
 \newenvironment{metatext}{%
   \textbf{$\hookrightarrow$}
@@ -29,7 +30,6 @@
 }
 \makeatother
 
-\bibliography{bibliography.bib}
 \title{Modular responsive web design}
 \foreigntitle{Modulär responsiv webbutveckling}
 \subtitle{Allowing responsive web modules to respond to custom criterias instead of only viewport size by implementing \emph{element queries}}
@@ -64,11 +64,13 @@
   \part{Background}
 
     \chapter{Browsers} 
-      Browsers and the Internet is something that many people today take for granted.
-      It is not longer the case that only computer scientists are browsing the web.
-      Today the web is becoming increasingly important in both our personal and professional lives.
-      This chapter will give a brief history of browsers and the rise of the web.
-      It will also cover the role of browsers today, and what can be expected in the future.
+      \begin{metatext}
+        Browsers and the Internet is something that many people today take for granted.
+        It is not longer the case that only computer scientists are browsing the web.
+        Today the web is becoming increasingly important in both our personal and professional lives.
+        This chapter will give a brief history of browsers and the rise of the web.
+        It will also cover the role of browsers today, and what can be expected in the future.
+      \end{metatext}
 
       Before addressing the birth of the web, lets define the meaning of the concepets of the \emph{Internet}, \emph{Web} and \emph{World Wide Web}.
       The word internet can be translated to \emph{something between networks}. 
@@ -94,7 +96,7 @@
       Therefore, the web is both the system enabling sharing of hypermedia and also all of the accessible hypermedia itself \cite{w3c_www}.
       Hypertext documents are today more known by the name \emph{web pages} or simply \emph{pages} \cite{oed}.
       Multiple related pages compose a \emph{web site} or simply a \emph{site} and are usually hosted from the same domain \cite{oed}.
-      To transfer the resources between computers the protocol \textsc{HTTP} is used.
+      To transfer the resources between computers the protocol \textsc{http} is used.
       Typically the way of retrieving resources on the web is by using a \emph{web browser} or simply a \emph{browser}.
       Browsers handles the fetching, parsing and rendering of the hypertext (more about this in section~\ref{sec:browsers}).
       
@@ -114,6 +116,7 @@
     \chapter{Web development}
       \section{From documents to applications}
       \section{Responsive web design}
+      \section{Modularity}
     \chapter{Modular development}
       \section{Web Components}
   \part{Theory}
