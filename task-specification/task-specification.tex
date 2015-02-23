@@ -91,11 +91,39 @@ In addition to the listed literature, numerous web articles has been found regar
 
 The literature study will be examined by a verbal presentation to Philipp Haller (supervisor at \textsc{csc}).
 
+\section*{Related work}
+The \textsc{ccss} language proposed in the \emph{Constraint cascading style sheets for the web} report provides a formal specification to \textsc{css} (and extensions) which element queries would be easy to build upon.
+It is not directly stated in the report that element queries are supported (since only a subset of \textsc{css} has been described), but the language construction itself is appealing to element queries.
+One of the objectives to \textsc{ccss} is to enable \textsc{css} selectors to arbitrary elements, not only parent elements.
+That, along with the powerful constraints syntax makes it a good environment for element queries.
+However, one of the premises for the thesis is to make element queries work in existing browsers.
+Since \textsc{ccss} is not a recommended standard today (or even fully constructed), the \textsc{ccss} ground will only be interesting to build upon on a theoretical level.
+If element queries could be expressed in the syntax of \textsc{ccss}, it could be easier to understand the problems and implications of element queries since it then exists a formal description of it.
+Since the \textsc{css} language itself doesn't impose any cyclic rules, it is unclear how one would handle cyclic element queries in \textsc{ccss}.
+Due to the behavior of the constraints solver algorithm (merging the selector matching and layouting phase) a cycle can easily be identified when the solver doesn't find any solutions.
+
+The Flapjax language descibed in \emph{Flapjax: a programming language for Ajax applications} is relevant due to it's handling of cyclic data flows.
+They describe various algorithms to detect cycles in directed graphs.
+Since element queries will indirectly create directed style dependency graphs, the algorithms described in the paper can be useful.
+Cycle detection in element queries may differ in the sense that the whole graph is not controllable (as the graph exists both in JavaScript and CSS) which means that the whole graph cannot be traversed.
+One way to overcome this limitation would be to parse the CSS and construct the whole rule dependency graph in JavaScript, thus making it fully traversable.
+This way the algorithms described in the Flapjax paper can be applied.
+However, it might be a better option to simply detect cycles by letting the cycles loop an amount of times and have the element query framework detect that the same rules has been applied back and forth frequently.
+
+There are numerous informal and unofficial implementation attempts and discussions about element queries, which of course will be of great use.
+The \textsc{ricg} will be a good resource to read and discuss how native element queries would look like.
+The mailing lists of \textsc{w3c} will also be a good resource to gain insight into the performance problems that native element queries might bring, as well as a deeper understanding of rendering engines.
+
 \section*{Methodology}
-A theoretical study of the problem and rendering engines will be performed in order to understand the premises and limitations of implementing element queries in browsers. When a deep understanding of the problem has been acquired, a third-party framework shall be developed. A study of implementation attempts will be made and a comparison of approaches will be presented. Then the \textsc{api} will be designed and implemented. Studies of the subproblems that may arise during the implementation will be studied in parallel to the implementation.
+A theoretical study of the problem and rendering engines will be performed in order to understand the premises and limitations of implementing element queries in browsers.
+When a deep understanding of the problem has been acquired, a third-party framework shall be developed.
+A study of implementation attempts will be made and a comparison of approaches will be presented.
+Then the \textsc{api} will be designed and implemented.
+Studies of the subproblems that may arise during the implementation will be studied in parallel to the implementation.
 
 \section*{Boundaries}
-The focus of the thesis lays on developing a third-party framework that realizes element queries. All theoretical studies and work will be performed to support the development of the framework.
+The focus of the thesis lays on developing a third-party framework that realizes element queries.
+All theoretical studies and work will be performed to support the development of the framework.
 
 \subsection*{What will be done}
 \begin{itemize}
