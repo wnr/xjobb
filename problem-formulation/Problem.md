@@ -10,8 +10,12 @@ The HTML code for the module is the following:
 ```html
 <div class="very-simple">
     <h1>Simple module</h1>
-    <h4 class="show-big">This text will only be shown when module is <b>big</b>.</h4>
-    <h4 class="show-small">This text will only be shown when module is <b>small</b>.</h4>
+    <h4 class="show-big">
+        This text will only be shown when module is <b>big</b>.
+    </h4>
+    <h4 class="show-small">
+        This text will only be shown when module is <b>small</b>.
+    </h4>
     <p>Will be colored red when small and blue when big.</p>
 </div>
 ```
@@ -130,8 +134,12 @@ The HTML of the module will look like this:
 ```html
 <div class="very-simple" elq elq-breakpoints elq-breakpoints-width="500">
     <h1>Simple module</h1>
-    <h4 class="show-big">This text will only be shown when module is <b>big</b>.</h4>
-    <h4 class="show-small">This text will only be shown when module is <b>small</b>.</h4>
+    <h4 class="show-big">
+        This text will only be shown when module is <b>big</b>.
+    </h4>
+    <h4 class="show-small">
+        This text will only be shown when module is <b>small</b>.
+    </h4>
     <p>Will be colored red when small and blue when big.</p>
 </div>
 ```
