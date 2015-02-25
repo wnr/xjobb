@@ -106,17 +106,68 @@
           Since the web is a system operating on top of the Internet, it is needed to first investigate the origin of the Internet.
           This can be viewed from many angles and different aspects need to be taken into consideration.
           With that in mind, the origin of the Internet is not something easily pinned down and what will be presented here will be more of a technically interesting history.
-          This section is a summary of \normalfont{\cite{overview_of_tcp_ip}\cite{internetsociety_history_internet}}.
+          This section is a summary of \normalfont{\cite{overview_of_tcp_ip}\cite{internetsociety_history_internet}\cite{internet_maps}\cite{historyofthings_internet}}.
         \end{metatext}
 
-        In the early 1960's \emph{packet switching} was being researched, which is a fundamental networking technology behing the Internet.
+        In the early 1960's \emph{packet switching} was being researched, which is a prerequisite of internetworking.
         With packet switching in place, the very important ancestor of the Internet \textsc{arpanet} (Advanced Research Projects Agency Network) was developed, which was the first network to implement the \textsc{tcp/ip} protocol suite.
         The \textsc{tcp/ip} protocol suite together with packet switching are fundamental technologies of the Internet.
-        \textsc{arpanet} was funded by the United States Department of Defense in order (DoD) to interconnect their research sites in the United States.
-        The first nodes of \textsc{arpanet} was installed at four major universities in the western United States in 1969.
-        In 1971 the network spanned the whole country and had in 1973 connections to Europe.
+        \textsc{arpanet} was funded by the United States Department of Defense (DoD) in order to interconnect their research sites in the United States.
+        The first nodes of \textsc{arpanet} was installed at four major universities in the western United States in 1969 and two years later the network spanned the whole country.
         The first public demonstration of \textsc{arpanet} was held at the International Computer Communication Conference (ICCC) in 1972.
         It was also at this time the email system was introduced, which became the largest network application for over a decade.
+        In 1973 the network had international connections to Norway and London via a sattelite link.
+        At this time information was exchanged with the File Transfer Protocol (\textsc{ftp}), which is a protocol to transfer files between hosts.
+        This can be viewed as the first generation of the Internet. With around 40 nodes, operating with raw file transfers between the hosts it was mostly used by the academic community of the United States.
+
+        The number of nodes and hosts of \textsc{arpanet} increased slowly, mainly due to the fact that it was a centralized network owned and operated by the \textsc{us} military.
+        In 1974 the \textsc{tcp/ip} stack was proposed in order to have a more robust and scalable system for end-to-end network communication.
+        The \textsc{tcp/ip} stack is a key technology for the decentralization of the \textsc{arpanet}, to allow the massive expandation of the network that later happened.
+        In 1983 \textsc{arpanet} switched to the \textsc{tcp/ip} protocols, and the network was split in two.
+        One network was still called \textsc{arpanet} and was to be used for research and development sites.
+        The other network was called \textsc{milnet} and was used for military purposes.
+        The decentralization event was a key point and perhaps the birth of the Internet.
+        The Computer Science Network (\textsc{csnet}) was funded by the National Science Foundation (\textsc{nsf}) in 1981 to allow networking benefits to academic insitutions that could not directly connect to \textsc{arpanet}.
+        After the event of decentralizing \textsc{arpanet}, the two networks were connected among many other networks.
+        In 1985 \textsc{nsf} started the National Science Foundation Network (nsfnet) program to promote advanced research and education networking in the \textsc{us}.
+        To link the supercomputing centers funded by \textsc{nsf} the \textsc{nsfnet} serverd as a high speed and long distance backbone network.
+        As more networks and sites were linked by the \textsc{nsfnet} network, it became the first backbone of the Internet.
+        In 1992, around 6000 networks were connected to the \textsc{nsfnet} backbone with many international networks.
+        To this point, the Internet was still a network for scientists, academic institutions and technology enthusiasts.
+        Mainly, because \textsc{nsf} had stated that \textsc{nsfnet} was a network for non-commercial traffic only.
+        In 1993 \textsc{nsf} decided to go back to funding research in supercomputing and high-speed communcations instead of funding and running the Internet backbone.
+        That, along with an increasing preassure of commercializing the Internet let to another key event in the history of the Internet - the privatization of the \textsc{nsfnet} backbone.
+
+        In 1994, the \textsc{nsfnet} was systematically privatized while making sure that no actor owned too much of the backbone in order to create constructive market competition.
+        With the Internet decentralized and privatized regular people started using it as well as companies.
+        Backbones were built across the globe, more international actors and organizations appeared and eventually the Internet as we know it today came to exist.
+
+        \subsection{The World Wide Web}
+          \begin{metatext}
+            Now that the history of the Internet has been described, it is time to talk about the birth of the World Wide Web.
+            Here the initial ideas of the web will be described, the alternatives and how it became a global standard.
+            This subsection is a summary of \normalfont{\cite{wiki_www}\cite{wiki_gopher}\cite{webdevnotes_history_of_the_internet}\cite{webdevnotes_www_basics}\cite{historyofthings_internet}}.
+          \end{metatext}
+
+          Recall that the way of exchanging information was to upload and download files between clients and hosts with \textsc{ftp}.
+          If a document downloaded was referring to another document, the user had to manually find the server that hosted the other document and download it manually.
+          This was a poor way of digesting information and documents that linked to other resources.
+          In 1989 a proposal for a communication system that allowed interlinked documents was submitted to the management at \textsc{cern}.
+          The idea was to allow links embedded in text documents, to enable users to view the linked document by clicking it.
+          A quote from the draft:
+          \begin{quote}
+            Imagine, then, the references in this document all being associated with the network address of the thing to which they referred, so that while reading this document you could skip to them with a click of the mouse.
+          \end{quote}
+          This catches the whole essence of the web in a sentence --- to interlink resources in an user friendly way.
+          The proposal describes that such text embedded links would be hypertext.
+          It continues to explain that interlinked resources does not need to be limited to text documents, multimedia such as images and videos can also be interlinked which would similarly be hypermedia.
+          The concept of browsers is described, with a client-server model the browser would fetch the hypertext documents, parse them and handle the fetching of all media linked in the hypertext.
+
+          In 1990, the Hypertext Transfer Protocol (\textsc{http}), the Hypertext Markup Language (\textsc{html}), a browser and a web server had been created and the web was born.
+          One year later the web was introduced to the public and in 1993 over five hundred international web servers existed.
+          It was stated in 1994 that the web was to be free without any patents or royalties.
+          At this time the Wolrd Wide Web Consortium (\textsc{w3c}) was founded by Berners-Lee with support from the Defense Advanced Research Projects Agency and the European Commission.
+          The organization comprised of companies and individuals that wanted to standardize and improve the web.
 
       \section{The need for browsers}
       \label{sec:browsers}
