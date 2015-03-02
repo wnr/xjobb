@@ -30,12 +30,13 @@
 \section{Problem definition}
 By using \textsc{css} \emph{media queries} developers can specify different rules for different viewport sizes.
 This is fundamental to create responsive web applications.
-If developers want to build modular applications by composing the application by smaller components (elements, scripts, styles, etc.) the media queries are no longer applicable.
+If developers want to build modular applications by composing the application by smaller components (elements, scripts, styles, etc.) media queries are no longer applicable.
 Modular components should be able to react and change style depending on the given size that the component has been given by the application, not the viewport size.
 The problem can be formulated as: \emph{Elements can not specify conditional style rules depending on their own size, or the size of any other element}.
 See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
-\textsc{w}\oldstylenums{3}\textsc{c}\footnote{World Wide Web Consortium (abbreviated \textsc{w}\oldstylenums{3}\textsc{c}) is the main international standards organization for the World Wide Web.} has unofficially stated that such feature would be infeasible to implement. Some problems with implementing element queries in \textsc{css} are:
+\textsc{w3c}\footnote{World Wide Web Consortium (abbreviated \textsc{w}\oldstylenums{3}\textsc{c}) is the main international standards organization for the World Wide Web.} has unofficially stated that such feature would be infeasible to implement.
+Some problems with implementing element queries in \textsc{css} are:
 \begin{itemize}
     \item \textbf{Circularity:} The styling of elements depend on many factors (theoretically on all other elements in the layout tree).
     If elements can apply styles by criterias of other elements, it will be possible to create infinite loops of styling.
@@ -44,9 +45,13 @@ See the included document in section~\ref{sec:problem-formulation} of the append
     If this element would have another rule that set its width to 50 pixels if it is wider than 150 pixels, there is an infinite loop of styling.
     Problems like this can probably be catched during \textsc{css} parsing, but there are so many combinations of style properties that could result in similar loops that it will add a lot of complexity to the language, both for implementers and users.
     See the included document in section~\ref{sec:cyclic-rules} of the appendix for more examples and deeper discussions about cyclic rules.
-    \item \textbf{Performance:} Rendering engines typically perform selector matching and layout computations in parallel to achieve good performance. If element queries would be implemented, the rendering engines would need to first compute the layout of all elements in order to decide which selectors would conform to the element query conditions and then do a new layout computation, and so on until a stable state has been reached. Far worse, since selectors now depend on layout style, this cannot be done in parallel which impacts performance heavily.
+    \item \textbf{Performance:} Rendering engines typically perform selector matching and layout computations in parallel to achieve good performance.
+    If element queries would be implemented, the rendering engines would need to first compute the layout of all elements in order to decide which selectors would conform to the element query conditions and then do a new layout computation, and so on until a stable state has been reached.
+    Far worse, since selectors now depend on layout style, this cannot be done in parallel which impacts performance heavily.
 \end{itemize}
-Because of the problems, it is stated that such feature will not be implemented in the near future. So it is now up to the developers to implement this feature as a third-party solution. Efforts have been made by big players to create a robust implementation, with moderate success. Since all implementations have shortcomings, there is still no de facto solution that developers use and the problem remains unsolved.
+Because of the problems, it is stated that such feature will not be implemented in the near future. So it is now up to the developers to implement this feature as a third-party solution. 
+Efforts have been made by big players to create a robust implementation, with moderate success. 
+Since all implementations have shortcomings, there is still no de facto solution that developers use and the problem remains unsolved.
 
 \section{Objective}
 The main objective of my master's thesis is to develop a third-party implementation of element queries (or equivalent to solve the problem of modular responsive elements). To do this, I will need to research and understand all existing attempts and analyze the advantages and shortcomings of each approach. I will also need to be aware of the premises, such as browser limitations and specifications that need to be conformed. In addition, I will research the problems of implementing element queries natively to get a deeper understanding of how an official \textsc{api} would look like. There are many challenges along the way that will need to be researched and worked around. Examples of such subproblems that would need to be investigated are:
@@ -59,11 +64,28 @@ The main objective of my master's thesis is to develop a third-party implementat
 The scientific question to be answered is if it is possible to solve the problem  without extending the current web standard. The hypothesis is that the problem can be solved in a reliable and performant way by crafting a third-party implementation. A reliable implementation should also enable existing responsive components to react to a specified criteria (parent container size for example) with no modifications to the components. The goal of the thesis should be considered fulfilled if a solution was successfully implemented or described, or if the problems hindering a solution are thoroughly documented.
 
 \section{Significance}
-Web developers are today limited to writing big applications in an entagled mess. In almost all other programming environments it is possible and encouraged to write applications in smaller parts (or modules). By creating modules that can be used in any context with well defined responsibilities and dependencies, developing applications is reduced to the task of simply configuring modules (to some extent) to work together which forms a bigger application. It is today possible to write the web client logic in a modular way in JavaScript. The desire of writing modular code can be shown by the popularity of frameworks that helps dividing up the client code into modules. The ever so popular frameworks Angular, Backbone, Ember, Web Components, requirejs, Browserify, Polymer, React and many more all have in common that they embrace coding modular components. Many of these frameworks also help with dividing the \textsc{html} up into modules, creating small packages of style, markup and code. One of the biggest issues keeping the modules from being truly modular is that they cannot adapt to given sizes. This makes the modules either force the client to style them properly depending on viewport size, or not being responsive. Both options are undesirable for developing larger applications. A third option would be to make the modules context aware and style themselves according to the viewport, which defeats the purpose of modules (making them not reusable).
+Web developers are today limited to writing big applications in an entagled mess.
+In almost all other programming environments it is possible and encouraged to write applications in smaller parts (or modules).
+By creating modules that can be used in any context with well defined responsibilities and dependencies, developing applications is reduced to the task of simply configuring modules (to some extent) to work together which forms a bigger application.
+It is today possible to write the web client logic in a modular way in JavaScript.
+The desire of writing modular code can be shown by the popularity of frameworks that helps dividing up the client code into modules.
+The ever so popular frameworks Angular, Backbone, Ember, Web Components, requirejs, Browserify, Polymer, React and many more all have in common that they embrace coding modular components.
+Many of these frameworks also help with dividing the \textsc{html} up into modules, creating small packages of style, markup and code.
+One of the biggest issues keeping the modules from being truly modular is that they cannot adapt to given sizes.
+This makes the modules either force the client to style them properly depending on viewport size, or not being responsive.
+Both options are undesirable for developing larger applications.
+A third option would be to make the modules context aware and style themselves according to the viewport, which defeats the purpose of modules (making them not reusable).
 
-The last couple of years a lot of articles have been written about the problem and how badly we need element queries. As already stated, third-party implementation efforts have been made by small and big players, with moderate success. \textsc{w}\oldstylenums{3}\textsc{c} keep getting requests and questions about it, but the answer seems to lean towards no. An organization called Responsive Issues Community Group (abbreviated \textsc{ricg}) have started an initial planning regarding element queries. However, things are moving slow and a draft about element queries use cases are still being made.
+The last couple of years a lot of articles have been written about the problem and how badly we need element queries.
+As already stated, third-party implementation efforts have been made by small and big players, with moderate success.
+\textsc{w3c} keep getting requests and questions about it, but the answer seems to lean towards no.
+An organization called Responsive Issues Community Group (abbreviated \textsc{ricg}) have started an initial planning regarding element queries.
+However, things are moving slow and a draft about element queries use cases are still being made.
 
-Solving this problem would be a big advancement to web development, enabling developers to create truly modular components. By studying the problem, identifying approaches and providing a third-party solution the community can take a step closer to solve the problem. If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for \textsc{w}\oldstylenums{3}\textsc{c} to make their verdict. The outcome of this thesis can also be helpful for \textsc{w}\oldstylenums{3}\textsc{c} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
+Solving this problem would be a big advancement to web development, enabling developers to create truly modular components.
+By studying the problem, identifying approaches and providing a third-party solution the community can take a step closer to solve the problem.
+If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for \textsc{w3c} to make their verdict.
+The outcome of this thesis can also be helpful for \textsc{w3c} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
 
 \section{Literature study}
 Since the problem is relatively new and unique for the web, my main literature will be web articles and \textsc{w}\oldstylenums{3}\textsc{c} mailing lists. There are many experienced individuals writing good articles about the problem and mostly discusses how an \textsc{api} can look like. The \textsc{w}\oldstylenums{3}\textsc{c} mailing lists are a good resource to get insight into how the browser vendors view the problem. To investigate third-party implementation approaches, I will read the implementation attempts that I can find. To understand the issues with implementing the problem better, I will read books, scientific papers and articles covering how rendering engines work. To solve the circular problems of the third-part implementation I will read scientific papers and articles how other languages have solved similar problems. To make sure I fully understand responsive web development I will read books about the subject. To support my claims that modular development is a good thing, I will research scientific papers and books.
