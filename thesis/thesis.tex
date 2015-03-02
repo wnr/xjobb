@@ -145,8 +145,8 @@
         \subsection{The World Wide Web}
           \begin{metatext}
             Now that the history of the Internet has been described, it is time to talk about the birth of the World Wide Web.
-            Here the initial ideas of the web will be described and how it became a global standard.
-            This subsection is a summary of \normalfont{\cite{wiki_www}\cite{wiki_gopher}\cite{webdevnotes_history_of_the_internet}\cite{webdevnotes_www_basics}\cite{historyofthings_internet}}.
+            Here the initial ideas of the web will be described, the alternatives and how it became a global standard.
+            This subsection is a summary of \normalfont{\cite{wiki_gopher}\cite{wiki_www}\cite{webdevnotes_history_of_the_internet}\cite{webdevnotes_www_basics}\cite{historyofthings_internet}}.
           \end{metatext}
 
           Recall that the way of exchanging information was to upload and download files between clients and hosts with \textsc{ftp}.
@@ -169,8 +169,49 @@
           At this time the Wolrd Wide Web Consortium (\textsc{w3c}) was founded by Berners-Lee with support from the Defense Advanced Research Projects Agency and the European Commission.
           The organization comprised of companies and individuals that wanted to standardize and improve the web.
 
-      \section{The need for browsers}
-      \label{sec:browsers}
+          As a side note, the Gopher protocol was developed in parallel to the World Wide Web by the University of Minnesota.
+          It was released in 1991 and quickly gained traction as the web still was in very early stages.
+          The goal of the system, just like the web, was to overcome the shortcomings of browsing documents with \textsc{ftp}.
+          Gopher enabled servers to list the documents present, and also to link to documents on other servers.
+          This created a strong hierarchy between the documents.
+          The listed documents of a server could then be presented as hypertext menus to the client (much like a web browser).
+          As the protocol was simpled than \textsc{http} it was often preferred since it used less network resources.
+          The structure provided by Gopher provided a platform for large electronic library connections.
+          A big difference between the web and the Gopher platform is that the Gopher platform provided hypertext menus presented as a file system while the web hypertext links inside hypertext documents, which provided greater flexibility.
+          When the University of Minnesota announced that it would charge lincensing fees for the implementation, users were somewhat scared away.
+          As the web matured, being a more flexible system with more features as well as being totally free it quickly became dominant.
+
+      \section{The history of browsers}
+        \label{sec:browsers}
+        \begin{metatext}
+          In the mid 1990's the usage of the Internet transitioned from downloading files with \textsc{ftp} to instead access resources with the \textsc{http} protocol.
+          To fulfill the vision that users would be able to skip to the linked documents ``with a click of the mouse'' the users needed a client to handle the fetching and displaying of the hypertext documents, hence the need for browsers were apparent.
+          Here the evolution of the browser clients will be given, while emphasizing the timeline of the popular browsers we use today.
+          This section is a summary of \normalfont{\cite{wiki_www}\cite{wiki_nexus}\cite{wiki_lmb}\cite{wiki_libwww}\cite{wiki_mosaic}}.
+        \end{metatext}
+
+        The first web browser ever made was created in 1990 and was called WorldWideWeb (which was renamed to Nexus to avoid confusion).
+        It was at the time the only way to view the web, and the browser only worked on NeXT computers.
+        Built with the NeXT framework, it was quite sophisticated.
+        It had a \textsc{gui} and a \textsc{wysiwyg}\footnote{What You See Is What You Get is a classification that ensures that text and graphics during editing appears close to the result.} hypertext document editor.
+        Unfortunately it couldn't be ported to other platforms, so a new browser called \emph{Line Mode Browser} (\textsc{lmb}) were quickly developed.
+        To ensure compatability with the earliest computer terminals the browser displayed text, and was operated with text input.
+        Since the browser was operated in the terminal, users could log in to a remote server and use the browser via telnet.
+        The code that the two browsers shared was in 1993 bundled as a library called \emph{libwww}.
+        The library was licensed as \emph{public domain} to encourage the development of web browsers.
+        Many browsers were develop at this time.
+        The \emph{Arena} browser served as a testbed browser and authoring tool for Unix.
+        The \emph{ViolaWWW} browser was the first to support embedded scriptable objects, stylesheets and tables.
+        \emph{Lynx} is a text based browser that supports many protocols (including Gopher and \textsc{http}), and is the oldest browser still being used and developed.
+        The list of browsers of this time can be made long.
+
+        In 1993, the \emph{Mosaic} browser was released by the National Center for Supercomputing Applications (\textsc{ncsa}) which came to be the ancestor of many of the popular browsers in use today.
+        As Lynx, Mosaic also supported many different protocols.
+        Mosaic quickly became popular, mainly due to the intuitive \textsc{gui}, reliability, simple installation and Windows compatability.
+        The leader of the team that developed Mosaic, Marc Andreessen, left \textsc{ncsa} to start Mosaic Communications Corporation.
+        
+
+
 
     \chapter{Web development}
       \section{From documents to applications}
