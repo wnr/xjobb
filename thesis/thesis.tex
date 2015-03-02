@@ -74,8 +74,8 @@
         If this element would have another rule that set its width to 50 pixels if it is wider than 150 pixels, there is an infinite loop of styling.
         Problems like this can probably be catched during \textsc{css} parsing, but there are so many combinations of style properties that could result in similar loops that it will add a lot of complexity to the language, both for implementers and users.
         See the included document in section~\ref{sec:cyclic-rules} of the appendix for more examples and deeper discussions about cyclic rules.
-        \item \textbf{Performance:} Rendering engines typically perform selector matching and layout computations in parallel to achieve good performance.
-        If element queries would be implemented, the rendering engines would need to first compute the layout of all elements in order to decide which selectors would conform to the element query conditions and then do a new layout computation, and so on until a stable state has been reached.
+        \item \textbf{Performance:} layout engines typically perform selector matching and layout computations in parallel to achieve good performance.
+        If element queries would be implemented, the layout engines would need to first compute the layout of all elements in order to decide which selectors would conform to the element query conditions and then do a new layout computation, and so on until a stable state has been reached.
         Far worse, since selectors now depend on layout style, this cannot be done in parallel which impacts performance heavily.
       \end{itemize}
       Because of the problems, it is stated that such feature will not be implemented in the near future. So it is now up to the developers to implement this feature as a third-party solution. 
@@ -134,7 +134,7 @@
       \begin{itemize}
       \item A third-party implementation of element queries will be developed.
       \item The problems of implementing element queries natively will be addressed.
-      \item Theory about rendering engines, \textsc{css}, \textsc{html} and responsive web design will be given to fully understand the problem.
+      \item Theory about layout engines, \textsc{css}, \textsc{html} and responsive web design will be given to fully understand the problem.
       \end{itemize}
 
       \subsection{What will not be done}
@@ -145,7 +145,7 @@
       \item No complete history of browsers, the Internet or responsive web design will be given other than neccesary.
       \end{itemize}
     \section{Outline}
-      
+
   \part{Background}
 
     \chapter{Browsers} 
@@ -272,7 +272,7 @@
           In the mid 1990's the usage of the Internet transitioned from downloading files with \textsc{ftp} to instead access resources with the \textsc{http} protocol.
           To fulfill the vision that users would be able to skip to the linked documents ``with a click of the mouse'' the users needed a client to handle the fetching and displaying of the hypertext documents, hence the need for browsers were apparent.
           Here the evolution of the browser clients will be given, while emphasizing the timeline of the popular browsers we use today.
-          This section is a summary of \normalfont{\cite{wiki_www}\cite{wiki_nexus}\cite{wiki_lmb}\cite{wiki_libwww}\cite{wiki_mosaic}}.
+          This section is a summary of \normalfont{\cite{wiki_www}\cite{wiki_nexus}\cite{wiki_lmb}\cite{wiki_libwww}\cite{wiki_mosaic}\cite{wiki_netscape}\cite{wiki_mozilla}\cite{wiki_opera}\cite{wiki_konqueror}\cite{wiki_safari}\cite{wiki_webkit}\cite{wiki_blink}}.
         \end{metatext}
 
         The first web browser ever made was created in 1990 and was called WorldWideWeb (which was renamed to Nexus to avoid confusion).
@@ -293,9 +293,30 @@
         In 1993, the \emph{Mosaic} browser was released by the National Center for Supercomputing Applications (\textsc{ncsa}) which came to be the ancestor of many of the popular browsers in use today.
         As Lynx, Mosaic also supported many different protocols.
         Mosaic quickly became popular, mainly due to the intuitive \textsc{gui}, reliability, simple installation and Windows compatability.
-        The leader of the team that developed Mosaic, Marc Andreessen, left \textsc{ncsa} to start Mosaic Communications Corporation.
+        The company \emph{Spyglass, Inc.} licensed the browser from \textsc{ncsa} for producing their own browser 1994.
+        Around the same time the leader of the team that developed Mosaic, Marc Andreessen, left \textsc{ncsa} to start Mosaic Communications Corporation.
+        The company released their own browser named \emph{Mosaic Netscape} in 1994, which later was to be called \emph{Netscape Navigator} which was internally codenamed \emph{Mozilla}.
+        Microsoft licensed the Spyglass Mosaic browser in 1995, modified and renamed it to \emph{Internet Explorer}.
+        In 1997 Microsoft started using their own \emph{Trident} layout engine for Internet Explorer.
+        The norwegian telecommunications company \emph{Telenor} developed their own browser called \emph{Opera} in 1994, which was released 1996.
+        Internet Explorer and Netscape Navigator were the two main browsers for many years, competing for market dominance.
+        Netscape couldn't keep up with Microsoft, and was slowly losing market share.
+        In 1998 Netscape started the open source Mozilla project, which made available the source code for their browser.
+        Mozilla was to originally develop a suite of internet applications, but later switched focus to the \emph{Firefox} browser that had been created in 2002.
+        Firefox uses the \emph{Gecko} layout engine developed by Mozilla.
 
+        Another historically important browser is the \emph{Konqueror} browser developed by the free software community \textsc{kde}.
+        The browser was released in 1998 and was bundled in the \textsc{kde} Software Compilation.
+        Konqueror used the \textsc{kthml} layout engine, also developed by \textsc{kde}.
+        In 2001, when \emph{Apple Inc.} decided to build their own browser to ship with \textsc{os x}, a fork called \emph{WebKit} was made of the \textsc{khtml} project.
+        Apple's browser called \emph{Safari} was released in 2003.
+        The WebKit form was made fully open source in 2005.
+        In 2008, \emph{Google Inc.} also released a browser based on WebKit, named \emph{Google Chrome}, or shortened \emph{Chrome}.
+        The majority of the source code for Chrome was open sourced as the \emph{Chromium} project.
+        Google decided in 2013 create a fork of WebKit called \emph{Blink} for their browser.
+        Opera Software decided in 2013 to base their new version of Opera on the Chromium project, using the Blink fork.
 
+        TODO: Timeline.
 
 
     \chapter{Web development}
@@ -305,7 +326,7 @@
     \chapter{Modular development}
       \section{Web Components}
   \part{Theory}
-    \chapter{Rendering engines}
+    \chapter{layout engines}
     \chapter{Element queries}
   \part{Third-party framework}
     \chapter{Analysis of approaches}
