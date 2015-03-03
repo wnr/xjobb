@@ -7,7 +7,14 @@
 \usepackage[swedish,english]{babel}
 \usepackage{modifications}
 \usepackage[backend=biber]{biblatex}
-\usepackage[]{todonotes}
+\usepackage{todonotes}
+\usepackage{listings}
+
+\lstset{%
+  basicstyle=\footnotesize,
+  numbers=left,
+  frame=l
+}
 
 \bibliography{bibliography.bib}
 
@@ -381,6 +388,51 @@
 
         \todo{Write that traditional applications are threatened by web applications, since the reach and availability of the web is superior to any other distribution platform. Also, no installation is required with web applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
       \section{Responsive web design}
+        \begin{metatext}
+          Back in the days, web developers could make assumptions about the screen size of the users.
+          Since typically only desktop computers with monitors accessed web sites they were designed for a minimum viewport dimension.
+          If the dimension of the viewport was smaller than the supported one, the site would look broken.
+          This was a valid approach in a time when tablets and smartphones were unheard of.
+          Today, another approach is needed to ensure that sites function properly across a range of different devices and viewport dimensions.
+          This section is a summary of \normalfont{\cite{book_rwd}\cite{wiki_rwd}}.
+        \end{metatext}
+
+        According to \emph{StatCounter}\footnote{Statistics are based on aggregate data collected by StatCounter on a sample exceeding 15 billion pageviews per month collected from across the StatCounter network of more than 3 million websites.}, 37\% of the web users are visiting sites on a mobile or tablet device.
+        No longer is it valid to not support small screens.
+        Furthermore, it is understood that sites need to be styled differently if they are visisted by touch devices or mouse-based devices (such as laptops or desktops).
+        Since web developers were not ready for this rapid change of device properties, they resorted to using the same approach that they had done before --- assumptions about the user device, but this time the other way around.
+        When a browser request a resource, an agent string is usually sent with the request to identify what kind of browser the user is using.
+        By reading the agent string at server side, a mobile-friendly version of the site could be served if the user was sending mobile agent strings and the desktop version could be served otherwise.
+        The mobile version would be designed for a maximum width, and the desktop would be designed for a minimum width.
+        This was a natural reaction since no better techniques existed, but the approach has many flaws.
+        First, the developer now have two versions of a site to maintain and develop in parallel.
+        Second, this approach doesn't scale well with new devices entering the market. For instance, tablets are somewhere in the middle of mobile and laptops in size which would require another special version of the site.
+        Third, the desktop site assumes that desktop users have big screens (which in most of the times is true).
+        However, there is no guarantee that the browser viewport will be big just because the screen is big.
+        Users might want to have multiple browser windows displayed at the same time on the screen, which would break the assumptions about the layout size avaiable for the site.
+        Clearly, a better approach was needed.
+
+        With the release of \textsc{css3} \emph{media queries} new possibilities opened up.
+        Media queries enabled developers to write conditional style rules by media properties such as viewport dimension.
+        By using media queries, elements can be styled in the following manner:
+        \begin{lstlisting}[caption={The above \textsc{css} styles the body of the website blue if the viewport is less or equal to 600 pixels wide, and yellow otherwise.},captionpos=b]]
+@media screen and (max-width: 600px) {
+  body {
+    background-color: blue;
+  }
+}
+
+@media screen and (min-width: 601px) {
+  body {
+    background-color: yellow;
+  }
+}
+      \end{lstlisting}
+      This can be used to tailor a site for a specific medium or viewport size at runtime.
+      The term \emph{Responsive Web Design} (\textsc{rwd}) refers to the approach of having a single site \emph{responding} to different media properties (mainly viewport size) at runtime to improve the user experience.
+      With \textsc{rwd} it is no longer needed to maintain several versions of a site, instead the site adapts to the user medium and device.
+      
+
 
       \section{Modularity}
     \chapter{Modular development}
