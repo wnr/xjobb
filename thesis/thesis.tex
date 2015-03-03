@@ -7,6 +7,8 @@
 \usepackage[swedish,english]{babel}
 \usepackage{modifications}
 \usepackage[backend=biber]{biblatex}
+\usepackage[]{todonotes}
+
 \bibliography{bibliography.bib}
 
 \newenvironment{metatext}{%
@@ -125,7 +127,7 @@
       If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for \textsc{w3c} to make their verdict.
       The outcome of this thesis can also be helpful for \textsc{w3c} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
     \section{Methodology}
-      TODO: What should go here?
+      \todo{What should go here?}
     \section{Delimitations}
       The focus of the thesis lays on developing a third-party framework that realizes element queries.
       All theoretical studies and work will be performed to support the development of the framework.
@@ -154,7 +156,6 @@
         It is not longer the case that only computer scientists are browsing the web.
         Today the web is becoming increasingly important in both our personal and professional lives.
         This chapter will give a brief history of browsers and the rise of the web.
-        It will also cover the role of browsers today, and what can be expected in the future.
         This section is a summary of \normalfont{\cite{internet_live_stats}\cite{internet_of_things}\cite{wiki_hypermedia}\cite{w3c_www}\cite{oed}}.
       \end{metatext}
 
@@ -227,7 +228,7 @@
         With the Internet decentralized and privatized regular people started using it as well as companies.
         Backbones were built across the globe, more international actors and organizations appeared and eventually the Internet as we know it today came to exist.
 
-        \subsection{The World Wide Web}
+        \subsection{The World Wide Web}\label{sec:www}
           \begin{metatext}
             Now that the history of the Internet has been described, it is time to talk about the birth of the World Wide Web.
             Here the initial ideas of the web will be described, the alternatives and how it became a global standard.
@@ -316,12 +317,71 @@
         Google decided in 2013 create a fork of WebKit called \emph{Blink} for their browser.
         Opera Software decided in 2013 to base their new version of Opera on the Chromium project, using the Blink fork.
 
-        TODO: Timeline.
+        \todo{Timeline image and text perhaps}
 
 
     \chapter{Web development}
+      \begin{metatext}
+        As the history of browsers has been presented, it is time to understand the evolution of web development.
+        Browsers are the far most popular tools of accessing content on the web, which makes them very important in the modern society.
+        In the dawn of the web, browsers were simply applications that fetched and displayed text with embedded links.
+        Today, browsers act more like an operating system (on top of the host system), parsing and executing complex web applications.
+        There even exist computers that only run a browser, which is sufficient for many users.
+        This chapter will describe the transition from browsers rendering simple documents to being hosts for complex applications.
+        It will also describe two key evolution points in web development --- responsive web design and modular development.
+      \end{metatext}
+
+      \todo{What to write here?}
       \section{From documents to applications}
+        \begin{metatext}
+          This section will describe the transition from browsers rendering simple documents to being hosts for complex applications.
+          Since web development trends are not easily pinned to exact dates, this section will only present dates as guidance and should not be regarded as exact dates for the events.
+          This section is a summary of \normalfont{\cite{wiki_web_dev}\cite{wiki_cgi}\cite{wiki_css}\cite{wiki_ajax}\cite{wiki_html5}\cite{book_html5}}.
+        \end{metatext}
+
+        As described in section~\ref{sec:www}, browsers initially were applications that displayed hypertext documents with the ability to fetch linked documents in an user friendly way.
+        Static content were written in \textsc{html}, which could include hyperlinks to other hypertext documents or hypermedia.
+        Different stylesheet languages were being developed to enable the possibility of separating content styling with the content.
+        In 1996 \textsc{w3c} officially recommended the Cascading Style Sheets (\textsc{css}), which came to be the preferred way of styling web content.
+        Since \textsc{html} is only a markup language it is not possible to generate dynamic content, which was sufficient at the time \textsc{html} only was used for annotating links in research documents.
+
+        The need for generated dynamic content grew bigger, and \textsc{ncsa} created the first draft of the Common Gateway Interface (\textsc{cgi}) in 1993, which provides an interface between the web server and the systems that generate content.
+        \textsc{cgi} programs are usually referred to as scripts, since many of the popular \textsc{cgi} languages are script langauges.
+        To generate dynamic content on the server is sometimes referred to as \emph{serverside scriping}.
+        This enabled developers to generate dynamic websites, with different content for different users for instance.
+        However, when the content had been delivered to the client (browser) it was still static content.
+        There is no way for the server to change the content that the client has received, unless the client requests another document.
+
+        Around 1996, client side scripting was born.
+        The term Dynamic \textsc{html} (\textsc{dhtml}) was being used as an umbrella term for a collection of technologies used together to make pages interactive and animated, where client side scripting played a big role.
+        Examples of things that were being done with \textsc{dhtml} are; refreshing the pages for the user so that new content is loaded, give feedback on user input without involving the server and animating content.
+        Plugins also existed during this time, which teaches the browsers how to handle and execute programs. \emph{Java applets} and \emph{Flash} are examples of this.
+        The user then had to download the Java runtime or Flash runtime on the computer.
+        When the runtimes are present, the browser then executed the included Java applets or Flash in the web pages by using the external runtimes.
+        This enabled web developers to use ``real'' programming languages.
+        The drawback of this is that users first had to download the runtimes in order to run the programs embedded in pages.
+        As client side scripting matured and standardized into \emph{JavaScript}, plugins slowly decreased in popularity.
+        With the increase of smart devices (such as phones, televisions, cars, game consoles, etc.) which included browsers but limited third-party runtimes, plugins quickly went extinct.
+        Today, web sites rarely use plugins.
+
+        As JavaScript and \textsc{html} supported more features, websites turned into small applications with user sessions (using cookies) and user interfaces.
+        Still, parts of the applications were defined as \textsc{html} pages, fetched from the server when navigating the site.
+        When \emph{XMLHttpRequest} \textsc{api} was supported in the major browsers, pages no longer needed to reload the page to fetch new content as XMLHttpRequest enabled developers to perform asynchronous requests to the server without page reload.
+        This opened up for \emph{Ajax} web development technique which became a popular way of communicating with servers ``in the background'' of the page.
+        Developers pushed browsers and \textsc{html} to the limit when creating applications instead of documents which it was originally designed for.
+        In a \textsc{w3c} meeting in 2004 it was proposed to extend \textsc{html} to allow the creation of web applications, which was rejected.
+        \textsc{w3c} was criticized of not listening to the need of the industry, and some members of \textsc{w3c} left to create the Web Hypertext Application Technology Working Group (\textsc{whatwg}).
+        \textsc{whatwg} started working on specifications to ease the development of web applications which came to be named \textsc{html5}.
+        In 2006, \textsc{w3c} realized that \textsc{whatwg} were on the right track, and decided to start working on their own \textsc{html5} specification based on the \textsc{whatwg} version.
+        \textsc{html5} is an evolutionary improvement process of \textsc{html}, which means that browsers are adding support as parts of the specification is finished.
+
+        A new era of \textsc{api}'s and features came along with the \textsc{html5} standard, which truly enabled developers to create rich client side applications.
+        \textsc{css3} was also recently released which also included many new features.
+        Using \textsc{html5} together with \textsc{css3} developers could utilize advanced graphics programming, geolocation, cache storage, file system acccess, offline mode, and much more.
+
+        \todo{Write that traditional applications are threatened by web applications, since the reach and availability of the web is superior to any other distribution platform. Also, no installation is required with web applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
       \section{Responsive web design}
+
       \section{Modularity}
     \chapter{Modular development}
       \section{Web Components}
