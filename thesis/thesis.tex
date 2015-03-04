@@ -111,14 +111,9 @@
 
 
     \section{Significance}
-      Web developers are today limited to writing big applications in an entagled mess.
-      In almost all other programming environments it is possible and encouraged to write applications in smaller parts (or modules).
-      By creating modules that can be used in any context with well defined responsibilities and dependencies, developing applications is reduced to the task of simply configuring modules (to some extent) to work together which forms a bigger application.
-      It is today possible to write the web client logic in a modular way in JavaScript.
-      The desire of writing modular code can be shown by the popularity of frameworks that helps dividing up the client code into modules.
-      The ever so popular frameworks Angular, Backbone, Ember, Web Components, requirejs, Browserify, Polymer, React and many more all have in common that they embrace coding modular components.
-      Many of these frameworks also help with dividing the \textsc{html} up into modules, creating small packages of style, markup and code.
-      One of the biggest issues keeping the modules from being truly modular is that they cannot adapt to given sizes.
+      Many frameworks and techniques are being used in web development to keep the code from becoming an entangled mess.
+      Creating modules helps to ease development and increase reusability.
+      One of the biggest issues that keeps web modules from being truly modular is that they cannot adapt to given sizes.
       This makes the modules either force the client to style them properly depending on viewport size, or not being responsive.
       Both options are undesirable for developing larger applications.
       A third option would be to make the modules context aware and style themselves according to the viewport, which defeats the purpose of modules (making them not reusable).
@@ -427,18 +422,38 @@
     background-color: yellow;
   }
 }
-      \end{lstlisting}
-      This can be used to tailor a site for a specific medium or viewport size at runtime.
-      The term \emph{Responsive Web Design} (\textsc{rwd}) refers to the approach of having a single site \emph{responding} to different media properties (mainly viewport size) at runtime to improve the user experience.
-      With \textsc{rwd} it is no longer needed to maintain several versions of a site, instead the site adapts to the user medium and device.
-      
-
+        \end{lstlisting}
+        This can be used to tailor a site for a specific medium or viewport size at runtime.
+        The term \emph{Responsive Web Design} (\textsc{rwd}) refers to the approach of having a single site \emph{responding} to different media properties (mainly viewport size) at runtime to improve the user experience.
+        With \textsc{rwd} it is no longer needed to maintain several versions of a site, instead the site adapts to the user medium and device.
 
       \section{Modularity}
+        \begin{metatext}
+          This section is a summary of \normalfont{\cite{book_modular_programming}\cite{book_eloq_js}}.
+        \end{metatext}
+
+        By creating modules that can be used in any context with well defined responsibilities and dependencies, developing applications is reduced to the task of simply configuring modules (to some extent) to work together which forms a bigger application.
+        It is today possible to write the web client logic in a modular way in JavaScript.
+        The desire of writing modular code can be shown by the popularity of frameworks that helps dividing up the client code into modules.
+        The ever so popular frameworks \emph{Angular}, \emph{Backbone}, \emph{Ember}, \emph{Web Components}, \emph{requirejs}, \emph{Browserify}, \emph{Polymer}, \emph{React} and many more all have in common that they embrace coding modular components.
+        Many of these frameworks also help with dividing the \textsc{html} up into modules, creating small packages of style, markup and code.
+
+        \todo{Flesh this one out, with meta text.}
+
     \chapter{Modular development}
+      \todo{Remove this chapter?}
       \section{Web Components}
   \part{Theory}
     \chapter{layout engines}
+      \begin{metatext}
+        Before diving into the theory of element queries, it is important to understand how layout engines work.
+        Only the layout engines of the browser will be of importance, since element queries does not affect any other browser subsystem.
+        This chapter will give a brief explanation of the layouting flow that the engines generally perform, and how content changes affects the engine.
+        It will also cover some optimizations that are done and which parts of the layout process that can be done in parallel.
+      \end{metatext}
+
+      Browsers are complex applications that consists of many subsystems.
+
     \chapter{Element queries}
   \part{Third-party framework}
     \chapter{Analysis of approaches}
