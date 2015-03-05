@@ -457,21 +457,9 @@
 
       \todo{Make sections of this chapter?}
 
-      Browsers are complex applications that consists of many subsystems.
-      A reference architecture of browsers has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
-      It is shown that the layout engine is located between the \emph{browser engine} system and the network, JavaScript, \textsc{xml} parsing and display backend.
-      The browser engine acts as a high level interface to the layout engine, and is responsible for providing the layout engine with \textsc{uri}'s that should be rendered with layout options.
-      The main responsibility of the layout engine is to render the current state of the fetched hypertext document.
-      Since documents may (and often do) change dynamically after parse time, it is important to keep in mind that the job of the layout engine is continuous, and is not a one time operation.
-      The parsing of \textsc{html} is also done by the layout engine (and not in the \textsc{xml} subsystem) since the browser need to be able to handle malformed \textsc{html}.
-      There are four layout engines that the major browsers use, as presented in table~\ref{table:layout_engines}.
-      Since Blink is a recent fork of WebKit they can be grouped as WebKit-based layout engines.
-      This results in three different layout engines to consider; WebKit, Gecko and Trident.
-      Due to Trident being closed source, only the WebKit based layout engines and Gecko will be considered from now on.
-
       \begin{figure}
         \centering
-        \begin{tikzpicture}[node distance=1cm, auto]  
+        \begin{tikzpicture}[node distance=1cm, auto, transform shape, scale=0.66]  
         \tiny
           \tikzset{
               mynode/.style={rectangle,rounded corners,draw=black, top color=white, bottom color=white,very thin, inner sep=1em, minimum size=3em, text centered},
@@ -499,6 +487,27 @@
         \label{fig:browser_architecture}
         \caption{Reference browser architecture. The data persistance system used by the browser engine and the user interface has been omitted.} 
       \end{figure}
+
+      Browsers are complex applications that consists of many subsystems.
+      A reference architecture of browsers has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
+      It is shown that the layout engine is located between the \emph{browser engine} system and the network, JavaScript, \textsc{xml} parsing and display backend.
+      The browser engine acts as a high level interface to the layout engine, and is responsible for providing the layout engine with \textsc{uri}'s that should be rendered with layout options.
+      The main responsibility of the layout engine is to render the current state of the fetched hypertext document.
+      Since documents may (and often do) change dynamically after parse time, it is important to keep in mind that the job of the layout engine is continuous, and is not a one time operation.
+      The parsing of \textsc{html} is also done by the layout engine (and not in the \textsc{xml} subsystem) since the browser need to be able to handle malformed \textsc{html}.
+      In short, layout engines perform four distinct tasks:
+      \begin{enumerate}
+        \item Fetch of content (typically \textsc{html} and \textsc{css}) and parse it in order to construct a \textsc{dom} tree.
+        \item Construct a \emph{render tree} of the \textsc{dom} tree.
+        \item Layout the elements of the render tree.
+        \item Render the elements of the render tree.
+      \end{enumerate}
+      See section~\ref{sec:dom-tree} and section~\ref{sec:render-tree} for a more in depth explanation of \textsc{dom} and render trees.
+      Modern browsers can display multiple pages at the same time (by using tabs or multiple windows) where each page typically has an instance of the layout engine in a separate process.
+      There are four layout engines that the major browsers use, as presented in table~\ref{table:layout_engines}.
+      Since Blink is a recent fork of WebKit they can be grouped as WebKit-based layout engines.
+      This results in three different layout engines to consider; WebKit, Gecko and Trident.
+      Due to Trident being closed source, only the WebKit based layout engines and Gecko will be considered from now on.
 
       \begin{table}[ht]\center
         \tiny
@@ -528,6 +537,26 @@
           The table to the right has grouped together Blink into WebKit since it is a recent for of WebKit.
           See section~\ref{sec:layout_engines_market_share} for more information how the market share data was gathered.}
       \end{table}
+
+      %The content fetching and parsing is an advanced topic by itself, but is not relevant for element queries since they impose no fundamental changes to process.
+      %Also, rendering the final layout with the render backend is not affected by element queries.
+      %The construction of 
+
+      \section{Constructing \textsc{DOM} trees}\label{sec:dom-tree}
+        \begin{metatext}
+          Here a brief explenation of \textsc{dom} trees will be given, and how they are constructed.
+          In order to construct a \textsc{dom} tree, the content need to be parsed which also will be covered.
+          Since parsing of content is not very relevant for element queries, it will be adressed only briefly.
+          This section is mainly based on \normalfont{\cite{w3c_dom}\cite{garsiel2011browsers}}.
+        \end{metatext}
+
+        \textsc{dom} is an abbreviation of Document Object Model which is a convention for representing and interacting with object in \textsc{xml}-based documens (such as \textsc{html}).
+        The \textsc{dom} provides an interface for programs (JavaScript scripts in the browser) to dynamically access and mutate the content, structure and style of documents.
+        Each node of the document is a \textsc{dom} object, and therefore the whole document is converted to a tree structure of \textsc{dom} nodes which is refered to as the \textsc{dom} tree.
+
+      \section{Render trees}\label{sec:render-tree}
+
+      \section{The layout process}
 
     \chapter{Element queries}
   \part{Third-party framework}
