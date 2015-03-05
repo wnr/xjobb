@@ -9,6 +9,8 @@
 \usepackage[backend=biber]{biblatex}
 \usepackage{todonotes}
 \usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning}
 
 \lstset{%
   basicstyle=\footnotesize,
@@ -444,15 +446,88 @@
       \todo{Remove this chapter?}
       \section{Web Components}
   \part{Theory}
-    \chapter{layout engines}
+    \chapter{Layout engines}
       \begin{metatext}
         Before diving into the theory of element queries, it is important to understand how layout engines work.
         Only the layout engines of the browser will be of importance, since element queries does not affect any other browser subsystem.
         This chapter will give a brief explanation of the layouting flow that the engines generally perform, and how content changes affects the engine.
         It will also cover some optimizations that are done and which parts of the layout process that can be done in parallel.
+        This chapter is mainly based on \normalfont{\cite{browser_architecture}\cite{garsiel2011browsers}}.
       \end{metatext}
 
+      \todo{Make sections of this chapter?}
+
       Browsers are complex applications that consists of many subsystems.
+      A reference architecture of browsers has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
+      It is shown that the layout engine is located between the \emph{browser engine} system and the network, JavaScript, \textsc{xml} parsing and display backend.
+      The browser engine acts as a high level interface to the layout engine, and is responsible for providing the layout engine with \textsc{uri}'s that should be rendered with layout options.
+      The main responsibility of the layout engine is to render the current state of the fetched hypertext document.
+      Since documents may (and often do) change dynamically after parse time, it is important to keep in mind that the job of the layout engine is continuous, and is not a one time operation.
+      The parsing of \textsc{html} is also done by the layout engine (and not in the \textsc{xml} subsystem) since the browser need to be able to handle malformed \textsc{html}.
+      There are four layout engines that the major browsers use, as presented in table~\ref{table:layout_engines}.
+      Since Blink is a recent fork of WebKit they can be grouped as WebKit-based layout engines.
+      This results in three different layout engines to consider; WebKit, Gecko and Trident.
+      Due to Trident being closed source, only the WebKit based layout engines and Gecko will be considered from now on.
+
+      \begin{figure}
+        \centering
+        \begin{tikzpicture}[node distance=1cm, auto]  
+        \tiny
+          \tikzset{
+              mynode/.style={rectangle,rounded corners,draw=black, top color=white, bottom color=white,very thin, inner sep=1em, minimum size=3em, text centered},
+              myarrow/.style={->, >=latex', shorten >=1pt, thin},
+              mylabel/.style={text width=3em, text centered}
+          }  
+          \node[mynode, text width=20em] (ui) {User Interface};  
+          \node[mynode, text width=20em, below=0.5cm of ui] (browser-engine) {Browser Engine};
+          \node[mynode, text width=20em, below=0.5cm of browser-engine] (layout-engine) {Layout Engine};
+          \node[below=of layout-engine] (dummy) {};
+          \node[mynode, below=of layout-engine, left=0.1cm of dummy] (javascript) {JavaScript};
+          \node[mynode, below=of layout-engine, left=0.1cm and 0.1cm of javascript] (networking) {Networking};  
+          \node[mynode, below=of layout-engine, right=0.1cm of dummy] (xml) {XML};
+          \node[mynode, below=of layout-engine, right=0.1cm and 0.1cm of xml] (render-backend) {Render Backend};
+
+          \draw[myarrow] (ui.south) -- (browser-engine.north);
+          \draw[myarrow] (browser-engine.south) -- (layout-engine.north);
+          \draw[myarrow] (layout-engine.south) -- (networking.north); 
+          \draw[myarrow] (layout-engine.south) -- (javascript.north);
+          \draw[myarrow] (layout-engine.south) -- (xml.north);
+          \draw[myarrow] (layout-engine.south) -- (render-backend.north);
+          \draw[myarrow] (ui.east) -- +(1.5, 0) |- (render-backend.east);
+        \end{tikzpicture} 
+        \medskip
+        \label{fig:browser_architecture}
+        \caption{Reference browser architecture. The data persistance system used by the browser engine and the user interface has been omitted.} 
+      \end{figure}
+
+      \begin{table}[ht]\center
+        \tiny
+        \begin{minipage}[t]{0.38\linewidth}
+          \begin{tabular}[t]{ l l l }
+            \textbf{Engine} & \textbf{Browsers} & \textbf{Share} \\
+            \hline
+            Blink & Chrome, Opera & 44.38\% \\
+            WebKit & Safari & 17.64\% \\
+            Trident & Internet Explorer & 14.96\% \\
+            Gecko & Firefox & 12.83\% \\
+          \end{tabular}
+        \end{minipage}
+        \hspace{0.1cm}
+        \begin{minipage}[t]{0.42\linewidth}
+          \begin{tabular}[t]{ l l l }
+            \textbf{Engine} & \textbf{Browsers} & \textbf{Share} \\
+            \hline
+            WebKit & Safari, Chrome, Opera & 62.02\% \\
+            Trident & Internet Explorer & 14.96\% \\
+            Gecko & Firefox & 12.83\% \\
+          \end{tabular}
+        \end{minipage}
+        \label{table:layout_engines}
+        \caption{
+          The major layout engines and their browsers with market shares.
+          The table to the right has grouped together Blink into WebKit since it is a recent for of WebKit.
+          See section~\ref{sec:layout_engines_market_share} for more information how the market share data was gathered.}
+      \end{table}
 
     \chapter{Element queries}
   \part{Third-party framework}
@@ -470,4 +545,23 @@
           TODO: Should this be in the real document instead of appendix?          
         \section{Practical cyclic rules discussion document}\label{sec:cyclic-rules}
           TODO: Should this be in the real document instead of appendix?
+        \section{Layout engine market share statistics}\label{sec:layout_engines_market_share}
+          Browser market share was retrieved by \emph{StatCounter}\footnote{StatCounter graph \url{http://gs.statcounter.com/#all-browser-ww-monthly-201402-201502-bar}}.
+          Since the graph only display browser market share and not layout engine, it is needed to further divide the browsers into layout engine percentages.
+          The Blink engine was introduced with Chrome version 28 and Android version 4.4 \cite{wiki_blink}.
+          Since Chrome has very good adoption rate\footnote{According to \url{http://clicky.com/marketshare/global/web-browsers/google-chrome/}} of new versions the Chrome market share percentage of 39.72\% is considered to be Blink based.
+          However, Android has not as good adoption rate as Chrome with only 44.2\% using Android version 4.4 and up\footnote{According to \url{https://developer.android.com/about/dashboards/index.html}}.
+          Android has a browser market share of 7.21\%. 44.2\% of the 7.21\% Android browsers is assumed to be Blink based and 55.8\% to be WebKit based (since the Android browser was WebKit based before Blink).
+          Of course, the assumption that users with old versions of Android browse the web as much as users with new versions are probably invalid, but the data source itself is uncertain enough to make such assumptions and the percentages should only be regarded as guidelines.
+          Opera with the lowest market share at 3.97\% started using the Blink engine in late 2013 as of version 15.
+          StatCounter shows that 37\% of the Opera users are using Opera Mini (their mobile browser), which does not use the Blink engine (it uses Opera's own Presto layout engine which will be ignored).
+          All desktop users of Opera are assumed to be using version 15 or above and hence using the Blink engine.
+          The total market share percentage of the Blink engine is then calculated to $39.72 + 0.442\cdot7.21 + 0.37\cdot3.97 = 44.38\%$.
+          Safari, with the market share percentage of 7.46\%, has always been WebKit based.
+          iOS also uses WebKit and has the market share percentage of 6.16\%.
+          The WebKit market share percentage is calculated to $7.46 + 0.558\cdot7.21 + 6.16 = 17.64\%$.
+          FireFox, with the market share percentage of 12.83\%, has always been Gecko based and is the only major browser that uses the Gecko engine.
+          The market share percentage of Gecko is therefore 12.83\%.
+          Internet Explorer, with the market share percentage of 14.96\%, has been Trident based since version 4.
+          Since Internet Explorer 4 is no longer in use\footnote{According to \url{http://www.w3schools.com/browsers/browsers_explorer.asp}}, the market share percentage of the Trident engine is 14.96\%.
 \end{document}
