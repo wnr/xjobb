@@ -603,11 +603,33 @@
         The weightening process continues by calculating the specificity of the all rule set selectors, the higher the specificity the higher the rule set will be weightened.
         This will make rule sets with more specific selectors override rule sets with more general selectors.
         Finally, if two rule declarations have the same weight, origin and specificity the rule set specified last will win.
-
         Inline \textsc{css} does not cascade since all rules given are automatically matched with the element of the style attribute.
         However, inline \textsc{css} is considered with highest possible specificity when performing the style cascade.
-
         It is important to note that the two last items are conceptually the same, since they both alter the style property of the \textsc{dom} element.
+
+        If the cascade results in no value for an element style property, then the property can \emph{inherit} a value or have the initial value defined by the \textsc{css} \emph{property definition}.
+        Property definitions describe how the style properties should behave, see table~\ref{table:css_property_definition}.
+        For instance, the width property definition states that legal values are absolute lengths, percentages or \code{auto} (which will let the browser decide).
+        The percentages are relative to the containing block.
+        The initial value is \code{auto}, the properties applies to all elements non-replaced inline elements, table rows and row groups.
+        The value may not be inherited, and the media groups is \code{visual}.
+        The computed value is either the absolute length, calculated percentage of the containing block or what the browser decides (in case of \code{auto}).
+        If a property may inherit values, it will inherit the value of the first ancestor that has a value that is not \code{inherit}.
+
+        \begin{table}[ht]\center
+          \tiny
+          \begin{tabular}[t]{ r | l }
+            \textbf{Value} & Defines the legal values and the syntax. \\
+            \textbf{Initial} & The initial value that the property will have. \\
+            \textbf{Applies to} & The elements that the property applies to. \\
+            \textbf{Inherited} & Determines if the value should be inherited or not. \\
+            \textbf{Percentages} & Defines if percentages are applicable, and how they should be interpreted. \\
+            \textbf{Media} & Defines which media group the property applies to. \\
+            \textbf{Computed value} & Describes how the value should be computed. \\
+          \end{tabular}
+          \label{table:css_property_definition}
+          \caption{The \textsc{css} property definition format that describes how all element style properties behave.}
+        \end{table}
 
         \todo{How does selector matching work? Parallel?}
         \todo{Cascading, parallel?}
