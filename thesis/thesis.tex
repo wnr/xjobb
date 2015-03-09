@@ -20,6 +20,8 @@
 
 \bibliography{bibliography.bib}
 
+\newcommand{\code}[1]{\texttt{#1}}
+
 \newenvironment{metatext}{%
   \textbf{$\hookrightarrow$}
   \begin{itshape}
@@ -544,7 +546,7 @@
 
       \section{Constructing \textsc{DOM} trees}\label{sec:dom-tree}
         \begin{metatext}
-          Here a brief explenation of \textsc{dom} trees will be given, and how they are constructed.
+          Here a brief explanation of \textsc{dom} trees will be given, and how they are constructed.
           In order to construct a \textsc{dom} tree, the content need to be parsed which also will be covered.
           Since parsing of content is not very relevant for element queries, it will be adressed only briefly.
           This section is mainly based on \normalfont{\cite{w3c_dom}\cite{garsiel2011browsers}\cite{w3c_css21}}.
@@ -570,10 +572,49 @@
         \todo{Figure of how the DOM tree looks like? Maybe example HTML and DOM tree figure.}
         \todo{Write about media type, and how the CSS is calculated if it is in this stage?}
 
+      \section{Style computation}
+        \begin{metatext}
+          In order to create a render tree, the styles of all the nodes in the \textsc{dom} tree must be computed in order to know how to construct it.
+          Here a brief explanation of selector matching, style cascading, and style computation will be given.
+          This section is mainly based on \normalfont{\cite{garsiel2011browsers}\cite{w3c_css21}\cite{world2013css}}.
+        \end{metatext}
+
+        To trace how the style of an element was computed can be a complex task, since there are many parameters to element style computations.
+        First, styles for an element can be defined in several places such as:
+        \begin{enumerate}
+          \item In the default styles of the browser.
+          \item In the user defined browser style.
+          \item In external \textsc{css} documents.
+          \item In internal \textsc{css} \code{style} tags in the document head.
+          \item In inline \textsc{css} in the \code{style} element attribute.
+          \item In scripts modifying the element style through the \textsc{dom} tree.
+          \item In special attributes of the element such as \code{bgcolor} (deprecated, but possible).
+        \end{enumerate}
+
+        This can be grouped into \emph{author}, \emph{user} and \emph{browser} styles.
+        The four first items can be regarded as \textsc{css} which means that they are \emph{cascading} their style rules through \emph{selector matching}.
+        Selector matching conceptually finds all elements in the \textsc{dom} tree that matches a \textsc{css} selector, to apply the rule set.
+        The rule sets are weightened so that if a property is assigned values by multiple rule sets the one with highest weight will be applied.
+        The weightening process starts with the origin of the style:
+        \begin{itemize}
+          \item In case of normal rule declarations, the style weightening relation is: $browser < user < author$.
+          \item Important rule declarations have the following relation: $author < user$.
+        \end{itemize}
+        The weightening process continues by calculating the specificity of the all rule set selectors, the higher the specificity the higher the rule set will be weightened.
+        This will make rule sets with more specific selectors override rule sets with more general selectors.
+        Finally, if two rule declarations have the same weight, origin and specificity the rule set specified last will win.
+
+        Inline \textsc{css} does not cascade since all rules given are automatically matched with the element of the style attribute.
+        However, inline \textsc{css} is considered with highest possible specificity when performing the style cascade.
+
+        It is important to note that the two last items are conceptually the same, since they both alter the style property of the \textsc{dom} element.
+
+        \todo{How does selector matching work? Parallel?}
+        \todo{Cascading, parallel?}
       \section{Render trees}\label{sec:render-tree}
         \begin{metatext}
-          When the \textsc{DOM} tree has been constructed, it is time for the layout engine to create the render tree.
-          Here an explenation of the creation process and the structure of render trees will be given.
+          When the \textsc{dom} tree has been constructed and all styles has been computed, it is time for the layout engine to create the render tree.
+          Here an explanation of the creation process and the structure of render trees will be given.
           This section is mainly based on \normalfont{\cite{garsiel2011browsers}\cite{w3c_css21}}.
         \end{metatext}
 
@@ -584,15 +625,26 @@
         There are differnt types of renderers, which affects how the renderer rectangle is computed.
         The type can be directly affected by the display style property.
 
+        Typically nodes in the \textsc{dom} tree map in a 1:1 relation to nodes in the render tree, but the relation can also be smallar or larger.
+        The render tree only contains nodes that will affect the rendered result, so nodes that do not affect the layout flow of the document and that aren't visible will not be present in the render tree.
+        For instance, an \textsc{dom} node element with the \code{display} property set to \code{none} will have the relation 1:0 (it will not be present in the render tree because it is not visible and will not affect the layout flow.).
+        It should be note that elements with the \code{visibility} property set to \code{hidden} will be present in the render tree, although they are not visible, since they still affect the layout flow.
 
       \section{The layout process}
+        \todo{backflow?}
 
     \chapter{Element queries}
+      \section{Problems}
+        \subsection{Performance}
+        \subsection{Circularity}
   \part{Third-party framework}
     \chapter{Analysis of approaches}
     \section{Current implementations}
     \chapter{API design}
     \chapter{Implementation}
+      \section{Element resize events}
+        \subsection{Native resize event}
+        \subsection{Object injection}
   \part{Result}
     \chapter{Discussion}
   \printbibliography
@@ -603,6 +655,8 @@
           TODO: Should this be in the real document instead of appendix?          
         \section{Practical cyclic rules discussion document}\label{sec:cyclic-rules}
           TODO: Should this be in the real document instead of appendix?
+        \section{CSS terminology}
+          TODO: Write custom or refer to this \url{http://www.impressivewebs.com/css-terms-definitions/}?
         \section{Layout engine market share statistics}\label{sec:layout_engines_market_share}
           Browser market share was retrieved by \emph{StatCounter}\footnote{StatCounter graph \url{http://gs.statcounter.com/#all-browser-ww-monthly-201402-201502-bar}}.
           Since the graph only display browser market share and not layout engine, it is needed to further divide the browsers into layout engine percentages.
