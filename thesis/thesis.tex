@@ -563,8 +563,10 @@
         Script elements are to be executed synchronously when it is occured by the parser.
         If such script mutate the \textsc{dom}, then the parser will need to evaluate the changes made by the script and update the \textsc{dom} tree.
         External scripts need to be fetched in order to be executed, which halts the parsing unless the script element states otherwise.
-        Linked \textsc{css} documents could conceptually be fetched and parsed after the parsing of the \textsc{html}.
-        However, scripts can access style properties of the \textsc{dom} tree and therefore either the parsing of \textsc{html} needs to be halted in order to fetch and parse \textsc{css} when it occurs, or the scripts accessing style properties of \textsc{dom} nodes need to be halted.
+        It should be noted that although \textsc{dom} nodes do include a \code{style} property, the nodes in the \textsc{dom} tree are not affected by the \textsc{css} cascading, and the style properties do not represent the final style of the element.
+        Instead, for scripts to obtain the final computed style for an element a special function needs to be called (\code{getComputedStyle} in JavaScript).
+        Since externally linked \textsc{css} documents do not directly affect the \textsc{dom} tree they could conceptually be fetched and parsed after the parsing of the \textsc{html}.
+        However, scripts can request the computed style of \textsc{dom} tree nodes and therefore either the parsing of \textsc{html} needs to be halted in order to fetch and parse \textsc{css} when it occurs, or the scripts accessing style properties of \textsc{dom} nodes need to be halted.
         A common optimization is to use a specalutive parser that continues to parse the \textsc{html} when the main parser has halted (for executing the scripts usually).
         The speculative parser does not change the \textsc{dom} tree, instead it searches for external resources that can be fetched in parallel while waiting for the main parser to continue.
 
@@ -572,15 +574,42 @@
         \todo{Figure of how the DOM tree looks like? Maybe example HTML and DOM tree figure.}
         \todo{Write about media type, and how the CSS is calculated if it is in this stage?}
 
-      \section{Style computation}
+      \section{Render trees}\label{sec:render-tree}
         \begin{metatext}
-          In order to create a render tree, the styles of all the nodes in the \textsc{dom} tree must be computed in order to know how to construct it.
-          Here a brief explanation of selector matching, style cascading, and style computation will be given.
+          When the \textsc{dom} tree has been constructed and all external \textsc{css} has been fetched and parsed, it is time for the layout engine to create the render tree.
+          Here an explanation of the creation process and the structure of render trees will be given.
+          This section is mainly based on \normalfont{\cite{garsiel2011browsers}\cite{w3c_css21}}.
+        \end{metatext}
+
+        A Render tree is a visual representation of the document.
+        In contrast to the \textsc{dom} tree, the render tree only contains of elements that will be rendered.
+        The nodes of the render tree are called \emph{renderers} (also known as \emph{frames} or \emph{render objects}), as the elements are responsible for laying out and rendering themselves and all of its subnodes.
+        In order to know how to render themselves, the final style of each renderer needs to be computed which is done by the layout engine while constructing the tree.
+        Each renderer represents a rectangle (given by style dimension and position) with a given style.
+        There are differnt types of renderers, which affects how the renderer rectangle is computed.
+        The type can be directly affected by the display style property.
+
+        Typically nodes in the \textsc{dom} tree map in a 1:1 relation to nodes in the render tree, but the relation can also be smallar or larger.
+        The render tree only contains nodes that will affect the rendered result, so nodes that do not affect the layout flow of the document and that aren't visible will not be present in the render tree.
+        For instance, an \textsc{dom} node element with the \code{display} property set to \code{none} will have the relation 1:0 (it will not be present in the render tree because it is not visible and will not affect the layout flow).
+        It should be noted that elements with the \code{visibility} property set to \code{hidden} will be present in the render tree, although they are not visible, since they still affect the layout flow.
+
+        Even though all style properties have been resolved for each node in the render tree (through \textsc{css} cascading), the renderers still do not know about the size and position of the rectangle.
+        This is because some properties cannot be computed by just computing the styles for an element.
+        Some properties depend on the flow of the document, and needs to be resolved through a layout.
+        The layout process will resolve the final position and size for all renderes.
+
+      \section{Style computation}\label{sec:style-computation}
+        \begin{metatext}
+          Both the render tree and scripts need to be able to get the final style of an element.
+          In order to know the final style of an element, the style for each element must be computed.
+          Here a brief explanation of selector matching, style cascading, inheritence and rule set specificity will be given.
+          \textsc{css} property definitions will also be described.
           This section is mainly based on \normalfont{\cite{garsiel2011browsers}\cite{w3c_css21}\cite{world2013css}}.
         \end{metatext}
 
         To trace how the style of an element was computed can be a complex task, since there are many parameters to element style computations.
-        First, styles for an element can be defined in several places such as:
+        First, styles for an element can be defined in several places:
         \begin{enumerate}
           \item In the default styles of the browser.
           \item In the user defined browser style.
@@ -590,8 +619,7 @@
           \item In scripts modifying the element style through the \textsc{dom} tree.
           \item In special attributes of the element such as \code{bgcolor} (deprecated, but possible).
         \end{enumerate}
-
-        This can be grouped into \emph{author}, \emph{user} and \emph{browser} styles.
+        This can be grouped into author, user and browser styles.
         The four first items can be regarded as \textsc{css} which means that they are \emph{cascading} their style rules through \emph{selector matching}.
         Selector matching conceptually finds all elements in the \textsc{dom} tree that matches a \textsc{css} selector, to apply the rule set.
         The rule sets are weightened so that if a property is assigned values by multiple rule sets the one with highest weight will be applied.
@@ -600,12 +628,13 @@
           \item In case of normal rule declarations, the style weightening relation is: $browser < user < author$.
           \item Important rule declarations have the following relation: $author < user$.
         \end{itemize}
-        The weightening process continues by calculating the specificity of the all rule set selectors, the higher the specificity the higher the rule set will be weightened.
+        The weightening process continues by calculating the \emph{specificity} of all rule set selectors, the higher the specificity the higher the rule set will be weightened.
         This will make rule sets with more specific selectors override rule sets with more general selectors.
         Finally, if two rule declarations have the same weight, origin and specificity the rule set specified last will win.
         Inline \textsc{css} does not cascade since all rules given are automatically matched with the element of the style attribute.
         However, inline \textsc{css} is considered with highest possible specificity when performing the style cascade.
-        It is important to note that the two last items are conceptually the same, since they both alter the style property of the \textsc{dom} element.
+        It is important to note that the styling methods number five and six are conceptually the same, since they both alter the style property of the \textsc{dom} element.
+        The last item is deprecated, and all styles applied this way will be weightened as low as possible.
 
         If the cascade results in no value for an element style property, then the property can \emph{inherit} a value or have the initial value defined by the \textsc{css} \emph{property definition}.
         Property definitions describe how the style properties should behave, see table~\ref{table:css_property_definition}.
@@ -631,34 +660,30 @@
           \caption{The \textsc{css} property definition format that describes how all element style properties behave.}
         \end{table}
 
+        This process will resolve most style properties, but as stated in section~\ref{sec:render-tree} some properties require a layout in order to be resolved.
+
         \todo{How does selector matching work? Parallel?}
         \todo{Cascading, parallel?}
-      \section{Render trees}\label{sec:render-tree}
-        \begin{metatext}
-          When the \textsc{dom} tree has been constructed and all styles has been computed, it is time for the layout engine to create the render tree.
-          Here an explanation of the creation process and the structure of render trees will be given.
-          This section is mainly based on \normalfont{\cite{garsiel2011browsers}\cite{w3c_css21}}.
-        \end{metatext}
-
-        A Render tree is a visual representation of the document.
-        In contrast to the \textsc{dom} tree, the render tree only contains of elements that will be rendered.
-        The nodes of the render tree are called \emph{renderers} (also known as \emph{frames} or \emph{render objects}), as the elements are responsible for laying out and rendering itself and all of its subnodes.
-        Each renderer represents a rectangle (given by style dimension and position) with a given style.
-        There are differnt types of renderers, which affects how the renderer rectangle is computed.
-        The type can be directly affected by the display style property.
-
-        Typically nodes in the \textsc{dom} tree map in a 1:1 relation to nodes in the render tree, but the relation can also be smallar or larger.
-        The render tree only contains nodes that will affect the rendered result, so nodes that do not affect the layout flow of the document and that aren't visible will not be present in the render tree.
-        For instance, an \textsc{dom} node element with the \code{display} property set to \code{none} will have the relation 1:0 (it will not be present in the render tree because it is not visible and will not affect the layout flow.).
-        It should be note that elements with the \code{visibility} property set to \code{hidden} will be present in the render tree, although they are not visible, since they still affect the layout flow.
 
       \section{The layout process}
+        \begin{metatext}
+          When the render tree has been constructed and the style properties has been resolved for all nodes, it is time to perform the actual layouting.
+          The layout process will decide the final computed style of all elements, and needs to be done before rendering.
+          This section will describe the layout process, discuss some performance aspects and show examples when layouting happens.
+        \end{metatext}
+
+        In section~\ref{sec:style-computation} it was stated that some style properties needs a layout in order to be resolved with a final value.
+        Because the \textsc{api} of \code{getComputedStyle} promises resolved values for all style properties, a call will force a layout (flushing the changes buffer).
+
         \todo{backflow?}
 
     \chapter{Element queries}
       \section{Problems}
         \subsection{Performance}
         \subsection{Circularity}
+      \section{Possible solutions}
+        \subsection{Container queries}
+        \subsection{Element queries with runtime checks}
   \part{Third-party framework}
     \chapter{Analysis of approaches}
     \section{Current implementations}
