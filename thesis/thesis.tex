@@ -68,12 +68,13 @@
   \mainmatter
   \pagestyle{newchap}
   \chapter{Introduction}
+    \todo{Write somewhere that modular and responsive web development right now is two disjunct terms?}
     \section{Targeted audience}
     \section{Problem statement}
       By using \textsc{css} \emph{media queries} developers can specify different rules for different viewport sizes.
       This is fundamental to create responsive web applications.
       If developers want to build modular applications by composing the application by smaller components (elements, scripts, styles, etc.) media queries are no longer applicable.
-      Modular components should be able to react and change style depending on the given size that the component has been given by the application, not the viewport size.
+      Modular components should be able to react and change style depending on the givenj size that the component has been given by the application, not the viewport size.
       The problem can be formulated as: \emph{Elements can not specify conditional style rules depending on their own size, or the size of any other element}.
       See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
@@ -457,8 +458,6 @@
         This chapter is mainly based on \normalfont{\cite{browser_architecture}\cite{garsiel2011browsers}}.
       \end{metatext}
 
-      \todo{Make sections of this chapter?}
-
       \begin{figure}
         \centering
         \begin{tikzpicture}[node distance=1cm, auto, transform shape, scale=0.66]  
@@ -670,12 +669,39 @@
           When the render tree has been constructed and the style properties has been resolved for all nodes, it is time to perform the actual layouting.
           The layout process will decide the final computed style of all elements, and needs to be done before rendering.
           This section will describe the layout process, discuss some performance aspects and show examples when layouting happens.
+          This section is mainly based on \normalfont{\cite{garsiel2011browsers}}.
         \end{metatext}
 
-        In section~\ref{sec:style-computation} it was stated that some style properties needs a layout in order to be resolved with a final value.
-        Because the \textsc{api} of \code{getComputedStyle} promises resolved values for all style properties, a call will force a layout (flushing the changes buffer).
+        The layout (also called \emph{reflow}) of \textsc{html} is flow based which means that document layout can generally be performed top to bottom and left to right in one pass.
+        This is possible because the geometry of elements typically do not depend on the siblings or children\todo{Seems weird to say that flow is not dependant on children, since the height is propagated upwards.}.
+        Layout is performed recursively by starting at the root of the tree, let the renderer render itself and all of its children which will render themselves and their children and so on.
+        When a layout is performed on the whole render tree it is called a \emph{global layout}.
+        To avoid global layouts when an renderer has been changed, a dirty bit system is usually implemented.
+        The system will mark which renderers in the tree that need a layout, which avoids layouting unaffected elements.
+        Layouts that only layout the dirty renderers are called \emph{incremental layouts}.
+        Layout engines that uses the dirty bit system usually keeps a queue of incremental layout commands.
+        The scheduler system later triggers a batch execution of the incremental layout commands asynchronously.
+        A global layout is triggered when the viewport is resized or when styles that affect the whole document are changed (such as \code{font-size}).
+        Because the \textsc{api} of \code{getComputedStyle} promises resolved values for all style properties, a call will force a full layout (flushing the incremental layout commands queue).
+        When a renderer performs a layout the following usually happens:
+        \begin{enumerate}
+          \item The own width is determined.
+          \item Positions all children and request them to layout themselves (with given position and width).
+          \item The heights, margins and paddings of the children are accumulated in order to decide the own height.
+        \end{enumerate}
+        Of course, only the children that needs a layout will be affected (dirty, or global layout) in step 2.
+        So, the widths and positions are sent down in the tree and the height is sent up in the tree in order to construct the final layout.
 
-        \todo{backflow?}
+        The widths are calculated by the \code{width} style of the elements, relative to the container element width.
+        Margins and paddings are also takin into account when calculating the widths.
+        When the width of an element is calculated, it needs to controlled against the \code{min-width} and \code{max-width} style properties and make sure that the width is inside the range.
+        If the content of an element does not fit with the calculated width (text usually needs to perform line break when the width is too small), the element needs to break up the content into multiple renderers in order to expand the height.
+        The renderer that has decided it needs to break the content up into multiple renderers propagates to the parent renderer that it needs to perform the breaking.
+        When the parent renderer has created the renderes needed to fit the content with the given height, layout is performed on the new renderers and then the final height can be calculated and propageted upwards.
+
+
+        \todo{Parallel?}
+        \todo{Is incremental layout commands really batch processed?}
 
     \chapter{Element queries}
       \section{Problems}
