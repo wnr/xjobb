@@ -69,31 +69,36 @@
   \pagestyle{newchap}
   \chapter{Introduction}
     \todo{Write somewhere that modular and responsive web development right now is two disjunct terms?}
+    \todo{This or the thesis? Now both is being used.}
     \section{Targeted audience}
+      The thesis is targeted for web developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
+      Heavy use of web terminology is being used and intermediate web development knowledge is assumed.
     \section{Problem statement}
-      By using \textsc{css} \emph{media queries} developers can specify different rules for different viewport sizes.
-      This is fundamental to create responsive web applications.
+      By using \textsc{css} \emph{media queries} developers can specify different style rules for different viewport sizes.
+      This is fundamental to creating responsive web applications.
       If developers want to build modular applications by composing the application by smaller components (elements, scripts, styles, etc.) media queries are no longer applicable.
-      Modular components should be able to react and change style depending on the givenj size that the component has been given by the application, not the viewport size.
+      Modular responsive components should be able to react and change style depending on the size that the component has been given by the application, not the viewport size.
       The problem can be formulated as: \emph{Elements can not specify conditional style rules depending on their own size, or the size of any other element}.
       See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
+      \todo{Back this up or maybe reformulate it a bit.}
       The main international standards organization for the World Wide Web (World Wide Web Consortium, abbreviated \textsc{w3c}) has unofficially stated that such feature would be infeasible to implement.
       Some problems with implementing element queries in \textsc{css} are:
       \begin{itemize}
-        \item \textbf{Circularity:} The styling of elements depend on many factors (theoretically on all other elements in the layout tree).
-        If elements can apply styles by criterias of other elements, it will be possible to create infinite loops of styling.
-        The simplest example of this would be an element to set its width to 200 pixels if it is under 100 pixels wide.
-        If the element is under 100 pixels wide, the new style will be applied to the element which would make the width of the element 200 pixels.
-        If this element would have another rule that set its width to 50 pixels if it is wider than 150 pixels, there is an infinite loop of styling.
-        Problems like this can probably be catched during \textsc{css} parsing, but there are so many combinations of style properties that could result in similar loops that it will add a lot of complexity to the language, both for implementers and users.
-        See the included document in section~\ref{sec:cyclic-rules} of the appendix for more examples and deeper discussions about cyclic rules.
-        \item \textbf{Performance:} layout engines typically perform selector matching and layout computations in parallel to achieve good performance.
+        \item \textbf{Circularity:}
+        If style rules can be applied by criterias of other elements, it will be possible to create cyclic rules (infinite loops of styling).
+        Some cyclic rules might be possible to detect during \textsc{css} parsing, but there are so many combinations of style properties that could result in cyclic rules that it will add a lot of complexity to the language, both for implementers and users.
+        Also, it has been shown that some cyclic rules are impossible to detect at parse time, due to being dependent on run time factors.
+        See the included document in section~\ref{sec:cyclic-rules} of the appendix for examples and deeper discussions about cyclic rules.
+        \item \textbf{Performance:} 
+        \todo{Rewrite this. Some of this is totally wrong.}
+        layout engines typically perform selector matching and layout computations in parallel to achieve good performance.
         If element queries would be implemented, the layout engines would need to first compute the layout of all elements in order to decide which selectors would conform to the element query conditions and then do a new layout computation, and so on until a stable state has been reached.
         Far worse, since selectors now depend on layout style, this cannot be done in parallel which impacts performance heavily.
       \end{itemize}
-      Because of the problems, it is stated that such feature will not be implemented in the near future. So it is now up to the developers to implement this feature as a third-party solution. 
-      Efforts have been made by big players to create a robust implementation, with moderate success. 
+      \todo{Back this up or rewrite.}
+      Because of the problems, it is stated that such feature will not be implemented in the near future. So it is now up to the developers to implement this feature as a third-party solution.
+      Efforts have been made to create a robust implementation, with moderate success.
       Since all implementations have shortcomings, there is still no de facto solution that developers use and the problem remains unsolved.
 
     \section{Objective}
@@ -113,7 +118,6 @@
       The hypothesis is that the problem can be solved in a reliable and performant way by crafting a third-party implementation.
       A reliable implementation should also enable existing responsive components to react to a specified criteria (parent container size for example) with no modifications to the components.
       The goal of the thesis should be considered fulfilled if a solution was successfully implemented or described, or if the problems hindering a solution are thoroughly documented.
-
 
     \section{Significance}
       Many frameworks and techniques are being used in web development to keep the code from becoming an entangled mess.
@@ -706,7 +710,7 @@
           Now, applications need to utilize the multiple cores of the \textsc{cpu} instead of relying on high clock speed.
           Parallelization is something layout engine vendors are very interested in, and much research is being done about utilizing multiple cores to increase the speed of the engine.
           In this section a small summary will be given about the current research front, and how the parallelization can be approached.
-          This sections is mainly based on \normalfont{\cite{zoomm}\cite{parallelizing_the_web_browser}}.
+          This section is mainly based on \normalfont{\cite{zoomm}\cite{parallelizing_the_web_browser}}.
         \end{metatext}
 
         As web applications grow bigger and more demanding, browser continously needs to improve the performance on all levels.
@@ -735,7 +739,7 @@
         Further, some possible restrictions will be presented to resolve some of the issues.
       \end{metatext}
 
-      
+
       \section{Problems}
         \subsection{Performance}
         \subsection{Circularity}
@@ -781,4 +785,6 @@
           The market share percentage of Gecko is therefore 12.83\%.
           Internet Explorer, with the market share percentage of 14.96\%, has been Trident based since version 4.
           Since Internet Explorer 4 is no longer in use\footnote{According to \url{http://www.w3schools.com/browsers/browsers_explorer.asp}}, the market share percentage of the Trident engine is 14.96\%.
+
+\listoftodos 
 \end{document}
