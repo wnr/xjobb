@@ -7,10 +7,13 @@
 \usepackage[swedish,english]{babel}
 \usepackage{modifications}
 \usepackage[backend=biber]{biblatex}
-\usepackage{todonotes}
+\usepackage{hyperref}
+\hypersetup{
+}
 \usepackage{listings}
 \usepackage{tikz}
 \usetikzlibrary{arrows,positioning}
+\usepackage{todonotes}
 
 \lstset{%
   basicstyle=\footnotesize,
@@ -767,7 +770,7 @@
         \section{CSS terminology}
           TODO: Write custom or refer to this \url{http://www.impressivewebs.com/css-terms-definitions/}?
         \section{Layout engine market share statistics}\label{sec:layout_engines_market_share}
-          Browser market share was retrieved by \emph{StatCounter}\footnote{StatCounter graph \url{http://gs.statcounter.com/#all-browser-ww-monthly-201402-201502-bar}}.
+          Browser market share was retrieved by \emph{StatCounter}\footnote{StatCounter graph \url{http://gs.statcounter.com/\#all-browser-ww-monthly-201402-201502-bar}}.
           Since the graph only display browser market share and not layout engine, it is needed to further divide the browsers into layout engine percentages.
           The Blink engine was introduced with Chrome version 28 and Android version 4.4 \cite{wiki_blink}.
           Since Chrome has very good adoption rate\footnote{According to \url{http://clicky.com/marketshare/global/web-browsers/google-chrome/}} of new versions the Chrome market share percentage of 39.72\% is considered to be Blink based.
