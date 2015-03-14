@@ -458,7 +458,8 @@
         The render process will not be described, as it is not relevant for element queries.
         This chapter is mainly based on \normalfont{\cite{browser_architecture}\cite{garsiel2011browsers}}.
       \end{metatext}
-
+      Browsers are complex applications that consists of many subsystems.
+      A reference architecture of browsers has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
       \begin{figure}
         \centering
         \begin{tikzpicture}[node distance=1cm, auto, transform shape, scale=0.66]  
@@ -489,9 +490,6 @@
         \label{fig:browser_architecture}
         \caption{Reference browser architecture. The data persistance system used by the browser engine and the user interface has been omitted.} 
       \end{figure}
-
-      Browsers are complex applications that consists of many subsystems.
-      A reference architecture of browsers has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
       It is shown that the layout engine is located between the \emph{browser engine} system and the network, JavaScript, \textsc{xml} parsing and display backend.
       The browser engine acts as a high level interface to the layout engine, and is responsible for providing the layout engine with \textsc{uri}'s that should be rendered with layout options.
       The main responsibility of the layout engine is to render the current state of the fetched hypertext document.
@@ -728,9 +726,16 @@
         This is why most researchers target light devices when trying to parallelize web browsers.
         Of course, once the methods has matured and been implemented desktops will benefit from this as well.
 
-        
+        \todo{Continue this}
 
     \chapter{Element queries}
+      \begin{metatext}
+        Now that a good understanding of browsers (especially the layout engine), responsive design and modular development has been aqcuired it is time to address element queries --- the solution to modular responsive web design.
+        This chapter will define element queries, present how they solve the problem, and address some of the issues hindering element queries from being implemented natively.
+        Further, some possible restrictions will be presented to resolve some of the issues.
+      \end{metatext}
+
+      
       \section{Problems}
         \subsection{Performance}
         \subsection{Circularity}
