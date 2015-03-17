@@ -675,7 +675,7 @@
         \todo{How does selector matching work? Parallel?}
         \todo{Cascading, parallel?}
 
-      \section{The layout process}
+      \section{The layout process}\label{sec:layout-process}
         \begin{metatext}
           When the render tree has been constructed and the style properties has been resolved for all nodes, it is time to perform the actual layouting.
           The layout process will decide the final computed style of all elements, and needs to be done before rendering.
@@ -795,12 +795,31 @@
           In this section the two major problems will be presented; performance and circularity.
         \end{metatext}
 
+        \todo{What to write here?}
         \subsection{Performance}
           \begin{metatext}
             This subsection will present the performance impacts that element queries have on layout engines.
             As shown in section~\ref{sec:parallel} browser vendors are very interested in parallelizing their browsers and especially the layout engines to increase the page performance.
             Element queries limits the parallelization badly, which will be the focus of this subsection.
           \end{metatext}
+
+          Recall from section~\ref{sec:layout-process} that the box size and position for each element is calculated at in the layout process, and cannot be determined before an actual layout has happened.
+          This impose that a layout pass needs to be performed before knowing the element sizes.
+          If element queries are present that rely on the size of elements, which is the identified common usecase, the following process needs to happen:
+          \begin{enumerate}
+            \item A layout pass needs to be performed in order to calculate the size of the elements targeted by element queries.
+            \item The element query conditional rules need to be evaluated against the elements to know which rules should be applied (element query selector matching).
+            \item If the element query selector matching has resulted in a different matching set than in step 1, another layout pass (with the new rules applied) needs to be performed.
+          \end{enumerate}
+          So for each element query selector matching change result in performing another layout, discarding at least a subtree of the previous layout.
+          As already stated, this only occurs when the layout has changed in a way that changes the element query selectors.
+          Unfortunately, this means that if there is any matching element query selector at page load, two layout passes will always be performed.
+
+          Further, it is common for internal \textsc{api}'s in layout engines to request updated element styles that do not require layout to resolve (non-layout properties such as \code{color} and \code{font-family}).
+          Since a layout of the element query selector target is required in order to resolve the correct element style, such internal \textsc{api}'s will require a layout in order to obtain the correct element style (even for non-layout related properties).
+          \todo{Referera till w3c mailinglista?}
+          Also, layout engines would not be able to layout subtrees in parallel since an element in one subtree might affect an element in another subtree.
+
 
         \subsection{Circularity}
           \begin{metatext}
@@ -815,6 +834,7 @@
           The different solution approaches either limits element queries in some way or solves only a subproblem, so no perfect solution that keeps element queries unlimited with decent performance has been found.
         \end{metatext}
 
+        \todo{Write somewhere that iframes are not a solution?}
         \subsection{Container queries}
           \begin{metatext}
             This solution limits element queries a lot, but avoids many of the problems this way.
