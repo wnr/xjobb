@@ -74,6 +74,8 @@
   \chapter{Introduction}
     \todo{Write somewhere that modular and responsive web development right now is two disjunct terms?}
     \todo{This or the thesis? Now both is being used.}
+    \todo{runtime or run time? same for parse time. Both is being used right now.}
+    \todo{Container or parent element? Using both now.}
     \section{Targeted audience}
       The thesis is targeted for web developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
       Heavy use of web terminology is being used and intermediate web development knowledge is assumed.
@@ -106,7 +108,7 @@
       Since all implementations have shortcomings, there is still no de facto solution that developers use and the problem remains unsolved.
 
     \section{Objective}
-      The main objective of this thesis is to develop a third-party implementation of element queries (or equivalent to solve the problem of modular responsive elements).
+      The main objective of this thesis is to develop a third-party implementation of element queries (or equivalent to solve the problem of modular responsive components).
       To do this, it is needed to research existing implementation attempts in order to understand and analyze the advantages and shortcomings of the approaches.
       It is also neccesary to be aware of the premises, such as browser limitations and specifications that need to be conformed.
       In addition, research will be done about the problems of implementing element queries natively, to get a deeper understanding of how an official \textsc{api} would look like.
@@ -120,6 +122,7 @@
       \end{itemize}
       The scientific question to be answered is if it is possible to solve the problem  without extending the current web standard.
       The hypothesis is that the problem can be solved in a reliable and performant way by crafting a third-party implementation.
+      \todo{This might be a bit to much.}
       A reliable implementation should also enable existing responsive components to react to a specified criteria (parent container size for example) with no modifications to the components.
       The goal of the thesis should be considered fulfilled if a solution was successfully implemented or described, or if the problems hindering a solution are thoroughly documented.
 
@@ -395,7 +398,7 @@
         Using \textsc{html5} together with \textsc{css3} developers could utilize advanced graphics programming, geolocation, cache storage, file system acccess, offline mode, and much more.
 
         \todo{Write that traditional applications are threatened by web applications, since the reach and availability of the web is superior to any other distribution platform. Also, no installation is required with web applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
-      \section{Responsive web design}
+      \section{Responsive web design}\label{sec:rwd}
         \begin{metatext}
           Back in the days, web developers could make assumptions about the screen size of the users.
           Since typically only desktop computers with monitors accessed web sites they were designed for a minimum viewport size.
@@ -440,7 +443,7 @@
         The term \emph{Responsive Web Design} (\textsc{rwd}) refers to the approach of having a single site \emph{responding} to different media properties (mainly viewport size) at runtime to improve the user experience.
         With \textsc{rwd} it is no longer needed to maintain several versions of a site, instead the site adapts to the user medium and device.
 
-      \section{Modularity}
+      \section{Modularity}\label{sec:modularity}
         \begin{metatext}
           This section is a summary of \normalfont{\cite{book_modular_programming}\cite{book_eloq_js}}.
         \end{metatext}
@@ -495,8 +498,8 @@
           \draw[myarrow] (ui.east) -- +(1.5, 0) |- (render-backend.east);
         \end{tikzpicture} 
         \medskip
-        \label{fig:browser_architecture}
         \caption{Reference browser architecture. The data persistance system used by the browser engine and the user interface has been omitted.} 
+        \label{fig:browser_architecture}
       \end{figure}
       It is shown that the layout engine is located between the \emph{browser engine} system and the network, JavaScript, \textsc{xml} parsing and display backend.
       The browser engine acts as a high level interface to the layout engine, and is responsible for providing the layout engine with \textsc{uri}'s that should be rendered with layout options.
@@ -539,11 +542,11 @@
             Gecko & Firefox & 12.83\% \\
           \end{tabular}
         \end{minipage}
-        \label{table:layout_engines}
         \caption{
           The major layout engines and their browsers with market shares.
           The table to the right has grouped together Blink into WebKit since it is a recent for of WebKit.
           See section~\ref{sec:layout_engines_market_share} for more information how the market share data was gathered.}
+        \label{table:layout_engines}
       \end{table}
 
       %The content fetching and parsing is an advanced topic by itself, but is not relevant for element queries since they impose no fundamental changes to process.
@@ -663,8 +666,8 @@
             \textbf{Media} & Defines which media group the property applies to. \\
             \textbf{Computed value} & Describes how the value should be computed. \\
           \end{tabular}
-          \label{table:css_property_definition}
           \caption{The \textsc{css} property definition format that describes how all element style properties behave.}
+          \label{table:css_property_definition}
         \end{table}
 
         This process will resolve most style properties, but as stated in section~\ref{sec:render-tree} some properties require a layout in order to be resolved.
@@ -709,7 +712,7 @@
 
         \todo{Is incremental layout commands really batch processed?}
 
-      \section{Parallelization}
+      \section{Parallelization}\label{sec:parallel}
         \begin{metatext}
           No longer can performance of an application increase over time without any code changes (as opposed to the times when \textsc{cpu} clock speeds increased rapidly).
           Now, applications need to utilize the multiple cores of the \textsc{cpu} instead of relying on high clock speed.
@@ -744,13 +747,77 @@
         Further, some possible restrictions will be presented to resolve some of the issues.
       \end{metatext}
 
+      Recall from section~\ref{sec:rwd} that responsive web design is the concept of having elements respond to the given size.
+      Responsive web design implements this by using media queries, applying conditional rules by the viewport size.
+      In section~\ref{sec:modularity} the desire for building modular web components was presented.
+      One implication of building applications in a modular way, is that general components become reusable.
+      Since the only way of applying conditional rules to elements today is by using media queries, all responsive styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the layout).
+      The implication of this is that the \textsc{html} and JavaScript can be written in a modular way, but the \textsc{css} is left for the user of the module (application) to write which somewhat defeats the purpose of writing modules.
+      So developers today have two choices: Writing modules that are not responsive but self contained, or writing modules that are responsive but not self contained (leaving the styling to the user).
+      The solutions to this is elemenet queries, which allows conditional rules to be applied based on any criteria for any element.
+      Figure~\ref{fig:mq-vs-eq} shows the problem with media queries and the element query solution.
+      The typical use case is to write conditional styles to be applied based on the container element size.
+      Although the typically the size of the container element is the most interesting element query with reponsive web design, element queries as a concept does not need to be limited to that.
+      It is also possible to apply conditional rules by any element display property, color, text alignment, and so on.
+      Theoretically it should be possible to query any style property of an element, but the focus will lay on the \code{width} and \code{height} properties since they are the most interesting in responsive web design.
+
+      \begin{figure}
+        \centering
+        \begin{minipage}{.5\textwidth}
+          \centering
+          \includegraphics[width=\linewidth]{images/mq-big}
+        \end{minipage}%
+        \begin{minipage}{.5\textwidth}
+          \centering
+          \includegraphics[width=\linewidth]{images/eq-big}
+        \end{minipage}
+        \caption{
+          The problem of media queries and the element query solution.
+          Both images shows four instances of a module in different sizes.
+          The module is responsive, so when it is small it should change color to red and change the inner text a bit.
+          The left version is built with media queries, hence all module instances stay blue even though some are small (only a smaller viewport will trigger the modules to change style).
+          The right version is built with element queries, hence the modules display differently depending on the given size that each module has, which is the desired behavior.}
+        \label{fig:mq-vs-eq}
+      \end{figure}
 
       \section{Problems}
+        \begin{metatext}
+          The main reason why element queries hasn't been implemented natively in browsers is because they bring problems and limitations to the browsers.
+          It is key to understand the problems in order to speculate about a potential native \textsc{api} design.
+          In this section the two major problems will be presented; performance and circularity.
+        \end{metatext}
+
         \subsection{Performance}
+          \begin{metatext}
+            This subsection will present the performance impacts that element queries have on layout engines.
+            As shown in section~\ref{sec:parallel} browser vendors are very interested in parallelizing their browsers and especially the layout engines to increase the page performance.
+            Element queries limits the parallelization badly, which will be the focus of this subsection.
+          \end{metatext}
+
         \subsection{Circularity}
+          \begin{metatext}
+            This subsection will show how cyclic rules may occur and why it is such a major problem.
+            It will also be presented why cyclic rules must be detected at run time.
+            Some examples of will be given to better understand the complexity of the problem.
+          \end{metatext}
+
       \section{Possible solutions}
+        \begin{metatext}
+          Now that the problems of element queries have been presented, it is time to show some possible solutions to the problems.
+          The different solution approaches either limits element queries in some way or solves only a subproblem, so no perfect solution that keeps element queries unlimited with decent performance has been found.
+        \end{metatext}
+
         \subsection{Container queries}
+          \begin{metatext}
+            This solution limits element queries a lot, but avoids many of the problems this way.
+            This approach has been discussed at \textsc{w3c} and \textsc{ricg} assumes that this is a prerequisite to a native implementation.
+          \end{metatext}
         \subsection{Element queries with runtime checks}
+          \begin{metatext}
+            This solution does not limit element queries, but does also not solve all problems.
+            Instead of making cyclic rules impossible, a mechanism to handle the cyclic rules is desired.
+            Unfortunately this does not improve the performance at all, which is a major drawback.
+          \end{metatext}
   \part{Third-party framework}
     \chapter{Analysis of approaches}
     \section{Current implementations}
