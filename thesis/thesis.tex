@@ -16,9 +16,9 @@
 \usepackage{todonotes}
 
 \lstset{%
-  basicstyle=\footnotesize,
-  numbers=left,
-  frame=l
+  frame=L,
+  basicstyle=\tiny,
+  xleftmargin=\parindent
 }
 
 \bibliography{bibliography.bib}
@@ -801,6 +801,7 @@
             This subsection will present the performance impacts that element queries have on layout engines.
             As shown in section~\ref{sec:parallel} browser vendors are very interested in parallelizing their browsers and especially the layout engines to increase the page performance.
             Element queries limits the parallelization badly, which will be the focus of this subsection.
+            \todo{Referera till w3c mailinglista?}
           \end{metatext}
 
           Recall from section~\ref{sec:layout-process} that the box size and position for each element is calculated at in the layout process, and cannot be determined before an actual layout has happened.
@@ -817,9 +818,7 @@
 
           Further, it is common for internal \textsc{api}'s in layout engines to request updated element styles that do not require layout to resolve (non-layout properties such as \code{color} and \code{font-family}).
           Since a layout of the element query selector target is required in order to resolve the correct element style, such internal \textsc{api}'s will require a layout in order to obtain the correct element style (even for non-layout related properties).
-          \todo{Referera till w3c mailinglista?}
           Also, layout engines would not be able to layout subtrees in parallel since an element in one subtree might affect an element in another subtree.
-
 
         \subsection{Circularity}
           \begin{metatext}
@@ -827,6 +826,147 @@
             It will also be presented why cyclic rules must be detected at run time.
             Some examples of will be given to better understand the complexity of the problem.
           \end{metatext}
+
+          The most straight forward occurances of cyclic rules are when there are specified conflicting width constraints and width updates for an element.
+          See listing~\ref{code:cyclic-simple} for the perhaps most simple example of cyclic rules.
+          The syntax of element queries will be presented in section~\ref{}, and is not important to understand the problem.
+          \begin{lstlisting}[caption={Very simple example of cyclic rules.}, captionpos=b, label={code:cyclic-simple}]
+#foo {
+  width: 250px;
+}
+
+#foo:eq(max-width: 300px) {
+  /* This rule will be applied only when the width of #foo is < 300px. */
+  width: 550px;
+}
+
+#foo:eq(min-width: 500px) {
+  /* This rule will be applied only when the width of #foo is > 500px. */
+  width: 250px;
+}
+          \end{lstlisting}
+
+          The following will happen to the element:
+          \begin{enumerate}
+          \item The initial width of the \code{\#foo} element is set to 250 pixels.
+          After a layout, the \code{\#foo:eq(max-width: 300px)} will match and therefore next step will be 2.
+          \item The width of the element is under 300 pixels, so the selector \code{\#foo:eq(max-width: 300px)} will match.
+          Note that the \code{\#foo:eq(min-width: 500px)} does not match, since the width is under 500 pixels.
+          Since the matched selector is more specific than the \code{\#foo} selector, the new width of the element will be 550 pixels.
+          Next step will be 3.
+          \item The width of the element is above 500 pixels, so the selector \code{\#foo:eq(min-width: 500px)} will match.
+          Note that the \code{\#foo:eq(max-width: 300px)} does not match, since the width is above 300 pixels.
+          Since the matched selector is more specific than the \code{\#foo} selector, the new width of the element will be 250 pixels.
+          Next step will be 2.
+          \end{enumerate}
+          Clearly, the browser will be stuck in an infinite layout cycle pending back and forth between step 2 and 3 (250 pixels and 550 pixels).
+          The result of this is of course implementation dependant.
+          One reasonable outcome of such infinite layout loop is that the layout engine will execute one layout pass and then evaluate the next set of matched selectors and so on, which will lead to a functioning site but since a relayout is enforced every update, the performance impact will be huge.
+          This example is somewhat similar to writing \code{while(true);} in JavaScript, which obviously is a bad idea.
+          However, cyclic rules can also occur in less obvious ways. 
+
+          Indirect cyclic rules are somewhat more complex to reason about, than the example given above (which is an example of direct cyclic rules).
+          For instance, if the \code{\#foo} element matches the width of a child element, and the child changes width depending on the parent width, a cycle might occur.
+          Consider the code in listing~\ref{code:cyclic-2}.
+          
+          \begin{lstlisting}[caption={Example of indirect cyclic rules.}, captionpos=b, label={code:cyclic-2}]
+/* HTML */
+<div id="foo">
+  <div id="child"></div>
+</div>
+
+/* CSS */
+#foo {
+  /* Will match the width of the child element. */
+  display: inline-block;
+}
+
+#child {
+  width: 250px;
+}
+
+#foo:eq(max-width: 300px) #child {
+  /* This rule will be applied only when the width of #foo is < 300px. */
+  width: 550px;
+}
+
+#foo:eq(min-width: 500px) #child {
+  /* This rule will be applied only when the width of #foo is > 500px. */
+  width: 250px;
+}
+          \end{lstlisting}
+          What makes this situation more complex than the previous example is that it is less obvious for numerous reasons:
+          \begin{itemize}
+            \item The rules of the child element and the rules of the \code{\#foo} element might be separated into different parts of the stylesheet (or even different stylesheets).
+            The problem cannot be found without considering both of the rule sets.
+            \item The child element might be another module, and by adding one line to the parent module (the \code{\#foo} element) a cycle has appeared.
+            \item The developer has to be well aware of how the display property affects the element and what implications the \code{inline-block} has to the element.
+          \end{itemize}
+          An JavaScript quivalent of this example would perhaps be \code{var bar = true; while(bar);} with the motivation that it is still very obvious that it is an infinite loop but both the while loop and the variable needs to be reviewed.
+          Also, the variable assignment could happen in another part of the program.
+
+          The examples given so far have been simple and easily detectable.
+          However, cycles can occur in a much more complex way.
+          The two given examples could both be identified as cyclic by simply reviewing the \textsc{css} code.
+          It is also possible for a program to analyze the examples to deduce that they are cyclic.
+          Unfortunately, not all cycles can be detected by static analyze.
+          Consider the code in listing~\ref{code:cyclic-3}.
+          \begin{lstlisting}[caption={Example of indirect cyclic rules.}, captionpos=b, label={code:cyclic-3}]
+/* HTML */
+<div id="foo">
+  <div id="child">
+    When in doubt, mumble.
+  </div>
+</div>
+
+/* CSS */
+#foo {
+  /* Will match the width of the child element. */
+  display: inline-block;
+}
+
+#child {
+  font-size: 1.5em;
+}
+
+#foo:eq(max-width: 300px) #child {
+  /* This rule will be applied only when the width of #foo is < 300px. */
+  font-size: 3em;
+}
+
+#foo:eq(min-width: 500px) #child { 
+  /* This rule will be applied only when the width of #foo is > 500px. */
+  font-size: 1em;
+}
+          \end{lstlisting}
+          In this example, it is virtually impossible to tell if the rules are cyclic.
+          So what happens is that the \code{\#foo} element will get the size of the child element, which width depend on the text inside it.
+          The width of the text depends on the font size, which is initially set to \code{1.5em}.
+          The \code{em} unit is relative to the inherited font size of the element.
+          So the width of the \code{\#foo} element is dependent on the inherited font size.
+          When the \code{\#foo} element is below 300 pixels wide, the font size of the child is increased to \code{3em} and when above 500 pixels the font size is decreased to \code{1em}.
+          So if \code{3em} results in a font size big enough to make the child element bigger than 500 pixels, and if \code{1em} results in a font size small enough to make the child element smaller than 300 pixels the rules are cyclic.
+          The factors that creates the cycle are the following:
+          \begin{itemize}
+            \item The display type of the \code{\#foo} element
+            \item The element queries of the child element
+            \item The font size value of the child element
+            \item \textbf{The inherited font size of the \code{\#foo} element}
+            \item \textbf{The text of the child element}
+          \end{itemize}
+          The bolded factors are of a far worse type than the ones presented until now.
+          They are impossible to determine at parse time.
+          In this example the text is static but it could have beeen added dynamically.
+          Also, the inherited font size depends on the closest ancestor with a font size property defined.
+          Since ancestors also can have their font sizes defined in relative units, the dependency tree can go up to the root of the document.
+          Further, if no ancestor defines an absolute value for the font size it is up to the browser to default to a size, which is impossible to reason about at parse time.
+          This implies that there is no way of telling if the cycle will appear or not without actually running the code.
+          Also, the cycle may appear in different browsers and settings, which makes the cycle even harder to detect.
+          Far worse is that the previous examples have been of the \code{while(true);} character, which gives the false hope that even though it is possible to create cycles developers would never encouter it since ``real'' code would not be close to the examples given here.
+          With the third example, this is no longer true.
+          Increasing the font size when the layout area is smaller and decreasing the font size when the layout area is bigger is something that is frequently done in responsive web deisgn.
+          Typically web site authors want the font size to increase on handheld devices, to increase the readability.
+          Of course, the numbers given in the example might not be reasonable, but in concept it is valid use case which may result in cyclic rules.
 
       \section{Possible solutions}
         \begin{metatext}
