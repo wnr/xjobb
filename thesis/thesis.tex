@@ -718,33 +718,41 @@
           Now, applications need to utilize the multiple cores of the \textsc{cpu} instead of relying on high clock speed.
           Parallelization is something layout engine vendors are very interested in, and much research is being done about utilizing multiple cores to increase the speed of the engine.
           In this section a small summary will be given about the current research front, and how the parallelization can be approached.
-          This section is mainly based on \normalfont{\cite{zoomm}\cite{parallelizing_the_web_browser}}.
+          This section is mainly based on \normalfont{\cite{zoomm}\cite{parallelizing_the_web_browser}\cite{meyerovich2010fast}\cite{servo_parallel}\cite{servo_blog}}.
         \end{metatext}
 
-        As web applications grow bigger and more demanding, browser continously needs to improve the performance on all levels.
+        As web applications grow bigger and more demanding, browsers continously need to improve the performance on all levels.
         Fetching resources over the network is the only thing that is done in parallel today.
         The rest of the browser system is designed and optimized to run sequentially.
         On computers, browsers usually achieves parallelism by running each page context in parallel (each tab of the browser window is an own process).
-        This approach is appealing because it utilizes the cores of the machine by still having all subsystems run sequentally for each page, and improves the overall performance of the browser.
+        This approach is appealing because it utilizes the cores of the machine by still having all subsystems run sequentally for each page, while improving the overall performance of the browser.
         However, this approach is not enough.
-        The page performance is not improved if only one page is present (the user does not have multiple tabs open).
+        The page performance is not improved if only one page is present.
         For the web to be a true competitor to heavy native applications, the page performance needs to be increased (not only the overall browser performance).
         It is then important to be able to dedicate multiple cores to one page instead of having all the pages present using their own core (perhaps the non-visible pages in different tabs will share one core while the main visible tab will get access to multiple cores if needed).
         Also, with the number of mobile devices browsing the web increasing rapidly it is really important to be able to achieve good parallelism.
         Light devices such as small laptops, mobile devices and tablets share a common goal --- they want to reduce power consumption while increasing the performance.
         This can be achieved with multicore processors that run at lower clock speeds.
         \todo{Write that many cores is preferred over high clock speed? Why?}
-        It has been shown that the performance of mobile browsers are \textsc{cpu} bound contrary to the common belief that they are network bandwidth bound.
+        It has been shown that the performance of mobile browsers are \textsc{cpu} bound contrary to the common belief that they are network bandwidth bound \cite{parallelizing_the_web_browser}.
         This is why most researchers target light devices when trying to parallelize web browsers.
-        Of course, once the methods has matured and been implemented desktops will benefit from this as well.
+        Of course, once the methods has matured and been implemented, desktops will benefit from this as well.
 
-        \todo{Continue this}
+        \textsc{css} selector matching is a good candidate for parallelization, due to matching nodes to selectors being independent from other selector matches.
+        A successful parallelization of selector matching has been achieved with locality-aware task parallelism \cite{parallelizing_the_web_browser}.
+        It has also been shown that selector matching and style resolving (through cascading) can be parallelized \cite{zoomm}.
+        It is possible to resolve element styles in parallel as long as two requirements are fulfilled: The matching task must have finished for the element to resolve styles for, and the parent element must have resolved all styles (since the element might inherit some styles from the parent).
+        As long as these requirements are fulfilled, selector matching and style resolving can run in parallel for different elements.
+        The layout process can also be parallelized, since the layout process has been shown to be sub-tree independent for non-float elements \cite{servo_parallel}\cite{servo_blog}.
+        Siblings of the layout tree can be processed independently of each other (in the general case), and is suitable to parallelize with a work stealing system.
+        \todo{Write about the fork-join model of the parallelization as described in servo?}
 
     \chapter{Element queries}
       \begin{metatext}
         Now that a good understanding of browsers (especially the layout engine), responsive design and modular development has been aqcuired it is time to address element queries --- the solution to modular responsive web design.
         This chapter will define element queries, present how they solve the problem, and address some of the issues hindering element queries from being implemented natively.
         Further, some possible restrictions will be presented to resolve some of the issues.
+        \todo{Instead write that some solutions will be presented?}
       \end{metatext}
 
       Recall from section~\ref{sec:rwd} that responsive web design is the concept of having elements respond to the given size.
@@ -782,8 +790,8 @@
 
       \section{Problems}
         \begin{metatext}
-          The main reason why element queries hasn't been implemented natively in browsers is because they bring problems and limitations to the browsers.
-          It is key to understand the problems in order to speculate about a potential native \textsc{api} design.
+          The main reason why element queries has not been implemented natively in browsers is because they bring problems and limitations to the browsers.
+          It is important to understand the problems in order to speculate about a potential native \textsc{api} design.
           In this section the two major problems will be presented; performance and circularity.
         \end{metatext}
 
