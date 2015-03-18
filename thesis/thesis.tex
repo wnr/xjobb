@@ -820,6 +820,8 @@
           Since a layout of the element query selector target is required in order to resolve the correct element style, such internal \textsc{api}'s will require a layout in order to obtain the correct element style (even for non-layout related properties).
           Also, layout engines would not be able to layout subtrees in parallel since an element in one subtree might affect an element in another subtree.
 
+          \todo{Totally forgot to write about parallel problems}
+
         \subsection{Circularity}
           \begin{metatext}
             This subsection will show how cyclic rules may occur and why it is such a major problem.
@@ -974,12 +976,37 @@
           The different solution approaches either limits element queries in some way or solves only a subproblem, so no perfect solution that keeps element queries unlimited with decent performance has been found.
         \end{metatext}
 
-        \todo{Write somewhere that iframes are not a solution?}
-        \subsection{Container queries}
+        \todo{Write somewhere that iframes are not a solution? But they are close to a solution...}
+        \subsection{Viewport elements}
           \begin{metatext}
             This solution limits element queries a lot, but avoids many of the problems this way.
             This approach has been discussed at \textsc{w3c} and \textsc{ricg} assumes that this is a prerequisite to a native implementation.
+            \todo{cite where this has been gathered from?}
           \end{metatext}
+
+          By limiting element queries to special \emph{viewport} container elements that can only be queried by child elements, much of the problems are resolved.
+          This means that a new \textsc{html} tag will be crafted (perhaps named \code{viewport}) that defines separated viewports in the document.
+          The size of Viewports are not dependent on their children, and children may only target the closest ancestor viewport element in the element queries.
+          This way, cyclic rules can no longer occur since the viewport size may not be altered by the children.
+
+          This approach also solves many of the performance problems, but not all.
+          The internal \textsc{api}'s that request non-layout information for the elements using element queries only need to make sure that the containging viewport element has been layed out before resolving the styles (which is a much better situation that the unrestricted version of element queries).
+          Further, the layout can be done in one pass as long as the viewport elements are layed out before the children.
+          It is still a bit inconvenient that the layout engine would need to evaluate all element query selectors in the middle of a layout pass (after the that the viewport elements has been layed out) in orde to resolve the styles for the viewport children.
+          Parallelization is also easier, since the queries may only be targeting the closest viewport element.
+          This means that each viewport subtree can be layed out in parallel.
+
+          This solution would behave much like the \code{iframe} element layout-wise.
+          It should be noted that \code{iframe} elements are not suitable as an alternative to the proposed \code{viewport} elements, since \code{iframe}'s are much more limited by nature (creates a new document and script context).
+
+          Obviously, this limits element queries a lot.
+          The fact that the size of the viewport element cannot depend on the children (like normal block elements do), limits the usability.
+          The idea is that the viewport cannot cannot be queried for properties that the children may affect (such as the width and height style properties).
+          In order to allow the children to query the properties, they cannot be affected by the children.
+          In theory it should mean that if no children query for instance the height of the viewport, then the viewport may depend on the children for it's height.
+          This is a powerful insight, since the general use case would be to write element queries against the width and have the elements adapt their heights accordingly (including the viewport element).
+          \todo{Back this up. Maybe check with RICG if this is possible?}
+
         \subsection{Element queries with runtime checks}
           \begin{metatext}
             This solution does not limit element queries, but does also not solve all problems.
