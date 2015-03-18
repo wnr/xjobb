@@ -95,7 +95,7 @@
         If style rules can be applied by criterias of other elements, it will be possible to create cyclic rules (infinite loops of styling).
         Some cyclic rules might be possible to detect during \textsc{css} parsing, but there are so many combinations of style properties that could result in cyclic rules that it will add a lot of complexity to the language, both for implementers and users.
         Also, it has been shown that some cyclic rules are impossible to detect at parse time, due to being dependent on run time factors.
-        See the included document in section~\ref{sec:cyclic-rules} of the appendix for examples and deeper discussions about cyclic rules.
+        See section~\ref{sec:cyclic-rules} for examples and a deeper analysis of cyclic rules.
         \item \textbf{Performance:} 
         \todo{Rewrite this. Some of this is totally wrong.}
         layout engines typically perform selector matching and layout computations in parallel to achieve good performance.
@@ -252,6 +252,8 @@
             Here the initial ideas of the web will be described, the alternatives and how it became a global standard.
             This subsection is a summary of \normalfont{\cite{wiki_gopher}\cite{wiki_www}\cite{webdevnotes_history_of_the_internet}\cite{webdevnotes_www_basics}\cite{historyofthings_internet}}.
           \end{metatext}
+
+          \todo{Should have another subsection or not have this in a subsection. Only one subsection is not nice.}
 
           Recall that the way of exchanging information was to upload and download files between clients and hosts with \textsc{ftp}.
           If a document downloaded was referring to another document, the user had to manually find the server that hosted the other document and download it manually.
@@ -822,7 +824,7 @@
 
           \todo{Totally forgot to write about parallel problems}
 
-        \subsection{Circularity}
+        \subsection{Circularity}\label{sec:cyclic-rules}
           \begin{metatext}
             This subsection will show how cyclic rules may occur and why it is such a major problem.
             It will also be presented why cyclic rules must be detected at run time.
@@ -1013,6 +1015,16 @@
             Instead of making cyclic rules impossible, a mechanism to handle the cyclic rules is desired.
             Unfortunately this does not improve the performance at all, which is a major drawback.
           \end{metatext}
+
+          \todo{Should this be incorporated with some other section or be written?}
+          \todo{Maybe write about having a third-party framework as a solution?}
+      \section{Native API design}
+        \begin{metatext}
+          In this section a possible native element query \textsc{api} will be presented.
+          This is based on the current information and approaches of \textsc{w3c} and \textsc{ricg}, and should therefore be regarded as a guideline to how an \textsc{api} might look like.
+        \end{metatext}
+
+
   \part{Third-party framework}
     \chapter{Analysis of approaches}
     \section{Current implementations}
@@ -1029,8 +1041,6 @@
       \chapter{Resources}
         \section{Practical problem formulation document}\label{sec:problem-formulation}
           TODO: Should this be in the real document instead of appendix?          
-        \section{Practical cyclic rules discussion document}\label{sec:cyclic-rules}
-          TODO: Should this be in the real document instead of appendix?
         \section{CSS terminology}
           TODO: Write custom or refer to this \url{http://www.impressivewebs.com/css-terms-definitions/}?
         \section{Layout engine market share statistics}\label{sec:layout_engines_market_share}
