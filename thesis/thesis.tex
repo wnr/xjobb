@@ -471,6 +471,8 @@
         The render process will not be described, as it is not relevant for element queries.
         This chapter is mainly based on \normalfont{\cite{browser_architecture}\cite{garsiel2011browsers}}.
       \end{metatext}
+      \todo{Have an image about the layout flow somewhere?}
+
       Browsers are complex applications that consists of many subsystems.
       A reference architecture of browsers has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
       \begin{figure}
@@ -979,7 +981,7 @@
         \end{metatext}
 
         \todo{Write somewhere that iframes are not a solution? But they are close to a solution...}
-        \subsection{Viewport elements}
+        \subsection{Viewport elements}\label{sec:viewport-elements}
           \begin{metatext}
             This solution limits element queries a lot, but avoids many of the problems this way.
             This approach has been discussed at \textsc{w3c} and \textsc{ricg} assumes that this is a prerequisite to a native implementation.
@@ -990,6 +992,9 @@
           This means that a new \textsc{html} tag will be crafted (perhaps named \code{viewport}) that defines separated viewports in the document.
           The size of Viewports are not dependent on their children, and children may only target the closest ancestor viewport element in the element queries.
           This way, cyclic rules can no longer occur since the viewport size may not be altered by the children.
+          the reason that a new \textsc{html} tag is proposed instead of a new \textsc{css} property that defines the behavoir is because the layout engine in the latter case needs to resolve the styles for all elements in order to know which are viewport elements.
+          With a new \textsc{html} tag, the layout engine can detect that that the element is a viewport before any resolving styles.
+          \todo{Write why it is important to know viewport elements before resolving styles.}
 
           This approach also solves many of the performance problems, but not all.
           The internal \textsc{api}'s that request non-layout information for the elements using element queries only need to make sure that the containging viewport element has been layed out before resolving the styles (which is a much better situation that the unrestricted version of element queries).
@@ -1023,6 +1028,26 @@
           In this section a possible native element query \textsc{api} will be presented.
           This is based on the current information and approaches of \textsc{w3c} and \textsc{ricg}, and should therefore be regarded as a guideline to how an \textsc{api} might look like.
         \end{metatext}
+
+        As presented in subsection~\ref{sec:viewport-elements}, viewport elements solve many of the element query problems and are therefore assumed to be a part of a native \textsc{api}.
+        Since it would be favorable to be able to specify multiple conditional rule sets for the element queries (like media queries) the \textsc{css} syntax may be of the form as presnted in listing~\ref{code:mq-eq-syntax}.
+        \begin{lstlisting}[caption={Element queries are assumed to have nested rule sets, like media queries},captionpos=b,label={code:mq-eq-syntax}]]
+/* Media query syntax */
+@media ... {
+  p {
+    color: red;
+  }
+}
+
+/* Element query syntax */
+... {
+  p {
+    color: red;
+  }
+}
+        \end{lstlisting}
+
+        \todo{Continue this if possible?}
 
 
   \part{Third-party framework}
