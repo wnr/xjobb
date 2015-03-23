@@ -76,6 +76,7 @@
     \todo{This or the thesis? Now both is being used.}
     \todo{runtime or run time? same for parse time. Both is being used right now.}
     \todo{Container or parent element? Using both now.}
+    \todo{Renamed framework to library or plugin?}
     \section{Targeted audience}
       The thesis is targeted for web developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
       Heavy use of web terminology is being used and intermediate web development knowledge is assumed.
@@ -1048,16 +1049,73 @@
         \end{lstlisting}
 
         \todo{Continue this if possible?}
-
-
   \part{Third-party framework}
     \chapter{Analysis of approaches}
-    \section{Current implementations}
-    \chapter{API design}
+      \section{Current implementations}
+    \chapter{Framework design}
+
     \chapter{Implementation}
-      \section{Element resize events}
+      \section{Element resize detection}
+        \begin{metatext}
+          In order to be able to perform any element queries, one first needs to be able to detect when elements change size.
+          The element resize detection system will therefore be the backbone of the framework.
+          This section is mainly based on \normalfont{\cite{backalley}}.
+        \end{metatext}
+
+          Unfortunately, there is no standard resize event for arbitrary elements.
+          Only frames (elements that render it's content independently of the container element, such as \code{iframe} and \code{object}) support the resize event by standard since they have their own viewport.
+          Legacy versions of Internet Explorer (version 8 and down, but also some later versions depending on the document mode and if the browser is in quirks mode) do support the resize event on arbitrary elements.
+          Since the framework needs to support all commonly used \textsc{html} elements a solution to listen to any element resize needs to be found.
+          Possible solutions are:
+          \begin{itemize}
+            \item \textbf{Polling}:
+              To have a script running asynchronously to check all elements if they have resized.
+              This can be achieved by using the \code{setInterval} function.
+              One can set the interval time to shorter or longer, where shorter would lead to being able to detect resize changes quicker but having worse performance.
+              A longer interval time would not be able to detect changes as quickly but increase the performance.
+            \item \textbf{Overflow hacks}:
+              \todo{Write me, or is this no longer an alternative?}
+            \item \textbf{Injecting frames}:
+              Since frame elements are the only ones that support resize events natively, the idea is to inject frame elements as children to the elements that one want to listen for resize changes (also called \emph{target elements}).
+              By styling the frame so that it depends on the target element and set the size to be 100 percent, the frame will always be the same size as the target element.
+              Then a resize event handler can be attached to the frame which will emit a resize event for every target element resize.
+              So in order to listen for resize events for an element, a frame element is injected and listened to instead.
+          \end{itemize}
+          The first solution is appealing because it does not mutate the \textsc{dom} and it will work on all browsers since it does not rely on special element behaviors or similar.
+          However, in order to prevent the responsive elements lagging behind the size changes of the user interface, the polls need to be performed quite frequently.
+          The performance impact of polling the \textsc{dom} frequently is not desirable.
+          Since the polling will be performed all the time, the overall page performance will be decreased even if the page is idle, which is undesireable especially for battery devices.
+          This is not a great solution since reading the \textsc{dom} constantly can be affect the performance negatively. \todo{Should make quick test to see how much CPU it uses when polling frequently}
+
+          The third solution does mutate the \textsc{dom} and relies on special element behavior, but it offers the best performance.
+          Browsers will only need to perform extra work when preparing elements for being resize-listenable and when the elements actually change size.
+          By positioning the injected frames \code{absolute} with width and height set to \code{100\%}, the frames does not affect the visual representation of the document.
+          Injecting frames into the elements has some implications:
+          \begin{itemize}
+            \item \textbf{CSS selectors may break}:
+              Since target elements get an extra child (the frame element), \textsc{css} selectors may behave differently.
+              For instance, the selector \code{\#target *} selector will also match the injected frame element which may result in the frame being styled in a way that it will be visible or in other ways interfere with the original user interface.
+              Also, selectors such as \code{:first-child} and \code{:last-child} since the object element is prepended (or appended) to the target element.
+            \item \textbf{JavaScript may break}:
+              Similar to with the \textsc{css} selectors, JavaScript \textsc{dom} selectors may break.
+              The first node (or last) of the target element may not be what the developer expect it to be, since the frame element has been injected.
+              Also, code that replaced the content of elements (such as \code{element.InnerHTML = ...}) will undesireably remove the injected frame element of if used on the target element.
+            \item \textbf{The target element must be positioned}:
+              Recall that absolute positioned elements are moved up to the first non-static positioned ancestor.
+              Since it is desired to have the injected frame being a direct child of the target element, the target element cannot be positioned \code{static} which is the default positioning for many elements.
+              Fortunately, elements positioned \code{relative} behave exactly like \code{static}, given that the elements do not have any styles applicable to relative (such as \code{top} or \code{bottom}).
+              Since the style properties that depend on the element being \code{relative} positioned does not affect the element if it is \code{static} positioned, the properties can be removed or regarded as user errors.
+              This way the target element can be changed to \code{relative} positioning with the special style properties removed, to obtain the same visual representation as the \code{static} version.
+          \end{itemize}
+          It has been shown by \cite{backalley} that \code{object} are the most suitable frame element to use for this purpose, as they have good browser compatability, adequate performance and are easy to work with.
+
+          \todo{Write that it might be up to the user to decide if solution 1 or 3 is desired? Or is it always better to use 3?}
         \subsection{Native resize event}
+          \todo{remove me?}
         \subsection{Object injection}
+          \todo{remove me?}
+      \section{Runtime cyclic rules detection}
+
   \part{Outro}
     \chapter{Related work}
     \chapter{Result}
