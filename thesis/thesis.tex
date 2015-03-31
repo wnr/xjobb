@@ -1053,7 +1053,36 @@
     \chapter{Analysis of approaches}
       \section{Current implementations}
     \chapter{Framework design}
+      \begin{metatext}
+        Before starting the actual implementation, it is important to have an overall design to follow.
+        In this chapter, the framework design will be described and a motivation why the framework should be plugin based will be given.
+        The subsystems of the framework and their interactions will also presented.
+      \end{metatext}
 
+      First of all, a working name of the framework needs to be established --- the framework will from now on have the working name \textsc{elq}.
+      This name will serve as a prefix for many of the framework \textsc{api}'s, and will be frequently used in the report from now on.
+
+      \todo{Write more here or move the above text somewhere else?}
+
+      \section{Technical goals}
+        \begin{metatext}
+          Before presenting the overall design of the framework, the technical goals will be stated.
+          It will be shown that the goals and use cases can vary from case to case, which will be the main argument to why the framework should be plugin based.
+        \end{metatext}
+
+        \begin{enumerate}
+          \item The framework needs to be performant enough for heavy applications running on light devices.
+          \item The framework may not require invalid \textsc{css}, \textsc{html} or JavaScript.
+          \item Developers should not need to perform big rewrites of their modules or applications in order to use the framework.
+          \item Existing modules written with media queries should be automatically converted to element queries so that existing third party modules can be used in element query power applications.
+          \item The \textsc{api}'s need to be natural for web developers, and may not seem alien.
+        \end{enumerate}
+      \section{Framework plugins}
+        \begin{metatext}
+        \end{metatext}
+      \section{Subsystems}
+        \begin{metatext}
+        \end{metatext}
     \chapter{Implementation}
       \section{Element resize detection}
         \begin{metatext}
