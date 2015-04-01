@@ -72,14 +72,16 @@
   \mainmatter
   \pagestyle{newchap}
   \chapter{Introduction}
-    \todo{Write somewhere that modular and responsive web development right now is two disjunct terms?}
-    \todo{This or the thesis? Now both is being used.}
-    \todo{runtime or run time? same for parse time. Both is being used right now.}
-    \todo{Container or parent element? Using both now.}
-    \todo{Renamed framework to library or plugin?}
+    \todo[inline]{Write somewhere that modular and responsive web development right now are two disjunct terms?}
+    \todo[inline]{This or the thesis? Now both is being used.}
+    \todo[inline]{runtime or run time? same for parse time. Both is being used right now.}
+    \todo[inline]{Container or parent element? Using both now.}
+    \todo[inline]{Renamed framework to library?}
+    \todo[inline]{Write about the targeted browser compatability.}
     \section{Targeted audience}
       The thesis is targeted for web developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
       Heavy use of web terminology is being used and intermediate web development knowledge is assumed.
+      \todo{Philipp wanted this to be more general.}
     \section{Problem statement}
       By using \textsc{css} \emph{media queries} developers can specify different style rules for different viewport sizes.
       This is fundamental to creating responsive web applications.
@@ -175,7 +177,7 @@
         It is not longer the case that only computer scientists are browsing the web.
         Today the web is becoming increasingly important in both our personal and professional lives.
         This chapter will give a brief history of browsers and the rise of the web.
-        This section is a summary of \normalfont{\cite{internet_live_stats}\cite{internet_of_things}\cite{wiki_hypermedia}\cite{w3c_www}\cite{oed}}.
+        This section is a summary of \normalfont{\cite{internet_live_stats,internet_of_things,wiki_hypermedia,w3c_www,oed}}.
       \end{metatext}
 
       Before addressing the birth of the web, lets define the meaning of the concepets of the \emph{Internet}, \emph{Web} and \emph{World Wide Web}.
@@ -211,7 +213,7 @@
           Since the web is a system operating on top of the Internet, it is needed to first investigate the origin of the Internet.
           This can be viewed from many angles and different aspects need to be taken into consideration.
           With that in mind, the origin of the Internet is not something easily pinned down and what will be presented here will be more of a technically interesting history.
-          This section is a summary of \normalfont{\cite{overview_of_tcp_ip}\cite{internetsociety_history_internet}\cite{internet_maps}\cite{historyofthings_internet}}.
+          This section is a summary of \normalfont{\cite{overview_of_tcp_ip,internetsociety_history_internet,internet_maps,historyofthings_internet}}.
         \end{metatext}
 
         In the early 1960's \emph{packet switching} was being researched, which is a prerequisite of internetworking.
@@ -251,7 +253,7 @@
           \begin{metatext}
             Now that the history of the Internet has been described, it is time to talk about the birth of the World Wide Web.
             Here the initial ideas of the web will be described, the alternatives and how it became a global standard.
-            This subsection is a summary of \normalfont{\cite{wiki_gopher}\cite{wiki_www}\cite{webdevnotes_history_of_the_internet}\cite{webdevnotes_www_basics}\cite{historyofthings_internet}}.
+            This subsection is a summary of \normalfont{\cite{wiki_gopher,wiki_www,webdevnotes_history_of_the_internet,webdevnotes_www_basics,historyofthings_internet}}.
           \end{metatext}
 
           \todo{Should have another subsection or not have this in a subsection. Only one subsection is not nice.}
@@ -294,7 +296,7 @@
           In the mid 1990's the usage of the Internet transitioned from downloading files with \textsc{ftp} to instead access resources with the \textsc{http} protocol.
           To fulfill the vision that users would be able to skip to the linked documents ``with a click of the mouse'' the users needed a client to handle the fetching and displaying of the hypertext documents, hence the need for browsers were apparent.
           Here the evolution of the browser clients will be given, while emphasizing the timeline of the popular browsers we use today.
-          This section is a summary of \normalfont{\cite{wiki_www}\cite{wiki_nexus}\cite{wiki_lmb}\cite{wiki_libwww}\cite{wiki_mosaic}\cite{wiki_netscape}\cite{wiki_mozilla}\cite{wiki_opera}\cite{wiki_konqueror}\cite{wiki_safari}\cite{wiki_webkit}\cite{wiki_blink}}.
+          This section is a summary of \normalfont{\cite{wiki_www,wiki_nexus,wiki_lmb,wiki_libwww,wiki_mosaic,wiki_netscape,wiki_mozilla,wiki_opera,wiki_konqueror,wiki_safari,wiki_webkit,wiki_blink}}.
         \end{metatext}
 
         The first web browser ever made was created in 1990 and was called WorldWideWeb (which was renamed to Nexus to avoid confusion).
@@ -357,7 +359,7 @@
         \begin{metatext}
           This section will describe the transition from browsers rendering simple documents to being hosts for complex applications.
           Since web development trends are not easily pinned to exact dates, this section will only present dates as guidance and should not be regarded as exact dates for the events.
-          This section is a summary of \normalfont{\cite{wiki_web_dev}\cite{wiki_cgi}\cite{wiki_css}\cite{wiki_ajax}\cite{wiki_html5}\cite{book_html5}}.
+          This section is a summary of \normalfont{\cite{wiki_web_dev,wiki_cgi,wiki_css,wiki_ajax,wiki_html5,book_html5}}.
         \end{metatext}
 
         As described in section~\ref{sec:www}, browsers initially were applications that displayed hypertext documents with the ability to fetch linked documents in an user friendly way.
@@ -408,7 +410,7 @@
           If the size of the viewport was smaller than the supported one, the site would look broken.
           This was a valid approach in a time when tablets and smartphones were unheard of.
           Today, another approach is needed to ensure that sites function properly across a range of different devices and viewport sizes.
-          This section is a summary of \normalfont{\cite{book_rwd}\cite{wiki_rwd}}.
+          This section is a summary of \normalfont{\cite{book_rwd,wiki_rwd}}.
         \end{metatext}
 
         According to \emph{StatCounter}\footnote{Statistics are based on aggregate data collected by StatCounter on a sample exceeding 15 billion pageviews per month collected from across the StatCounter network of more than 3 million websites.}, 37\% of the web users are visiting sites on a mobile or tablet device.
@@ -448,7 +450,7 @@
 
       \section{Modularity}\label{sec:modularity}
         \begin{metatext}
-          This section is a summary of \normalfont{\cite{book_modular_programming}\cite{book_eloq_js}}.
+          This section is a summary of \normalfont{\cite{book_modular_programming,book_eloq_js}}.
         \end{metatext}
 
         By creating modules that can be used in any context with well defined responsibilities and dependencies, developing applications is reduced to the task of simply configuring modules (to some extent) to work together which forms a bigger application.
@@ -470,7 +472,7 @@
         This chapter will give a brief explanation of the layouting flow that the engines generally perform, and how content changes affects the engine\todo{Write about content changes or remove this.}.
         It will also cover some optimizations that are done and which parts of the layout process that can be done in parallel.
         The render process will not be described, as it is not relevant for element queries.
-        This chapter is mainly based on \normalfont{\cite{browser_architecture}\cite{garsiel2011browsers}}.
+        This chapter is mainly based on \normalfont{\cite{browser_architecture,garsiel2011browsers}}.
       \end{metatext}
       \todo{Have an image about the layout flow somewhere?}
 
@@ -563,7 +565,7 @@
           Here a brief explanation of \textsc{dom} trees will be given, and how they are constructed.
           In order to construct a \textsc{dom} tree, the content need to be parsed which also will be covered.
           Since parsing of content is not very relevant for element queries, it will be adressed only briefly.
-          This section is mainly based on \normalfont{\cite{w3c_dom}\cite{garsiel2011browsers}\cite{w3c_css21}}.
+          This section is mainly based on \normalfont{\cite{w3c_dom,garsiel2011browsers,w3c_css21}}.
         \end{metatext}
 
         \textsc{dom} is an abbreviation of Document Object Model which is a convention for representing and interacting with object in \textsc{xml}-based documens (such as \textsc{html}).
@@ -593,7 +595,7 @@
         \begin{metatext}
           When the \textsc{dom} tree has been constructed and all external \textsc{css} has been fetched and parsed, it is time for the layout engine to create the render tree.
           Here an explanation of the creation process and the structure of render trees will be given.
-          This section is mainly based on \normalfont{\cite{garsiel2011browsers}\cite{w3c_css21}}.
+          This section is mainly based on \normalfont{\cite{garsiel2011browsers,w3c_css21}}.
         \end{metatext}
 
         A Render tree is a visual representation of the document.
@@ -620,7 +622,7 @@
           In order to know the final style of an element, the style for each element must be computed.
           Here a brief explanation of selector matching, style cascading, inheritence and rule set specificity will be given.
           \textsc{css} property definitions will also be described.
-          This section is mainly based on \normalfont{\cite{garsiel2011browsers}\cite{w3c_css21}\cite{world2013css}}.
+          This section is mainly based on \normalfont{\cite{garsiel2011browsers,w3c_css21,world2013css}}.
         \end{metatext}
 
         To trace how the style of an element was computed can be a complex task, since there are many parameters to element style computations.
@@ -723,7 +725,7 @@
           Now, applications need to utilize the multiple cores of the \textsc{cpu} instead of relying on high clock speed.
           Parallelization is something layout engine vendors are very interested in, and much research is being done about utilizing multiple cores to increase the speed of the engine.
           In this section a small summary will be given about the current research front, and how the parallelization can be approached.
-          This section is mainly based on \normalfont{\cite{zoomm}\cite{parallelizing_the_web_browser}\cite{meyerovich2010fast}\cite{servo_parallel}\cite{servo_blog}}.
+          This section is mainly based on \normalfont{\cite{zoomm,parallelizing_the_web_browser,meyerovich2010fast,servo_parallel,servo_blog}}.
         \end{metatext}
 
         As web applications grow bigger and more demanding, browsers continously need to improve the performance on all levels.
@@ -748,7 +750,7 @@
         It has also been shown that selector matching and style resolving (through cascading) can be parallelized \cite{zoomm}.
         It is possible to resolve element styles in parallel as long as two requirements are fulfilled: The matching task must have finished for the element to resolve styles for, and the parent element must have resolved all styles (since the element might inherit some styles from the parent).
         As long as these requirements are fulfilled, selector matching and style resolving can run in parallel for different elements.
-        The layout process can also be parallelized, since the layout process has been shown to be sub-tree independent for non-float elements \cite{servo_parallel}\cite{servo_blog}.
+        The layout process can also be parallelized, since the layout process has been shown to be sub-tree independent for non-float elements \cite{servo_parallel,servo_blog}.
         Siblings of the layout tree can be processed independently of each other (in the general case), and is suitable to parallelize with a work stealing system.
         \todo{Write about the fork-join model of the parallelization as described in servo?}
 
@@ -1052,12 +1054,20 @@
   \part{Third-party framework}
     \chapter{Analysis of approaches}
       \section{Current implementations}
+        \todo[inline]{Write about GSS, Tommy's implementation and the different approaches}
+        \todo[inline]{Write somehwere that an extra layout on element resize is inevitable since it is required in theory.}
     \chapter{Framework design}
       \begin{metatext}
         Before starting the actual implementation, it is important to have an overall design to follow.
         In this chapter, the framework design will be described and a motivation why the framework should be plugin based will be given.
         The subsystems of the framework and their interactions will also presented.
       \end{metatext}
+
+      \todo[inline]{Write somewhere that it might be an option to not have a resize detection system, but instead let the user manually check the elements when they may have changed.}
+      \todo[inline]{Write about the simple cycle detector.}
+      \todo[inline]{Write about the N layouts, and how it was fixed with the batch-processing. Investigate how this behaves for nested elements.}
+      \todo[inline]{Write about the drawbacks (invalid layout at page load, injecting objects is heavy, DOM is mutated.)}
+
 
       First of all, a working name of the framework needs to be established --- the framework will from now on have the working name \textsc{elq}.
       This name will serve as a prefix for many of the framework \textsc{api}'s, and will be frequently used in the report from now on.
@@ -1144,6 +1154,7 @@
         \subsection{Object injection}
           \todo{remove me?}
       \section{Runtime cyclic rules detection}
+      \section{Avoiding layout thrashing}
 
   \part{Outro}
     \chapter{Related work}
