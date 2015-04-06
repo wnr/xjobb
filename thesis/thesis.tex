@@ -1083,21 +1083,101 @@
           It will be shown that the goals and use cases can vary from case to case, which will be the main argument to why the framework should be plugin based.
         \end{metatext}
 
+        Expectations and requirements of element queries vary greatly by use cases.
+        As usual in software development, tradeoffs need to be made.
+        Some projects value simplicity and ease of use while other projects demand advanced features and high performance.
+        The requirements can be grouped into four categories; features, ease of use, performance and compatibility.
+        Identified possible requirements of the framework are the following:
         \begin{enumerate}
-          \item The framework needs to have adequate performance to empower heavy applications running on light devices.
-          \item The framework may not require invalid \textsc{css}, \textsc{html} or JavaScript.
-          \item Developers should not need to perform big rewrites of their modules or applications in order to use the framework.
-          \item Existing modules written with media queries should be automatically converted to element queries so that existing third-party modules can be used in element query power applications.
-          \item The \textsc{api}'s need to be natural for web developers, and may not seem alien.
+          \item \textbf{Features}
+            \begin{enumerate}
+              \item The framework needs to augment native element queries in the sense that styles are applied automatically on element resizes.
+              \item Existing modules written with media queries should be automatically converted to element queries so that existing third-party modules can be used in element query empowered applications.
+              \todo{Remove this?}
+              \item The features should be flexible and not limited to only the common use cases.
+            \end{enumerate}
+          \item \textbf{Ease of use}
+            \begin{enumerate}
+              \item Developers should not need to perform big rewrites of their modules or applications in order to use the framework.
+              \item The \textsc{api}'s need to be natural for web developers, and may not seem alien.
+              \item The framework should help identifiying cyclic rules and prevent them from causing infinite layouts.
+            \end{enumerate}
+          \item \textbf{Performance}
+            \begin{enumerate}
+              \item The framework needs to have adequate performance to empower heavy applications running on light devices.
+              \item The framework load time needs to be kept low.
+            \end{enumerate}
+          \item \textbf{Compatibility}
+            \begin{enumerate}
+              \item Older browsers must be supported.
+              \item The framework may not require invalid \textsc{css}, \textsc{html} or JavaScript.
+              \item Dependencies and assumptions about the host application (including the development environment) should be kept low.
+            \end{enumerate}
         \end{enumerate}
-      \section{Framework plugins}
+        It is possible to create a framework that conforms to all of the requirements but more features, automation and compatability decreases the performance.
+        In the same way, too many advanced features may decrease the ease of use.
+        Some feature may also decrease the compatability.
+        It would be possible to create a framework that conforms to the requirements with some kind of balance between them.
+        However, trying to conform to all of the requirements and trying to find a balance will result in a worse solution than a framework tailored for specific requirements.
+        By providing a good framework foundation and plugins for different use cases it is up to developers too choose the right plugins for each project.
+        This way, developers are composing their own custom tailored framework for their specific use cases.
+        In addition, by letting the plugins satisfy the requirements it is easy to extend the framework with new plugins when new requirements arise.
+
+      \section{Architecture}
         \begin{metatext}
+          As it has been shown that a plugin based framework is most suitable, it is time to present the overall architecture of the framework.
+          The major subsystems of the core framework will be explained in depth.
         \end{metatext}
-      \section{Subsystems}
+
+        To decide which parts of the framework that should be part of the core and which parts to be plugins is a difficult task.
+        Once again, a balance needs to be found between ease of use, performance and extendability.
+        All subsystems of the core needs to provide a fundamental functionality to the framework and also needs to be general enough to be used by plugins in different ways.
+        If a plugin needs to write a custom version of a subsystem in the core in order to work, the subsystem should perhaps not be part of the core.
+        Each subsystem added to the core will impact the performance negatively for all users, so they must impose a real value to the existing and future plugins.
+        The subsystems of the core always have the risk of being redundant, unnecessary and in other ways unwanted for some use cases.
+        Therefore it is important that it is possible for developers to either remove them or change them.
+        This way the more advanced users can choose which subsystems to alter, keeping the framework easy to use for the common use cases.
+
+        Figure~\ref{fig:elq_architecture} shows the overall architecture of the framework.
+        The core consists of fundamental and general subsystems that are utilized by the plugins.
+        The plugins form the bigger part of the \textsc{api} in the sense that they decide how which features exists and how they work.
+        Developers will never be programming against the core directly, and are therefore kept hidden from the public \textsc{api}.
+        The core subsystems are:
+        \begin{itemize}
+          \item \textbf{Reporter:}
+            Responsible for reporting information, warnings and errors to the developer.
+            By having a centralized reporter, it is possible to decide at a global framework-level how much plugins are allowed to report.
+            Other options suchs as throwing exception on errors or warnings could also be set at framework-level.
+            Also, the framework can make sure that all reports are standardized and can provide extra information such as which plugin reported what.
+            To avoid code duplications, it also beneficial to have a centralized report system so the plugins do not need to perform the same compatability checks (such as checking if the browser actually supports console reporting).
+          \item \textbf{Element resize detector:}
+            Provides an interface for listening to element resize events.
+            This system is fundamental to plugins fulfilling the ease of use requirements since it enables the framework to be aware of when elements change sizes, instead of the host application keeping track of when elements have changed sizes.
+            This is presented in greater detail in section~\ref{sec:imp_erd}.
+            \todo{Maybe this shouldn't be a core subsystem? Since this system imposes the biggest performance impact. It might make more sense to have this as a plugin.}
+          \item \textbf{Cycle detector:}
+            As shown in section~\ref{} cyclic rules need to be detected at runtime.
+            When a plugin wish to update the size state of an element (which in turn applies the conditional styles for the state) it can ask this system if the element has cyclic rules.
+            It keeps track of the size state of the elements, and decides if the rules of an element are cyclic by options such as state frequency.
+            This is presented in greater detail in section~\ref{sec:imp_cycle_detector}.
+            \todo{Write that this system is more general, and could potentially be used for detecting other cyclic behaviors?}
+          \item \textbf{Batch processor:}
+            To avoid layout thrashing, it is important to read and mutate the \textsc{dom} in separate batches.
+            This subsystem provides an interface for plugins to store functions to later be executed in a batch.
+            To avoid layout thrashing by other scripts it can beneficial to asynchronously postpone the batch until the next layout cycle of the browser, which is also handled by the subsystem.
+            This is presented in greater detail in section~\ref{sec:imp_batch_processor}.
+          \item \textbf{Plugin handler:}
+            Of course, having plugins requires a subsystem for handling them.
+            This system provides the interface for developers to add plugins to the framework.
+            The system is also responsible for retrieving the plugins, and invoking them on different framework events.
+        \end{itemize}
+      \section{Framework plugins}
+
+      \section{API design}
         \begin{metatext}
         \end{metatext}
     \chapter{Implementation}
-      \section{Element resize detection}
+      \section{Element resize detection}\label{sec:imp_erd}
         \begin{metatext}
           In order to be able to perform any element queries, one first needs to be able to detect when elements change size.
           The element resize detection system will therefore be the backbone of the framework.
@@ -1156,8 +1236,8 @@
           \todo{remove me?}
         \subsection{Object injection}
           \todo{remove me?}
-      \section{Runtime cyclic rules detection}
-      \section{Avoiding layout thrashing}
+      \section{Detecting runtime cycles}\label{sec:imp_cycle_detector}
+      \section{Avoiding layout thrashing}\label{sec:imp_batch_processor}
 
   \part{Outro}
     \chapter{Related work}
