@@ -99,10 +99,10 @@
         Also, it has been shown that some cyclic rules are impossible to detect at parsetime, due to being dependent on runtime factors.
         See section~\ref{sec:cyclic-rules} for examples and a deeper analysis of cyclic rules.
         \item \textbf{Performance:} 
-        \todo{Rewrite this. Some of this is totally wrong.}
-        layout engines typically perform selector matching and layout computations in parallel to achieve good performance.
+        Layout engine vendors are interested in performing selector matching and layout computations in parallel to achieve good performance.
+        The research front of browsers have shown successful ways of parallelising the layout engine.
         If element queries would be implemented, the layout engines would need to first compute the layout of all elements in order to decide which selectors would conform to the element query conditions and then do a new layout computation, and so on until a stable state has been reached.
-        Far worse, since selectors now depend on layout style, this cannot be done in parallel, which impacts performance heavily.
+        Far worse, since selectors would depend on layout style, this cannot be done in parallel.
       \end{itemize}
       \todo{Back this up or rewrite.}
       Because of the problems, it is stated that such feature will not be implemented in the near future. So it is now up to the developers to implement this feature as a third-party solution.
@@ -146,8 +146,6 @@
       By studying the problem, identifying approaches and providing a third-party solution the community can take a step closer to solve the problem.
       If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for \textsc{w3c} to make their verdict.
       The outcome of this thesis can also be helpful for \textsc{w3c} and others to get an overview of the problem and possibly get ideas how sub problems can be handled.
-    \section{Methodology}
-      \todo{What should go here?}
     \section{Delimitations}
       The focus of this thesis lays on developing a third-party framework that realizes element queries.
       All theoretical studies and work will be performed to support the development of the framework.
@@ -460,10 +458,6 @@
         Many of these frameworks also help with dividing the \textsc{html} up into modules, creating small packages of style, markup and code.
 
         \todo{Flesh this one out, with meta text.}
-
-    \chapter{Modular development}
-      \todo{Remove this chapter?}
-      \section{Web Components}
   \part{Theory}
     \chapter{Layout engines}
       \begin{metatext}
