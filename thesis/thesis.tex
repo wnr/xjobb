@@ -48,7 +48,7 @@
 
 \title{Modular responsive web design}
 \foreigntitle{Modulär responsiv webbutveckling}
-\subtitle{Allowing responsive web modules to respond to custom criterias instead of only viewport size by implementing \emph{element queries}}
+\subtitle{Allowing responsive web modules to respond to custom criteria instead of only viewport size by implementing \emph{element queries}}
 \author{Lucas Wiener \\ \lowercase{lwiener@kth.se}}
 \date{February 2015}
 \blurb{Master's Thesis at \textsc{csc}\\\hfill\\ Supervisors at \textsc{evry ab}: Tomas Ekholm \& Stefan Sennerö\\Supervisor at \textsc{csc}: Philipp Haller\\Examiner: Mads Dam}
@@ -77,7 +77,9 @@
     \todo[inline]{runtime or run time? same for parse time. Both is being used right now.}
     \todo[inline]{Container or parent element? Using both now.}
     \todo[inline]{Renamed framework to library?}
-    \todo[inline]{Write about the targeted browser compatability.}
+    \todo[inline]{Write about the targeted browser compatibility.}
+    \todo[inline]{Word says that all "their own" is wrong.}
+    \todo[inline]{The word "layouting" seems wrong.}
     \section{Targeted audience}
       The thesis is targeted for web developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
       Heavy use of web terminology is being used and intermediate web development knowledge is assumed.
@@ -87,7 +89,7 @@
       This is fundamental to creating responsive web applications.
       If developers want to build modular applications by composing the application by smaller components (elements, scripts, styles, etc.) media queries are no longer applicable.
       Modular responsive components should be able to react and change style depending on the size that the component has been given by the application, not the viewport size.
-      The problem can be formulated as: \emph{Elements can not specify conditional style rules depending on their own size, or the size of any other element}.
+      The problem can be formulated as: \emph{Elements cannot specify conditional style rules depending on their own size, or the size of any other element}.
       See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
       \todo{Back this up or maybe reformulate it a bit.}
@@ -95,7 +97,7 @@
       Some problems with implementing element queries in \textsc{css} are:
       \begin{itemize}
         \item \textbf{Circularity:}
-        If style rules can be applied by criterias of other elements, it will be possible to create cyclic rules (infinite loops of styling).
+        If style rules can be applied by criteria of other elements, it will be possible to create cyclic rules (infinite loops of styling).
         Some cyclic rules might be possible to detect during \textsc{css} parsing, but there are so many combinations of style properties that could result in cyclic rules that it will add a lot of complexity to the language, both for implementers and users.
         Also, it has been shown that some cyclic rules are impossible to detect at parse time, due to being dependent on run time factors.
         See section~\ref{sec:cyclic-rules} for examples and a deeper analysis of cyclic rules.
@@ -103,7 +105,7 @@
         \todo{Rewrite this. Some of this is totally wrong.}
         layout engines typically perform selector matching and layout computations in parallel to achieve good performance.
         If element queries would be implemented, the layout engines would need to first compute the layout of all elements in order to decide which selectors would conform to the element query conditions and then do a new layout computation, and so on until a stable state has been reached.
-        Far worse, since selectors now depend on layout style, this cannot be done in parallel which impacts performance heavily.
+        Far worse, since selectors now depend on layout style, this cannot be done in parallel, which impacts performance heavily.
       \end{itemize}
       \todo{Back this up or rewrite.}
       Because of the problems, it is stated that such feature will not be implemented in the near future. So it is now up to the developers to implement this feature as a third-party solution.
@@ -113,26 +115,26 @@
     \section{Objective}
       The main objective of this thesis is to develop a third-party implementation of element queries (or equivalent to solve the problem of modular responsive components).
       To do this, it is needed to research existing implementation attempts in order to understand and analyze the advantages and shortcomings of the approaches.
-      It is also neccesary to be aware of the premises, such as browser limitations and specifications that need to be conformed.
+      It is also necessary to be aware of the premises, such as browser limitations and specifications that need to be conformed.
       In addition, research will be done about the problems of implementing element queries natively, to get a deeper understanding of how an official \textsc{api} would look like.
       There are many challenges along the way that will need to be researched and worked around.
-      Examples of such subproblems that would need to be investigated are:
+      Examples of such sub problems that would need to be investigated are:
       \begin{itemize}
-        \item How should circularity be handled? Should it be detected at runtime or parsetime, and what should happen on detection?
+        \item How should circularity be handled? Should it be detected at runtime or parse time, and what should happen on detection?
         \item How can one listen to element size changes without any native support?
         \item How can a custom \textsc{api} be crafted that will enable element queries and still conform to the \textsc{css} specification?
         \item If a custom \textsc{api} is developed, how would one make third-party modules (that uses media queries) work without demanding a rewrite of all third-party modules?
       \end{itemize}
       The scientific question to be answered is if it is possible to solve the problem  without extending the current web standard.
-      The hypothesis is that the problem can be solved in a reliable and performant way by crafting a third-party implementation.
-      \todo{This might be a bit to much.}
-      A reliable implementation should also enable existing responsive components to react to a specified criteria (parent container size for example) with no modifications to the components.
+      The hypothesis is that the problem can be solved with high reliability and adequate performance by crafting a third-party implementation.
+      \todo{This might be a bit too much.}
+      A reliable implementation should also enable existing responsive components to react to a specified criterion (parent container size for example) with no modifications to the components.
       The goal of the thesis should be considered fulfilled if a solution was successfully implemented or described, or if the problems hindering a solution are thoroughly documented.
 
     \section{Significance}
       Many frameworks and techniques are being used in web development to keep the code from becoming an entangled mess.
       Creating modules helps to ease development and increase reusability.
-      One of the biggest issues that keeps web modules from being truly modular is that they cannot adapt to given sizes.
+      One of the biggest issues that keep web modules from being truly modular is that they cannot adapt to given sizes.
       This makes the modules either force the client to style them properly depending on viewport size, or not being responsive.
       Both options are undesirable for developing larger applications.
       A third option would be to make the modules context aware and style themselves according to the viewport, which defeats the purpose of modules (making them not reusable).
@@ -146,7 +148,7 @@
       Solving this problem would be a big advancement to web development, enabling developers to create truly modular components.
       By studying the problem, identifying approaches and providing a third-party solution the community can take a step closer to solve the problem.
       If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for \textsc{w3c} to make their verdict.
-      The outcome of this thesis can also be helpful for \textsc{w3c} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
+      The outcome of this thesis can also be helpful for \textsc{w3c} and others to get an overview of the problem and possibly get ideas how sub problems can be handled.
     \section{Methodology}
       \todo{What should go here?}
     \section{Delimitations}
@@ -165,7 +167,7 @@
       \item No efforts will be made to solve the problems accompanied with a native solution.
       \item No \textsc{api} or similar will be designed for a native solution.
       \item \textsc{ui} and \textsc{ux} design will not be addressed, other than necessary for understanding the problem.
-      \item No complete history of browsers, the Internet or responsive web design will be given other than neccesary.
+      \item No complete history of browsers, the Internet or responsive web design will be given other than necessary.
       \end{itemize}
     \section{Outline}
 
@@ -180,25 +182,25 @@
         This section is a summary of \normalfont{\cite{internet_live_stats,internet_of_things,wiki_hypermedia,w3c_www,oed}}.
       \end{metatext}
 
-      Before addressing the birth of the web, lets define the meaning of the concepets of the \emph{Internet}, \emph{Web} and \emph{World Wide Web}.
+      Before addressing the birth of the web, lets define the meaning of the concepts of the \emph{Internet}, \emph{Web} and \emph{World Wide Web}.
       The word internet can be translated to \emph{something between networks}. 
       When referring to the Internet (capitalized) it is usually the global decentralized internet used for communication between millions of networks using \textsc{tcp/ip}.
       Since the Internet is decentralized, there is no owner.
-      Or in other words, the owners are all the network end-points which means all users of the Internet.
+      Or in other words, the owners are all the network end-points (all users of the Internet).
       One can argue that the owners of the Internet are the \textsc{isp}'s, providing the services and infrastructure making the Internet possible.
       On the other hand, the backbones of the Internet are usually co-founded by countries and companies.
-      Or is it the \textsc{icann}\footnote{The Internet Corporation for Assigned Names and Numbers} organization which has the responsibility for managing the \textsc{ip} addresses in the Internet namespace?
+      Or is it the \textsc{icann}\footnote{The Internet Corporation for Assigned Names and Numbers} organization that has the responsibility for managing the \textsc{ip} addresses in the Internet namespace?
       Clearly, the Internet wouldn't be what it is today without all the actors.
       The Internet lays the ground for many systems and applications, including the World Wide Web, file sharing and telephony.
       In 2014 the number of Internet users was measured to just below 3 billions, and estimations shows that we have surpassed 3 billions users today (no report for 2015 has been made yet).
-      Users are here defined as humans having unrestricted acccess to the Internet.
+      Users are here defined as humans having unrestricted access to the Internet.
       If one instead measures the number of connected entities (electronic devices that communicates through the Internet) the numbers are much higher.
       An estimation for 2015 of 25 billions connected entities has been made, and the estimation for 2020 is 50 billions.
       
       As already stated, the Word Wide Web (abbreviated \textsc{www} or \textsc{w3}) is a system that operates through the Internet.
       The World Wide Web is usually shortened to simply \emph{the web}.
       The web is a system for accessing interlinked hypertext documents and other media such as images and videos.
-      Since not only hypertext is interlinked on the web, the term \emph{hypermedia} can be used as an extension to hypertext which also includes other nonlinear medium of information (images, videos, etc.).
+      Since not only hypertext is interlinked on the web, the term \emph{hypermedia} can be used as an extension to hypertext that also includes other nonlinear medium of information (images, videos, etc.).
       Although the term hypermedia has been around for a long time, the term hypertext is still being used as synonym for hypermedia.
       Further, the web can also be referred to as the universe of information accessible through the web system.
       Therefore, the web is both the system enabling sharing of hypermedia and also all of the accessible hypermedia itself.
@@ -206,7 +208,7 @@
       Multiple related pages compose a \emph{web site} or simply a \emph{site} and are usually hosted from the same domain.
       To transfer the resources between computers the protocol \textsc{http} is used.
       Typically the way of retrieving resources on the web is by using a \emph{web browser} or simply a \emph{browser}.
-      Browsers handles the fetching, parsing and rendering of the hypertext (more about this in section~\ref{sec:browsers}).
+      Browsers handle the fetching, parsing and rendering of the hypertext (more about this in section~\ref{sec:browsers}).
       
       \section{The origin of the web}
         \begin{metatext}
@@ -223,27 +225,27 @@
         The first nodes of \textsc{arpanet} was installed at four major universities in the western United States in 1969 and two years later the network spanned the whole country.
         The first public demonstration of \textsc{arpanet} was held at the International Computer Communication Conference (ICCC) in 1972.
         It was also at this time the email system was introduced, which became the largest network application for over a decade.
-        In 1973 the network had international connections to Norway and London via a sattelite link.
+        In 1973 the network had international connections to Norway and London via a satellite link.
         At this time information was exchanged with the File Transfer Protocol (\textsc{ftp}), which is a protocol to transfer files between hosts.
         This can be viewed as the first generation of the Internet. With around 40 nodes, operating with raw file transfers between the hosts it was mostly used by the academic community of the United States.
 
         The number of nodes and hosts of \textsc{arpanet} increased slowly, mainly due to the fact that it was a centralized network owned and operated by the \textsc{us} military.
         In 1974 the \textsc{tcp/ip} stack was proposed in order to have a more robust and scalable system for end-to-end network communication.
-        The \textsc{tcp/ip} stack is a key technology for the decentralization of the \textsc{arpanet}, to allow the massive expandation of the network that later happened.
+        The \textsc{tcp/ip} stack is a key technology for the decentralization of the \textsc{arpanet}, to allow the massive expansion of the network that later happened.
         In 1983 \textsc{arpanet} switched to the \textsc{tcp/ip} protocols, and the network was split in two.
         One network was still called \textsc{arpanet} and was to be used for research and development sites.
         The other network was called \textsc{milnet} and was used for military purposes.
         The decentralization event was a key point and perhaps the birth of the Internet.
-        The Computer Science Network (\textsc{csnet}) was funded by the National Science Foundation (\textsc{nsf}) in 1981 to allow networking benefits to academic insitutions that could not directly connect to \textsc{arpanet}.
+        The Computer Science Network (\textsc{csnet}) was funded by the National Science Foundation (\textsc{nsf}) in 1981 to allow networking benefits to academic intsitutions that could not directly connect to \textsc{arpanet}.
         After the event of decentralizing \textsc{arpanet}, the two networks were connected among many other networks.
         In 1985 \textsc{nsf} started the National Science Foundation Network (nsfnet) program to promote advanced research and education networking in the \textsc{us}.
-        To link the supercomputing centers funded by \textsc{nsf} the \textsc{nsfnet} serverd as a high speed and long distance backbone network.
+        To link the supercomputing centers funded by \textsc{nsf} the \textsc{nsfnet} served as a high speed and long distance backbone network.
         As more networks and sites were linked by the \textsc{nsfnet} network, it became the first backbone of the Internet.
         In 1992, around 6000 networks were connected to the \textsc{nsfnet} backbone with many international networks.
         To this point, the Internet was still a network for scientists, academic institutions and technology enthusiasts.
         Mainly, because \textsc{nsf} had stated that \textsc{nsfnet} was a network for non-commercial traffic only.
-        In 1993 \textsc{nsf} decided to go back to funding research in supercomputing and high-speed communcations instead of funding and running the Internet backbone.
-        That, along with an increasing preassure of commercializing the Internet let to another key event in the history of the Internet - the privatization of the \textsc{nsfnet} backbone.
+        In 1993 \textsc{nsf} decided to go back to funding research in supercomputing and high-speed communications instead of funding and running the Internet backbone.
+        That, along with an increasing pressure of commercializing the Internet let to another key event in the history of the Internet - the privatization of the \textsc{nsfnet} backbone.
 
         In 1994, the \textsc{nsfnet} was systematically privatized while making sure that no actor owned too much of the backbone in order to create constructive market competition.
         With the Internet decentralized and privatized regular people started using it as well as companies.
@@ -284,10 +286,10 @@
           Gopher enabled servers to list the documents present, and also to link to documents on other servers.
           This created a strong hierarchy between the documents.
           The listed documents of a server could then be presented as hypertext menus to the client (much like a web browser).
-          As the protocol was simpled than \textsc{http} it was often preferred since it used less network resources.
+          As the protocol was simpler than \textsc{http} it was often preferred since it used less network resources.
           The structure provided by Gopher provided a platform for large electronic library connections.
           A big difference between the web and the Gopher platform is that the Gopher platform provided hypertext menus presented as a file system while the web hypertext links inside hypertext documents, which provided greater flexibility.
-          When the University of Minnesota announced that it would charge lincensing fees for the implementation, users were somewhat scared away.
+          When the University of Minnesota announced that it would charge licensing fees for the implementation, users were somewhat scared away.
           As the web matured, being a more flexible system with more features as well as being totally free it quickly became dominant.
 
       \section{The history of browsers}
@@ -304,29 +306,29 @@
         Built with the NeXT framework, it was quite sophisticated.
         It had a \textsc{gui} and a \textsc{wysiwyg}\footnote{What You See Is What You Get is a classification that ensures that text and graphics during editing appears close to the result.} hypertext document editor.
         Unfortunately it couldn't be ported to other platforms, so a new browser called \emph{Line Mode Browser} (\textsc{lmb}) were quickly developed.
-        To ensure compatability with the earliest computer terminals the browser displayed text, and was operated with text input.
+        To ensure compatibility with the earliest computer terminals the browser displayed text, and was operated with text input.
         Since the browser was operated in the terminal, users could log in to a remote server and use the browser via telnet.
         The code that the two browsers shared was in 1993 bundled as a library called \emph{libwww}.
         The library was licensed as \emph{public domain} to encourage the development of web browsers.
         Many browsers were develop at this time.
         The \emph{Arena} browser served as a testbed browser and authoring tool for Unix.
         The \emph{ViolaWWW} browser was the first to support embedded scriptable objects, stylesheets and tables.
-        \emph{Lynx} is a text based browser that supports many protocols (including Gopher and \textsc{http}), and is the oldest browser still being used and developed.
+        \emph{Lynx} is a text-based browser that supports many protocols (including Gopher and \textsc{http}), and is the oldest browser still being used and developed.
         The list of browsers of this time can be made long.
 
         In 1993, the \emph{Mosaic} browser was released by the National Center for Supercomputing Applications (\textsc{ncsa}) which came to be the ancestor of many of the popular browsers in use today.
         As Lynx, Mosaic also supported many different protocols.
-        Mosaic quickly became popular, mainly due to the intuitive \textsc{gui}, reliability, simple installation and Windows compatability.
+        Mosaic quickly became popular, mainly due to the intuitive \textsc{gui}, reliability, simple installation and Windows compatibility.
         The company \emph{Spyglass, Inc.} licensed the browser from \textsc{ncsa} for producing their own browser 1994.
         Around the same time the leader of the team that developed Mosaic, Marc Andreessen, left \textsc{ncsa} to start Mosaic Communications Corporation.
-        The company released their own browser named \emph{Mosaic Netscape} in 1994, which later was to be called \emph{Netscape Navigator} which was internally codenamed \emph{Mozilla}.
+        The company released their own browser named \emph{Mosaic Netscape} in 1994, which later was to be called \emph{Netscape Navigator} that was internally codenamed \emph{Mozilla}.
         Microsoft licensed the Spyglass Mosaic browser in 1995, modified and renamed it to \emph{Internet Explorer}.
         In 1997 Microsoft started using their own \emph{Trident} layout engine for Internet Explorer.
-        The norwegian telecommunications company \emph{Telenor} developed their own browser called \emph{Opera} in 1994, which was released 1996.
+        The Norwegian telecommunications company \emph{Telenor} developed their own browser called \emph{Opera} in 1994, which was released 1996.
         Internet Explorer and Netscape Navigator were the two main browsers for many years, competing for market dominance.
         Netscape couldn't keep up with Microsoft, and was slowly losing market share.
         In 1998 Netscape started the open source Mozilla project, which made available the source code for their browser.
-        Mozilla was to originally develop a suite of internet applications, but later switched focus to the \emph{Firefox} browser that had been created in 2002.
+        Mozilla was to originally develop a suite of Internet applications, but later switched focus to the \emph{Firefox} browser that had been created in 2002.
         Firefox uses the \emph{Gecko} layout engine developed by Mozilla.
 
         Another historically important browser is the \emph{Konqueror} browser developed by the free software community \textsc{kde}.
@@ -369,8 +371,8 @@
         Since \textsc{html} is only a markup language it is not possible to generate dynamic content, which was sufficient at the time \textsc{html} only was used for annotating links in research documents.
 
         The need for generated dynamic content grew bigger, and \textsc{ncsa} created the first draft of the Common Gateway Interface (\textsc{cgi}) in 1993, which provides an interface between the web server and the systems that generate content.
-        \textsc{cgi} programs are usually referred to as scripts, since many of the popular \textsc{cgi} languages are script langauges.
-        To generate dynamic content on the server is sometimes referred to as \emph{serverside scriping}.
+        \textsc{cgi} programs are usually referred to as scripts, since many of the popular \textsc{cgi} languages are script languages.
+        To generate dynamic content on the server is sometimes referred to as \emph{server-side scripting}.
         This enabled developers to generate dynamic websites, with different content for different users for instance.
         However, when the content had been delivered to the client (browser) it was still static content.
         There is no way for the server to change the content that the client has received, unless the client requests another document.
@@ -384,14 +386,14 @@
         This enabled web developers to use ``real'' programming languages.
         The drawback of this is that users first had to download the runtimes in order to run the programs embedded in pages.
         As client side scripting matured and standardized into \emph{JavaScript}, plugins slowly decreased in popularity.
-        With the increase of smart devices (such as phones, televisions, cars, game consoles, etc.) which included browsers but limited third-party runtimes, plugins quickly went extinct.
+        With the increase of smart devices (such as phones, televisions, cars, game consoles, etc.) that included browsers but limited third-party runtimes, plugins quickly went extinct.
         Today, web sites rarely use plugins.
 
         As JavaScript and \textsc{html} supported more features, websites turned into small applications with user sessions (using cookies) and user interfaces.
         Still, parts of the applications were defined as \textsc{html} pages, fetched from the server when navigating the site.
         When \emph{XMLHttpRequest} \textsc{api} was supported in the major browsers, pages no longer needed to reload the page to fetch new content as XMLHttpRequest enabled developers to perform asynchronous requests to the server without page reload.
         This opened up for \emph{Ajax} web development technique which became a popular way of communicating with servers ``in the background'' of the page.
-        Developers pushed browsers and \textsc{html} to the limit when creating applications instead of documents which it was originally designed for.
+        Developers pushed browsers and \textsc{html} to the limit when creating applications instead of documents that it was originally designed for.
         In a \textsc{w3c} meeting in 2004 it was proposed to extend \textsc{html} to allow the creation of web applications, which was rejected.
         \textsc{w3c} was criticized of not listening to the need of the industry, and some members of \textsc{w3c} left to create the Web Hypertext Application Technology Working Group (\textsc{whatwg}).
         \textsc{whatwg} started working on specifications to ease the development of web applications which came to be named \textsc{html5}.
@@ -400,7 +402,7 @@
 
         A new era of \textsc{api}'s and features came along with the \textsc{html5} standard, which truly enabled developers to create rich client side applications.
         \textsc{css3} was also recently released which also included many new features.
-        Using \textsc{html5} together with \textsc{css3} developers could utilize advanced graphics programming, geolocation, cache storage, file system acccess, offline mode, and much more.
+        Using \textsc{html5} together with \textsc{css3} developers could utilize advanced graphics programming, geolocation, cache storage, file system access, offline mode, and much more.
 
         \todo{Write that traditional applications are threatened by web applications, since the reach and availability of the web is superior to any other distribution platform. Also, no installation is required with web applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
       \section{Responsive web design}\label{sec:rwd}
@@ -413,19 +415,20 @@
           This section is a summary of \normalfont{\cite{book_rwd,wiki_rwd}}.
         \end{metatext}
 
-        According to \emph{StatCounter}\footnote{Statistics are based on aggregate data collected by StatCounter on a sample exceeding 15 billion pageviews per month collected from across the StatCounter network of more than 3 million websites.}, 37\% of the web users are visiting sites on a mobile or tablet device.
+        According to \emph{StatCounter}\footnote{Statistics are based on aggregate data collected by StatCounter on a sample exceeding 15 billion page views per month collected from across the StatCounter network of more than 3 million websites.}, 37\% of the web users are visiting sites on a mobile or tablet device.
         No longer is it valid to not support small screens.
-        Furthermore, it is understood that sites need to be styled differently if they are visisted by touch devices or mouse-based devices (such as laptops or desktops).
+        Furthermore, it is understood that sites need to be styled differently if they are visited by touch devices or mouse-based devices (such as laptops or desktops).
         Since web developers were not ready for this rapid change of device properties, they resorted to using the same approach that they had done before --- assumptions about the user device, but this time the other way around.
         When a browser request a resource, an agent string is usually sent with the request to identify what kind of browser the user is using.
         By reading the agent string at server side, a mobile-friendly version of the site could be served if the user was sending mobile agent strings and the desktop version could be served otherwise.
         The mobile version would be designed for a maximum width, and the desktop would be designed for a minimum width.
         This was a natural reaction since no better techniques existed, but the approach has many flaws.
-        First, the developer now have two versions of a site to maintain and develop in parallel.
-        Second, this approach doesn't scale well with new devices entering the market. For instance, tablets are somewhere in the middle of mobile and laptops in size which would require another special version of the site.
+        First, the developers now have two versions of a site to maintain and develop in parallel.
+        Second, this approach doesn't scale well with new devices entering the market.
+        For instance, tablets are somewhere in the middle of mobile and laptops in size, which would require another special version of the site.
         Third, the desktop site assumes that desktop users have big screens (which in most of the times is true).
         However, there is no guarantee that the browser viewport will be big just because the screen is big.
-        Users might want to have multiple browser windows displayed at the same time on the screen, which would break the assumptions about the layout size avaiable for the site.
+        Users might want to have multiple browser windows displayed at the same time on the screen, which would break the assumptions about the layout size available for the site.
         Clearly, a better approach was needed.
 
         With the release of \textsc{css3} \emph{media queries} new possibilities opened up.
@@ -453,7 +456,7 @@
           This section is a summary of \normalfont{\cite{book_modular_programming,book_eloq_js}}.
         \end{metatext}
 
-        By creating modules that can be used in any context with well defined responsibilities and dependencies, developing applications is reduced to the task of simply configuring modules (to some extent) to work together which forms a bigger application.
+        By creating modules that can be used in any context with well-defined responsibilities and dependencies, developing applications is reduced to the task of simply configuring modules (to some extent) to work together which forms a bigger application.
         It is today possible to write the web client logic in a modular way in JavaScript.
         The desire of writing modular code can be shown by the popularity of frameworks that helps dividing up the client code into modules.
         The ever so popular frameworks \emph{Angular}, \emph{Backbone}, \emph{Ember}, \emph{Web Components}, \emph{requirejs}, \emph{Browserify}, \emph{Polymer}, \emph{React} and many more all have in common that they embrace coding modular components.
@@ -468,15 +471,15 @@
     \chapter{Layout engines}
       \begin{metatext}
         Before diving into the theory of element queries, it is important to understand how layout engines work.
-        Only the layout engines of the browser will be of importance, since element queries does not affect any other browser subsystem.
-        This chapter will give a brief explanation of the layouting flow that the engines generally perform, and how content changes affects the engine\todo{Write about content changes or remove this.}.
+        Only the layout engines of the browser will be of importance, since element queries do not affect any other browser subsystem.
+        This chapter will give a brief explanation of the layouting flow that the engines generally perform, and how content changes affect the engine\todo{Write about content changes or remove this.}.
         It will also cover some optimizations that are done and which parts of the layout process that can be done in parallel.
         The render process will not be described, as it is not relevant for element queries.
         This chapter is mainly based on \normalfont{\cite{browser_architecture,garsiel2011browsers}}.
       \end{metatext}
       \todo{Have an image about the layout flow somewhere?}
 
-      Browsers are complex applications that consists of many subsystems.
+      Browsers are complex applications that consist of many subsystems.
       A reference architecture of browsers has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
       \begin{figure}
         \centering
@@ -505,7 +508,7 @@
           \draw[myarrow] (ui.east) -- +(1.5, 0) |- (render-backend.east);
         \end{tikzpicture} 
         \medskip
-        \caption{Reference browser architecture. The data persistance system used by the browser engine and the user interface has been omitted.} 
+        \caption{Reference browser architecture. The data persistence system used by the browser engine and the user interface has been omitted.} 
         \label{fig:browser_architecture}
       \end{figure}
       It is shown that the layout engine is located between the \emph{browser engine} system and the network, JavaScript, \textsc{xml} parsing and display backend.
@@ -564,27 +567,27 @@
         \begin{metatext}
           Here a brief explanation of \textsc{dom} trees will be given, and how they are constructed.
           In order to construct a \textsc{dom} tree, the content need to be parsed which also will be covered.
-          Since parsing of content is not very relevant for element queries, it will be adressed only briefly.
+          Since parsing of content is not very relevant for element queries, it will be addressed only briefly.
           This section is mainly based on \normalfont{\cite{w3c_dom,garsiel2011browsers,w3c_css21}}.
         \end{metatext}
 
-        \textsc{dom} is an abbreviation of Document Object Model which is a convention for representing and interacting with object in \textsc{xml}-based documens (such as \textsc{html}).
+        \textsc{dom} is an abbreviation of Document Object Model which is a convention for representing and interacting with object in \textsc{xml}-based documents (such as \textsc{html}).
         The \textsc{dom} provides an interface for programs (JavaScript scripts in the browser) to dynamically access and mutate the content, structure and style of documents.
-        Each node of the document is a \textsc{dom} object, and therefore the whole document is converted to a tree structure of \textsc{dom} nodes which is refered to as the \textsc{dom} tree.
+        Each node of the document is a \textsc{dom} object, and therefore the whole document is converted to a tree structure of \textsc{dom} nodes which is referred to as the \textsc{dom} tree.
 
         Layout engines construct \textsc{dom} trees by parsing \textsc{html} with any included \textsc{css} and JavaScript.
-        Parsing of \textsc{html} is not an easy task because the specification of \textsc{html} states that it must be forgiving (i.e. accepting malformated markup).
-        \todo{Is it true that the sepc says that malformated html must be accepted. Servo experience report seems to say otherwise.}
-        As \textsc{css} and JavasScript are more strict, their grammar can be expressed in a formal syntax and can therefore be parsed with a context free grammar parser (which can be autogenerated).
+        Parsing of \textsc{html} is not an easy task because the specification of \textsc{html} states that it must be forgiving (i.e. accepting malformed markup).
+        \todo{Is it true that the spec says that malformed html must be accepted. Servo experience report seems to say otherwise.}
+        As \textsc{css} and JavasScript are stricter, their grammar can be expressed in a formal syntax and can therefore be parsed with a context free grammar parser (which can be autogenerated).
         Another big quirk to parsing \textsc{html} is that it is reentrant, which means that the source may change during parsing.
-        Script elements are to be executed synchronously when it is occured by the parser.
-        If such script mutate the \textsc{dom}, then the parser will need to evaluate the changes made by the script and update the \textsc{dom} tree.
+        Script elements are to be executed synchronously when it is occurred by the parser.
+        If such script mutates the \textsc{dom}, then the parser will need to evaluate the changes made by the script and update the \textsc{dom} tree.
         External scripts need to be fetched in order to be executed, which halts the parsing unless the script element states otherwise.
         It should be noted that although \textsc{dom} nodes do include a \code{style} property, the nodes in the \textsc{dom} tree are not affected by the \textsc{css} cascading, and the style properties do not represent the final style of the element.
         Instead, for scripts to obtain the final computed style for an element a special function needs to be called (\code{getComputedStyle} in JavaScript).
         Since externally linked \textsc{css} documents do not directly affect the \textsc{dom} tree they could conceptually be fetched and parsed after the parsing of the \textsc{html}.
         However, scripts can request the computed style of \textsc{dom} tree nodes and therefore either the parsing of \textsc{html} needs to be halted in order to fetch and parse \textsc{css} when it occurs, or the scripts accessing style properties of \textsc{dom} nodes need to be halted.
-        A common optimization is to use a specalutive parser that continues to parse the \textsc{html} when the main parser has halted (for executing the scripts usually).
+        A common optimization is to use a speculative parser that continues to parse the \textsc{html} when the main parser has halted (for executing the scripts usually).
         The speculative parser does not change the \textsc{dom} tree, instead it searches for external resources that can be fetched in parallel while waiting for the main parser to continue.
 
         \todo{code example of reentrant html?}
@@ -600,27 +603,27 @@
 
         A Render tree is a visual representation of the document.
         In contrast to the \textsc{dom} tree, the render tree only contains of elements that will be rendered.
-        The nodes of the render tree are called \emph{renderers} (also known as \emph{frames} or \emph{render objects}), as the elements are responsible for laying out and rendering themselves and all of its subnodes.
+        The nodes of the render tree are called \emph{renderers} (also known as \emph{frames} or \emph{render objects}), as the elements are responsible for their own and all subnodes layout and rendering.
         In order to know how to render themselves, the final style of each renderer needs to be computed which is done by the layout engine while constructing the tree.
         Each renderer represents a rectangle (given by style size and position) with a given style.
-        There are differnt types of renderers, which affects how the renderer rectangle is computed.
+        There are different types of renderers, which affect how the renderer rectangle is computed.
         The type can be directly affected by the display style property.
 
-        Typically nodes in the \textsc{dom} tree map in a 1:1 relation to nodes in the render tree, but the relation can also be smallar or larger.
+        Typically nodes in the \textsc{dom} tree map in a 1:1 relation to nodes in the render tree, but the relation can also be smaller or larger.
         The render tree only contains nodes that will affect the rendered result, so nodes that do not affect the layout flow of the document and that aren't visible will not be present in the render tree.
-        For instance, an \textsc{dom} node element with the \code{display} property set to \code{none} will have the relation 1:0 (it will not be present in the render tree because it is not visible and will not affect the layout flow).
+        For instance, a \textsc{dom} node element with the \code{display} property set to \code{none} will have the relation 1:0 (it will not be present in the render tree because it is not visible and will not affect the layout flow).
         It should be noted that elements with the \code{visibility} property set to \code{hidden} will be present in the render tree, although they are not visible, since they still affect the layout flow.
 
         Even though all style properties have been resolved for each node in the render tree (through \textsc{css} cascading), the renderers still do not know about the size and position of the rectangle.
         This is because some properties cannot be computed by just computing the styles for an element.
         Some properties depend on the flow of the document, and needs to be resolved through a layout.
-        The layout process will resolve the final position and size for all renderes.
+        The layout process will resolve the final position and size for all renderers.
 
       \section{Style computation}\label{sec:style-computation}
         \begin{metatext}
           Both the render tree and scripts need to be able to get the final style of an element.
           In order to know the final style of an element, the style for each element must be computed.
-          Here a brief explanation of selector matching, style cascading, inheritence and rule set specificity will be given.
+          Here a brief explanation of selector matching, style cascading, inheritance and rule set specificity will be given.
           \textsc{css} property definitions will also be described.
           This section is mainly based on \normalfont{\cite{garsiel2011browsers,w3c_css21,world2013css}}.
         \end{metatext}
@@ -637,15 +640,15 @@
           \item In special attributes of the element such as \code{bgcolor} (deprecated, but possible).
         \end{enumerate}
         This can be grouped into author, user and browser styles.
-        The four first items can be regarded as \textsc{css} which means that they are \emph{cascading} their style rules through \emph{selector matching}.
+        The four first items can be regarded as \textsc{css} because they are \emph{cascading} their style rules through \emph{selector matching}.
         Selector matching conceptually finds all elements in the \textsc{dom} tree that matches a \textsc{css} selector, to apply the rule set.
-        The rule sets are weightened so that if a property is assigned values by multiple rule sets the one with highest weight will be applied.
-        The weightening process starts with the origin of the style:
+        The rule sets are weighted so that if a property is assigned values by multiple rule sets the one with highest weight will be applied.
+        The weighting process starts with the origin of the style:
         \begin{itemize}
-          \item In case of normal rule declarations, the style weightening relation is: $browser < user < author$.
+          \item In case of normal rule declarations, the style weighting relation is: $browser < user < author$.
           \item Important rule declarations have the following relation: $author < user$.
         \end{itemize}
-        The weightening process continues by calculating the \emph{specificity} of all rule set selectors, the higher the specificity the higher the rule set will be weightened.
+        The weighting process continues by calculating the \emph{specificity} of all rule set selectors, the higher the specificity the higher the rule set will be weightened.
         This will make rule sets with more specific selectors override rule sets with more general selectors.
         Finally, if two rule declarations have the same weight, origin and specificity the rule set specified last will win.
         Inline \textsc{css} does not cascade since all rules given are automatically matched with the element of the style attribute.
@@ -658,9 +661,9 @@
         For instance, the width property definition states that legal values are absolute lengths, percentages or \code{auto} (which will let the browser decide).
         The percentages are relative to the containing block.
         The initial value is \code{auto}, the properties applies to all elements non-replaced inline elements, table rows and row groups.
-        The value may not be inherited, and the media groups is \code{visual}.
+        The value may not be inherited, and the media group is \code{visual}.
         The computed value is either the absolute length, calculated percentage of the containing block or what the browser decides (in case of \code{auto}).
-        If a property may inherit values, it will inherit the value of the first ancestor that has a value that is not \code{inherit}.
+        If a property may inherit values, it will inherit the value of the first ancestor that has a value that is not \code{inherited}.
 
         \begin{table}[ht]\center
           \tiny
@@ -690,11 +693,11 @@
           This section is mainly based on \normalfont{\cite{garsiel2011browsers}}.
         \end{metatext}
 
-        The layout (also called \emph{reflow}) of \textsc{html} is flow based which means that document layout can generally be performed top to bottom and left to right in one pass.
-        This is possible because the geometry of elements typically do not depend on the siblings or children\todo{Seems weird to say that flow is not dependant on children, since the height is propagated upwards.}.
+        The layout (also called \emph{reflow}) of \textsc{html} is flow based, which means that document layout can generally be performed top to bottom and left to right in one pass.
+        This is possible because the geometry of elements typically do not depend on the siblings or children\todo{Seems weird to say that flow is not dependent on children, since the height is propagated upwards.}.
         Layout is performed recursively by starting at the root of the tree, let the renderer render itself and all of its children which will render themselves and their children and so on.
         When a layout is performed on the whole render tree it is called a \emph{global layout}.
-        To avoid global layouts when an renderer has been changed, a dirty bit system is usually implemented.
+        To avoid global layouts when a renderer has been changed, a dirty bit system is usually implemented.
         The system will mark which renderers in the tree that need a layout, which avoids layouting unaffected elements.
         Layouts that only layout the dirty renderers are called \emph{incremental layouts}.
         Layout engines that uses the dirty bit system usually keeps a queue of incremental layout commands.
@@ -707,15 +710,15 @@
           \item Positions all children and request them to layout themselves (with given position and width).
           \item The heights, margins and paddings of the children are accumulated in order to decide the own height.
         \end{enumerate}
-        Of course, only the children that needs a layout will be affected (dirty, or global layout) in step 2.
+        Of course, only the children that need a layout will be affected (dirty, or global layout) in step 2.
         So, the widths and positions are sent down in the tree and the height is sent up in the tree in order to construct the final layout.
 
         The widths are calculated by the \code{width} style of the elements, relative to the container element width.
-        Margins and paddings are also takin into account when calculating the widths.
-        When the width of an element is calculated, it needs to controlled against the \code{min-width} and \code{max-width} style properties and make sure that the width is inside the range.
+        Margins and paddings are also taken into account when calculating the widths.
+        When the width of an element is calculated, it needs to be controlled against the \code{min-width} and \code{max-width} style properties and make sure that the width is inside the range.
         If the content of an element does not fit with the calculated width (text usually needs to perform line break when the width is too small), the element needs to break up the content into multiple renderers in order to expand the height.
         The renderer that has decided it needs to break the content up into multiple renderers propagates to the parent renderer that it needs to perform the breaking.
-        When the parent renderer has created the renderes needed to fit the content with the given height, layout is performed on the new renderers and then the final height can be calculated and propageted upwards.
+        When the parent renderer has created the renderers needed to fit the content with the given height, layout is performed on the new renderers and then the final height can be calculated and propagated upwards.
 
         \todo{Is incremental layout commands really batch processed?}
 
@@ -728,11 +731,11 @@
           This section is mainly based on \normalfont{\cite{zoomm,parallelizing_the_web_browser,meyerovich2010fast,servo_parallel,servo_blog}}.
         \end{metatext}
 
-        As web applications grow bigger and more demanding, browsers continously need to improve the performance on all levels.
+        As web applications grow bigger and more demanding, browsers continuously need to improve the performance on all levels.
         Fetching resources over the network is the only thing that is done in parallel today.
         The rest of the browser system is designed and optimized to run sequentially.
-        On computers, browsers usually achieves parallelism by running each page context in parallel (each tab of the browser window is an own process).
-        This approach is appealing because it utilizes the cores of the machine by still having all subsystems run sequentally for each page, while improving the overall performance of the browser.
+        On computers, browsers usually achieve parallelism by running each page context in parallel (each tab of the browser window is an own process).
+        This approach is appealing because it utilizes the cores of the machine by still having all subsystems run sequentially for each page, while improving the overall performance of the browser.
         However, this approach is not enough.
         The page performance is not improved if only one page is present.
         For the web to be a true competitor to heavy native applications, the page performance needs to be increased (not only the overall browser performance).
@@ -741,7 +744,7 @@
         Light devices such as small laptops, mobile devices and tablets share a common goal --- they want to reduce power consumption while increasing the performance.
         This can be achieved with multicore processors that run at lower clock speeds.
         \todo{Write that many cores is preferred over high clock speed? Why?}
-        It has been shown that the performance of mobile browsers are \textsc{cpu} bound contrary to the common belief that they are network bandwidth bound \cite{parallelizing_the_web_browser}.
+        It has been shown that the performance of mobile browsers is \textsc{cpu} bound contrary to the common belief that they are network bandwidth bound \cite{parallelizing_the_web_browser}.
         This is why most researchers target light devices when trying to parallelize web browsers.
         Of course, once the methods has matured and been implemented, desktops will benefit from this as well.
 
@@ -756,7 +759,7 @@
 
     \chapter{Element queries}
       \begin{metatext}
-        Now that a good understanding of browsers (especially the layout engine), responsive design and modular development has been aqcuired it is time to address element queries --- the solution to modular responsive web design.
+        Now that a good understanding of browsers (especially the layout engine), responsive design and modular development has been acquired it is time to address element queries --- the solution to modular responsive web design.
         This chapter will define element queries, present how they solve the problem, and address some of the issues hindering element queries from being implemented natively.
         Further, some possible restrictions will be presented to resolve some of the issues.
         \todo{Instead write that some solutions will be presented?}
@@ -765,14 +768,14 @@
       Recall from section~\ref{sec:rwd} that responsive web design is the concept of having elements respond to the given size.
       Responsive web design implements this by using media queries, applying conditional rules by the viewport size.
       In section~\ref{sec:modularity} the desire for building modular web components was presented.
-      One implication of building applications in a modular way, is that general components become reusable.
+      One implication of building applications in a modular way is that general components become reusable.
       Since the only way of applying conditional rules to elements today is by using media queries, all responsive styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the layout).
       The implication of this is that the \textsc{html} and JavaScript can be written in a modular way, but the \textsc{css} is left for the user of the module (application) to write which somewhat defeats the purpose of writing modules.
       So developers today have two choices: Writing modules that are not responsive but self contained, or writing modules that are responsive but not self contained (leaving the styling to the user).
-      The solutions to this is elemenet queries, which allows conditional rules to be applied based on any criteria for any element.
+      The solution to this is element queries, which allows conditional rules to be applied based on any criteria for any element.
       Figure~\ref{fig:mq-vs-eq} shows the problem with media queries and the element query solution.
       The typical use case is to write conditional styles to be applied based on the container element size.
-      Although the typically the size of the container element is the most interesting element query with reponsive web design, element queries as a concept does not need to be limited to that.
+      Although the typically the size of the container element is the most interesting element query with responsive web design, element queries as a concept does not need to be limited to that.
       It is also possible to apply conditional rules by any element display property, color, text alignment, and so on.
       Theoretically it should be possible to query any style property of an element, but the focus will lay on the \code{width} and \code{height} properties since they are the most interesting in responsive web design.
 
@@ -790,7 +793,7 @@
           The problem of media queries and the element query solution.
           Both images shows four instances of a module in different sizes.
           The module is responsive, so when it is small it should change color to red and change the inner text a bit.
-          The left version is built with media queries, hence all module instances stay blue even though some are small (only a smaller viewport will trigger the modules to change style).
+          The left version is built with media queries; hence all module instances stay blue even though some are small (only a smaller viewport will trigger the modules to change style).
           The right version is built with element queries, hence the modules display differently depending on the given size that each module has, which is the desired behavior.}
         \label{fig:mq-vs-eq}
       \end{figure}
@@ -812,8 +815,8 @@
           \end{metatext}
 
           Recall from section~\ref{sec:layout-process} that the box size and position for each element is calculated at in the layout process, and cannot be determined before an actual layout has happened.
-          This impose that a layout pass needs to be performed before knowing the element sizes.
-          If element queries are present that rely on the size of elements, which is the identified common usecase, the following process needs to happen:
+          This imposes that a layout pass needs to be performed before knowing the element sizes.
+          If element queries are present that rely on the size of elements, which is the identified common use case, the following process needs to happen:
           \begin{enumerate}
             \item A layout pass needs to be performed in order to calculate the size of the elements targeted by element queries.
             \item The element query conditional rules need to be evaluated against the elements to know which rules should be applied (element query selector matching).
@@ -836,7 +839,7 @@
             Some examples of will be given to better understand the complexity of the problem.
           \end{metatext}
 
-          The most straight forward occurances of cyclic rules are when there are specified conflicting width constraints and width updates for an element.
+          The most obvious occurrences of cyclic rules are when there are specified conflicting width constraints and width updates for an element.
           See listing~\ref{code:cyclic-simple} for the perhaps most simple example of cyclic rules.
           The syntax of element queries will be presented in section~\ref{}, and is not important to understand the problem.
           \begin{lstlisting}[caption={Very simple example of cyclic rules.}, captionpos=b, label={code:cyclic-simple}]
@@ -869,7 +872,7 @@
           Next step will be 2.
           \end{enumerate}
           Clearly, the browser will be stuck in an infinite layout cycle pending back and forth between step 2 and 3 (250 pixels and 550 pixels).
-          The result of this is of course implementation dependant.
+          The result of this is of course implementation dependent.
           One reasonable outcome of such infinite layout loop is that the layout engine will execute one layout pass and then evaluate the next set of matched selectors and so on, which will lead to a functioning site but since a relayout is enforced every update, the performance impact will be huge.
           This example is somewhat similar to writing \code{while(true);} in JavaScript, which obviously is a bad idea.
           However, cyclic rules can also occur in less obvious ways. 
@@ -965,17 +968,17 @@
           \end{itemize}
           The bolded factors are of a far worse type than the ones presented until now.
           They are impossible to determine at parse time.
-          In this example the text is static but it could have beeen added dynamically.
+          In this example the text is static but it could have been added dynamically.
           Also, the inherited font size depends on the closest ancestor with a font size property defined.
           Since ancestors also can have their font sizes defined in relative units, the dependency tree can go up to the root of the document.
           Further, if no ancestor defines an absolute value for the font size it is up to the browser to default to a size, which is impossible to reason about at parse time.
           This implies that there is no way of telling if the cycle will appear or not without actually running the code.
           Also, the cycle may appear in different browsers and settings, which makes the cycle even harder to detect.
-          Far worse is that the previous examples have been of the \code{while(true);} character, which gives the false hope that even though it is possible to create cycles developers would never encouter it since ``real'' code would not be close to the examples given here.
+          Far worse is that the previous examples have been of the \code{while(true);} character, which gives the false hope that even though it is possible to create cycles developers would never encounter it since ``real'' code would not be close to the examples given here.
           With the third example, this is no longer true.
-          Increasing the font size when the layout area is smaller and decreasing the font size when the layout area is bigger is something that is frequently done in responsive web deisgn.
+          Increasing the font size when the layout area is smaller and decreasing the font size when the layout area is bigger is something that is frequently done in responsive web design.
           Typically web site authors want the font size to increase on handheld devices, to increase the readability.
-          Of course, the numbers given in the example might not be reasonable, but in concept it is valid use case which may result in cyclic rules.
+          Of course, the numbers given in the example might not be reasonable, but in concept it is valid use case that may result in cyclic rules.
 
       \section{Possible solutions}
         \begin{metatext}
@@ -993,25 +996,25 @@
 
           By limiting element queries to special \emph{viewport} container elements that can only be queried by child elements, much of the problems are resolved.
           This means that a new \textsc{html} tag will be crafted (perhaps named \code{viewport}) that defines separated viewports in the document.
-          The size of Viewports are not dependent on their children, and children may only target the closest ancestor viewport element in the element queries.
-          This way, cyclic rules can no longer occur since the viewport size may not be altered by the children.
-          the reason that a new \textsc{html} tag is proposed instead of a new \textsc{css} property that defines the behavoir is because the layout engine in the latter case needs to resolve the styles for all elements in order to know which are viewport elements.
+          The size of viewports is not dependent on their children, and children may only target the closest ancestor viewport element in the element queries.
+          This way, cyclic rules can no longer occur since the children may not alter the viewport size.
+          The reason that a new \textsc{html} tag is proposed instead of a new \textsc{css} property that defines the behavior is because the layout engine in the latter case needs to resolve the styles for all elements in order to know which are viewport elements.
           With a new \textsc{html} tag, the layout engine can detect that that the element is a viewport before any resolving styles.
           \todo{Write why it is important to know viewport elements before resolving styles.}
 
           This approach also solves many of the performance problems, but not all.
-          The internal \textsc{api}'s that request non-layout information for the elements using element queries only need to make sure that the containging viewport element has been layed out before resolving the styles (which is a much better situation that the unrestricted version of element queries).
-          Further, the layout can be done in one pass as long as the viewport elements are layed out before the children.
-          It is still a bit inconvenient that the layout engine would need to evaluate all element query selectors in the middle of a layout pass (after the that the viewport elements has been layed out) in orde to resolve the styles for the viewport children.
+          The internal \textsc{api}'s that request non-layout information for the elements using element queries only need to make sure that the containing viewport element has been laid out before resolving the styles (which is a much better situation that the unrestricted version of element queries).
+          Further, the layout can be done in one pass as long as the viewport elements are laid out before the children.
+          It is still a bit inconvenient that the layout engine would need to evaluate all element query selectors in the middle of a layout pass (after the that the viewport elements has been laid out) in order to resolve the styles for the viewport children.
           Parallelization is also easier, since the queries may only be targeting the closest viewport element.
-          This means that each viewport subtree can be layed out in parallel.
+          This means that each viewport subtree can be laid out in parallel.
 
           This solution would behave much like the \code{iframe} element layout-wise.
           It should be noted that \code{iframe} elements are not suitable as an alternative to the proposed \code{viewport} elements, since \code{iframe}'s are much more limited by nature (creates a new document and script context).
 
           Obviously, this limits element queries a lot.
           The fact that the size of the viewport element cannot depend on the children (like normal block elements do), limits the usability.
-          The idea is that the viewport cannot cannot be queried for properties that the children may affect (such as the width and height style properties).
+          The idea is that the viewport cannot be queried for properties that the children may affect (such as the width and height style properties).
           In order to allow the children to query the properties, they cannot be affected by the children.
           In theory it should mean that if no children query for instance the height of the viewport, then the viewport may depend on the children for it's height.
           This is a powerful insight, since the general use case would be to write element queries against the width and have the elements adapt their heights accordingly (including the viewport element).
@@ -1033,7 +1036,7 @@
         \end{metatext}
 
         As presented in subsection~\ref{sec:viewport-elements}, viewport elements solve many of the element query problems and are therefore assumed to be a part of a native \textsc{api}.
-        Since it would be favorable to be able to specify multiple conditional rule sets for the element queries (like media queries) the \textsc{css} syntax may be of the form as presnted in listing~\ref{code:mq-eq-syntax}.
+        Since it would be favorable to be able to specify multiple conditional rule sets for the element queries (like media queries) the \textsc{css} syntax may be of the form as presented in listing~\ref{code:mq-eq-syntax}.
         \begin{lstlisting}[caption={Element queries are assumed to have nested rule sets, like media queries},captionpos=b,label={code:mq-eq-syntax}]]
 /* Media query syntax */
 @media ... {
@@ -1055,17 +1058,17 @@
     \chapter{Analysis of approaches}
       \section{Current implementations}
         \todo[inline]{Write about GSS, Tommy's implementation and the different approaches}
-        \todo[inline]{Write somehwere that an extra layout on element resize is inevitable since it is required in theory.}
+        \todo[inline]{Write somewhere that an extra layout on element resize is inevitable since it is required in theory.}
     \chapter{Framework design}
       \begin{metatext}
         Before starting the actual implementation, it is important to have an overall design to follow.
         In this chapter, the framework design will be described and a motivation why the framework should be plugin based will be given.
-        The subsystems of the framework and their interactions will also presented.
+        The subsystems of the framework and their interactions will also be presented.
       \end{metatext}
 
       \todo[inline]{Write somewhere that it might be an option to not have a resize detection system, but instead let the user manually check the elements when they may have changed.}
       \todo[inline]{Write about the simple cycle detector.}
-      \todo[inline]{Write about the N layouts, and how it was fixed with the batch-processing. Investigate how this behaves for nested elements.}
+      \todo[inline]{Write about the N layouts, and how it was fixed with the batch processing. Investigate how this behaves for nested elements.}
       \todo[inline]{Write about the drawbacks (invalid layout at page load, injecting objects is heavy, DOM is mutated.)}
 
 
@@ -1081,10 +1084,10 @@
         \end{metatext}
 
         \begin{enumerate}
-          \item The framework needs to be performant enough for heavy applications running on light devices.
+          \item The framework needs to have adequate performance to empower heavy applications running on light devices.
           \item The framework may not require invalid \textsc{css}, \textsc{html} or JavaScript.
           \item Developers should not need to perform big rewrites of their modules or applications in order to use the framework.
-          \item Existing modules written with media queries should be automatically converted to element queries so that existing third party modules can be used in element query power applications.
+          \item Existing modules written with media queries should be automatically converted to element queries so that existing third-party modules can be used in element query power applications.
           \item The \textsc{api}'s need to be natural for web developers, and may not seem alien.
         \end{enumerate}
       \section{Framework plugins}
@@ -1117,18 +1120,18 @@
             \item \textbf{Injecting frames}:
               Since frame elements are the only ones that support resize events natively, the idea is to inject frame elements as children to the elements that one want to listen for resize changes (also called \emph{target elements}).
               By styling the frame so that it depends on the target element and set the size to be 100 percent, the frame will always be the same size as the target element.
-              Then a resize event handler can be attached to the frame which will emit a resize event for every target element resize.
+              Then a resize event handler can be attached to the frame that will emit a resize event for every target element resize.
               So in order to listen for resize events for an element, a frame element is injected and listened to instead.
           \end{itemize}
           The first solution is appealing because it does not mutate the \textsc{dom} and it will work on all browsers since it does not rely on special element behaviors or similar.
           However, in order to prevent the responsive elements lagging behind the size changes of the user interface, the polls need to be performed quite frequently.
           The performance impact of polling the \textsc{dom} frequently is not desirable.
-          Since the polling will be performed all the time, the overall page performance will be decreased even if the page is idle, which is undesireable especially for battery devices.
+          Since the polling will be performed all the time, the overall page performance will be decreased even if the page is idle, which is undesirable especially for battery devices.
           This is not a great solution since reading the \textsc{dom} constantly can be affect the performance negatively. \todo{Should make quick test to see how much CPU it uses when polling frequently}
 
           The third solution does mutate the \textsc{dom} and relies on special element behavior, but it offers the best performance.
           Browsers will only need to perform extra work when preparing elements for being resize-listenable and when the elements actually change size.
-          By positioning the injected frames \code{absolute} with width and height set to \code{100\%}, the frames does not affect the visual representation of the document.
+          By positioning the injected frames \code{absolute} with width and height set to \code{100\%}, the frames do not affect the visual representation of the document.
           Injecting frames into the elements has some implications:
           \begin{itemize}
             \item \textbf{CSS selectors may break}:
@@ -1137,16 +1140,16 @@
               Also, selectors such as \code{:first-child} and \code{:last-child} since the object element is prepended (or appended) to the target element.
             \item \textbf{JavaScript may break}:
               Similar to with the \textsc{css} selectors, JavaScript \textsc{dom} selectors may break.
-              The first node (or last) of the target element may not be what the developer expect it to be, since the frame element has been injected.
-              Also, code that replaced the content of elements (such as \code{element.InnerHTML = ...}) will undesireably remove the injected frame element of if used on the target element.
+              The first node (or last) of the target element may not be what developers expect it to be, since the frame element has been injected.
+              Also, code that replaced the content of elements (such as \code{element.InnerHTML = ...}) will undesirably remove the injected frame element of if used on the target element.
             \item \textbf{The target element must be positioned}:
               Recall that absolute positioned elements are moved up to the first non-static positioned ancestor.
-              Since it is desired to have the injected frame being a direct child of the target element, the target element cannot be positioned \code{static} which is the default positioning for many elements.
+              Since it is desired to have the injected frame being a direct child of the target element, the target element cannot be positioned \code{static} that is the default positioning for many elements.
               Fortunately, elements positioned \code{relative} behave exactly like \code{static}, given that the elements do not have any styles applicable to relative (such as \code{top} or \code{bottom}).
               Since the style properties that depend on the element being \code{relative} positioned does not affect the element if it is \code{static} positioned, the properties can be removed or regarded as user errors.
               This way the target element can be changed to \code{relative} positioning with the special style properties removed, to obtain the same visual representation as the \code{static} version.
           \end{itemize}
-          It has been shown by \cite{backalley} that \code{object} are the most suitable frame element to use for this purpose, as they have good browser compatability, adequate performance and are easy to work with.
+          It has been shown by \cite{backalley} that \code{object} are the most suitable frame element to use for this purpose, as they have good browser compatibility, adequate performance and are easy to work with.
 
           \todo{Write that it might be up to the user to decide if solution 1 or 3 is desired? Or is it always better to use 3?}
         \subsection{Native resize event}
