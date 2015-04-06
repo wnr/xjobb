@@ -73,12 +73,10 @@
   \pagestyle{newchap}
   \chapter{Introduction}
     \todo[inline]{Write somewhere that modular and responsive web development right now are two disjunct terms?}
-    \todo[inline]{runtime or run time? same for parse time. Both is being used right now.}
     \todo[inline]{Container or parent element? Using both now.}
     \todo[inline]{Renamed framework to library?}
-    \todo[inline]{Write about the targeted browser compatibility.}
+    \todo[inline]{Write about the targeted browser compatibility. Started writing about this but put it on hold in the appendix.}
     \todo[inline]{Word says that all "their own" is wrong.}
-    \todo[inline]{The word "layouting" seems wrong.}
     \section{Targeted audience}
       This thesis is targeted for web developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
       Heavy use of web terminology is being used and intermediate web development knowledge is assumed.
@@ -98,7 +96,7 @@
         \item \textbf{Circularity:}
         If style rules can be applied by criteria of other elements, it will be possible to create cyclic rules (infinite loops of styling).
         Some cyclic rules might be possible to detect during \textsc{css} parsing, but there are so many combinations of style properties that could result in cyclic rules that it will add a lot of complexity to the language, both for implementers and users.
-        Also, it has been shown that some cyclic rules are impossible to detect at parse time, due to being dependent on run time factors.
+        Also, it has been shown that some cyclic rules are impossible to detect at parsetime, due to being dependent on runtime factors.
         See section~\ref{sec:cyclic-rules} for examples and a deeper analysis of cyclic rules.
         \item \textbf{Performance:} 
         \todo{Rewrite this. Some of this is totally wrong.}
@@ -119,7 +117,7 @@
       There are many challenges along the way that will need to be researched and worked around.
       Examples of such sub problems that would need to be investigated are:
       \begin{itemize}
-        \item How should circularity be handled? Should it be detected at runtime or parse time, and what should happen on detection?
+        \item How should circularity be handled? Should it be detected at runtime or parsetime, and what should happen on detection?
         \item How can one listen to element size changes without any native support?
         \item How can a custom \textsc{api} be crafted that will enable element queries and still conform to the \textsc{css} specification?
         \item If a custom \textsc{api} is developed, how would one make third-party modules (that uses media queries) work without demanding a rewrite of all third-party modules?
@@ -471,7 +469,7 @@
       \begin{metatext}
         Before diving into the theory of element queries, it is important to understand how layout engines work.
         Only the layout engines of the browser will be of importance, since element queries do not affect any other browser subsystem.
-        This chapter will give a brief explanation of the layouting flow that the engines generally perform, and how content changes affect the engine\todo{Write about content changes or remove this.}.
+        This chapter will give a brief explanation of the layout flow that the engines generally perform, and how content changes affect the engine\todo{Write about content changes or remove this.}.
         It will also cover some optimizations that are done and which parts of the layout process that can be done in parallel.
         The render process will not be described, as it is not relevant for element queries.
         This chapter is mainly based on \normalfont{\cite{browser_architecture,garsiel2011browsers}}.
@@ -513,7 +511,7 @@
       It is shown that the layout engine is located between the \emph{browser engine} system and the network, JavaScript, \textsc{xml} parsing and display backend.
       The browser engine acts as a high level interface to the layout engine, and is responsible for providing the layout engine with \textsc{uri}'s that should be rendered with layout options.
       The main responsibility of the layout engine is to render the current state of the fetched hypertext document.
-      Since documents may (and often do) change dynamically after parse time, it is important to keep in mind that the job of the layout engine is continuous, and is not a one time operation.
+      Since documents may (and often do) change dynamically after parsetime, it is important to keep in mind that the job of the layout engine is continuous, and is not a one time operation.
       The parsing of \textsc{html} is also done by the layout engine (and not in the \textsc{xml} subsystem) since \textsc{html} is less strict and reentrant.
       In short, layout engines perform four distinct tasks:
       \begin{enumerate}
@@ -686,9 +684,9 @@
 
       \section{The layout process}\label{sec:layout-process}
         \begin{metatext}
-          When the render tree has been constructed and the style properties has been resolved for all nodes, it is time to perform the actual layouting.
+          When the render tree has been constructed and the style properties has been resolved for all nodes, it is time to perform the actual layout.
           The layout process will decide the final computed style of all elements, and needs to be done before rendering.
-          This section will describe the layout process, discuss some performance aspects and show examples when layouting happens.
+          This section will describe the layout process, discuss some performance aspects and show examples when layout happens.
           This section is mainly based on \normalfont{\cite{garsiel2011browsers}}.
         \end{metatext}
 
@@ -697,7 +695,7 @@
         Layout is performed recursively by starting at the root of the tree, let the renderer render itself and all of its children which will render themselves and their children and so on.
         When a layout is performed on the whole render tree it is called a \emph{global layout}.
         To avoid global layouts when a renderer has been changed, a dirty bit system is usually implemented.
-        The system will mark which renderers in the tree that need a layout, which avoids layouting unaffected elements.
+        The system will mark which renderers in the tree that need a layout, which avoids layout of unaffected elements.
         Layouts that only layout the dirty renderers are called \emph{incremental layouts}.
         Layout engines that uses the dirty bit system usually keeps a queue of incremental layout commands.
         The scheduler system later triggers a batch execution of the incremental layout commands asynchronously.
@@ -834,7 +832,7 @@
         \subsection{Circularity}\label{sec:cyclic-rules}
           \begin{metatext}
             This subsection will show how cyclic rules may occur and why it is such a major problem.
-            It will also be presented why cyclic rules must be detected at run time.
+            It will also be presented why cyclic rules must be detected at runtime.
             Some examples of will be given to better understand the complexity of the problem.
           \end{metatext}
 
@@ -966,11 +964,11 @@
             \item \textbf{The text of the child element}
           \end{itemize}
           The bolded factors are of a far worse type than the ones presented until now.
-          They are impossible to determine at parse time.
+          They are impossible to determine at parsetime.
           In this example the text is static but it could have been added dynamically.
           Also, the inherited font size depends on the closest ancestor with a font size property defined.
           Since ancestors also can have their font sizes defined in relative units, the dependency tree can go up to the root of the document.
-          Further, if no ancestor defines an absolute value for the font size it is up to the browser to default to a size, which is impossible to reason about at parse time.
+          Further, if no ancestor defines an absolute value for the font size it is up to the browser to default to a size, which is impossible to reason about at parsetime.
           This implies that there is no way of telling if the cycle will appear or not without actually running the code.
           Also, the cycle may appear in different browsers and settings, which makes the cycle even harder to detect.
           Far worse is that the previous examples have been of the \code{while(true);} character, which gives the false hope that even though it is possible to create cycles developers would never encounter it since ``real'' code would not be close to the examples given here.
@@ -1269,4 +1267,12 @@
           The market share percentage of Gecko is therefore 12.83\%.
           Internet Explorer, with the market share percentage of 14.96\%, has been Trident based since version 4.
           Since Internet Explorer 4 is no longer in use\footnote{According to \url{http://www.w3schools.com/browsers/browsers_explorer.asp}}, the market share percentage of the Trident engine is 14.96\%.
+        \section{Usage share of browser versions}
+          \todo{Put this somewhere else?}
+          For compatability, the framework needs to support older browsers.
+          Most of the end users are using a self updating browser (those browsers are usually referred to as the \emph{evergreen} browsers), which improves the adoption rate of new versions greatly.
+          See figure~\ref{} for the adoption rate of new versions of Chrome for an example of how evergreen browsers keep their users updated.
+          Unfortunately, there are some laggards that still use very outdated versions of some browsers.
+          Each version of Internet Explorer 8 up to 11 need to be supported since they all still have a significant user share.
+          Opera version 12 does also have 
 \end{document}
