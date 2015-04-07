@@ -1120,7 +1120,7 @@
       \section{Architecture}
         \begin{metatext}
           As it has been shown that a plugin based framework is most suitable, it is time to present the overall architecture of the framework.
-          The major subsystems of the core framework will be explained in depth.
+          The major subsystems of the core framework will be explained in depth. \todo{Should they be explained in depth here or in the implementation section? Maybe rewrite this sentence.}
         \end{metatext}
 
         To decide which parts of the framework that should be part of the core and which parts to be plugins is a difficult task.
@@ -1213,7 +1213,7 @@
             \draw[o] (mirror.east) -- ($ (mirror.east) + (0.5,0) $);
             \draw[o] (prolyfill.east) -- ($ (prolyfill.east) + (0.5,0) $);
             \draw[myarrow, <->] ($ (breakpoints.east) + (0.8,0) $) to[out=-45, in=45] ($ (prolyfill.east) + (0.8,0) $);
-            \node[mylabel, rotate=-90, text width=10em] (interpluginapilabel) at ($ (mirror.east) + (1.5,0) $) {Interplugin API};
+            \node[mylabel, rotate=-90, text width=10em] (interpluginapilabel) at ($ (mirror.east) + (1.5,0) $) {Interplugin \textsc{api}};
             \node[apibox, fit={($ (breakpoints.east) + (0.3,0.5) $) ($ (prolyfill.east) + (0.3,-0.5) $) (interpluginapilabel)}] (interpluginapi) {};
 
             % Public API
@@ -1224,14 +1224,14 @@
             \draw[o] let \p1=(pubapibottom), \p2=(plugins.south) in ($ (plugins.south) + (0,0) $) -| ($ (\x2,\y1) + (0,0) $);
             \draw[o] let \p1=(pubapibottom), \p2=(plugins.south) in ($ (plugins.south) + (0.5,0) $) -| ($ (\x2,\y1) + (0.5,0) $);
             \draw[o] let \p1=(pubapibottom), \p2=(plugins.south) in ($ (plugins.south) + (-0.5,0) $) -| ($ (\x2,\y1) + (-0.5,0) $);
-            \node[mylabel, right=4em of pubapibottom, text width=5em] (pubapilabel) {Public API};
+            \node[mylabel, right=4em of pubapibottom, text width=5em] (pubapilabel) {Public \textsc{api}};
             \path let \p1=(pubapibottom), \p2=(plugins.south) in node (pubapiright) at ($ (\x2,\y1) + (0.5,0) $) {};
             \node (pubapileft) at ($ (pubapibottom) + (-0.5,0) $) {};
             \node[apibox, fit={(pubapibottom) (pubapilabel) ($ (pubapileft) + (-0.5,0) $) ($ (pubapiright) + (0.5,0) $)}] (publicapi) {};
 
             % Plugin API
             \path let \p1=(middledummy.south), \p2=(core.east) in coordinate (pluginapi) at (\x1, \y2);
-            \node[mylabel, below=3em of pluginapi, text width=5em] (pluginapilabel) {Plugin API};
+            \node[mylabel, below=3em of pluginapi, text width=5em] (pluginapilabel) {Plugin \textsc{api}};
             \draw[o] ($ (core.east) + (0,0) $) -- ($ (pluginapi) + (-0.2,0) $);
             \draw[o] ($ (core.east) + (0,0.5) $) -- ($ (pluginapi) + (-0.2,0.5) $);
             \draw[o] ($ (core.east) + (0,-0.5) $) -- ($ (pluginapi) + (-0.2,-0.5) $);
@@ -1241,14 +1241,24 @@
             \node[apibox, fit={(pluginapilabel) ($(pluginapi) + (0, 0.7)$)}] (pluginapibox) {};
           \end{tikzpicture}
           \medskip
-          \caption{TODO: Do me.} 
+          \caption{
+            The overall framework architecture, which shows how the framework is divided into two parts; the core system and the plugins. 
+            The core is only accesible through the plugin \textsc{api}, and is not a part of the public \textsc{api}.
+            Plugins may have interplugin \textsc{api}'s and dependencies.
+            The bigger part of the public \textsc{api}'s is defined by the plugins.
+          }
           \label{fig:elq_architecture}
         \end{figure}
 
         Figure~\ref{fig:elq_architecture} shows the overall architecture of the framework.
-        The core consists of fundamental and general subsystems that are utilized by the plugins.
-        The plugins form the bigger part of the \textsc{api} in the sense that they decide how which features exists and how they work.
-        Developers will never be programming against the core directly, and are therefore kept hidden from the public \textsc{api}.
+        The core consists of fundamental and general subsystems that are utilized by the plugins by the plugin \textsc{api}.
+        Developers should never be programming against the core directly, and can therefore only be accessed by plugins through the hidden plugin \textsc{api}.
+        The framework provides a small public \textsc{api} which is mainly used to invoke and handle the plugins.
+        The plugins form the bigger part of the public \textsc{api} in the sense that they decide which features exist and how they work.
+        It should be noted that plugins may provide \textsc{api}'s through the framework by registering methods, or by specifying custom syntax (such as markup or \textsc{css}) which is beyond the control of the framework.
+        Plugins may also have interplugin \textsc{api}'s and dependencies, which also is beyond the control of the framework.
+        The core system is supposed to have a slow development phase, with few changes and good backwards compatability.
+        The plugins may be development in a high rate, with frequent changes to support the newest features.
         The core subsystems are:
         \begin{itemize}
           \item \textbf{Reporter:}
@@ -1278,11 +1288,25 @@
             This system provides the interface for developers to add plugins to the framework.
             The system is also responsible for retrieving the plugins, and invoking them on different framework events.
         \end{itemize}
-      \section{Framework plugins}
-
+        Some of the subsystems may be partially accessible by through the public \textsc{api} such as the plugin handler and the element resize detector.
+        It should be noted that the presented core subsystems are not the only thing that the framework consists of --- they are simply the ones worth mentioning.
       \section{API design}
         \begin{metatext}
+          This section will describe the \textsc{api} of the framework.
+          First, the public \textsc{api} of the non-plugin part of the framework will be presented, followed by the plugin \textsc{api}.
+          After that, all current plugins will be described in depth addressing their features and \textsc{api}'s.
         \end{metatext}
+
+        Recall from section~\ref{} that the bigger part of the public \textsc{api} is provided by plugins.
+        The role of the framework is to provide plugins with systems to be used for performing element query tasks, which is done through the plugin \textsc{api}.
+        Three plugins will be developed; 
+
+        \section{Public \textsc{api}}
+        \section{Plugin \textsc{api}}
+        \section{Plugins}
+          \subsection{Breakpoints}
+          \subsection{Mirror}
+          \subsection{Native}
     \chapter{Implementation}
       \section{Element resize detection}\label{sec:imp_erd}
         \begin{metatext}
