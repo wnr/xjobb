@@ -1190,7 +1190,7 @@
             \node[] (middledummy) {};
             \node[title, above=15pt of middledummy] (elqtitle) {\normalsize ELQ};
 
-            \node[title, left=12em of middledummy] (coretitle) { \normalsize Core };
+            \node[title, left=11em of middledummy] (coretitle) { \normalsize Core };
             \node[insidenode, below=of coretitle] (erd) {Element resize detector};  
             \node[insidenode, below=of erd] (reporter) {Reporter};
             \node[insidenode, below=of reporter] (cycle) {Cycle detector};
@@ -1199,7 +1199,7 @@
 
             \node[box, fit={(coretitle) (erd) (reporter) (cycle) (batch) (plugin)}] (core) {};
 
-            \node[title, right=12em of middledummy] (pluginstitle) { \normalsize Plugins };
+            \node[title, right=10em of middledummy] (pluginstitle) { \normalsize Plugins };
             \node[insidenode, below=of pluginstitle] (breakpoints) {breakpoints};
             \node[insidenode, below=of breakpoints] (mirror) {mirror};
             \node[insidenode, below=of mirror] (prolyfill) {prolyfill};
@@ -1229,14 +1229,17 @@
             \node (pubapileft) at ($ (pubapibottom) + (-0.5,0) $) {};
             \node[apibox, fit={(pubapibottom) (pubapilabel) ($ (pubapileft) + (-0.5,0) $) ($ (pubapiright) + (0.5,0) $)}] (publicapi) {};
 
-            % \draw[myarrow] (ui.south) -- (browser-engine.north);
-            % \draw[myarrow] (browser-engine.south) -- (layout-engine.north);
-            % \draw[myarrow] (layout-engine.south) -- (networking.north); 
-            % \draw[myarrow] (layout-engine.south) -- (javascript.north);
-            % \draw[myarrow] (layout-engine.south) -- (xml.north);
-            % \draw[myarrow] (layout-engine.south) -- (render-backend.north);
-            % \draw[myarrow] (ui.east) -- +(1.5, 0) |- (render-backend.east);
-          \end{tikzpicture} 
+            % Plugin API
+            \path let \p1=(middledummy.south), \p2=(core.east) in coordinate (pluginapi) at (\x1, \y2);
+            \node[mylabel, below=3em of pluginapi, text width=5em] (pluginapilabel) {Plugin API};
+            \draw[o] ($ (core.east) + (0,0) $) -- ($ (pluginapi) + (-0.2,0) $);
+            \draw[o] ($ (core.east) + (0,0.5) $) -- ($ (pluginapi) + (-0.2,0.5) $);
+            \draw[o] ($ (core.east) + (0,-0.5) $) -- ($ (pluginapi) + (-0.2,-0.5) $);
+            \draw[myarrow] let \p1=(core.east), \p2=(plugins.west) in ($ (\x2, \y1) + (0,0) $) -- ($ (pluginapi) + (0.2,0) $);
+            \draw[myarrow] let \p1=(core.east), \p2=(plugins.west) in ($ (\x2, \y1) + (0,0.5) $) -- ($ (pluginapi) + (0.2,0.5) $);
+            \draw[myarrow] let \p1=(core.east), \p2=(plugins.west) in ($ (\x2, \y1) + (0,-0.5) $) -- ($ (pluginapi) + (0.2,-0.5) $);
+            \node[apibox, fit={(pluginapilabel) ($(pluginapi) + (0, 0.7)$)}] (pluginapibox) {};
+          \end{tikzpicture}
           \medskip
           \caption{TODO: Do me.} 
           \label{fig:elq_architecture}
