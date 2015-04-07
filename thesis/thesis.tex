@@ -12,7 +12,7 @@
 }
 \usepackage{listings}
 \usepackage{tikz}
-\usetikzlibrary{arrows,positioning}
+\usetikzlibrary{arrows,positioning,fit,calc,decorations.markings}
 \usepackage{todonotes}
 
 \lstset{%
@@ -1103,6 +1103,7 @@
               \item Older browsers must be supported.
               \item The framework may not require invalid \textsc{css}, \textsc{html} or JavaScript.
               \item Dependencies and assumptions about the host application (including the development environment) should be kept low.
+              \item\label{itm:req_prolyfill} The framework must act as a prolyfill\footnote{A polyfill is something that provides a functionality that is expected to be provided natively by browsers. Polyfills usually fixes some standard functionality for browsers that do not yet support it. A prolyfill is a polyfill for something that will probably become a standard.} for native element queries.
             \end{enumerate}
         \end{enumerate}
         It is possible to create a framework that conforms to all of the requirements but more features, automation and compatability decreases the performance.
@@ -1113,6 +1114,8 @@
         By providing a good framework foundation and plugins for different use cases it is up to developers too choose the right plugins for each project.
         This way, developers are composing their own custom tailored framework for their specific use cases.
         In addition, by letting the plugins satisfy the requirements it is easy to extend the framework with new plugins when new requirements arise.
+        For instance, the requirement~\ref{itm:req_prolyfill} is beneficial to satisfy with a plugin since the \textsc{api} for native element queries can only be guessed at this point of time, which will probably lead to frequent changes to the plugin.
+        By separating it from the core framework (and the other plugins), only the developers that really desire the prolyfill behavior must handle the rapid \textsc{api} changes.
 
       \section{Architecture}
         \begin{metatext}
@@ -1128,6 +1131,116 @@
         The subsystems of the core always have the risk of being redundant, unnecessary and in other ways unwanted for some use cases.
         Therefore it is important that it is possible for developers to either remove them or change them.
         This way the more advanced users can choose which subsystems to alter, keeping the framework easy to use for the common use cases.
+
+        \begin{figure}
+          \centering
+          \begin{tikzpicture}[node distance=3pt]  
+          \tiny
+            \tikzset{
+                insidenode/.style={
+                  rectangle,
+                  rounded corners,
+                  draw=black,
+                  top color=white,
+                  bottom color=white,
+                  very thin,
+                  inner sep=1em,
+                  minimum height=2em,
+                  text centered,
+                  text width=12em
+                },
+                title/.style={
+                  draw=none,
+                  fill=none,
+                  top color=white,
+                  bottom color=white,
+                  thin,
+                  inner sep=0,
+                  minimum height=2em,
+                  text centered
+                },
+                box/.style={
+                  draw=black!50,
+                  inner sep=0.5em
+                },
+                o/.style={
+                  shorten >=#1,
+                  decoration={
+                    markings,
+                    mark={
+                      at position 1
+                      with {
+                        \draw circle [radius=#1];
+                      }
+                    }
+                  },
+                  postaction=decorate
+                },
+                o/.default=2pt,
+                apibox/.style={
+                  minimum height=3em,
+                  dashed,
+                  draw=black,
+                  rounded corners
+                },
+                myarrow/.style={->, >=latex', shorten >=1pt, thin},
+                mylabel/.style={text width=3em, text centered}
+            }
+
+            \node[] (middledummy) {};
+            \node[title, above=15pt of middledummy] (elqtitle) {\normalsize ELQ};
+
+            \node[title, left=12em of middledummy] (coretitle) { \normalsize Core };
+            \node[insidenode, below=of coretitle] (erd) {Element resize detector};  
+            \node[insidenode, below=of erd] (reporter) {Reporter};
+            \node[insidenode, below=of reporter] (cycle) {Cycle detector};
+            \node[insidenode, below=of cycle] (batch) {Batch processor};
+            \node[insidenode, below=of batch] (plugin) {Plugin handler};
+
+            \node[box, fit={(coretitle) (erd) (reporter) (cycle) (batch) (plugin)}] (core) {};
+
+            \node[title, right=12em of middledummy] (pluginstitle) { \normalsize Plugins };
+            \node[insidenode, below=of pluginstitle] (breakpoints) {breakpoints};
+            \node[insidenode, below=of breakpoints] (mirror) {mirror};
+            \node[insidenode, below=of mirror] (prolyfill) {prolyfill};
+            \node[below=-4pt of prolyfill] (dots) {\huge \vdots};
+            \node[box, fit={(pluginstitle) (breakpoints) (mirror) (prolyfill) (dots) ($ (breakpoints.east) + (1.8,0) $)}] (plugins) {};
+
+            \node[box, fit={(elqtitle) (core) (plugins)}] (elq) {};
+
+            % Interplugin API
+            \draw[o] (breakpoints.east) -- ($ (breakpoints.east) + (0.5,0) $);
+            \draw[o] (mirror.east) -- ($ (mirror.east) + (0.5,0) $);
+            \draw[o] (prolyfill.east) -- ($ (prolyfill.east) + (0.5,0) $);
+            \draw[myarrow, <->] ($ (breakpoints.east) + (0.8,0) $) to[out=-45, in=45] ($ (prolyfill.east) + (0.8,0) $);
+            \node[mylabel, rotate=-90, text width=10em] (interpluginapilabel) at ($ (mirror.east) + (1.5,0) $) {Interplugin API};
+            \node[apibox, fit={($ (breakpoints.east) + (0.3,0.5) $) ($ (prolyfill.east) + (0.3,-0.5) $) (interpluginapilabel)}] (interpluginapi) {};
+
+            % Public API
+            \coordinate (pubapibottom) at ($ (elq.south) + (0,-1) $);
+            \draw[o] ($ (elq.south) + (0,0) $) -| (pubapibottom);
+            \draw[o] ($ (elq.south) + (-0.5,0) $) -| ($ (pubapibottom) + (-0.5,0) $);
+            \draw[o] ($ (elq.south) + (0.5,0) $) -| ($ (pubapibottom) + (0.5,0) $);
+            \draw[o] let \p1=(pubapibottom), \p2=(plugins.south) in ($ (plugins.south) + (0,0) $) -| ($ (\x2,\y1) + (0,0) $);
+            \draw[o] let \p1=(pubapibottom), \p2=(plugins.south) in ($ (plugins.south) + (0.5,0) $) -| ($ (\x2,\y1) + (0.5,0) $);
+            \draw[o] let \p1=(pubapibottom), \p2=(plugins.south) in ($ (plugins.south) + (-0.5,0) $) -| ($ (\x2,\y1) + (-0.5,0) $);
+            \node[mylabel, right=4em of pubapibottom, text width=5em] (pubapilabel) {Public API};
+            \path let \p1=(pubapibottom), \p2=(plugins.south) in node (pubapiright) at ($ (\x2,\y1) + (0.5,0) $) {};
+            \node (pubapileft) at ($ (pubapibottom) + (-0.5,0) $) {};
+            \node[apibox, fit={(pubapibottom) (pubapilabel) ($ (pubapileft) + (-0.5,0) $) ($ (pubapiright) + (0.5,0) $)}] (publicapi) {};
+
+            % \draw[myarrow] (ui.south) -- (browser-engine.north);
+            % \draw[myarrow] (browser-engine.south) -- (layout-engine.north);
+            % \draw[myarrow] (layout-engine.south) -- (networking.north); 
+            % \draw[myarrow] (layout-engine.south) -- (javascript.north);
+            % \draw[myarrow] (layout-engine.south) -- (xml.north);
+            % \draw[myarrow] (layout-engine.south) -- (render-backend.north);
+            % \draw[myarrow] (ui.east) -- +(1.5, 0) |- (render-backend.east);
+          \end{tikzpicture} 
+          \medskip
+          \caption{TODO: Do me.} 
+          \label{fig:elq_architecture}
+        \end{figure}
 
         Figure~\ref{fig:elq_architecture} shows the overall architecture of the framework.
         The core consists of fundamental and general subsystems that are utilized by the plugins.
