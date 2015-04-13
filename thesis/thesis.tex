@@ -1290,6 +1290,8 @@
         \end{itemize}
         Some of the subsystems may be partially accessible by through the public \textsc{api} such as the plugin handler and the element resize detector.
         It should be noted that the presented core subsystems are not the only thing that the framework consists of --- they are simply the ones worth mentioning.
+        \todo{Maybe rewrite this a bit?}
+
       \section{API design}
         \begin{metatext}
           This section will describe the \textsc{api} of the framework.
@@ -1306,7 +1308,7 @@
         \section{Plugins}
           \subsection{Breakpoints}
           \subsection{Mirror}
-          \subsection{Native}
+          \subsection{Prolyfill}
     \chapter{Implementation}
       \section{Element resize detection}\label{sec:imp_erd}
         \begin{metatext}
@@ -1336,14 +1338,19 @@
           \end{itemize}
           The first solution is appealing because it does not mutate the \textsc{dom} and it will work on all browsers since it does not rely on special element behaviors or similar.
           However, in order to prevent the responsive elements lagging behind the size changes of the user interface, the polls need to be performed quite frequently.
+          Recall from section~\ref{sec:layout-process} that layout engines typically have a layout queue in order to perform layout in batches for increased performance.
+          Each poll would force the layout queue to be flushed since the computed style of elements will need to be retrieved in order to know if elements have resized or not.
           The performance impact of polling the \textsc{dom} frequently is not desirable.
-          Since the polling will be performed all the time, the overall page performance will be decreased even if the page is idle, which is undesirable especially for battery devices.
+          Since the polling will be performed all the time, the overall page performance will be decreased even if the page is idle, which is undesirable especially for devices running on battery.
           This is not a great solution since reading the \textsc{dom} constantly can be affect the performance negatively. \todo{Should make quick test to see how much CPU it uses when polling frequently}
+          \todo{Write that in theory the detection of resize is delayed by the frequency of the polling?}
 
-          The third solution does mutate the \textsc{dom} and relies on special element behavior, but it offers the best performance.
-          Browsers will only need to perform extra work when preparing elements for being resize-listenable and when the elements actually change size.
+          The third solution does mutate the \textsc{dom} and relies on special element behavior, but it offers many advantages.
+          Browsers will only need to perform extra work when preparing elements for being resize-detectable and when the elements actually resize.
+          Further, since the resize detection instead is event-based there is no delay between the actual resize and the detection.
           By positioning the injected frames \code{absolute} with width and height set to \code{100\%}, the frames do not affect the visual representation of the document.
-          Injecting frames into the elements has some implications:
+          It has been shown by \cite{backalley} that \code{object} is the most suitable frame element to use for this purpose, as they have good browser compatibility, adequate performance and are easy to work with.
+          However, injecting frames into the elements has some implications:
           \begin{itemize}
             \item \textbf{CSS selectors may break}:
               Since target elements get an extra child (the frame element), \textsc{css} selectors may behave differently.
@@ -1360,7 +1367,6 @@
               Since the style properties that depend on the element being \code{relative} positioned does not affect the element if it is \code{static} positioned, the properties can be removed or regarded as user errors.
               This way the target element can be changed to \code{relative} positioning with the special style properties removed, to obtain the same visual representation as the \code{static} version.
           \end{itemize}
-          It has been shown by \cite{backalley} that \code{object} are the most suitable frame element to use for this purpose, as they have good browser compatibility, adequate performance and are easy to work with.
 
           \todo{Write that it might be up to the user to decide if solution 1 or 3 is desired? Or is it always better to use 3?}
         \subsection{Native resize event}
