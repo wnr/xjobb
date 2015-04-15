@@ -72,11 +72,13 @@
   \mainmatter
   \pagestyle{newchap}
   \chapter{Introduction}
+    \todo[inline]{Philipp: Grammar: avoid future tense if possible. (Avoiding "will")}
     \todo[inline]{Write somewhere that modular and responsive web development right now are two disjunct terms?}
     \todo[inline]{Container or parent element? Using both now.}
     \todo[inline]{Renamed framework to library?}
     \todo[inline]{Write about the targeted browser compatibility. Started writing about this but put it on hold in the appendix.}
     \todo[inline]{Word says that all "their own" is wrong.}
+    \todo[inline]{Philipp: API's should be APIs. Problem is that im using small caps, so it looks ugly. Maybe I should use normalcaps for all abbrvs instead?}
     \section{Targeted audience}
       This thesis is targeted for web developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
       Heavy use of web terminology is being used and intermediate web development knowledge is assumed.
@@ -346,13 +348,14 @@
         As the history of browsers has been presented, it is time to understand the evolution of web development.
         Browsers are the far most popular tools of accessing content on the web, which makes them very important in the modern society.
         In the dawn of the web, browsers were simply applications that fetched and displayed text with embedded links.
-        Today, browsers act more like an operating system (on top of the host system), parsing and executing complex web applications.
+        Today, browsers act more like an operating system (on top of the host system) executing complex web applications.
         There even exist computers that only run a browser, which is sufficient for many users.
         This chapter will describe the transition from browsers rendering simple documents to being hosts for complex applications.
         It will also describe two key evolution points in web development --- responsive web design and modular development.
       \end{metatext}
 
       \todo{What to write here?}
+      \todo[inline]{Philipp: Here you should provide an overview of the different sections of the chapter. “In section 3.1 we outline… In section 3.2 we…}
       \section{From documents to applications}
         \begin{metatext}
           This section will describe the transition from browsers rendering simple documents to being hosts for complex applications.
@@ -364,11 +367,11 @@
         Static content were written in \textsc{html}, which could include hyperlinks to other hypertext documents or hypermedia.
         Different stylesheet languages were being developed to enable the possibility of separating content styling with the content.
         In 1996 \textsc{w3c} officially recommended the Cascading Style Sheets (\textsc{css}), which came to be the preferred way of styling web content.
-        Since \textsc{html} is only a markup language it is not possible to generate dynamic content, which was sufficient at the time \textsc{html} only was used for annotating links in research documents.
+        Since \textsc{html} is only a markup language it is not possible to generate dynamic content, which was sufficient at the time \textsc{html} was only used for annotating links in research documents.
 
         The need for generated dynamic content grew bigger, and \textsc{ncsa} created the first draft of the Common Gateway Interface (\textsc{cgi}) in 1993, which provides an interface between the web server and the systems that generate content.
         \textsc{cgi} programs are usually referred to as scripts, since many of the popular \textsc{cgi} languages are script languages.
-        To generate dynamic content on the server is sometimes referred to as \emph{server-side scripting}.
+        Generating dynamic content on the server is sometimes referred to as \emph{server-side scripting}.
         This enabled developers to generate dynamic websites, with different content for different users for instance.
         However, when the content had been delivered to the client (browser) it was still static content.
         There is no way for the server to change the content that the client has received, unless the client requests another document.
@@ -376,7 +379,8 @@
         Around 1996, client side scripting was born.
         The term Dynamic \textsc{html} (\textsc{dhtml}) was being used as an umbrella term for a collection of technologies used together to make pages interactive and animated, where client side scripting played a big role.
         Examples of things that were being done with \textsc{dhtml} are; refreshing the pages for the user so that new content is loaded, give feedback on user input without involving the server and animating content.
-        Plugins also existed during this time, which teaches the browsers how to handle and execute programs. \emph{Java applets} and \emph{Flash} are examples of this.
+        Plugins also existed during this time, which teaches the browsers how to handle and execute programs.
+        \emph{Java applets} and \emph{Flash} are examples of this. \todo{Philipp: Maybe provide references for Java and Flash.}
         The user then had to download the Java runtime or Flash runtime on the computer.
         When the runtimes are present, the browser then executed the included Java applets or Flash in the web pages by using the external runtimes.
         This enabled web developers to use ``real'' programming languages.
@@ -387,23 +391,23 @@
 
         As JavaScript and \textsc{html} supported more features, websites turned into small applications with user sessions (using cookies) and user interfaces.
         Still, parts of the applications were defined as \textsc{html} pages, fetched from the server when navigating the site.
-        When \emph{XMLHttpRequest} \textsc{api} was supported in the major browsers, pages no longer needed to reload the page to fetch new content as XMLHttpRequest enabled developers to perform asynchronous requests to the server without page reload.
-        This opened up for \emph{Ajax} web development technique which became a popular way of communicating with servers ``in the background'' of the page.
+        When the \emph{XMLHttpRequest} \textsc{api} was supported in the major browsers, pages no longer needed to reload in order to fetch new content as XMLHttpRequest enabled developers to perform asynchronous requests to servers in JavaScript.
+        This opened up for the \textsc{ajax} (Asynchronous JavaScript and XML) web development technique which became a popular way of communicating with servers ``in the background'' of the page.
         Developers pushed browsers and \textsc{html} to the limit when creating applications instead of documents that it was originally designed for.
-        In a \textsc{w3c} meeting in 2004 it was proposed to extend \textsc{html} to allow the creation of web applications, which was rejected.
+        In a \textsc{w3c} meeting in 2004 it was proposed to extend \textsc{html} to ease the creation of web applications, which was rejected.
         \textsc{w3c} was criticized of not listening to the need of the industry, and some members of \textsc{w3c} left to create the Web Hypertext Application Technology Working Group (\textsc{whatwg}).
         \textsc{whatwg} started working on specifications to ease the development of web applications which came to be named \textsc{html5}.
         In 2006, \textsc{w3c} realized that \textsc{whatwg} were on the right track, and decided to start working on their own \textsc{html5} specification based on the \textsc{whatwg} version.
         \textsc{html5} is an evolutionary improvement process of \textsc{html}, which means that browsers are adding support as parts of the specification is finished.
 
-        A new era of \textsc{api}'s and features came along with the \textsc{html5} standard, which truly enabled developers to create rich client side applications.
+        A new era of \textsc{API}'s and features came along with the \textsc{html5} standard, which truly enabled developers to create rich client side applications.
         \textsc{css3} was also recently released which also included many new features.
         Using \textsc{html5} together with \textsc{css3} developers could utilize advanced graphics programming, geolocation, cache storage, file system access, offline mode, and much more.
 
         \todo{Write that traditional applications are threatened by web applications, since the reach and availability of the web is superior to any other distribution platform. Also, no installation is required with web applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
       \section{Responsive web design}\label{sec:rwd}
         \begin{metatext}
-          Back in the days, web developers could make assumptions about the screen size of the users.
+          A few years ago, web developers could make assumptions about the screen size of the users.
           Since typically only desktop computers with monitors accessed web sites they were designed for a minimum viewport size.
           If the size of the viewport was smaller than the supported one, the site would look broken.
           This was a valid approach in a time when tablets and smartphones were unheard of.
@@ -416,7 +420,7 @@
         Furthermore, it is understood that sites need to be styled differently if they are visited by touch devices or mouse-based devices (such as laptops or desktops).
         Since web developers were not ready for this rapid change of device properties, they resorted to using the same approach that they had done before --- assumptions about the user device, but this time the other way around.
         When a browser request a resource, an agent string is usually sent with the request to identify what kind of browser the user is using.
-        By reading the agent string at server side, a mobile-friendly version of the site could be served if the user was sending mobile agent strings and the desktop version could be served otherwise.
+        By reading the agent string on the server-side, a mobile-friendly version of the site could be served if the user was sending mobile agent strings and the desktop version could be served otherwise.
         The mobile version would be designed for a maximum width, and the desktop would be designed for a minimum width.
         This was a natural reaction since no better techniques existed, but the approach has many flaws.
         First, the developers now have two versions of a site to maintain and develop in parallel.
@@ -458,7 +462,8 @@
         The ever so popular frameworks \emph{Angular}, \emph{Backbone}, \emph{Ember}, \emph{Web Components}, \emph{requirejs}, \emph{Browserify}, \emph{Polymer}, \emph{React} and many more all have in common that they embrace coding modular components.
         Many of these frameworks also help with dividing the \textsc{html} up into modules, creating small packages of style, markup and code.
 
-        \todo{Flesh this one out, with meta text.}
+        \todo[inline]{Philipp: You should also mention that modules enable reuse of components.}
+        \todo[inline]{Flesh this one out, with meta text.}
   \part{Theory}
     \chapter{Layout engines}
       \begin{metatext}
@@ -563,7 +568,7 @@
           This section is mainly based on \normalfont{\cite{w3c_dom,garsiel2011browsers,w3c_css21}}.
         \end{metatext}
 
-        \textsc{dom} is an abbreviation of Document Object Model which is a convention for representing and interacting with object in \textsc{xml}-based documents (such as \textsc{html}).
+        \textsc{dom} is an abbreviation of Document Object Model which is a convention for representing and interacting with objects in \textsc{xml}-based documents (such as \textsc{html}).
         The \textsc{dom} provides an interface for programs (JavaScript scripts in the browser) to dynamically access and mutate the content, structure and style of documents.
         Each node of the document is a \textsc{dom} object, and therefore the whole document is converted to a tree structure of \textsc{dom} nodes which is referred to as the \textsc{dom} tree.
 
@@ -582,9 +587,11 @@
         A common optimization is to use a speculative parser that continues to parse the \textsc{html} when the main parser has halted (for executing the scripts usually).
         The speculative parser does not change the \textsc{dom} tree, instead it searches for external resources that can be fetched in parallel while waiting for the main parser to continue.
 
-        \todo{code example of reentrant html?}
-        \todo{Figure of how the DOM tree looks like? Maybe example HTML and DOM tree figure.}
-        \todo{Write about media type, and how the CSS is calculated if it is in this stage?}
+        \todo[inline]{Philipp: Maybe check the official HTML specs about this.}
+        \todo[inline]{Philipp: Yes, a picture of the DOM corresponding to some HTML would be good.}
+        \todo[inline]{code example of reentrant html?}
+        \todo[inline]{Figure of how the DOM tree looks like? Maybe example HTML and DOM tree figure.}
+        \todo[inline]{Write about media type, and how the CSS is calculated if it is in this stage?}
 
       \section{Render trees}\label{sec:render-tree}
         \begin{metatext}
@@ -640,13 +647,13 @@
           \item In case of normal rule declarations, the style weighting relation is: $browser < user < author$.
           \item Important rule declarations have the following relation: $author < user$.
         \end{itemize}
-        The weighting process continues by calculating the \emph{specificity} of all rule set selectors, the higher the specificity the higher the rule set will be weightened.
+        The weighting process continues by calculating the \emph{specificity} of all rule set selectors, the higher the specificity the higher the rule set will be weighted.
         This will make rule sets with more specific selectors override rule sets with more general selectors.
         Finally, if two rule declarations have the same weight, origin and specificity the rule set specified last will win.
         Inline \textsc{css} does not cascade since all rules given are automatically matched with the element of the style attribute.
         However, inline \textsc{css} is considered with highest possible specificity when performing the style cascade.
         It is important to note that the styling methods number five and six are conceptually the same, since they both alter the style property of the \textsc{dom} element.
-        The last item is deprecated, and all styles applied this way will be weightened as low as possible.
+        The last item is deprecated, and all styles applied this way will be weighted as low as possible.
 
         If the cascade results in no value for an element style property, then the property can \emph{inherit} a value or have the initial value defined by the \textsc{css} \emph{property definition}.
         Property definitions describe how the style properties should behave, see table~\ref{table:css_property_definition}.
@@ -690,7 +697,7 @@
         Layout is performed recursively by starting at the root of the tree, let the renderer render itself and all of its children which will render themselves and their children and so on.
         When a layout is performed on the whole render tree it is called a \emph{global layout}.
         To avoid global layouts when a renderer has been changed, a dirty bit system is usually implemented.
-        The system will mark which renderers in the tree that need a layout, which avoids layout of unaffected elements.
+        The system marks which renderers in the tree that need a layout, which avoids layout of unaffected elements.
         Layouts that only layout the dirty renderers are called \emph{incremental layouts}.
         Layout engines that uses the dirty bit system usually keeps a queue of incremental layout commands.
         The scheduler system later triggers a batch execution of the incremental layout commands asynchronously.
@@ -726,7 +733,7 @@
         As web applications grow bigger and more demanding, browsers continuously need to improve the performance on all levels.
         Fetching resources over the network is the only thing that is done in parallel today.
         The rest of the browser system is designed and optimized to run sequentially.
-        On computers, browsers usually achieve parallelism by running each page context in parallel (each tab of the browser window is an own process).
+        On computers, browsers usually achieve parallelism by running each page context in parallel (each tab of the browser window is separate process).
         This approach is appealing because it utilizes the cores of the machine by still having all subsystems run sequentially for each page, while improving the overall performance of the browser.
         However, this approach is not enough.
         The page performance is not improved if only one page is present.
@@ -743,15 +750,17 @@
         \textsc{css} selector matching is a good candidate for parallelization, due to matching nodes to selectors being independent from other selector matches.
         A successful parallelization of selector matching has been achieved with locality-aware task parallelism \cite{parallelizing_the_web_browser}.
         It has also been shown that selector matching and style resolving (through cascading) can be parallelized \cite{zoomm}.
-        It is possible to resolve element styles in parallel as long as two requirements are fulfilled: The matching task must have finished for the element to resolve styles for, and the parent element must have resolved all styles (since the element might inherit some styles from the parent).
+        It is possible to resolve element styles in parallel as long as two requirements are fulfilled: the matching task must have finished for the element to resolve styles for, and the parent element must have resolved all styles (since the element might inherit some styles from the parent).
         As long as these requirements are fulfilled, selector matching and style resolving can run in parallel for different elements.
         The layout process can also be parallelized, since the layout process has been shown to be sub-tree independent for non-float elements \cite{servo_parallel,servo_blog}.
         Siblings of the layout tree can be processed independently of each other (in the general case), and is suitable to parallelize with a work stealing system.
-        \todo{Write about the fork-join model of the parallelization as described in servo?}
+        
+        \todo[inline]{Write about the fork-join model of the parallelization as described in servo?}
+        \todo[inline]{Philipp: It would be very interesting to just shortly summarize typical performance gains due to parallelization.}
 
     \chapter{Element queries}
       \begin{metatext}
-        Now that a good understanding of browsers (especially the layout engine), responsive design and modular development has been acquired it is time to address element queries --- the solution to modular responsive web design.
+        Now that a good understanding of browsers (especially the layout engine), responsive design, and modular development has been acquired it is time to address element queries --- the solution to modular responsive web design.
         This chapter will define element queries, present how they solve the problem, and address some of the issues hindering element queries from being implemented natively.
         Further, some possible restrictions will be presented to resolve some of the issues.
         \todo{Instead write that some solutions will be presented?}
@@ -763,13 +772,14 @@
       One implication of building applications in a modular way is that general components become reusable.
       Since the only way of applying conditional rules to elements today is by using media queries, all responsive styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the layout).
       The implication of this is that the \textsc{html} and JavaScript can be written in a modular way, but the \textsc{css} is left for the user of the module (application) to write which somewhat defeats the purpose of writing modules.
-      So developers today have two choices: Writing modules that are not responsive but self contained, or writing modules that are responsive but not self contained (leaving the styling to the user).
+      So developers today have two choices: writing modules that are not responsive but self contained, or writing modules that are responsive but not self contained (leaving the styling to the user).
+
       The solution to this is element queries, which allows conditional rules to be applied based on any criteria for any element.
       Figure~\ref{fig:mq-vs-eq} shows the problem with media queries and the element query solution.
       The typical use case is to write conditional styles to be applied based on the container element size.
-      Although the typically the size of the container element is the most interesting element query with responsive web design, element queries as a concept does not need to be limited to that.
+      Although the size of the container element is typically the most interesting element query with responsive web design, element queries as a concept does not need to be limited to that.
       It is also possible to apply conditional rules by any element display property, color, text alignment, and so on.
-      Theoretically it should be possible to query any style property of an element, but the focus will lay on the \code{width} and \code{height} properties since they are the most interesting in responsive web design.
+      Theoretically it should be possible to query any style property of an element, but the focus will be the \code{width} and \code{height} properties since they are the most interesting in responsive web design.
 
       \begin{figure}
         \centering
@@ -792,7 +802,7 @@
 
       \section{Problems}
         \begin{metatext}
-          The main reason why element queries has not been implemented natively in browsers is because they bring problems and limitations to the browsers.
+          The main reason why element queries have not been implemented natively in browsers is because they bring problems and limitations to the browsers.
           It is important to understand the problems in order to speculate about a potential native \textsc{api} design.
           In this section the two major problems will be presented; performance and circularity.
         \end{metatext}
@@ -1331,7 +1341,7 @@
               A longer interval time would not be able to detect changes as quickly but increase the performance.
             \item \textbf{Scroll events by overflowing elements}:
               By injecting multiple elements, into the target element, that have overflowing content scroll events will occur when the target element is resized.
-              
+              Five elements needs to be injected; one container element that is styled to have the same size as the target element that contains all the other elements
             \item \textbf{Injecting frames}:
               Since frame elements are the only ones that support resize events natively, the idea is to inject frame elements as children to the elements that one want to listen for resize changes (also called \emph{target elements}).
               By styling the frame so that it depends on the target element and set the size to be 100 percent, the frame will always be the same size as the target element.
