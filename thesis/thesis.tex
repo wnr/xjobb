@@ -829,7 +829,7 @@
           Unfortunately, this means that if there is any matching element query selector at page load, two layout passes will always be performed.
 
           Further, it is common for internal \textsc{api}'s in layout engines to request updated element styles that do not require layout to resolve (non-layout properties such as \code{color} and \code{font-family}).
-          Since a layout of the element query selector target is required in order to resolve the correct element style, such internal \textsc{api}'s will require a layout in order to obtain the correct element style (even for non-layout related properties).
+          Since a layout of the element query selector target is required in order to resolve the correct element style, such internal \textsc{api}'s requires a layout in order to obtain the correct element style (even for non-layout related properties).
           Also, layout engines would not be able to layout subtrees in parallel since an element in one subtree might affect an element in another subtree.
 
           \todo{Totally forgot to write about parallel problems}
@@ -860,22 +860,22 @@
 }
           \end{lstlisting}
 
-          The following will happen to the element:
+          The following happens to the element:
           \begin{enumerate}
           \item The initial width of the \code{\#foo} element is set to 250 pixels.
-          After a layout, the \code{\#foo:eq(max-width: 300px)} will match and therefore next step will be 2.
-          \item The width of the element is under 300 pixels, so the selector \code{\#foo:eq(max-width: 300px)} will match.
+          After a layout, the \code{\#foo:eq(max-width: 300px)} matches and therefore next step will be 2.
+          \item The width of the element is under 300 pixels, so the selector \code{\#foo:eq(max-width: 300px)} matches.
           Note that the \code{\#foo:eq(min-width: 500px)} does not match, since the width is under 500 pixels.
-          Since the matched selector is more specific than the \code{\#foo} selector, the new width of the element will be 550 pixels.
+          Since the matched selector is more specific than the \code{\#foo} selector, the new width of the element is 550 pixels.
           Next step will be 3.
-          \item The width of the element is above 500 pixels, so the selector \code{\#foo:eq(min-width: 500px)} will match.
+          \item The width of the element is above 500 pixels, so the selector \code{\#foo:eq(min-width: 500px)} matches.
           Note that the \code{\#foo:eq(max-width: 300px)} does not match, since the width is above 300 pixels.
-          Since the matched selector is more specific than the \code{\#foo} selector, the new width of the element will be 250 pixels.
+          Since the matched selector is more specific than the \code{\#foo} selector, the new width of the element is 250 pixels.
           Next step will be 2.
           \end{enumerate}
           Clearly, the browser will be stuck in an infinite layout cycle pending back and forth between step 2 and 3 (250 pixels and 550 pixels).
           The result of this is of course implementation dependent.
-          One reasonable outcome of such infinite layout loop is that the layout engine will execute one layout pass and then evaluate the next set of matched selectors and so on, which will lead to a functioning site but since a relayout is enforced every update, the performance impact will be huge.
+          One reasonable outcome of such infinite layout loop is that the layout engine executes one layout pass and then evaluate the next set of matched selectors and so on, which leads to a functioning page but since a relayout is enforced every update, the performance impact is huge.
           This example is somewhat similar to writing \code{while(true);} in JavaScript, which obviously is a bad idea.
           However, cyclic rules can also occur in less obvious ways. 
 
@@ -900,12 +900,12 @@
 }
 
 #foo:eq(max-width: 300px) #child {
-  /* This rule will be applied only when the width of #foo is < 300px. */
+  /* This rule applies only when the width of #foo is < 300px. */
   width: 550px;
 }
 
 #foo:eq(min-width: 500px) #child {
-  /* This rule will be applied only when the width of #foo is > 500px. */
+  /* This rule applies only when the width of #foo is > 500px. */
   width: 250px;
 }
           \end{lstlisting}
@@ -944,17 +944,17 @@
 }
 
 #foo:eq(max-width: 300px) #child {
-  /* This rule will be applied only when the width of #foo is < 300px. */
+  /* This rule applies only when the width of #foo is < 300px. */
   font-size: 3em;
 }
 
 #foo:eq(min-width: 500px) #child { 
-  /* This rule will be applied only when the width of #foo is > 500px. */
+  /* This rule applies only when the width of #foo is > 500px. */
   font-size: 1em;
 }
           \end{lstlisting}
           In this example, it is virtually impossible to tell if the rules are cyclic.
-          So what happens is that the \code{\#foo} element will get the size of the child element, which width depend on the text inside it.
+          So what happens is that the \code{\#foo} element get the size of the child element, which width depend on the text inside it.
           The width of the text depends on the font size, which is initially set to \code{1.5em}.
           The \code{em} unit is relative to the inherited font size of the element.
           So the width of the \code{\#foo} element is dependent on the inherited font size.
@@ -974,7 +974,7 @@
           Also, the inherited font size depends on the closest ancestor with a font size property defined.
           Since ancestors also can have their font sizes defined in relative units, the dependency tree can go up to the root of the document.
           Further, if no ancestor defines an absolute value for the font size it is up to the browser to default to a size, which is impossible to reason about at parsetime.
-          This implies that there is no way of telling if the cycle will appear or not without actually running the code.
+          This implies that there is no way of telling if the cycle appears or not without actually running the code.
           Also, the cycle may appear in different browsers and settings, which makes the cycle even harder to detect.
           Far worse is that the previous examples have been of the \code{while(true);} character, which gives the false hope that even though it is possible to create cycles developers would never encounter it since ``real'' code would not be close to the examples given here.
           With the third example, this is no longer true.
@@ -1075,7 +1075,7 @@
 
 
       First of all, a working name of the framework needs to be established --- the framework will from now on have the working name \textsc{elq}.
-      This name will serve as a prefix for many of the framework \textsc{api}'s, and will be frequently used in the report from now on.
+      This name serves as a prefix for many of the framework \textsc{api}'s, and will be frequently used in the report from now on.
 
       \todo{Write more here or move the above text somewhere else?}
 
@@ -1340,25 +1340,25 @@
               One can set the interval time to shorter or longer, where shorter would lead to being able to detect resize changes quicker but having worse performance.
               A longer interval time would not be able to detect changes as quickly but increase the performance.
             \item \textbf{Scroll events by overflowing elements}:
-              By injecting multiple elements, into the target element, that have overflowing content scroll events will occur when the target element is resized.
+              By injecting multiple elements, into the target element, that have overflowing content scroll events occurs when the target element is resized.
               Five elements needs to be injected; one container element that is styled to have the same size as the target element that contains all the other elements
             \item \textbf{Injecting frames}:
               Since frame elements are the only ones that support resize events natively, the idea is to inject frame elements as children to the elements that one want to listen for resize changes (also called \emph{target elements}).
               By styling the frame so that it depends on the target element and set the size to be 100 percent, the frame will always be the same size as the target element.
-              Then a resize event handler can be attached to the frame that will emit a resize event for every target element resize.
+              Then a resize event handler can be attached to the frame that emits a resize event for every target element resize.
               So in order to listen for resize events for an element, a frame element is injected and listened to instead.
           \end{itemize}
-          The first solution is appealing because it does not mutate the \textsc{dom} and it will work on all browsers since it does not rely on special element behaviors or similar.
+          The first solution is appealing because it does not mutate the \textsc{dom} and it works on all browsers since it does not rely on special element behaviors or similar.
           However, in order to prevent the responsive elements lagging behind the size changes of the user interface, the polls need to be performed quite frequently.
           Recall from section~\ref{sec:layout-process} that layout engines typically have a layout queue in order to perform layout in batches for increased performance.
-          Each poll would force the layout queue to be flushed since the computed style of elements will need to be retrieved in order to know if elements have resized or not.
+          Each poll would force the layout queue to be flushed since the computed style of elements needs to be retrieved in order to know if elements have resized or not.
           The performance impact of polling the \textsc{dom} frequently is not desirable.
-          Since the polling will be performed all the time, the overall page performance will be decreased even if the page is idle, which is undesirable especially for devices running on battery.
+          Since the polling is be performed all the time, the overall page performance will be decreased even if the page is idle, which is undesirable especially for devices running on battery.
           This is not a great solution since reading the \textsc{dom} constantly can be affect the performance negatively. \todo{Should make quick test to see how much CPU it uses when polling frequently}
           \todo{Write that in theory the detection of resize is delayed by the frequency of the polling?}
 
           The third solution does mutate the \textsc{dom} and relies on special element behavior, but it offers many advantages.
-          Browsers will only need to perform extra work when preparing elements for being resize-detectable and when the elements actually resize.
+          Browsers only need to perform extra work when preparing elements for being resize-detectable and when the elements actually resize.
           Further, since the resize detection instead is event-based there is no delay between the actual resize and the detection.
           By positioning the injected frames \code{absolute} with width and height set to \code{100\%}, the frames do not affect the visual representation of the document.
           It has been shown by \cite{backalley} that \code{object} is the most suitable frame element to use for this purpose, as they have good browser compatibility, adequate performance and are easy to work with.
@@ -1366,12 +1366,12 @@
           \begin{itemize}
             \item \textbf{CSS selectors may break}:
               Since target elements get an extra child (the frame element), \textsc{css} selectors may behave differently.
-              For instance, the selector \code{\#target *} selector will also match the injected frame element which may result in the frame being styled in a way that it will be visible or in other ways interfere with the original user interface.
+              For instance, the selector \code{\#target *} selector also matches the injected frame element which may result in the frame being styled in a way that it will be visible or in other ways interfere with the original user interface.
               Also, selectors such as \code{:first-child} and \code{:last-child} since the object element is prepended (or appended) to the target element.
             \item \textbf{JavaScript may break}:
               Similar to with the \textsc{css} selectors, JavaScript \textsc{dom} selectors may break.
               The first node (or last) of the target element may not be what developers expect it to be, since the frame element has been injected.
-              Also, code that replaced the content of elements (such as \code{element.InnerHTML = ...}) will undesirably remove the injected frame element of if used on the target element.
+              Also, code that replaced the content of elements (such as \code{element.InnerHTML = ...}) undesirably removes the injected frame element of if used on the target element.
             \item \textbf{The target element must be positioned}:
               Recall that absolute positioned elements are moved up to the first non-static positioned ancestor.
               Since it is desired to have the injected frame being a direct child of the target element, the target element cannot be positioned \code{static} that is the default positioning for many elements.
