@@ -165,6 +165,7 @@
       \item No complete history of browsers, the Internet or responsive web design will be given other than necessary.
       \end{itemize}
     \section{Outline}
+      \todo[inline]{Write this.}
 
   \part{Background}
 
@@ -253,8 +254,8 @@
             This subsection is a summary of \normalfont{\cite{wiki_gopher,wiki_www,webdevnotes_history_of_the_internet,webdevnotes_www_basics,historyofthings_internet}}.
           \end{metatext}
 
-          \todo{Should have another subsection or not have this in a subsection. Only one subsection is not nice.}
-
+          \todo[inline]{Should have another subsection or not have this in a subsection. Only one subsection is not nice.}
+          \noindent
           Recall that the way of exchanging information was to upload and download files between clients and hosts with \textsc{ftp}.
           If a document downloaded was referring to another document, the user had to manually find the server that hosted the other document and download it manually.
           This was a poor way of digesting information and documents that linked to other resources.
@@ -468,8 +469,8 @@
         The render process will not be described, as it is not relevant for element queries.
         This chapter is mainly based on \normalfont{\cite{browser_architecture,garsiel2011browsers}}.
       \end{metatext}
-      \todo{Have an image about the layout flow somewhere?}
-
+      \todo[inline]{Have an image about the layout flow somewhere?}
+      \noindent
       Browsers are complex applications that consist of many subsystems.
       A reference architecture of browsers has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
       \begin{figure}
@@ -1328,8 +1329,9 @@
               This can be achieved by using the \code{setInterval} function.
               One can set the interval time to shorter or longer, where shorter would lead to being able to detect resize changes quicker but having worse performance.
               A longer interval time would not be able to detect changes as quickly but increase the performance.
-            \item \textbf{Overflow hacks}:
-              \todo{Write me, or is this no longer an alternative?}
+            \item \textbf{Scroll events by overflowing elements}:
+              By injecting multiple elements, into the target element, that have overflowing content scroll events will occur when the target element is resized.
+              
             \item \textbf{Injecting frames}:
               Since frame elements are the only ones that support resize events natively, the idea is to inject frame elements as children to the elements that one want to listen for resize changes (also called \emph{target elements}).
               By styling the frame so that it depends on the target element and set the size to be 100 percent, the frame will always be the same size as the target element.
