@@ -1093,14 +1093,14 @@
         \begin{enumerate}
           \item \textbf{Features}
             \begin{enumerate}
-              \item The framework needs to augment native element queries in the sense that styles are applied automatically on element resizes.
+              \item\label{itm:req_resize_detect} The framework needs to augment native element queries in the sense that styles are applied automatically on element resizes.
               \item Existing modules written with media queries should be automatically converted to element queries so that existing third-party modules can be used in element query empowered applications.
               \todo{Remove this?}
               \item The features should be flexible and not limited to only the common use cases.
             \end{enumerate}
           \item \textbf{Ease of use}
             \begin{enumerate}
-              \item Developers should not need to perform big rewrites of their modules or applications in order to use the framework.
+              \item\label{itm:req_big_rewrite} Developers should not need to perform big rewrites of their modules or applications in order to use the framework.
               \item The \textsc{api}'s need to feel natural and should not seem alien to web developers.
               \item The framework should help identifying cyclic rules and prevent them from causing infinite layouts.
             \end{enumerate}
@@ -1130,8 +1130,10 @@
       \section{Architecture}\label{sec:arcithecture}
         \begin{metatext}
           As it has been shown that a plugin based framework is most suitable, it is time to present the overall architecture of the framework.
-          The major subsystems of the core framework will also be explained in depth. \todo{Should they be explained in depth here or in the implementation section? Maybe rewrite this sentence.}
+          The roles of each subsystem of the core framework will also be explained.
         \end{metatext}
+
+        \todo[inline]{Here the style state of the element is talked about. Maybe this should have been mentioned before? Perhaps in the chapter text?}
 
         To decide if a subsystem of the solution should be in the framework core or a plugin is a difficult task.
         A balance needs to be found between ease of use, performance and extendability.
@@ -1142,123 +1144,7 @@
         Therefore it is important that it is possible for developers to either remove them or change them.
         This way the more advanced users can choose which subsystems to alter, keeping the framework easy to use for the common use cases.
 
-        \begin{figure}
-          \centering
-          \begin{tikzpicture}[node distance=3pt]  
-          \tiny
-            \tikzset{
-                insidenode/.style={
-                  rectangle,
-                  rounded corners,
-                  draw=black,
-                  top color=white,
-                  bottom color=white,
-                  very thin,
-                  inner sep=1em,
-                  minimum height=2em,
-                  text centered,
-                  text width=12em
-                },
-                title/.style={
-                  draw=none,
-                  fill=none,
-                  top color=white,
-                  bottom color=white,
-                  thin,
-                  inner sep=0,
-                  minimum height=2em,
-                  text centered
-                },
-                box/.style={
-                  draw=black!50,
-                  inner sep=0.5em
-                },
-                o/.style={
-                  shorten >=#1,
-                  decoration={
-                    markings,
-                    mark={
-                      at position 1
-                      with {
-                        \draw circle [radius=#1];
-                      }
-                    }
-                  },
-                  postaction=decorate
-                },
-                o/.default=2pt,
-                apibox/.style={
-                  minimum height=3em,
-                  dashed,
-                  draw=black,
-                  rounded corners
-                },
-                myarrow/.style={->, >=latex', shorten >=1pt, thin},
-                mylabel/.style={text width=3em, text centered}
-            }
-
-            \node[] (middledummy) {};
-            \node[title, above=15pt of middledummy] (elqtitle) {\normalsize ELQ};
-
-            \node[title, left=11em of middledummy] (coretitle) { \normalsize Core };
-            \node[insidenode, below=of coretitle] (erd) {Element resize detector};  
-            \node[insidenode, below=of erd] (reporter) {Reporter};
-            \node[insidenode, below=of reporter] (cycle) {Cycle detector};
-            \node[insidenode, below=of cycle] (batch) {Batch processor};
-            \node[insidenode, below=of batch] (plugin) {Plugin handler};
-
-            \node[box, fit={(coretitle) (erd) (reporter) (cycle) (batch) (plugin)}] (core) {};
-
-            \node[title, right=10em of middledummy] (pluginstitle) { \normalsize Plugins };
-            \node[insidenode, below=of pluginstitle] (breakpoints) {breakpoints};
-            \node[insidenode, below=of breakpoints] (mirror) {mirror};
-            \node[insidenode, below=of mirror] (prolyfill) {prolyfill};
-            \node[below=-4pt of prolyfill] (dots) {\huge \vdots};
-            \node[box, fit={(pluginstitle) (breakpoints) (mirror) (prolyfill) (dots) ($ (breakpoints.east) + (1.8,0) $)}] (plugins) {};
-
-            \node[box, fit={(elqtitle) (core) (plugins)}] (elq) {};
-
-            % Interplugin API
-            \draw[o] (breakpoints.east) -- ($ (breakpoints.east) + (0.5,0) $);
-            \draw[o] (mirror.east) -- ($ (mirror.east) + (0.5,0) $);
-            \draw[o] (prolyfill.east) -- ($ (prolyfill.east) + (0.5,0) $);
-            \draw[myarrow, <->] ($ (breakpoints.east) + (0.8,0) $) to[out=-45, in=45] ($ (prolyfill.east) + (0.8,0) $);
-            \node[mylabel, rotate=-90, text width=10em] (interpluginapilabel) at ($ (mirror.east) + (1.5,0) $) {Interplugin \textsc{api}};
-            \node[apibox, fit={($ (breakpoints.east) + (0.3,0.5) $) ($ (prolyfill.east) + (0.3,-0.5) $) (interpluginapilabel)}] (interpluginapi) {};
-
-            % Public API
-            \coordinate (pubapibottom) at ($ (elq.south) + (0,-1) $);
-            \draw[o] ($ (elq.south) + (0,0) $) -| (pubapibottom);
-            \draw[o] ($ (elq.south) + (-0.5,0) $) -| ($ (pubapibottom) + (-0.5,0) $);
-            \draw[o] ($ (elq.south) + (0.5,0) $) -| ($ (pubapibottom) + (0.5,0) $);
-            \draw[o] let \p1=(pubapibottom), \p2=(plugins.south) in ($ (plugins.south) + (0,0) $) -| ($ (\x2,\y1) + (0,0) $);
-            \draw[o] let \p1=(pubapibottom), \p2=(plugins.south) in ($ (plugins.south) + (0.5,0) $) -| ($ (\x2,\y1) + (0.5,0) $);
-            \draw[o] let \p1=(pubapibottom), \p2=(plugins.south) in ($ (plugins.south) + (-0.5,0) $) -| ($ (\x2,\y1) + (-0.5,0) $);
-            \node[mylabel, right=4em of pubapibottom, text width=5em] (pubapilabel) {Public \textsc{api}};
-            \path let \p1=(pubapibottom), \p2=(plugins.south) in node (pubapiright) at ($ (\x2,\y1) + (0.5,0) $) {};
-            \node (pubapileft) at ($ (pubapibottom) + (-0.5,0) $) {};
-            \node[apibox, fit={(pubapibottom) (pubapilabel) ($ (pubapileft) + (-0.5,0) $) ($ (pubapiright) + (0.5,0) $)}] (publicapi) {};
-
-            % Plugin API
-            \path let \p1=(middledummy.south), \p2=(core.east) in coordinate (pluginapi) at (\x1, \y2);
-            \node[mylabel, below=3em of pluginapi, text width=5em] (pluginapilabel) {Plugin \textsc{api}};
-            \draw[o] ($ (core.east) + (0,0) $) -- ($ (pluginapi) + (-0.2,0) $);
-            \draw[o] ($ (core.east) + (0,0.5) $) -- ($ (pluginapi) + (-0.2,0.5) $);
-            \draw[o] ($ (core.east) + (0,-0.5) $) -- ($ (pluginapi) + (-0.2,-0.5) $);
-            \draw[myarrow] let \p1=(core.east), \p2=(plugins.west) in ($ (\x2, \y1) + (0,0) $) -- ($ (pluginapi) + (0.2,0) $);
-            \draw[myarrow] let \p1=(core.east), \p2=(plugins.west) in ($ (\x2, \y1) + (0,0.5) $) -- ($ (pluginapi) + (0.2,0.5) $);
-            \draw[myarrow] let \p1=(core.east), \p2=(plugins.west) in ($ (\x2, \y1) + (0,-0.5) $) -- ($ (pluginapi) + (0.2,-0.5) $);
-            \node[apibox, fit={(pluginapilabel) ($(pluginapi) + (0, 0.7)$)}] (pluginapibox) {};
-          \end{tikzpicture}
-          \medskip
-          \caption{
-            The overall framework architecture, which shows how the framework is divided into two parts; the core and plugins. 
-            The core is only accesible through the plugin \textsc{api}, and is not a part of the public \textsc{api}.
-            Plugins may have interplugin \textsc{api}'s and dependencies.
-            The bigger part of the public \textsc{api}'s is defined by the plugins.
-          }
-          \label{fig:elq_architecture}
-        \end{figure}
+        \input{p3-elq-architecture}
 
         Figure~\ref{fig:elq_architecture} shows the overall architecture of the framework.
         The core consists of fundamental and general subsystems that are utilized by plugins.
@@ -1274,34 +1160,29 @@
           \item \textbf{Reporter:}
             Responsible for reporting information, warnings and errors to the developer.
             By having a centralized reporter, it is possible to decide at a global framework-level how much plugins are allowed to report.
-            Other options suchs as throwing exception on errors or warnings could also be set at framework-level.
-            Also, the framework can make sure that all reports are standardized and can provide extra information such as which plugin reported what.
-            To avoid code duplications, it also beneficial to have a centralized report system so the plugins do not need to perform the same compatability checks (such as checking if the browser actually supports console reporting).
+            Other options such as throwing exception on errors or warnings could also be set at a global framework-level.
+            Also, the framework can make sure that all reports are standardized and can provide extra information such as the name and version of the plugin along with its report.
+            To avoid code duplication, it also beneficial to have a centralized report system so the plugins do not need to perform the same compatibility checks (such as checking if the browser actually supports console reporting).
           \item \textbf{Element resize detector:}
             Provides an interface for listening to element resize events.
-            This system is fundamental to plugins fulfilling the ease of use requirements since it enables the framework to be aware of when elements change sizes, instead of the host application keeping track of when elements have changed sizes.
-            This is presented in greater detail in section~\ref{sec:imp_erd}.
+            This system is fundamental to plugins fulfilling requirements \ref{itm:req_resize_detect} and \ref{itm:req_big_rewrite} since it enables the framework to be aware of when elements change sizes, instead of the host application keeping track of when elements have changed sizes.
             \todo{Maybe this shouldn't be a core subsystem? Since this system imposes the biggest performance impact. It might make more sense to have this as a plugin.}
           \item \textbf{Cycle detector:}
-            As shown in section~\ref{} cyclic rules need to be detected at runtime.
-            When a plugin wish to update the size state of an element (which in turn applies the conditional styles for the state) it can ask this system if the element has cyclic rules.
-            It keeps track of the size state of the elements, and decides if the rules of an element are cyclic by options such as state frequency.
-            This is presented in greater detail in section~\ref{sec:imp_cycle_detector}.
+            As shown in section~\ref{sec:cyclic-rules} cyclic rules need to be detected at runtime.
+            When a plugin wish to update the size state of an element (which in turn applies the conditional styles to the element) it can ask this system if the update seems to be part of a cycle.
+            If the update seems to be part of a cycle, it is up to the plugin how that should be handled.
             \todo{Write that this system is more general, and could potentially be used for detecting other cyclic behaviors?}
           \item \textbf{Batch processor:}
             To avoid layout thrashing, it is important to read and mutate the \textsc{dom} in separate batches.
             This subsystem provides an interface for plugins to store functions to later be executed in a batch.
             To avoid layout thrashing by other scripts it can beneficial to asynchronously postpone the batch until the next layout cycle of the browser, which is also handled by the subsystem.
-            This is presented in greater detail in section~\ref{sec:imp_batch_processor}.
           \item \textbf{Plugin handler:}
             Of course, having plugins requires a subsystem for handling them.
             This system provides the interface for developers to add plugins to the framework.
             The system is also responsible for retrieving the plugins, and invoking them on different framework events.
         \end{itemize}
-        Some of the subsystems may be partially accessible by through the public \textsc{api} such as the plugin handler and the element resize detector.
-        It should be noted that the presented core subsystems are not the only thing that the framework consists of --- they are simply the ones worth mentioning.
-        \todo{Maybe rewrite this a bit?}
-
+        Some of the subsystems may be partially accessible through the public \textsc{api} such as the plugin handler and the element resize detector.
+        It should be noted that the presented core subsystems are not the only things that the framework consists of, but the presented systems are the major ones.
       \section{API design}\label{sec:elq-api}
         \begin{metatext}
           This section will describe the \textsc{api} of the framework.
