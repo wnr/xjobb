@@ -1190,11 +1190,11 @@
           After that, all plugins will be described in depth addressing their features, dependencies and \textsc{api}'s.
         \end{metatext}
 
-        Recall from section~\ref{} that the bigger part of the public \textsc{api} is provided by plugins.
+        Recall from section~\ref{sec:arcithecture} that the bigger part of the public \textsc{api} is provided by plugins.
         The role of the framework is to provide plugins with systems to be used for performing element query tasks, which is done through the plugin \textsc{api}.
         Three plugins will be developed; 
 
-        \section{Public API}
+        \subsection{Public API}
           \todo[inline]{Write how to install it. AMD, script, commonjs, etc.}
 
           In section~\ref{sec:techincal-goals} it was determined that advanced users must be able to change the subsystems used in the core.
@@ -1293,11 +1293,11 @@ var jqueryElementsCollection = $("...");
 elq.start(jqueryElementsCollection);
           \end{lstlisting}
 
-        \section{Plugin API}
-        \section{Plugins}
-          \subsection{Breakpoints}
-          \subsection{Mirror}
-          \subsection{Prolyfill}
+        \subsection{Plugin API}
+        \subsection{Plugins}
+          \subsubsection{Breakpoints}
+          \subsubsection{Mirror}
+          \subsubsection{Prolyfill}
     \chapter{Implementation}
       \section{Element resize detection}\label{sec:imp_erd}
         \begin{metatext}
