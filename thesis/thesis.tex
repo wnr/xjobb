@@ -73,6 +73,10 @@
   \tableofcontents*
   \listoftodos
   \mainmatter
+  \section*{Definition of terms and abbreviations}
+    \begin{itemize}
+      \item[self-contained] A self-contained module handles its task without any help from the user of the module.
+    \end{itemize}
   \pagestyle{newchap}
   \chapter{Introduction}
     \todo[inline]{Write somewhere that modular and responsive web development right now are two disjunct terms?}
@@ -94,7 +98,7 @@
 
       \todo{Is W3C okay with this?}
       The main international standards organization for the World Wide Web (World Wide Web Consortium, abbreviated \abbr{w3c}) has unofficially stated that such feature would be infeasible to implement.
-      Many standards organisations are interested in solving the problem and possible solutions are being discussed. \todo{Write which organisations?}
+      Many standards organizations are interested in solving the problem and possible solutions are being discussed. \todo{Write which organizations?}
       However, they are still at the initial planning stage so a solution will not be implemented natively in the near future.
       While awaiting the native solution it is up to the developers to implement this feature as a third-party solution.
       Efforts have been made to create a robust third-party solution, with moderate success.
@@ -113,28 +117,31 @@
         Far worse, since selectors would depend on layout style, this cannot be done in parallel.
       \end{itemize}
     \section{Objective}
-      The main objective of this thesis is to develop a third-party implementation of element queries (or equivalent to solve the problem of modular responsive components).
-      To do this, it is needed to research existing implementation attempts in order to understand and analyze the advantages and shortcomings of the approaches.
+      The main objective of this thesis is to design and develop a third-party implementation of element queries.
+      To do this, it is needed to research existing solution approaches in order to understand and analyze the advantages and shortcomings of the approaches.
       It is also necessary to be aware of the premises, such as browser limitations and specifications that need to be conformed.
-      In addition, research will be done about the problems of implementing element queries natively, to get a deeper understanding of how an official \abbr{api} would look like.
-      There are many challenges along the way that will need to be researched and worked around.
-      Examples of such sub problems that would need to be investigated are:
+      In addition, research will be done about the problems of implementing element queries natively, to get a deeper understanding of how an official \abbr{api} could look like.
+      Solving the main problem will require research and empirical studies of many subproblems.
+      Examples of such subproblems that needs to be addressed are:
       \begin{itemize}
         \item How should circularity be handled? Should it be detected at runtime or parsetime, and what should happen on detection?
         \item How can one listen to element size changes without any native support?
-        \item How can a custom \abbr{api} be crafted that will enable element queries and still conform to the \abbr{css} specification?
-        \item If a custom \abbr{api} is developed, how would one make third-party modules (that uses media queries) work without demanding a rewrite of all third-party modules?
+        \item How can a custom \abbr{api} be crafted that will enable element queries and still conform to the \abbr{css} specification? Is it possible to create an API that feels natural to web developers and works in tandem with other tools and frameworks?
+        \item If a custom \abbr{api} is developed, how would one make third-party modules (that uses media queries) work without demanding a rewrite of all third-party modules? \todo{Remove me?}
+        \item Is it possible to solve the problem with adequate performance for heavy applications?
+        \item How can high browser compatibility be achieved?
       \end{itemize}
       The scientific question to be answered is if it is possible to solve the problem  without extending the current web standard.
-      The hypothesis is that the problem can be solved with high reliability and adequate performance by crafting a third-party implementation.
-      \todo{This might be a bit too much.}
+      The hypothesis is that the problem can be solved with high reliability and adequate performance by developing a third-party implementation.
+      \todo{Remove me?}
       A reliable implementation should also enable existing responsive components to react to a specified criterion (parent container size for example) with no modifications to the components.
       The goal of this thesis should be considered fulfilled if a solution was successfully implemented or described, or if the problems hindering a solution are thoroughly documented.
+      \todo{Is it really interesting for the reader to know when it was fulfilled or not? I know at this point of time that it has been fulfilled, so the other case is no more relevant.}
 
     \section{Significance}
       Many frameworks and techniques are being used in web development to keep the code from becoming an entangled mess.
       Creating modules facilitates the development and increases reusability.
-      Unfortunately, it is currently impossible to create self contained responsive modules since conditional styles cannot be applied to elements by element sizes.
+      Unfortunately, it is currently impossible to create self-contained responsive modules since conditional styles cannot be applied to elements by element sizes.
       Without element queries, responsive modules force the application to style them properly depending on the viewport sizes, which defeats the purpose of modules.
       Modules should be self-contained (i.e. they work by themselves) and may not require the user to perform the module logic.
       Another option would be to make the modules context-aware so they can style themselves according to the viewport, but then they would not be reusable (since they assume a specific context).
@@ -149,7 +156,7 @@
       Solving this problem would be a big advancement to web development, enabling developers to create truly modular components.
       By studying the problem, identifying approaches and providing a third-party solution the community can take a step closer to solve the problem.
       If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for \abbr{w3c} to make their verdict.
-      The outcome of this thesis can also be helpful for \abbr{w3c} and others to get an overview of the problem and possibly get ideas how sub problems can be handled.
+      The outcome of this thesis can also be helpful for \abbr{w3c} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
     \section{Delimitations}
       The focus of this thesis lays on developing a third-party framework that realizes element queries.
       All theoretical studies and work will be performed to support the development of the framework.
@@ -789,7 +796,7 @@
       One implication of building applications in a modular way is that general components become reusable.
       Since the only way of applying conditional rules to elements today is by using media queries, all responsive styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the layout).
       The implication of this is that the \abbr{html} and JavaScript can be written in a modular way, but the \abbr{css} is left for the user of the module (application) to write which somewhat defeats the purpose of writing modules.
-      So developers today have two choices: writing modules that are not responsive but self contained, or writing modules that are responsive but not self contained (leaving the styling to the user).
+      So developers today have two choices: writing modules that are not responsive but self-contained, or writing modules that are responsive but not self-contained (leaving the styling to the user).
 
       The solution to this is element queries, which allows conditional rules to be applied based on any criteria for any element.
       Figure~\ref{fig:mq-vs-eq} shows the problem with media queries and the element query solution.
