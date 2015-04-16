@@ -24,6 +24,8 @@
 \bibliography{bibliography.bib}
 
 \newcommand{\code}[1]{\texttt{#1}}
+\newcommand\abbr[2][]{\ifthenelse{\equal{#1}{}}%
+                     {\textsc{#2}}{\textsc{#2}'#1}}
 
 \newenvironment{metatext}{%
   \textbf{$\hookrightarrow$}
@@ -38,7 +40,6 @@
 \def\useignorespacesandallpars#1\ignorespaces\fi{%
 #1\fi\ignorespacesandallpars}
 
-\newcommand{\abbr}[2]{\textsc{#1}{\small#2}}
 
 \makeatletter
 \def\ignorespacesandallpars{%
@@ -53,7 +54,7 @@
 \subtitle{Allowing responsive web modules to respond to custom criteria instead of only viewport size by implementing \emph{element queries}}
 \author{Lucas Wiener \\ \lowercase{lwiener@kth.se}}
 \date{February 2015}
-\blurb{Master's Thesis at \textsc{csc}\\\hfill\\ Supervisors at \textsc{evry ab}: Tomas Ekholm \& Stefan Sennerö\\Supervisor at \textsc{csc}: Philipp Haller\\Examiner: Mads Dam}
+\blurb{Master's Thesis at \abbr{csc}\\\hfill\\ Supervisors at \abbr{evry ab}: Tomas Ekholm \& Stefan Sennerö\\Supervisor at \abbr{csc}: Philipp Haller\\Examiner: Mads Dam}
 \trita{TRITA xxx yyyy-nn}
 \begin{document}
   \frontmatter
@@ -85,7 +86,7 @@
       Heavy use of web terminology is being used and intermediate web development knowledge is assumed.
       \todo{Philipp wanted this to be more general.}
     \section{Problem statement}
-      By using \textsc{css} \emph{media queries} developers can specify different style rules for different viewport sizes.
+      By using \abbr{css} \emph{media queries} developers can specify different style rules for different viewport sizes.
       This is fundamental to creating responsive web applications.
       If developers want to build modular applications by composing the application by smaller components (elements, scripts, styles, etc.) media queries are no longer applicable.
       Modular responsive components should be able to react and change style depending on the size that the component has been given by the application, not the viewport size.
@@ -93,7 +94,7 @@
       See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
       \todo{Is W3C okay with this?}
-      The main international standards organization for the World Wide Web (World Wide Web Consortium, abbreviated \textsc{w3c}) has unofficially stated that such feature would be infeasible to implement.
+      The main international standards organization for the World Wide Web (World Wide Web Consortium, abbreviated \abbr{w3c}) has unofficially stated that such feature would be infeasible to implement.
       Many standards organisations are interested in solving the problem and possible solutions are being discussed. \todo{Write which organisations?}
       However, they are still at the initial planning stage so a solution will not be implemented natively in the near future.
       While awaiting the native solution it is up to the developers to implement this feature as a third-party solution.
@@ -103,7 +104,7 @@
       \begin{itemize}
         \item \textbf{Circularity:}
         If style rules can be applied by criteria of other elements, it will be possible to create cyclic rules (infinite loops of styling).
-        Some cyclic rules might be possible to detect during \textsc{css} parsing, but there are so many combinations of style properties that could result in cyclic rules that it will add a lot of complexity to the language, both for implementers and users.
+        Some cyclic rules might be possible to detect during \abbr{css} parsing, but there are so many combinations of style properties that could result in cyclic rules that it will add a lot of complexity to the language, both for implementers and users.
         Also, it has been shown that some cyclic rules are impossible to detect at parsetime, due to being dependent on runtime factors.
         See section~\ref{sec:cyclic-rules} for examples and a deeper analysis of cyclic rules.
         \item \textbf{Performance:} 
@@ -116,14 +117,14 @@
       The main objective of this thesis is to develop a third-party implementation of element queries (or equivalent to solve the problem of modular responsive components).
       To do this, it is needed to research existing implementation attempts in order to understand and analyze the advantages and shortcomings of the approaches.
       It is also necessary to be aware of the premises, such as browser limitations and specifications that need to be conformed.
-      In addition, research will be done about the problems of implementing element queries natively, to get a deeper understanding of how an official \textsc{api} would look like.
+      In addition, research will be done about the problems of implementing element queries natively, to get a deeper understanding of how an official \abbr{api} would look like.
       There are many challenges along the way that will need to be researched and worked around.
       Examples of such sub problems that would need to be investigated are:
       \begin{itemize}
         \item How should circularity be handled? Should it be detected at runtime or parsetime, and what should happen on detection?
         \item How can one listen to element size changes without any native support?
-        \item How can a custom \textsc{api} be crafted that will enable element queries and still conform to the \textsc{css} specification?
-        \item If a custom \textsc{api} is developed, how would one make third-party modules (that uses media queries) work without demanding a rewrite of all third-party modules?
+        \item How can a custom \abbr{api} be crafted that will enable element queries and still conform to the \abbr{css} specification?
+        \item If a custom \abbr{api} is developed, how would one make third-party modules (that uses media queries) work without demanding a rewrite of all third-party modules?
       \end{itemize}
       The scientific question to be answered is if it is possible to solve the problem  without extending the current web standard.
       The hypothesis is that the problem can be solved with high reliability and adequate performance by crafting a third-party implementation.
@@ -142,14 +143,14 @@
 
       The last couple of years a lot of articles have been written about the problem and how badly web developers need element queries.
       As already stated, third-party implementation efforts have been made by small and big entities\todo{Not really happy with this sentence.}, with moderate success.
-      \textsc{w3c} receives requests and questions about it, but the answer seems to lean towards no. \todo{Remove me?}
-      An organization called Responsive Issues Community Group (abbreviated \textsc{ricg}) have started an initial planning regarding element queries.
+      \abbr{w3c} receives requests and questions about it, but the answer seems to lean towards no. \todo{Remove me?}
+      An organization called Responsive Issues Community Group (abbreviated \abbr{ricg}) have started an initial planning regarding element queries.
       However, things are moving slow and a draft about element queries use cases are still being made.
 
       Solving this problem would be a big advancement to web development, enabling developers to create truly modular components.
       By studying the problem, identifying approaches and providing a third-party solution the community can take a step closer to solve the problem.
-      If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for \textsc{w3c} to make their verdict.
-      The outcome of this thesis can also be helpful for \textsc{w3c} and others to get an overview of the problem and possibly get ideas how sub problems can be handled.
+      If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for \abbr{w3c} to make their verdict.
+      The outcome of this thesis can also be helpful for \abbr{w3c} and others to get an overview of the problem and possibly get ideas how sub problems can be handled.
     \section{Delimitations}
       The focus of this thesis lays on developing a third-party framework that realizes element queries.
       All theoretical studies and work will be performed to support the development of the framework.
@@ -158,14 +159,14 @@
       \begin{itemize}
       \item A third-party implementation of element queries will be developed.
       \item The problems of implementing element queries natively will be addressed.
-      \item Theory about layout engines, \textsc{css}, \textsc{html} and responsive web design will be given to fully understand the problem.
+      \item Theory about layout engines, \abbr{css}, \abbr{html} and responsive web design will be given to fully understand the problem.
       \end{itemize}
 
       \subsection{What will not be done}
       \begin{itemize}
       \item No efforts will be made to solve the problems accompanied with a native solution.
-      \item No \textsc{api} or similar will be designed for a native solution.
-      \item \textsc{ui} and \textsc{ux} design will not be addressed, other than necessary for understanding the problem.
+      \item No \abbr{api} or similar will be designed for a native solution.
+      \item \abbr{ui} and \abbr{ux} design will not be addressed, other than necessary for understanding the problem.
       \item No complete history of browsers, the Internet or responsive web design will be given other than necessary.
       \end{itemize}
     \section{Outline}
@@ -177,12 +178,12 @@
       It starts with describing a reference architecture of layout engines and the parts of layout engines that directly affects element queries will be described in detail.
       Here it will also be presented why element queries impose problems to layout engines on a theoretical level.
       After that, a full description of element queries as a concept and a more in depth analysis of the problems will be given.
-      Possible solutions to the given problems will also be presented followed by a theoretization about how a \textsc{api} could be designed.
+      Possible solutions to the given problems will also be presented followed by a theoretization about how a \abbr{api} could be designed.
 
       The third part \emph{\ref{part:framework}~\nameref{part:framework}} presents the design and implementation of the solution as a third-party framework.
       Here possible approaches to solving the solution will be presented.
       Other implementations and solutions will be presented and analyzed followed by a motivation of the chosen approach for the framework.
-      Identified technical requirements will be given in order to motivate the framework architecture and \textsc{api} design.
+      Identified technical requirements will be given in order to motivate the framework architecture and \abbr{api} design.
       After that, interesting parts of the implementation will be presented.\todo{Maybe flesh this one out as it has been written.}
 
       \todo[inline]{Finish the Outline when the other parts have been written.}
@@ -199,12 +200,12 @@
 
       Before addressing the birth of the web, lets define the meaning of the concepts of the \emph{Internet}, \emph{Web} and \emph{World Wide Web}.
       The word internet can be translated to \emph{something between networks}. 
-      When referring to the Internet (capitalized) it is usually the global decentralized internet used for communication between millions of networks using \textsc{tcp/ip}.
+      When referring to the Internet (capitalized) it is usually the global decentralized internet used for communication between millions of networks using \abbr{tcp/ip}.
       Since the Internet is decentralized, there is no owner.
       Or in other words, the owners are all the network end-points (all users of the Internet).
-      One can argue that the owners of the Internet are the \textsc{isp}'s, providing the services and infrastructure making the Internet possible.
+      One can argue that the owners of the Internet are the \abbr[s]{isp}, providing the services and infrastructure making the Internet possible.
       On the other hand, the backbones of the Internet are usually co-founded by countries and companies.
-      Or is it the \textsc{icann}\footnote{The Internet Corporation for Assigned Names and Numbers} organization that has the responsibility for managing the \textsc{ip} addresses in the Internet namespace?
+      Or is it the \abbr{icann}\footnote{The Internet Corporation for Assigned Names and Numbers} organization that has the responsibility for managing the \abbr{ip} addresses in the Internet namespace?
       Clearly, the Internet wouldn't be what it is today without all the actors.
       The Internet lays the ground for many systems and applications, including the World Wide Web, file sharing and telephony.
       In 2014 the number of Internet users was measured to just below 3 billions, and estimations shows that we have surpassed 3 billions users today (no report for 2015 has been made yet).
@@ -212,7 +213,7 @@
       If one instead measures the number of connected entities (electronic devices that communicates through the Internet) the numbers are much higher.
       An estimation for 2015 of 25 billions connected entities has been made, and the estimation for 2020 is 50 billions.
       
-      As already stated, the Word Wide Web (abbreviated \textsc{www} or \textsc{w3}) is a system that operates through the Internet.
+      As already stated, the Word Wide Web (abbreviated \abbr{www} or \abbr{w3}) is a system that operates through the Internet.
       The World Wide Web is usually shortened to simply \emph{the web}.
       The web is a system for accessing interlinked hypertext documents and other media such as images and videos.
       Since not only hypertext is interlinked on the web, the term \emph{hypermedia} can be used as an extension to hypertext that also includes other nonlinear medium of information (images, videos, etc.).
@@ -221,7 +222,7 @@
       Therefore, the web is both the system enabling sharing of hypermedia and also all of the accessible hypermedia itself.
       Hypertext documents are today more known by the name \emph{web pages} or simply \emph{pages}.
       Multiple related pages compose a \emph{web site} or simply a \emph{site} and are usually hosted from the same domain.
-      To transfer the resources between computers the protocol \textsc{http} is used.
+      To transfer the resources between computers the protocol \abbr{http} is used.
       Typically the way of retrieving resources on the web is by using a \emph{web browser} or simply a \emph{browser}.
       Browsers handle the fetching, parsing and rendering of the hypertext (more about this in section~\ref{sec:browsers}).
       
@@ -234,35 +235,35 @@
         \end{metatext}
 
         In the early 1960's \emph{packet switching} was being researched, which is a prerequisite of internetworking.
-        With packet switching in place, the very important ancestor of the Internet \textsc{arpanet} (Advanced Research Projects Agency Network) was developed, which was the first network to implement the \textsc{tcp/ip} protocol suite.
-        The \textsc{tcp/ip} protocol suite together with packet switching are fundamental technologies of the Internet.
-        \textsc{arpanet} was funded by the United States Department of Defense (DoD) in order to interconnect their research sites in the United States.
-        The first nodes of \textsc{arpanet} was installed at four major universities in the western United States in 1969 and two years later the network spanned the whole country.
-        The first public demonstration of \textsc{arpanet} was held at the International Computer Communication Conference (ICCC) in 1972.
+        With packet switching in place, the very important ancestor of the Internet \abbr{arpanet} (Advanced Research Projects Agency Network) was developed, which was the first network to implement the \abbr{tcp/ip} protocol suite.
+        The \abbr{tcp/ip} protocol suite together with packet switching are fundamental technologies of the Internet.
+        \abbr{arpanet} was funded by the United States Department of Defense (DoD) in order to interconnect their research sites in the United States.
+        The first nodes of \abbr{arpanet} was installed at four major universities in the western United States in 1969 and two years later the network spanned the whole country.
+        The first public demonstration of \abbr{arpanet} was held at the International Computer Communication Conference (ICCC) in 1972.
         It was also at this time the email system was introduced, which became the largest network application for over a decade.
         In 1973 the network had international connections to Norway and London via a satellite link.
-        At this time information was exchanged with the File Transfer Protocol (\textsc{ftp}), which is a protocol to transfer files between hosts.
+        At this time information was exchanged with the File Transfer Protocol (\abbr{ftp}), which is a protocol to transfer files between hosts.
         This can be viewed as the first generation of the Internet. With around 40 nodes, operating with raw file transfers between the hosts it was mostly used by the academic community of the United States.
 
-        The number of nodes and hosts of \textsc{arpanet} increased slowly, mainly due to the fact that it was a centralized network owned and operated by the \textsc{us} military.
-        In 1974 the \textsc{tcp/ip} stack was proposed in order to have a more robust and scalable system for end-to-end network communication.
-        The \textsc{tcp/ip} stack is a key technology for the decentralization of the \textsc{arpanet}, to allow the massive expansion of the network that later happened.
-        In 1983 \textsc{arpanet} switched to the \textsc{tcp/ip} protocols, and the network was split in two.
-        One network was still called \textsc{arpanet} and was to be used for research and development sites.
-        The other network was called \textsc{milnet} and was used for military purposes.
+        The number of nodes and hosts of \abbr{arpanet} increased slowly, mainly due to the fact that it was a centralized network owned and operated by the \abbr{us} military.
+        In 1974 the \abbr{tcp/ip} stack was proposed in order to have a more robust and scalable system for end-to-end network communication.
+        The \abbr{tcp/ip} stack is a key technology for the decentralization of the \abbr{arpanet}, to allow the massive expansion of the network that later happened.
+        In 1983 \abbr{arpanet} switched to the \abbr{tcp/ip} protocols, and the network was split in two.
+        One network was still called \abbr{arpanet} and was to be used for research and development sites.
+        The other network was called \abbr{milnet} and was used for military purposes.
         The decentralization event was a key point and perhaps the birth of the Internet.
-        The Computer Science Network (\textsc{csnet}) was funded by the National Science Foundation (\textsc{nsf}) in 1981 to allow networking benefits to academic intsitutions that could not directly connect to \textsc{arpanet}.
-        After the event of decentralizing \textsc{arpanet}, the two networks were connected among many other networks.
-        In 1985 \textsc{nsf} started the National Science Foundation Network (nsfnet) program to promote advanced research and education networking in the \textsc{us}.
-        To link the supercomputing centers funded by \textsc{nsf} the \textsc{nsfnet} served as a high speed and long distance backbone network.
-        As more networks and sites were linked by the \textsc{nsfnet} network, it became the first backbone of the Internet.
-        In 1992, around 6000 networks were connected to the \textsc{nsfnet} backbone with many international networks.
+        The Computer Science Network (\abbr{csnet}) was funded by the National Science Foundation (\abbr{nsf}) in 1981 to allow networking benefits to academic intsitutions that could not directly connect to \abbr{arpanet}.
+        After the event of decentralizing \abbr{arpanet}, the two networks were connected among many other networks.
+        In 1985 \abbr{nsf} started the National Science Foundation Network (nsfnet) program to promote advanced research and education networking in the \abbr{us}.
+        To link the supercomputing centers funded by \abbr{nsf} the \abbr{nsfnet} served as a high speed and long distance backbone network.
+        As more networks and sites were linked by the \abbr{nsfnet} network, it became the first backbone of the Internet.
+        In 1992, around 6000 networks were connected to the \abbr{nsfnet} backbone with many international networks.
         To this point, the Internet was still a network for scientists, academic institutions and technology enthusiasts.
-        Mainly, because \textsc{nsf} had stated that \textsc{nsfnet} was a network for non-commercial traffic only.
-        In 1993 \textsc{nsf} decided to go back to funding research in supercomputing and high-speed communications instead of funding and running the Internet backbone.
-        That, along with an increasing pressure of commercializing the Internet let to another key event in the history of the Internet - the privatization of the \textsc{nsfnet} backbone.
+        Mainly, because \abbr{nsf} had stated that \abbr{nsfnet} was a network for non-commercial traffic only.
+        In 1993 \abbr{nsf} decided to go back to funding research in supercomputing and high-speed communications instead of funding and running the Internet backbone.
+        That, along with an increasing pressure of commercializing the Internet let to another key event in the history of the Internet - the privatization of the \abbr{nsfnet} backbone.
 
-        In 1994, the \textsc{nsfnet} was systematically privatized while making sure that no actor owned too much of the backbone in order to create constructive market competition.
+        In 1994, the \abbr{nsfnet} was systematically privatized while making sure that no actor owned too much of the backbone in order to create constructive market competition.
         With the Internet decentralized and privatized regular people started using it as well as companies.
         Backbones were built across the globe, more international actors and organizations appeared and eventually the Internet as we know it today came to exist.
 
@@ -275,10 +276,10 @@
 
           \todo[inline]{Should have another subsection or not have this in a subsection. Only one subsection is not nice.}
           \noindent
-          Recall that the way of exchanging information was to upload and download files between clients and hosts with \textsc{ftp}.
+          Recall that the way of exchanging information was to upload and download files between clients and hosts with \abbr{ftp}.
           If a document downloaded was referring to another document, the user had to manually find the server that hosted the other document and download it manually.
           This was a poor way of digesting information and documents that linked to other resources.
-          In 1989 a proposal for a communication system that allowed interlinked documents was submitted to the management at \textsc{cern}.
+          In 1989 a proposal for a communication system that allowed interlinked documents was submitted to the management at \abbr{cern}.
           The idea was to allow links embedded in text documents, to enable users to view the linked document by clicking it.
           A quote from the draft:
           \begin{quote}
@@ -289,19 +290,19 @@
           It continues to explain that interlinked resources does not need to be limited to text documents, multimedia such as images and videos can also be interlinked which would similarly be hypermedia.
           The concept of browsers is described, with a client-server model the browser would fetch the hypertext documents, parse them and handle the fetching of all media linked in the hypertext.
 
-          In 1990, the Hypertext Transfer Protocol (\textsc{http}), the Hypertext Markup Language (\textsc{html}), a browser and a web server had been created and the web was born.
+          In 1990, the Hypertext Transfer Protocol (\abbr{http}), the Hypertext Markup Language (\abbr{html}), a browser and a web server had been created and the web was born.
           One year later the web was introduced to the public and in 1993 over five hundred international web servers existed.
           It was stated in 1994 that the web was to be free without any patents or royalties.
-          At this time the Wolrd Wide Web Consortium (\textsc{w3c}) was founded by Berners-Lee with support from the Defense Advanced Research Projects Agency and the European Commission.
+          At this time the Wolrd Wide Web Consortium (\abbr{w3c}) was founded by Berners-Lee with support from the Defense Advanced Research Projects Agency and the European Commission.
           The organization comprised of companies and individuals that wanted to standardize and improve the web.
 
           As a side note, the Gopher protocol was developed in parallel to the World Wide Web by the University of Minnesota.
           It was released in 1991 and quickly gained traction as the web still was in very early stages.
-          The goal of the system, just like the web, was to overcome the shortcomings of browsing documents with \textsc{ftp}.
+          The goal of the system, just like the web, was to overcome the shortcomings of browsing documents with \abbr{ftp}.
           Gopher enabled servers to list the documents present, and also to link to documents on other servers.
           This created a strong hierarchy between the documents.
           The listed documents of a server could then be presented as hypertext menus to the client (much like a web browser).
-          As the protocol was simpler than \textsc{http} it was often preferred since it used less network resources.
+          As the protocol was simpler than \abbr{http} it was often preferred since it used less network resources.
           The structure provided by Gopher provided a platform for large electronic library connections.
           A big difference between the web and the Gopher platform is that the Gopher platform provided hypertext menus presented as a file system while the web hypertext links inside hypertext documents, which provided greater flexibility.
           When the University of Minnesota announced that it would charge licensing fees for the implementation, users were somewhat scared away.
@@ -310,7 +311,7 @@
       \section{The history of browsers}
         \label{sec:browsers}
         \begin{metatext}
-          In the mid 1990's the usage of the Internet transitioned from downloading files with \textsc{ftp} to instead access resources with the \textsc{http} protocol.
+          In the mid 1990's the usage of the Internet transitioned from downloading files with \abbr{ftp} to instead access resources with the \abbr{http} protocol.
           To fulfill the vision that users would be able to skip to the linked documents ``with a click of the mouse'' the users needed a client to handle the fetching and displaying of the hypertext documents, hence the need for browsers were apparent.
           Here the evolution of the browser clients will be given, while emphasizing the timeline of the popular browsers we use today.
           This section is a summary of \normalfont{\cite{wiki_www,wiki_nexus,wiki_lmb,wiki_libwww,wiki_mosaic,wiki_netscape,wiki_mozilla,wiki_opera,wiki_konqueror,wiki_safari,wiki_webkit,wiki_blink}}.
@@ -319,8 +320,8 @@
         The first web browser ever made was created in 1990 and was called WorldWideWeb (which was renamed to Nexus to avoid confusion).
         It was at the time the only way to view the web, and the browser only worked on NeXT computers.
         Built with the NeXT framework, it was quite sophisticated.
-        It had a \textsc{gui} and a \textsc{wysiwyg}\footnote{What You See Is What You Get is a classification that ensures that text and graphics during editing appears close to the result.} hypertext document editor.
-        Unfortunately it couldn't be ported to other platforms, so a new browser called \emph{Line Mode Browser} (\textsc{lmb}) were quickly developed.
+        It had a \abbr{gui} and a \abbr{wysiwyg}\footnote{What You See Is What You Get is a classification that ensures that text and graphics during editing appears close to the result.} hypertext document editor.
+        Unfortunately it couldn't be ported to other platforms, so a new browser called \emph{Line Mode Browser} (\abbr{lmb}) were quickly developed.
         To ensure compatibility with the earliest computer terminals the browser displayed text, and was operated with text input.
         Since the browser was operated in the terminal, users could log in to a remote server and use the browser via telnet.
         The code that the two browsers shared was in 1993 bundled as a library called \emph{libwww}.
@@ -328,14 +329,14 @@
         Many browsers were develop at this time.
         The \emph{Arena} browser served as a testbed browser and authoring tool for Unix.
         The \emph{ViolaWWW} browser was the first to support embedded scriptable objects, stylesheets and tables.
-        \emph{Lynx} is a text-based browser that supports many protocols (including Gopher and \textsc{http}), and is the oldest browser still being used and developed.
+        \emph{Lynx} is a text-based browser that supports many protocols (including Gopher and \abbr{http}), and is the oldest browser still being used and developed.
         The list of browsers of this time can be made long.
 
-        In 1993, the \emph{Mosaic} browser was released by the National Center for Supercomputing Applications (\textsc{ncsa}) which came to be the ancestor of many of the popular browsers in use today.
+        In 1993, the \emph{Mosaic} browser was released by the National Center for Supercomputing Applications (\abbr{ncsa}) which came to be the ancestor of many of the popular browsers in use today.
         As Lynx, Mosaic also supported many different protocols.
-        Mosaic quickly became popular, mainly due to the intuitive \textsc{gui}, reliability, simple installation and Windows compatibility.
-        The company \emph{Spyglass, Inc.} licensed the browser from \textsc{ncsa} for producing their own browser 1994.
-        Around the same time the leader of the team that developed Mosaic, Marc Andreessen, left \textsc{ncsa} to start Mosaic Communications Corporation.
+        Mosaic quickly became popular, mainly due to the intuitive \abbr{gui}, reliability, simple installation and Windows compatibility.
+        The company \emph{Spyglass, Inc.} licensed the browser from \abbr{ncsa} for producing their own browser 1994.
+        Around the same time the leader of the team that developed Mosaic, Marc Andreessen, left \abbr{ncsa} to start Mosaic Communications Corporation.
         The company released their own browser named \emph{Mosaic Netscape} in 1994, which later was to be called \emph{Netscape Navigator} that was internally codenamed \emph{Mozilla}.
         Microsoft licensed the Spyglass Mosaic browser in 1995, modified and renamed it to \emph{Internet Explorer}.
         In 1997 Microsoft started using their own \emph{Trident} layout engine for Internet Explorer.
@@ -346,10 +347,10 @@
         Mozilla was to originally develop a suite of Internet applications, but later switched focus to the \emph{Firefox} browser that had been created in 2002.
         Firefox uses the \emph{Gecko} layout engine developed by Mozilla.
 
-        Another historically important browser is the \emph{Konqueror} browser developed by the free software community \textsc{kde}.
-        The browser was released in 1998 and was bundled in the \textsc{kde} Software Compilation.
-        Konqueror used the \textsc{kthml} layout engine, also developed by \textsc{kde}.
-        In 2001, when \emph{Apple Inc.} decided to build their own browser to ship with \textsc{os x}, a fork called \emph{WebKit} was made of the \textsc{khtml} project.
+        Another historically important browser is the \emph{Konqueror} browser developed by the free software community \abbr{kde}.
+        The browser was released in 1998 and was bundled in the \abbr{kde} Software Compilation.
+        Konqueror used the \abbr{kthml} layout engine, also developed by \abbr{kde}.
+        In 2001, when \emph{Apple Inc.} decided to build their own browser to ship with \abbr{os x}, a fork called \emph{WebKit} was made of the \abbr{khtml} project.
         Apple's browser called \emph{Safari} was released in 2003.
         The WebKit form was made fully open source in 2005.
         In 2008, \emph{Google Inc.} also released a browser based on WebKit, named \emph{Google Chrome}, or shortened \emph{Chrome}.
@@ -381,21 +382,21 @@
         \end{metatext}
 
         As described in section~\ref{sec:www}, browsers initially were applications that displayed hypertext documents with the ability to fetch linked documents in an user friendly way.
-        Static content were written in \textsc{html}, which could include hyperlinks to other hypertext documents or hypermedia.
+        Static content were written in \abbr{html}, which could include hyperlinks to other hypertext documents or hypermedia.
         Different stylesheet languages were being developed to enable the possibility of separating content styling with the content.
-        In 1996 \textsc{w3c} officially recommended the Cascading Style Sheets (\textsc{css}), which came to be the preferred way of styling web content.
-        Since \textsc{html} is only a markup language it is not possible to generate dynamic content, which was sufficient at the time \textsc{html} was only used for annotating links in research documents.
+        In 1996 \abbr{w3c} officially recommended the Cascading Style Sheets (\abbr{css}), which came to be the preferred way of styling web content.
+        Since \abbr{html} is only a markup language it is not possible to generate dynamic content, which was sufficient at the time \abbr{html} was only used for annotating links in research documents.
 
-        The need for generated dynamic content grew bigger, and \textsc{ncsa} created the first draft of the Common Gateway Interface (\textsc{cgi}) in 1993, which provides an interface between the web server and the systems that generate content.
-        \textsc{cgi} programs are usually referred to as scripts, since many of the popular \textsc{cgi} languages are script languages.
+        The need for generated dynamic content grew bigger, and \abbr{ncsa} created the first draft of the Common Gateway Interface (\abbr{cgi}) in 1993, which provides an interface between the web server and the systems that generate content.
+        \abbr{cgi} programs are usually referred to as scripts, since many of the popular \abbr{cgi} languages are script languages.
         Generating dynamic content on the server is sometimes referred to as \emph{server-side scripting}.
         This enabled developers to generate dynamic websites, with different content for different users for instance.
         However, when the content had been delivered to the client (browser) it was still static content.
         There is no way for the server to change the content that the client has received, unless the client requests another document.
 
         Around 1996, client side scripting was born.
-        The term Dynamic \textsc{html} (\textsc{dhtml}) was being used as an umbrella term for a collection of technologies used together to make pages interactive and animated, where client side scripting played a big role.
-        Examples of things that were being done with \textsc{dhtml} are; refreshing the pages for the user so that new content is loaded, give feedback on user input without involving the server and animating content.
+        The term Dynamic \abbr{html} (\abbr{dhtml}) was being used as an umbrella term for a collection of technologies used together to make pages interactive and animated, where client side scripting played a big role.
+        Examples of things that were being done with \abbr{dhtml} are; refreshing the pages for the user so that new content is loaded, give feedback on user input without involving the server and animating content.
         Plugins also existed during this time, which teaches the browsers how to handle and execute programs.
         \emph{Java applets} and \emph{Flash} are examples of this. \todo{Philipp: Maybe provide references for Java and Flash.}
         The user then had to download the Java runtime or Flash runtime on the computer.
@@ -406,20 +407,20 @@
         With the increase of smart devices (such as phones, televisions, cars, game consoles, etc.) that included browsers but limited third-party runtimes, plugins quickly went extinct.
         Today, web sites rarely use plugins.
 
-        As JavaScript and \textsc{html} supported more features, websites turned into small applications with user sessions (using cookies) and user interfaces.
-        Still, parts of the applications were defined as \textsc{html} pages, fetched from the server when navigating the site.
-        When the \emph{XMLHttpRequest} \textsc{api} was supported in the major browsers, pages no longer needed to reload in order to fetch new content as XMLHttpRequest enabled developers to perform asynchronous requests to servers in JavaScript.
-        This opened up for the \textsc{ajax} (Asynchronous JavaScript and XML) web development technique which became a popular way of communicating with servers ``in the background'' of the page.
-        Developers pushed browsers and \textsc{html} to the limit when creating applications instead of documents that it was originally designed for.
-        In a \textsc{w3c} meeting in 2004 it was proposed to extend \textsc{html} to ease the creation of web applications, which was rejected.
-        \textsc{w3c} was criticized of not listening to the need of the industry, and some members of \textsc{w3c} left to create the Web Hypertext Application Technology Working Group (\textsc{whatwg}).
-        \textsc{whatwg} started working on specifications to ease the development of web applications which came to be named \textsc{html5}.
-        In 2006, \textsc{w3c} realized that \textsc{whatwg} were on the right track, and decided to start working on their own \textsc{html5} specification based on the \textsc{whatwg} version.
-        \textsc{html5} is an evolutionary improvement process of \textsc{html}, which means that browsers are adding support as parts of the specification is finished.
+        As JavaScript and \abbr{html} supported more features, websites turned into small applications with user sessions (using cookies) and user interfaces.
+        Still, parts of the applications were defined as \abbr{html} pages, fetched from the server when navigating the site.
+        When the \emph{XMLHttpRequest} \abbr{api} was supported in the major browsers, pages no longer needed to reload in order to fetch new content as XMLHttpRequest enabled developers to perform asynchronous requests to servers in JavaScript.
+        This opened up for the \abbr{ajax} (Asynchronous JavaScript and XML) web development technique which became a popular way of communicating with servers ``in the background'' of the page.
+        Developers pushed browsers and \abbr{html} to the limit when creating applications instead of documents that it was originally designed for.
+        In a \abbr{w3c} meeting in 2004 it was proposed to extend \abbr{html} to ease the creation of web applications, which was rejected.
+        \abbr{w3c} was criticized of not listening to the need of the industry, and some members of \abbr{w3c} left to create the Web Hypertext Application Technology Working Group (\abbr{whatwg}).
+        \abbr{whatwg} started working on specifications to ease the development of web applications which came to be named \abbr{html5}.
+        In 2006, \abbr{w3c} realized that \abbr{whatwg} were on the right track, and decided to start working on their own \abbr{html5} specification based on the \abbr{whatwg} version.
+        \abbr{html5} is an evolutionary improvement process of \abbr{html}, which means that browsers are adding support as parts of the specification is finished.
 
-        A new era of \textsc{API}'s and features came along with the \textsc{html5} standard, which truly enabled developers to create rich client side applications.
-        \textsc{css3} was also recently released which also included many new features.
-        Using \textsc{html5} together with \textsc{css3} developers could utilize advanced graphics programming, geolocation, cache storage, file system access, offline mode, and much more.
+        A new era of \abbr[s]{api} and features came along with the \abbr{html5} standard, which truly enabled developers to create rich client side applications.
+        \abbr{css3} was also recently released which also included many new features.
+        Using \abbr{html5} together with \abbr{css3} developers could utilize advanced graphics programming, geolocation, cache storage, file system access, offline mode, and much more.
 
         \todo{Write that traditional applications are threatened by web applications, since the reach and availability of the web is superior to any other distribution platform. Also, no installation is required with web applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
       \section{Responsive web design}\label{sec:rwd}
@@ -448,10 +449,10 @@
         Users might want to have multiple browser windows displayed at the same time on the screen, which would break the assumptions about the layout size available for the site.
         Clearly, a better approach was needed.
 
-        With the release of \textsc{css3} \emph{media queries} new possibilities opened up.
+        With the release of \abbr{css3} \emph{media queries} new possibilities opened up.
         Media queries enabled developers to write conditional style rules by media properties such as viewport size.
         By using media queries, elements can be styled in the following manner:
-        \begin{lstlisting}[caption={The above \textsc{css} styles the body of the website blue if the viewport is less or equal to 600 pixels wide, and yellow otherwise.},captionpos=b]]
+        \begin{lstlisting}[caption={The above \abbr{css} styles the body of the website blue if the viewport is less or equal to 600 pixels wide, and yellow otherwise.},captionpos=b]]
 @media screen and (max-width: 600px) {
   body {
     background-color: blue;
@@ -465,8 +466,8 @@
 }
         \end{lstlisting}
         This can be used to tailor a site for a specific medium or viewport size at runtime.
-        The term \emph{Responsive Web Design} (\textsc{rwd}) refers to the approach of having a single site \emph{responding} to different media properties (mainly viewport size) at runtime to improve the user experience.
-        With \textsc{rwd} it is no longer needed to maintain several versions of a site, instead the site adapts to the user medium and device.
+        The term \emph{Responsive Web Design} (\abbr{rwd}) refers to the approach of having a single site \emph{responding} to different media properties (mainly viewport size) at runtime to improve the user experience.
+        With \abbr{rwd} it is no longer needed to maintain several versions of a site, instead the site adapts to the user medium and device.
 
       \section{Modularity}\label{sec:modularity}
         \begin{metatext}
@@ -477,7 +478,7 @@
         It is today possible to write the web client logic in a modular way in JavaScript.
         The desire of writing modular code can be shown by the popularity of frameworks that helps dividing up the client code into modules.
         The ever so popular frameworks \emph{Angular}, \emph{Backbone}, \emph{Ember}, \emph{Web Components}, \emph{requirejs}, \emph{Browserify}, \emph{Polymer}, \emph{React} and many more all have in common that they embrace coding modular components.
-        Many of these frameworks also help with dividing the \textsc{html} up into modules, creating small packages of style, markup and code.
+        Many of these frameworks also help with dividing the \abbr{html} up into modules, creating small packages of style, markup and code.
 
         \todo[inline]{Philipp: You should also mention that modules enable reuse of components.}
         \todo[inline]{Flesh this one out, with meta text.}
@@ -525,19 +526,19 @@
         \caption{Reference browser architecture. The data persistence system used by the browser engine and the user interface has been omitted.} 
         \label{fig:browser_architecture}
       \end{figure}
-      It is shown that the layout engine is located between the \emph{browser engine} system and the network, JavaScript, \textsc{xml} parsing and display backend.
-      The browser engine acts as a high level interface to the layout engine, and is responsible for providing the layout engine with \textsc{uri}'s that should be rendered with layout options.
+      It is shown that the layout engine is located between the \emph{browser engine} system and the network, JavaScript, \abbr{xml} parsing and display backend.
+      The browser engine acts as a high level interface to the layout engine, and is responsible for providing the layout engine with \abbr[s]{uri} that should be rendered with layout options.
       The main responsibility of the layout engine is to render the current state of the fetched hypertext document.
       Since documents may (and often do) change dynamically after parsetime, it is important to keep in mind that the job of the layout engine is continuous, and is not a one time operation.
-      The parsing of \textsc{html} is also done by the layout engine (and not in the \textsc{xml} subsystem) since \textsc{html} is less strict and reentrant.
+      The parsing of \abbr{doml} is also done by the layout engine (and not in the \abbr{dom} subsystem) since \abbr{doml} is less strict and reentrant.
       In short, layout engines perform four distinct tasks:
       \begin{enumerate}
-        \item Fetch of content (typically \textsc{html} and \textsc{css}) and parse it in order to construct a \textsc{dom} tree.
-        \item Construct a \emph{render tree} of the \textsc{dom} tree.
+        \item Fetch of content (typically \abbr{doml} and \abbr{dom}) and parse it in order to construct a \abbr{dom} tree.
+        \item Construct a \emph{render tree} of the \abbr{dom} tree.
         \item Layout the elements of the render tree.
         \item Render the elements of the render tree.
       \end{enumerate}
-      See section~\ref{sec:dom-tree} and section~\ref{sec:render-tree} for a more in depth explanation of \textsc{dom} and render trees.
+      See section~\ref{sec:dom-tree} and section~\ref{sec:render-tree} for a more in depth explanation of \abbr{dom} and render trees.
       Modern browsers can display multiple pages at the same time (by using tabs or multiple windows) where each page typically has an instance of the layout engine in a separate process.
       There are four layout engines that the major browsers use, as presented in table~\ref{table:layout_engines}.
       Since Blink is a recent fork of WebKit they can be grouped as WebKit-based layout engines.
@@ -577,32 +578,32 @@
       %Also, rendering the final layout with the render backend is not affected by element queries.
       %The construction of 
 
-      \section{Constructing \textsc{DOM} trees}\label{sec:dom-tree}
+      \section{Constructing \abbr{dom} trees}\label{sec:dom-tree}
         \begin{metatext}
-          Here a brief explanation of \textsc{dom} trees will be given, and how they are constructed.
-          In order to construct a \textsc{dom} tree, the content need to be parsed which also will be covered.
+          Here a brief explanation of \abbr{dom} trees will be given, and how they are constructed.
+          In order to construct a \abbr{dom} tree, the content need to be parsed which also will be covered.
           Since parsing of content is not very relevant for element queries, it will be addressed only briefly.
           This section is mainly based on \normalfont{\cite{w3c_dom,garsiel2011browsers,w3c_css21}}.
         \end{metatext}
 
-        \textsc{dom} is an abbreviation of Document Object Model which is a convention for representing and interacting with objects in \textsc{xml}-based documents (such as \textsc{html}).
-        The \textsc{dom} provides an interface for programs (JavaScript scripts in the browser) to dynamically access and mutate the content, structure and style of documents.
-        Each node of the document is a \textsc{dom} object, and therefore the whole document is converted to a tree structure of \textsc{dom} nodes which is referred to as the \textsc{dom} tree.
+        \abbr{dom} is an abbreviation of Document Object Model which is a convention for representing and interacting with objects in \abbr{xml}-based documents (such as \abbr{html}).
+        The \abbr{dom} provides an interface for programs (JavaScript scripts in the browser) to dynamically access and mutate the content, structure and style of documents.
+        Each node of the document is a \abbr{dom} object, and therefore the whole document is converted to a tree structure of \abbr{dom} nodes which is referred to as the \abbr{dom} tree.
 
-        Layout engines construct \textsc{dom} trees by parsing \textsc{html} with any included \textsc{css} and JavaScript.
-        Parsing of \textsc{html} is not an easy task because the specification of \textsc{html} states that it must be forgiving (i.e. accepting malformed markup).
+        Layout engines construct \abbr{dom} trees by parsing \abbr{html} with any included \abbr{css} and JavaScript.
+        Parsing of \abbr{html} is not an easy task because the specification of \abbr{html} states that it must be forgiving (i.e. accepting malformed markup).
         \todo{Is it true that the spec says that malformed html must be accepted. Servo experience report seems to say otherwise.}
-        As \textsc{css} and JavasScript are stricter, their grammar can be expressed in a formal syntax and can therefore be parsed with a context free grammar parser (which can be autogenerated).
-        Another big quirk to parsing \textsc{html} is that it is reentrant, which means that the source may change during parsing.
+        As \abbr{css} and JavasScript are stricter, their grammar can be expressed in a formal syntax and can therefore be parsed with a context free grammar parser (which can be autogenerated).
+        Another big quirk to parsing \abbr{html} is that it is reentrant, which means that the source may change during parsing.
         Script elements are to be executed synchronously when it is occurred by the parser.
-        If such script mutates the \textsc{dom}, then the parser will need to evaluate the changes made by the script and update the \textsc{dom} tree.
+        If such script mutates the \abbr{dom}, then the parser will need to evaluate the changes made by the script and update the \abbr{dom} tree.
         External scripts need to be fetched in order to be executed, which halts the parsing unless the script element states otherwise.
-        It should be noted that although \textsc{dom} nodes do include a \code{style} property, the nodes in the \textsc{dom} tree are not affected by the \textsc{css} cascading, and the style properties do not represent the final style of the element.
+        It should be noted that although \abbr{dom} nodes do include a \code{style} property, the nodes in the \abbr{dom} tree are not affected by the \abbr{css} cascading, and the style properties do not represent the final style of the element.
         Instead, for scripts to obtain the final computed style for an element a special function needs to be called (\code{getComputedStyle} in JavaScript).
-        Since externally linked \textsc{css} documents do not directly affect the \textsc{dom} tree they could conceptually be fetched and parsed after the parsing of the \textsc{html}.
-        However, scripts can request the computed style of \textsc{dom} tree nodes and therefore either the parsing of \textsc{html} needs to be halted in order to fetch and parse \textsc{css} when it occurs, or the scripts accessing style properties of \textsc{dom} nodes need to be halted.
-        A common optimization is to use a speculative parser that continues to parse the \textsc{html} when the main parser has halted (for executing the scripts usually).
-        The speculative parser does not change the \textsc{dom} tree, instead it searches for external resources that can be fetched in parallel while waiting for the main parser to continue.
+        Since externally linked \abbr{css} documents do not directly affect the \abbr{dom} tree they could conceptually be fetched and parsed after the parsing of the \abbr{html}.
+        However, scripts can request the computed style of \abbr{dom} tree nodes and therefore either the parsing of \abbr{html} needs to be halted in order to fetch and parse \abbr{css} when it occurs, or the scripts accessing style properties of \abbr{dom} nodes need to be halted.
+        A common optimization is to use a speculative parser that continues to parse the \abbr{html} when the main parser has halted (for executing the scripts usually).
+        The speculative parser does not change the \abbr{dom} tree, instead it searches for external resources that can be fetched in parallel while waiting for the main parser to continue.
 
         \todo[inline]{Philipp: Maybe check the official HTML specs about this.}
         \todo[inline]{Philipp: Yes, a picture of the DOM corresponding to some HTML would be good.}
@@ -612,25 +613,25 @@
 
       \section{Render trees}\label{sec:render-tree}
         \begin{metatext}
-          When the \textsc{dom} tree has been constructed and all external \textsc{css} has been fetched and parsed, it is time for the layout engine to create the render tree.
+          When the \abbr{dom} tree has been constructed and all external \abbr{css} has been fetched and parsed, it is time for the layout engine to create the render tree.
           Here an explanation of the creation process and the structure of render trees will be given.
           This section is mainly based on \normalfont{\cite{garsiel2011browsers,w3c_css21}}.
         \end{metatext}
 
         A Render tree is a visual representation of the document.
-        In contrast to the \textsc{dom} tree, the render tree only contains of elements that will be rendered.
+        In contrast to the \abbr{dom} tree, the render tree only contains of elements that will be rendered.
         The nodes of the render tree are called \emph{renderers} (also known as \emph{frames} or \emph{render objects}), as the elements are responsible for their own and all subnodes layout and rendering.
         In order to know how to render themselves, the final style of each renderer needs to be computed which is done by the layout engine while constructing the tree.
         Each renderer represents a rectangle (given by style size and position) with a given style.
         There are different types of renderers, which affect how the renderer rectangle is computed.
         The type can be directly affected by the display style property.
 
-        Typically nodes in the \textsc{dom} tree map in a 1:1 relation to nodes in the render tree, but the relation can also be smaller or larger.
+        Typically nodes in the \abbr{dom} tree map in a 1:1 relation to nodes in the render tree, but the relation can also be smaller or larger.
         The render tree only contains nodes that will affect the rendered result, so nodes that do not affect the layout flow of the document and that aren't visible will not be present in the render tree.
-        For instance, a \textsc{dom} node element with the \code{display} property set to \code{none} will have the relation 1:0 (it will not be present in the render tree because it is not visible and will not affect the layout flow).
+        For instance, a \abbr{dom} node element with the \code{display} property set to \code{none} will have the relation 1:0 (it will not be present in the render tree because it is not visible and will not affect the layout flow).
         It should be noted that elements with the \code{visibility} property set to \code{hidden} will be present in the render tree, although they are not visible, since they still affect the layout flow.
 
-        Even though all style properties have been resolved for each node in the render tree (through \textsc{css} cascading), the renderers still do not know about the size and position of the rectangle.
+        Even though all style properties have been resolved for each node in the render tree (through \abbr{css} cascading), the renderers still do not know about the size and position of the rectangle.
         This is because some properties cannot be computed by just computing the styles for an element.
         Some properties depend on the flow of the document, and needs to be resolved through a layout.
         The layout process will resolve the final position and size for all renderers.
@@ -640,7 +641,7 @@
           Both the render tree and scripts need to be able to get the final style of an element.
           In order to know the final style of an element, the style for each element must be computed.
           Here a brief explanation of selector matching, style cascading, inheritance and rule set specificity will be given.
-          \textsc{css} property definitions will also be described.
+          \abbr{css} property definitions will also be described.
           This section is mainly based on \normalfont{\cite{garsiel2011browsers,w3c_css21,world2013css}}.
         \end{metatext}
 
@@ -649,15 +650,15 @@
         \begin{enumerate}
           \item In the default styles of the browser.
           \item In the user defined browser style.
-          \item In external \textsc{css} documents.
-          \item In internal \textsc{css} \code{style} tags in the document head.
-          \item In inline \textsc{css} in the \code{style} element attribute.
-          \item In scripts modifying the element style through the \textsc{dom} tree.
+          \item In external \abbr{css} documents.
+          \item In internal \abbr{css} \code{style} tags in the document head.
+          \item In inline \abbr{css} in the \code{style} element attribute.
+          \item In scripts modifying the element style through the \abbr{dom} tree.
           \item In special attributes of the element such as \code{bgcolor} (deprecated, but possible).
         \end{enumerate}
         This can be grouped into author, user and browser styles.
-        The four first items can be regarded as \textsc{css} because they are \emph{cascading} their style rules through \emph{selector matching}.
-        Selector matching conceptually finds all elements in the \textsc{dom} tree that matches a \textsc{css} selector, to apply the rule set.
+        The four first items can be regarded as \abbr{css} because they are \emph{cascading} their style rules through \emph{selector matching}.
+        Selector matching conceptually finds all elements in the \abbr{dom} tree that matches a \abbr{css} selector, to apply the rule set.
         The rule sets are weighted so that if a property is assigned values by multiple rule sets the one with highest weight will be applied.
         The weighting process starts with the origin of the style:
         \begin{itemize}
@@ -667,12 +668,12 @@
         The weighting process continues by calculating the \emph{specificity} of all rule set selectors, the higher the specificity the higher the rule set will be weighted.
         This will make rule sets with more specific selectors override rule sets with more general selectors.
         Finally, if two rule declarations have the same weight, origin and specificity the rule set specified last will win.
-        Inline \textsc{css} does not cascade since all rules given are automatically matched with the element of the style attribute.
-        However, inline \textsc{css} is considered with highest possible specificity when performing the style cascade.
-        It is important to note that the styling methods number five and six are conceptually the same, since they both alter the style property of the \textsc{dom} element.
+        Inline \abbr{css} does not cascade since all rules given are automatically matched with the element of the style attribute.
+        However, inline \abbr{css} is considered with highest possible specificity when performing the style cascade.
+        It is important to note that the styling methods number five and six are conceptually the same, since they both alter the style property of the \abbr{dom} element.
         The last item is deprecated, and all styles applied this way will be weighted as low as possible.
 
-        If the cascade results in no value for an element style property, then the property can \emph{inherit} a value or have the initial value defined by the \textsc{css} \emph{property definition}.
+        If the cascade results in no value for an element style property, then the property can \emph{inherit} a value or have the initial value defined by the \abbr{css} \emph{property definition}.
         Property definitions describe how the style properties should behave, see table~\ref{table:css_property_definition}.
         For instance, the width property definition states that legal values are absolute lengths, percentages or \code{auto} (which will let the browser decide).
         The percentages are relative to the containing block.
@@ -692,7 +693,7 @@
             \textbf{Media} & Defines which media group the property applies to. \\
             \textbf{Computed value} & Describes how the value should be computed. \\
           \end{tabular}
-          \caption{The \textsc{css} property definition format that describes how all element style properties behave.}
+          \caption{The \abbr{css} property definition format that describes how all element style properties behave.}
           \label{table:css_property_definition}
         \end{table}
 
@@ -709,7 +710,7 @@
           This section is mainly based on \normalfont{\cite{garsiel2011browsers}}.
         \end{metatext}
 
-        The layout (also called \emph{reflow}) of \textsc{html} is flow based, which means that document layout can generally be performed top to bottom and left to right in one pass.
+        The layout (also called \emph{reflow}) of \abbr{html} is flow based, which means that document layout can generally be performed top to bottom and left to right in one pass.
         This is possible because the geometry of elements typically do not depend on the siblings or children\todo{Seems weird to say that flow is not dependent on children, since the height is propagated upwards.}.
         Layout is performed recursively by starting at the root of the tree, let the renderer render itself and all of its children which will render themselves and their children and so on.
         When a layout is performed on the whole render tree it is called a \emph{global layout}.
@@ -719,7 +720,7 @@
         Layout engines that uses the dirty bit system usually keeps a queue of incremental layout commands.
         The scheduler system later triggers a batch execution of the incremental layout commands asynchronously.
         A global layout is triggered when the viewport is resized or when styles that affect the whole document are changed (such as \code{font-size}).
-        Because the \textsc{api} of \code{getComputedStyle} promises resolved values for all style properties, a call will force a full layout (flushing the incremental layout commands queue).
+        Because the \abbr{api} of \code{getComputedStyle} promises resolved values for all style properties, a call will force a full layout (flushing the incremental layout commands queue).
         When a renderer performs a layout the following usually happens:
         \begin{enumerate}
           \item The own width is determined.
@@ -740,8 +741,8 @@
 
       \section{Parallelization}\label{sec:parallel}
         \begin{metatext}
-          No longer can performance of an application increase over time without any code changes (as opposed to the times when \textsc{cpu} clock speeds increased rapidly).
-          Now, applications need to utilize the multiple cores of the \textsc{cpu} instead of relying on high clock speed.
+          No longer can performance of an application increase over time without any code changes (as opposed to the times when \abbr{cpu} clock speeds increased rapidly).
+          Now, applications need to utilize the multiple cores of the \abbr{cpu} instead of relying on high clock speed.
           Parallelization is something layout engine vendors are very interested in, and much research is being done about utilizing multiple cores to increase the speed of the engine.
           In this section a small summary will be given about the current research front, and how the parallelization can be approached.
           This section is mainly based on \normalfont{\cite{zoomm,parallelizing_the_web_browser,meyerovich2010fast,servo_parallel,servo_blog}}.
@@ -760,11 +761,11 @@
         Light devices such as small laptops, mobile devices and tablets share a common goal --- they want to reduce power consumption while increasing the performance.
         This can be achieved with multicore processors that run at lower clock speeds.
         \todo{Write that many cores is preferred over high clock speed? Why?}
-        It has been shown that the performance of mobile browsers is \textsc{cpu} bound contrary to the common belief that they are network bandwidth bound \cite{parallelizing_the_web_browser}.
+        It has been shown that the performance of mobile browsers is \abbr{cpu} bound contrary to the common belief that they are network bandwidth bound \cite{parallelizing_the_web_browser}.
         This is why most researchers target light devices when trying to parallelize web browsers.
         Of course, once the methods has matured and been implemented, desktops will benefit from this as well.
 
-        \textsc{css} selector matching is a good candidate for parallelization, due to matching nodes to selectors being independent from other selector matches.
+        \abbr{css} selector matching is a good candidate for parallelization, due to matching nodes to selectors being independent from other selector matches.
         A successful parallelization of selector matching has been achieved with locality-aware task parallelism \cite{parallelizing_the_web_browser}.
         It has also been shown that selector matching and style resolving (through cascading) can be parallelized \cite{zoomm}.
         It is possible to resolve element styles in parallel as long as two requirements are fulfilled: the matching task must have finished for the element to resolve styles for, and the parent element must have resolved all styles (since the element might inherit some styles from the parent).
@@ -788,7 +789,7 @@
       In section~\ref{sec:modularity} the desire for building modular web components was presented.
       One implication of building applications in a modular way is that general components become reusable.
       Since the only way of applying conditional rules to elements today is by using media queries, all responsive styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the layout).
-      The implication of this is that the \textsc{html} and JavaScript can be written in a modular way, but the \textsc{css} is left for the user of the module (application) to write which somewhat defeats the purpose of writing modules.
+      The implication of this is that the \abbr{html} and JavaScript can be written in a modular way, but the \abbr{css} is left for the user of the module (application) to write which somewhat defeats the purpose of writing modules.
       So developers today have two choices: writing modules that are not responsive but self contained, or writing modules that are responsive but not self contained (leaving the styling to the user).
 
       The solution to this is element queries, which allows conditional rules to be applied based on any criteria for any element.
@@ -820,7 +821,7 @@
       \section{Problems}
         \begin{metatext}
           The main reason why element queries have not been implemented natively in browsers is because they bring problems and limitations to the browsers.
-          It is important to understand the problems in order to speculate about a potential native \textsc{api} design.
+          It is important to understand the problems in order to speculate about a potential native \abbr{api} design.
           In this section the two major problems will be presented; performance and circularity.
         \end{metatext}
 
@@ -845,8 +846,8 @@
           As already stated, this only occurs when the layout has changed in a way that changes the element query selectors.
           Unfortunately, this means that if there is any matching element query selector at page load, two layout passes will always be performed.
 
-          Further, it is common for internal \textsc{api}'s in layout engines to request updated element styles that do not require layout to resolve (non-layout properties such as \code{color} and \code{font-family}).
-          Since a layout of the element query selector target is required in order to resolve the correct element style, such internal \textsc{api}'s requires a layout in order to obtain the correct element style (even for non-layout related properties).
+          Further, it is common for internal \abbr[s]{api} in layout engines to request updated element styles that do not require layout to resolve (non-layout properties such as \code{color} and \code{font-family}).
+          Since a layout of the element query selector target is required in order to resolve the correct element style, such internal \abbr[s]{api} requires a layout in order to obtain the correct element style (even for non-layout related properties).
           Also, layout engines would not be able to layout subtrees in parallel since an element in one subtree might affect an element in another subtree.
 
           \todo{Totally forgot to write about parallel problems}
@@ -938,7 +939,7 @@
 
           The examples given so far have been simple and easily detectable.
           However, cycles can occur in a much more complex way.
-          The two given examples could both be identified as cyclic by simply reviewing the \textsc{css} code.
+          The two given examples could both be identified as cyclic by simply reviewing the \abbr{css} code.
           It is also possible for a program to analyze the examples to deduce that they are cyclic.
           Unfortunately, not all cycles can be detected by static analyze.
           Consider the code in listing~\ref{code:cyclic-3}.
@@ -1009,27 +1010,27 @@
         \subsection{Viewport elements}\label{sec:viewport-elements}
           \begin{metatext}
             This solution limits element queries a lot, but avoids many of the problems this way.
-            This approach has been discussed at \textsc{w3c} and \textsc{ricg} assumes that this is a prerequisite to a native implementation.
+            This approach has been discussed at \abbr{w3c} and \abbr{ricg} assumes that this is a prerequisite to a native implementation.
             \todo{cite where this has been gathered from?}
           \end{metatext}
 
           By limiting element queries to special \emph{viewport} container elements that can only be queried by child elements, much of the problems are resolved.
-          This means that a new \textsc{html} tag will be crafted (perhaps named \code{viewport}) that defines separated viewports in the document.
+          This means that a new \abbr{html} tag will be crafted (perhaps named \code{viewport}) that defines separated viewports in the document.
           The size of viewports is not dependent on their children, and children may only target the closest ancestor viewport element in the element queries.
           This way, cyclic rules can no longer occur since the children may not alter the viewport size.
-          The reason that a new \textsc{html} tag is proposed instead of a new \textsc{css} property that defines the behavior is because the layout engine in the latter case needs to resolve the styles for all elements in order to know which are viewport elements.
-          With a new \textsc{html} tag, the layout engine can detect that that the element is a viewport before any resolving styles.
+          The reason that a new \abbr{html} tag is proposed instead of a new \abbr{css} property that defines the behavior is because the layout engine in the latter case needs to resolve the styles for all elements in order to know which are viewport elements.
+          With a new \abbr{html} tag, the layout engine can detect that that the element is a viewport before any resolving styles.
           \todo{Write why it is important to know viewport elements before resolving styles.}
 
           This approach also solves many of the performance problems, but not all.
-          The internal \textsc{api}'s that request non-layout information for the elements using element queries only need to make sure that the containing viewport element has been laid out before resolving the styles (which is a much better situation that the unrestricted version of element queries).
+          The internal \abbr[s]{api} that request non-layout information for the elements using element queries only need to make sure that the containing viewport element has been laid out before resolving the styles (which is a much better situation that the unrestricted version of element queries).
           Further, the layout can be done in one pass as long as the viewport elements are laid out before the children.
           It is still a bit inconvenient that the layout engine would need to evaluate all element query selectors in the middle of a layout pass (after the that the viewport elements has been laid out) in order to resolve the styles for the viewport children.
           Parallelization is also easier, since the queries may only be targeting the closest viewport element.
           This means that each viewport subtree can be laid out in parallel.
 
           This solution would behave much like the \code{iframe} element layout-wise.
-          It should be noted that \code{iframe} elements are not suitable as an alternative to the proposed \code{viewport} elements, since \code{iframe}'s are much more limited by nature (creates a new document and script context).
+          It should be noted that \code{iframe} elements are not suitable as an alternative to the proposed \code{viewport} elements, since \code[s]{iframe} are much more limited by nature (creates a new document and script context).
 
           Obviously, this limits element queries a lot.
           The fact that the size of the viewport element cannot depend on the children (like normal block elements do), limits the usability.
@@ -1050,12 +1051,12 @@
           \todo{Maybe write about having a third-party framework as a solution?}
       \section{Native API design}
         \begin{metatext}
-          In this section a possible native element query \textsc{api} will be presented.
-          This is based on the current information and approaches of \textsc{w3c} and \textsc{ricg}, and should therefore be regarded as a guideline to how an \textsc{api} might look like.
+          In this section a possible native element query \abbr{api} will be presented.
+          This is based on the current information and approaches of \abbr{w3c} and \abbr{ricg}, and should therefore be regarded as a guideline to how an \abbr{api} might look like.
         \end{metatext}
 
-        As presented in subsection~\ref{sec:viewport-elements}, viewport elements solve many of the element query problems and are therefore assumed to be a part of a native \textsc{api}.
-        Since it would be favorable to be able to specify multiple conditional rule sets for the element queries (like media queries) the \textsc{css} syntax may be of the form as presented in listing~\ref{code:mq-eq-syntax}.
+        As presented in subsection~\ref{sec:viewport-elements}, viewport elements solve many of the element query problems and are therefore assumed to be a part of a native \abbr{api}.
+        Since it would be favorable to be able to specify multiple conditional rule sets for the element queries (like media queries) the \abbr{css} syntax may be of the form as presented in listing~\ref{code:mq-eq-syntax}.
         \begin{lstlisting}[caption={Element queries are assumed to have nested rule sets, like media queries},captionpos=b,label={code:mq-eq-syntax}]]
 /* Media query syntax */
 @media ... {
@@ -1090,11 +1091,11 @@
         The subsystems of the framework and their interactions will also be presented.
       \end{metatext}
 
-      First of all, a working name of the framework needs to be established --- the framework will from now on have the working name \textsc{elq}.
-      This name serves as a prefix for many of the framework \textsc{api}'s, and will be frequently used in the report from now on.
-      The technical goals of \textsc{elq} will be stated in section~\ref{sec:techincal-goals}.
-      In section~\ref{sec:arcithecture} the architecture will be described, and the subsystems of \textsc{elq} will be presented.
-      Last, the \textsc{api} will be defined in section~\ref{sec:elq-api}.
+      First of all, a working name of the framework needs to be established --- the framework will from now on have the working name \abbr{elq}.
+      This name serves as a prefix for many of the framework \abbr[s]{api}, and will be frequently used in the report from now on.
+      The technical goals of \abbr{elq} will be stated in section~\ref{sec:techincal-goals}.
+      In section~\ref{sec:arcithecture} the architecture will be described, and the subsystems of \abbr{elq} will be presented.
+      Last, the \abbr{api} will be defined in section~\ref{sec:elq-api}.
 
       \section{Technical goals}\label{sec:techincal-goals}
         \begin{metatext}
@@ -1118,7 +1119,7 @@
           \item \textbf{Ease of use}
             \begin{enumerate}
               \item\label{itm:req_big_rewrite} Developers should not need to perform big rewrites of their modules or applications in order to use the framework.
-              \item\label{itm:natural} The \textsc{api}'s need to feel natural and should not seem alien to web developers.
+              \item\label{itm:natural} The \abbr[s]{api} need to feel natural and should not seem alien to web developers.
               \item The framework should help identifying cyclic rules and prevent them from causing infinite layouts.
             \end{enumerate}
           \item \textbf{Performance}
@@ -1129,20 +1130,20 @@
           \item \textbf{Compatibility}
             \begin{enumerate}
               \item Older browsers must be supported.
-              \item The framework may not require invalid \textsc{css}, \textsc{html} or JavaScript.
+              \item The framework may not require invalid \abbr{css}, \abbr{html} or JavaScript.
               \item\label{itm:assumption} Dependencies and assumptions about the host application (including the development environment) should be kept low.
               \item\label{itm:req_prolyfill} The framework must act as a prolyfill\footnote{A polyfill is something that provides a functionality that is expected to be provided natively by browsers. Polyfills usually fixes some standard functionality for browsers that do not yet support it. A prolyfill is a polyfill for something that will probably become a standard.} for native element queries.
             \end{enumerate}
         \end{enumerate}
         It would be possible to create a framework that conforms to all of the requirements but added features, automation and compatibility most probably would decrease the performance.
-        In the same way, too many advanced features may decrease the ease of use and simplicity of the \textsc{api}'s.
+        In the same way, too many advanced features may decrease the ease of use and simplicity of the \abbr[s]{api}.
         Some feature may also restrict the compatibility.
         Trying to conform to all of the requirements and trying to find a balance would result in a worse solution than a framework tailored for specific requirements.
         By providing a good framework foundation and plugins for different use cases it is up to developers too choose the right plugins for each project.
         This way, developers are composing their own custom tailored solution for their specific use cases.
         In addition, by letting the plugins satisfy the requirements it is easy to extend the framework with new plugins when new requirements arise.
-        For instance, the requirement~\ref{itm:req_prolyfill} is beneficial to satisfy with a plugin since the \textsc{api} for native element queries can only be guessed at this point of time, which will probably lead to frequent changes to the plugin.
-        By separating it from the core framework (and the other plugins), only developers that really desire the prolyfill behavior must handle the rapid \textsc{api} changes.
+        For instance, the requirement~\ref{itm:req_prolyfill} is beneficial to satisfy with a plugin since the \abbr{api} for native element queries can only be guessed at this point of time, which will probably lead to frequent changes to the plugin.
+        By separating it from the core framework (and the other plugins), only developers that really desire the prolyfill behavior must handle the rapid \abbr{api} changes.
 
       \section{Architecture}\label{sec:arcithecture}
         \begin{metatext}
@@ -1165,11 +1166,11 @@
 
         Figure~\ref{fig:elq_architecture} shows the overall architecture of the framework.
         The core consists of fundamental and general subsystems that are utilized by plugins.
-        Developers should never be programming against the core directly, and it can therefore only be accessed by plugins through the hidden plugin \textsc{api}.
-        The framework provides a small public \textsc{api} which is mainly used to invoke and handle the plugins.
-        The plugins form the bigger part of the public \textsc{api} in the sense that they decide which features exist and how they work.
-        It should be noted that plugins may provide \textsc{api}'s through the framework by registering methods, or by specifying custom syntax (such as markup or \textsc{css}) which is beyond the control of the core.
-        Plugins may also have interplugin \textsc{api}'s and dependencies, which also is beyond the control of the core.
+        Developers should never be programming against the core directly, and it can therefore only be accessed by plugins through the hidden plugin \abbr{api}.
+        The framework provides a small public \abbr{api} which is mainly used to invoke and handle the plugins.
+        The plugins form the bigger part of the public \abbr{api} in the sense that they decide which features exist and how they work.
+        It should be noted that plugins may provide \abbr[s]{api} through the framework by registering methods, or by specifying custom syntax (such as markup or \abbr{css}) which is beyond the control of the core.
+        Plugins may also have interplugin \abbr[s]{api} and dependencies, which also is beyond the control of the core.
         The core is supposed to have a slow development phase, with few changes and good backwards compatability.
         Plugins may be developed in a high rate, with frequent changes to support new features.
         Subsystems that are part of the core are the following:
@@ -1190,7 +1191,7 @@
             If the update seems to be part of a cycle, it is up to the plugin how that should be handled.
             \todo{Write that this system is more general, and could potentially be used for detecting other cyclic behaviors?}
           \item \textbf{Batch processor:}
-            To avoid layout thrashing, it is important to read and mutate the \textsc{dom} in separate batches.
+            To avoid layout thrashing, it is important to read and mutate the \abbr{dom} in separate batches.
             This subsystem provides an interface for plugins to store functions to later be executed in a batch.
             To avoid layout thrashing by other scripts it can beneficial to asynchronously postpone the batch until the next layout cycle of the browser, which is also handled by the subsystem.
           \item \textbf{Plugin handler:}
@@ -1198,17 +1199,17 @@
             This system provides the interface for developers to add plugins to the framework.
             The system is also responsible for retrieving the plugins, and invoking them on different framework events.
         \end{itemize}
-        Some of the subsystems may be partially accessible through the public \textsc{api} such as the plugin handler and the element resize detector.
+        Some of the subsystems may be partially accessible through the public \abbr{api} such as the plugin handler and the element resize detector.
         It should be noted that the presented core subsystems are not the only things that the framework consists of, but the presented systems are the major ones.
       \section{API design}\label{sec:elq-api}
         \begin{metatext}
-          This section will describe the \textsc{api} of the framework.
-          First, the public \textsc{api} of the core will be presented, followed by the plugin \textsc{api}.
-          After that, all plugins will be described in depth addressing their features, dependencies and \textsc{api}'s.
+          This section will describe the \abbr{api} of the framework.
+          First, the public \abbr{api} of the core will be presented, followed by the plugin \abbr{api}.
+          After that, all plugins will be described in depth addressing their features, dependencies and \abbr[s]{api}.
         \end{metatext}
 
-        Recall from section~\ref{sec:arcithecture} that the bigger part of the public \textsc{api} is provided by plugins.
-        The role of the framework is to provide plugins with systems to be used for performing element query tasks, which is done through the plugin \textsc{api}.
+        Recall from section~\ref{sec:arcithecture} that the bigger part of the public \abbr{api} is provided by plugins.
+        The role of the framework is to provide plugins with systems to be used for performing element query tasks, which is done through the plugin \abbr{api}.
         Three plugins will be developed; 
 
         \subsection{Public API}
@@ -1216,12 +1217,12 @@
 
           In section~\ref{sec:techincal-goals} it was determined that advanced users must be able to change the subsystems used in the core.
           Therefore no global framework instance will be instantiated automatically on load.
-          Instead, a constructor function that creates \textsc{elq} instances is provided in order to be able to inject dependencies.
+          Instead, a constructor function that creates \abbr{elq} instances is provided in order to be able to inject dependencies.
           The constructor function takes as a parameter an \code{options} object, where it is possible to set options and subsystems to be used for the created instance.
           If no options are given, default options will be created.
           See listing~\ref{code:elq-ctor} of example usages of the constructor function.
-          The constructor returns an object containing the core public \textsc{api} methods of the \textsc{elq} instance.
-          \begin{lstlisting}[caption={Example usages of the \textsc{elq} custrctor function.},captionpos=b,label={code:elq-ctor}]]
+          The constructor returns an object containing the core public \abbr{api} methods of the \abbr{elq} instance.
+          \begin{lstlisting}[caption={Example usages of the \abbr{elq} custrctor function.},captionpos=b,label={code:elq-ctor}]]
 //Default options being used.
 var elq = new Elq();
 
@@ -1288,7 +1289,7 @@ var myPluginInstance = elq.getPlugin(myPlugin);
 elq.getPlugin("my-plugin") === myPluginInstance; // true
           \end{lstlisting}
 
-          When the desired plugins have been registered to the \textsc{elq} instance, it is time to apply the framework to the target elements.
+          When the desired plugins have been registered to the \abbr{elq} instance, it is time to apply the framework to the target elements.
           This is done with the \code{start} method which takes an collection of elements as a parameter.
           When called, it will invoke all \code{start} methods on all registered plugins which gives them the opportunity to initiate the elements according to their own mechanisms.
           To satisfy the requirements \ref{itm:natural} and \ref{itm:assumption} the function is agnostic about the elements collection --- all objects are accepted as long as they are iterable and contains elements.
@@ -1326,7 +1327,7 @@ elq.start(jqueryElementsCollection);
           Unfortunately, there is no standard resize event for arbitrary elements.
           Only frames (elements that render it's content independently of the container element, such as \code{iframe} and \code{object}) support the resize event by standard since they have their own viewport.
           Legacy versions of Internet Explorer (version 8 and down, but also some later versions depending on the document mode and if the browser is in quirks mode) do support the resize event on arbitrary elements.
-          Since the framework needs to support all commonly used \textsc{html} elements a solution to listen to any element resize needs to be found.
+          Since the framework needs to support all commonly used \abbr{html} elements a solution to listen to any element resize needs to be found.
           Possible solutions are:
           \begin{itemize}
             \item \textbf{Polling}:
@@ -1343,16 +1344,16 @@ elq.start(jqueryElementsCollection);
               Then a resize event handler can be attached to the frame that emits a resize event for every target element resize.
               So in order to listen for resize events for an element, a frame element is injected and listened to instead.
           \end{itemize}
-          The first solution is appealing because it does not mutate the \textsc{dom} and it works on all browsers since it does not rely on special element behaviors or similar.
+          The first solution is appealing because it does not mutate the \abbr{dom} and it works on all browsers since it does not rely on special element behaviors or similar.
           However, in order to prevent the responsive elements lagging behind the size changes of the user interface, the polls need to be performed quite frequently.
           Recall from section~\ref{sec:layout-process} that layout engines typically have a layout queue in order to perform layout in batches for increased performance.
           Each poll would force the layout queue to be flushed since the computed style of elements needs to be retrieved in order to know if elements have resized or not.
-          The performance impact of polling the \textsc{dom} frequently is not desirable.
+          The performance impact of polling the \abbr{dom} frequently is not desirable.
           Since the polling is be performed all the time, the overall page performance will be decreased even if the page is idle, which is undesirable especially for devices running on battery.
-          This is not a great solution since reading the \textsc{dom} constantly can be affect the performance negatively. \todo{Should make quick test to see how much CPU it uses when polling frequently}
+          This is not a great solution since reading the \abbr{dom} constantly can be affect the performance negatively. \todo{Should make quick test to see how much CPU it uses when polling frequently}
           \todo{Write that in theory the detection of resize is delayed by the frequency of the polling?}
 
-          The third solution does mutate the \textsc{dom} and relies on special element behavior, but it offers many advantages.
+          The third solution does mutate the \abbr{dom} and relies on special element behavior, but it offers many advantages.
           Browsers only need to perform extra work when preparing elements for being resize-detectable and when the elements actually resize.
           Further, since the resize detection instead is event-based there is no delay between the actual resize and the detection.
           By positioning the injected frames \code{absolute} with width and height set to \code{100\%}, the frames do not affect the visual representation of the document.
@@ -1360,11 +1361,11 @@ elq.start(jqueryElementsCollection);
           However, injecting frames into the elements has some implications:
           \begin{itemize}
             \item \textbf{CSS selectors may break}:
-              Since target elements get an extra child (the frame element), \textsc{css} selectors may behave differently.
+              Since target elements get an extra child (the frame element), \abbr{css} selectors may behave differently.
               For instance, the selector \code{\#target *} selector also matches the injected frame element which may result in the frame being styled in a way that it will be visible or in other ways interfere with the original user interface.
               Also, selectors such as \code{:first-child} and \code{:last-child} since the object element is prepended (or appended) to the target element.
             \item \textbf{JavaScript may break}:
-              Similar to with the \textsc{css} selectors, JavaScript \textsc{dom} selectors may break.
+              Similar to with the \abbr{css} selectors, JavaScript \abbr{dom} selectors may break.
               The first node (or last) of the target element may not be what developers expect it to be, since the frame element has been injected.
               Also, code that replaced the content of elements (such as \code{element.InnerHTML = ...}) undesirably removes the injected frame element of if used on the target element.
             \item \textbf{The target element must be positioned}:
