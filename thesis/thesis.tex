@@ -100,7 +100,7 @@
       While awaiting the native solution it is up to the developers to implement this feature as a third-party solution.
       Efforts have been made to create a robust third-party solution, with moderate success.
       Since all current third-party solutions have major shortcomings, there is still no de facto solution that developers use and the problem remains unsolved.
-      Some problems with implementing element queries natively in CSS are:
+      Some problems with implementing element queries natively in \abbr{css} are:
       \begin{itemize}
         \item \textbf{Circularity:}
         If style rules can be applied by criteria of other elements, it will be possible to create cyclic rules (infinite loops of styling).
@@ -239,7 +239,7 @@
         The \abbr{tcp/ip} protocol suite together with packet switching are fundamental technologies of the Internet.
         \abbr{arpanet} was funded by the United States Department of Defense (DoD) in order to interconnect their research sites in the United States.
         The first nodes of \abbr{arpanet} was installed at four major universities in the western United States in 1969 and two years later the network spanned the whole country.
-        The first public demonstration of \abbr{arpanet} was held at the International Computer Communication Conference (ICCC) in 1972.
+        The first public demonstration of \abbr{arpanet} was held at the International Computer Communication Conference (\abbr{iccc}) in 1972.
         It was also at this time the email system was introduced, which became the largest network application for over a decade.
         In 1973 the network had international connections to Norway and London via a satellite link.
         At this time information was exchanged with the File Transfer Protocol (\abbr{ftp}), which is a protocol to transfer files between hosts.
@@ -410,7 +410,7 @@
         As JavaScript and \abbr{html} supported more features, websites turned into small applications with user sessions (using cookies) and user interfaces.
         Still, parts of the applications were defined as \abbr{html} pages, fetched from the server when navigating the site.
         When the \emph{XMLHttpRequest} \abbr{api} was supported in the major browsers, pages no longer needed to reload in order to fetch new content as XMLHttpRequest enabled developers to perform asynchronous requests to servers in JavaScript.
-        This opened up for the \abbr{ajax} (Asynchronous JavaScript and XML) web development technique which became a popular way of communicating with servers ``in the background'' of the page.
+        This opened up for the \abbr{ajax} (Asynchronous JavaScript and \abbr{xml}) web development technique which became a popular way of communicating with servers ``in the background'' of the page.
         Developers pushed browsers and \abbr{html} to the limit when creating applications instead of documents that it was originally designed for.
         In a \abbr{w3c} meeting in 2004 it was proposed to extend \abbr{html} to ease the creation of web applications, which was rejected.
         \abbr{w3c} was criticized of not listening to the need of the industry, and some members of \abbr{w3c} left to create the Web Hypertext Application Technology Working Group (\abbr{whatwg}).
@@ -511,7 +511,7 @@
           \node[below=of layout-engine] (dummy) {};
           \node[mynode, below=of layout-engine, left=0.1cm of dummy] (javascript) {JavaScript};
           \node[mynode, below=of layout-engine, left=0.1cm and 0.1cm of javascript] (networking) {Networking};  
-          \node[mynode, below=of layout-engine, right=0.1cm of dummy] (xml) {XML};
+          \node[mynode, below=of layout-engine, right=0.1cm of dummy] (xml) {\abbr{xml}};
           \node[mynode, below=of layout-engine, right=0.1cm and 0.1cm of xml] (render-backend) {Render Backend};
 
           \draw[myarrow] (ui.south) -- (browser-engine.north);
@@ -1049,7 +1049,7 @@
 
           \todo{Should this be incorporated with some other section or be written?}
           \todo{Maybe write about having a third-party framework as a solution?}
-      \section{Native API design}
+      \section{Native \abbr{api} design}
         \begin{metatext}
           In this section a possible native element query \abbr{api} will be presented.
           This is based on the current information and approaches of \abbr{w3c} and \abbr{ricg}, and should therefore be regarded as a guideline to how an \abbr{api} might look like.
@@ -1201,7 +1201,7 @@
         \end{itemize}
         Some of the subsystems may be partially accessible through the public \abbr{api} such as the plugin handler and the element resize detector.
         It should be noted that the presented core subsystems are not the only things that the framework consists of, but the presented systems are the major ones.
-      \section{API design}\label{sec:elq-api}
+      \section{\abbr{api} design}\label{sec:elq-api}
         \begin{metatext}
           This section will describe the \abbr{api} of the framework.
           First, the public \abbr{api} of the core will be presented, followed by the plugin \abbr{api}.
@@ -1212,7 +1212,7 @@
         The role of the framework is to provide plugins with systems to be used for performing element query tasks, which is done through the plugin \abbr{api}.
         Three plugins will be developed; 
 
-        \subsection{Public API}
+        \subsection{Public \abbr{api}}
           \todo[inline]{Write how to install it. AMD, script, commonjs, etc.}
 
           In section~\ref{sec:techincal-goals} it was determined that advanced users must be able to change the subsystems used in the core.
@@ -1311,7 +1311,7 @@ var jqueryElementsCollection = $("...");
 elq.start(jqueryElementsCollection);
           \end{lstlisting}
 
-        \subsection{Plugin API}
+        \subsection{Plugin \abbr{api}}
         \subsection{Plugins}
           \subsubsection{Breakpoints}
           \subsubsection{Mirror}
@@ -1360,7 +1360,7 @@ elq.start(jqueryElementsCollection);
           It has been shown by \cite{backalley} that \code{object} is the most suitable frame element to use for this purpose, as they have good browser compatibility, adequate performance and are easy to work with.
           However, injecting frames into the elements has some implications:
           \begin{itemize}
-            \item \textbf{CSS selectors may break}:
+            \item \textbf{\abbr{css} selectors may break}:
               Since target elements get an extra child (the frame element), \abbr{css} selectors may behave differently.
               For instance, the selector \code{\#target *} selector also matches the injected frame element which may result in the frame being styled in a way that it will be visible or in other ways interfere with the original user interface.
               Also, selectors such as \code{:first-child} and \code{:last-child} since the object element is prepended (or appended) to the target element.
@@ -1394,7 +1394,7 @@ elq.start(jqueryElementsCollection);
       \chapter{Resources}
         \section{Practical problem formulation document}\label{sec:problem-formulation}
           TODO: Should this be in the real document instead of appendix?          
-        \section{CSS terminology}
+        \section{\abbr{css} terminology}
           TODO: Write custom or refer to this \url{http://www.impressivewebs.com/css-terms-definitions/}?
         \section{Layout engine market share statistics}\label{sec:layout_engines_market_share}
           Browser market share was retrieved by \emph{StatCounter}\footnote{StatCounter graph \url{http://gs.statcounter.com/\#all-browser-ww-monthly-201402-201502-bar}}.
