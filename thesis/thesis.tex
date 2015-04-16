@@ -167,9 +167,24 @@
       \item No complete history of browsers, the Internet or responsive web design will be given other than necessary.
       \end{itemize}
     \section{Outline}
-      \todo[inline]{Write this.}
+      The thesis is divided into four parts. The first part \emph{\ref{part:background}~\nameref{part:background}} presents some history of the web platform and descriptions of the concepts needed to understand the problem.
+      The background part starts with the history of browsers and information about market share between them followed by a brief history of the evolution of web development.
+      After that, the responsive web design concept will be described along with why modularity is important in software development.
 
-  \part{Background}
+      The second part \emph{\ref{part:theory}~\nameref{part:theory}} presents theoretizations of the problem.
+      It starts with describing a reference architecture of layout engines and the parts of layout engines that directly affects element queries will be described in detail.
+      Here it will also be presented why element queries impose problems to layout engines on a theoretical level.
+      After that, a full description of element queries as a concept and a more in depth analysis of the problems will be given.
+      Possible solutions to the given problems will also be presented followed by a theoretization about how a \textsc{api} could be designed.
+
+      The third part \emph{\ref{part:framework}~\nameref{part:framework}} presents the design and implementation of the solution as a third-party framework.
+      Here possible approaches to solving the solution will be presented.
+      Other implementations and solutions will be presented and analyzed followed by a motivation of the chosen approach for the framework.
+      Identified technical requirements will be given in order to motivate the framework architecture and \textsc{api} design.
+      After that, interesting parts of the implementation will be presented.\todo{Maybe flesh this one out as it has been written.}
+
+      \todo[inline]{Finish the Outline when the other parts have been written.}
+  \part{Background}\label{part:background}
 
     \chapter{Browsers} 
       \begin{metatext}
@@ -464,7 +479,7 @@
 
         \todo[inline]{Philipp: You should also mention that modules enable reuse of components.}
         \todo[inline]{Flesh this one out, with meta text.}
-  \part{Theory}
+  \part{Theory}\label{part:theory}
     \chapter{Layout engines}
       \begin{metatext}
         Before diving into the theory of element queries, it is important to understand how layout engines work.
@@ -1056,7 +1071,7 @@
         \end{lstlisting}
 
         \todo{Continue this if possible?}
-  \part{Third-party framework}
+  \part{Third-party framework}\label{part:framework}
     \todo[inline]{Write somewhere that it might be an option to not have a resize detection system, but instead let the user manually check the elements when they may have changed.}
     \todo[inline]{Write about the simple cycle detector.}
     \todo[inline]{Write about the N layouts, and how it was fixed with the batch processing. Investigate how this behaves for nested elements.}
@@ -1366,7 +1381,7 @@ elq.start(jqueryElementsCollection);
       \section{Detecting runtime cycles}\label{sec:imp_cycle_detector}
       \section{Avoiding layout thrashing}\label{sec:imp_batch_processor}
 
-  \part{Outro}
+  \part{Outro}\label{part:outro}
     \chapter{Related work}
     \chapter{Result}
     \chapter{Discussion}
