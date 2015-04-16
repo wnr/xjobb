@@ -1101,7 +1101,7 @@
           \item \textbf{Ease of use}
             \begin{enumerate}
               \item\label{itm:req_big_rewrite} Developers should not need to perform big rewrites of their modules or applications in order to use the framework.
-              \item The \textsc{api}'s need to feel natural and should not seem alien to web developers.
+              \item\label{itm:natural} The \textsc{api}'s need to feel natural and should not seem alien to web developers.
               \item The framework should help identifying cyclic rules and prevent them from causing infinite layouts.
             \end{enumerate}
           \item \textbf{Performance}
@@ -1113,7 +1113,7 @@
             \begin{enumerate}
               \item Older browsers must be supported.
               \item The framework may not require invalid \textsc{css}, \textsc{html} or JavaScript.
-              \item Dependencies and assumptions about the host application (including the development environment) should be kept low.
+              \item\label{itm:assumption} Dependencies and assumptions about the host application (including the development environment) should be kept low.
               \item\label{itm:req_prolyfill} The framework must act as a prolyfill\footnote{A polyfill is something that provides a functionality that is expected to be provided natively by browsers. Polyfills usually fixes some standard functionality for browsers that do not yet support it. A prolyfill is a polyfill for something that will probably become a standard.} for native element queries.
             \end{enumerate}
         \end{enumerate}
@@ -1186,16 +1186,114 @@
       \section{API design}\label{sec:elq-api}
         \begin{metatext}
           This section will describe the \textsc{api} of the framework.
-          First, the public \textsc{api} of the non-plugin part of the framework will be presented, followed by the plugin \textsc{api}.
-          After that, all current plugins will be described in depth addressing their features and \textsc{api}'s.
+          First, the public \textsc{api} of the core will be presented, followed by the plugin \textsc{api}.
+          After that, all plugins will be described in depth addressing their features, dependencies and \textsc{api}'s.
         \end{metatext}
 
         Recall from section~\ref{} that the bigger part of the public \textsc{api} is provided by plugins.
         The role of the framework is to provide plugins with systems to be used for performing element query tasks, which is done through the plugin \textsc{api}.
         Three plugins will be developed; 
 
-        \section{Public \textsc{api}}
-        \section{Plugin \textsc{api}}
+        \section{Public API}
+          \todo[inline]{Write how to install it. AMD, script, commonjs, etc.}
+
+          In section~\ref{sec:techincal-goals} it was determined that advanced users must be able to change the subsystems used in the core.
+          Therefore no global framework instance will be instantiated automatically on load.
+          Instead, a constructor function that creates \textsc{elq} instances is provided in order to be able to inject dependencies.
+          The constructor function takes as a parameter an \code{options} object, where it is possible to set options and subsystems to be used for the created instance.
+          If no options are given, default options will be created.
+          See listing~\ref{code:elq-ctor} of example usages of the constructor function.
+          The constructor returns an object containing the core public \textsc{api} methods of the \textsc{elq} instance.
+          \begin{lstlisting}[caption={Example usages of the \textsc{elq} custrctor function.},captionpos=b,label={code:elq-ctor}]]
+//Default options being used.
+var elq = new Elq();
+
+//A custom reporter and cycle detector being used.
+var customCycleDetector = ...;
+var customReporter = ...;
+var elq2 = new Elq({
+  reporter: customReporter,
+  cycleDetector: customCycleDetector
+});
+          \end{lstlisting}
+
+          The next step after that an instance has been created is to register the plugins to be used by the framework instance.
+          There are three methods for handling plugins; \code{use}, \code{using} and \code{getPlugin}.
+          The \code{use} method registers a plugin to be used by the framework.
+          It is responsible for making sure that plugins do not conflict with each other and that the plugin is being initiated correctly with the framework.
+          The methods requires a \emph{plugin object} and accepts an optional \code{options} parameter.
+          Plugin objects serves as a plugin definition and is responsible for describing a plugin and providing a constructor function to create a plugin instance.
+          See listing~\ref{code:plugin-object} for details about the plugin object and how it is used with the three methods for handling plugins.
+
+          \begin{lstlisting}[caption={Plugin object definition and examples of handling plugins.},captionpos=b,label={code:plugin-object}]]
+var myPlugin = {
+  getName: function() {
+    // Must return the name of the plugin, which has to be 
+    // unique in an elq instance.
+    return "my-plugin";
+  },
+  getVersion: function() {
+    // Must return the version of the plugin.
+    return "1.0.0";
+  },
+  isCompatible: function(elq) {
+    // Must return a boolean that indicates if this plugin
+    // is compatible with the given elq instance.
+    return true;
+  },
+  make: function(elq, options) {
+    // Must return a plugin instance. It is optional to use
+    // the elq instance or options object in the initiation process.
+    return {...};
+  }
+};
+
+// Tell the elq instance to use myPlugin with default options.
+elq.use(myPlugin);
+
+// Tell the elq2 instance to use myPlugin with custom options.
+var options = {...};
+elq2.use(myPlugin, options);
+
+// Check if the plugin is being used.
+elq.using(myPlugin); // true
+
+// Also possible to check by the plugin name.
+elq.using("my-plugin"); // true
+
+// Plugins not being used by the instance returns false.
+elq.using(otherPlugin); // false
+
+// It is possible to get the plugin instance.
+var myPluginInstance = elq.getPlugin(myPlugin);
+
+// Also by name.
+elq.getPlugin("my-plugin") === myPluginInstance; // true
+          \end{lstlisting}
+
+          When the desired plugins have been registered to the \textsc{elq} instance, it is time to apply the framework to the target elements.
+          This is done with the \code{start} method which takes an collection of elements as a parameter.
+          When called, it will invoke all \code{start} methods on all registered plugins which gives them the opportunity to initiate the elements according to their own mechanisms.
+          To satisfy the requirements \ref{itm:natural} and \ref{itm:assumption} the function is agnostic about the elements collection --- all objects are accepted as long as they are iterable and contains elements.
+          It is also possible to provide a single element without a collection.
+          See listing~\ref{code:elq-start} for example usages of the \code{start} method.
+          \begin{lstlisting}[caption={Example usages of the \code{start} method. The method only requires an iterable collection, so it is library agnostic.},captionpos=b,label={code:elq-start}]]
+// Initiating the framework to a single element.
+var singleElement = document.getElementById("...");
+elq.start(singleElement);
+
+// Initiating the framework to multiple elements.
+var singleElement2 = document.getElementById("...");
+elq.start([singleElement, singleElement2]);
+
+
+// Initiating the framework to multiple elements using
+// third-party libraries (in this case jQuery).
+var jqueryElementsCollection = $("...");
+elq.start(jqueryElementsCollection);
+          \end{lstlisting}
+
+        \section{Plugin API}
         \section{Plugins}
           \subsection{Breakpoints}
           \subsection{Mirror}
