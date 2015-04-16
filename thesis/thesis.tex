@@ -38,6 +38,8 @@
 \def\useignorespacesandallpars#1\ignorespaces\fi{%
 #1\fi\ignorespacesandallpars}
 
+\newcommand{\abbr}[2]{\textsc{#1}{\small#2}}
+
 \makeatletter
 \def\ignorespacesandallpars{%
   \@ifnextchar\par
@@ -87,12 +89,17 @@
       This is fundamental to creating responsive web applications.
       If developers want to build modular applications by composing the application by smaller components (elements, scripts, styles, etc.) media queries are no longer applicable.
       Modular responsive components should be able to react and change style depending on the size that the component has been given by the application, not the viewport size.
-      The problem can be formulated as: \emph{Elements cannot specify conditional style rules depending on their own size, or the size of any other element}.
+      The problem can be formulated as: \emph{It is not possible to specify conditional style rules for elements depending on the size of an element}.
       See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
-      \todo{Back this up or maybe reformulate it a bit.}
+      \todo{Is W3C okay with this?}
       The main international standards organization for the World Wide Web (World Wide Web Consortium, abbreviated \textsc{w3c}) has unofficially stated that such feature would be infeasible to implement.
-      Some problems with implementing element queries in \textsc{css} are:
+      Many standards organisations are interested in solving the problem and possible solutions are being discussed. \todo{Write which organisations?}
+      However, they are still at the initial planning stage so a solution will not be implemented natively in the near future.
+      While awaiting the native solution it is up to the developers to implement this feature as a third-party solution.
+      Efforts have been made to create a robust third-party solution, with moderate success.
+      Since all current third-party solutions have major shortcomings, there is still no de facto solution that developers use and the problem remains unsolved.
+      Some problems with implementing element queries natively in CSS are:
       \begin{itemize}
         \item \textbf{Circularity:}
         If style rules can be applied by criteria of other elements, it will be possible to create cyclic rules (infinite loops of styling).
@@ -102,14 +109,9 @@
         \item \textbf{Performance:} 
         Layout engine vendors are interested in performing selector matching and layout computations in parallel to achieve good performance.
         The research front of browsers have shown successful ways of parallelising the layout engine.
-        If element queries would be implemented, the layout engines would need to first compute the layout of all elements in order to decide which selectors would conform to the element query conditions and then do a new layout computation, and so on until a stable state has been reached.
+        If element queries would be implemented, layout engines would need to first compute the layout of all elements in order to decide which selectors would conform to the element query conditions and then do a new layout computation, and so on until a stable state has been reached.
         Far worse, since selectors would depend on layout style, this cannot be done in parallel.
       \end{itemize}
-      \todo{Back this up or rewrite.}
-      Because of the problems, it is stated that such feature will not be implemented in the near future. So it is now up to the developers to implement this feature as a third-party solution.
-      Efforts have been made to create a robust implementation, with moderate success.
-      Since all implementations have shortcomings, there is still no de facto solution that developers use and the problem remains unsolved.
-
     \section{Objective}
       The main objective of this thesis is to develop a third-party implementation of element queries (or equivalent to solve the problem of modular responsive components).
       To do this, it is needed to research existing implementation attempts in order to understand and analyze the advantages and shortcomings of the approaches.
@@ -131,15 +133,16 @@
 
     \section{Significance}
       Many frameworks and techniques are being used in web development to keep the code from becoming an entangled mess.
-      Creating modules helps to ease development and increase reusability.
-      One of the biggest issues that keep web modules from being truly modular is that they cannot adapt to given sizes.
-      This makes the modules either force the client to style them properly depending on viewport size, or not being responsive.
-      Both options are undesirable for developing larger applications.
-      A third option would be to make the modules context aware and style themselves according to the viewport, which defeats the purpose of modules (making them not reusable).
+      Creating modules facilitates the development and increases reusability.
+      Unfortunately, it is currently impossible to create self contained responsive modules since conditional styles cannot be applied to elements by element sizes.
+      Without element queries, responsive modules force the application to style them properly depending on the viewport sizes, which defeats the purpose of modules.
+      Modules should be self-contained (i.e. they work by themselves) and may not require the user to perform the module logic.
+      Another option would be to make the modules context-aware so they can style themselves according to the viewport, but then they would not be reusable (since they assume a specific context).
+      Clearly, no sound option exists for having responsive modules.
 
-      The last couple of years a lot of articles have been written about the problem and how badly we need element queries.
-      As already stated, third-party implementation efforts have been made by small and big players, with moderate success.
-      \textsc{w3c} keep getting requests and questions about it, but the answer seems to lean towards no.
+      The last couple of years a lot of articles have been written about the problem and how badly web developers need element queries.
+      As already stated, third-party implementation efforts have been made by small and big entities\todo{Not really happy with this sentence.}, with moderate success.
+      \textsc{w3c} receives requests and questions about it, but the answer seems to lean towards no. \todo{Remove me?}
       An organization called Responsive Issues Community Group (abbreviated \textsc{ricg}) have started an initial planning regarding element queries.
       However, things are moving slow and a draft about element queries use cases are still being made.
 
