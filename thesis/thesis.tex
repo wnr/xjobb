@@ -24,8 +24,8 @@
 \bibliography{bibliography.bib}
 
 \newcommand{\code}[1]{\texttt{#1}}
-\newcommand\abbr[2][]{\ifthenelse{\equal{#1}{}}%
-                     {\textsc{#2}}{\textsc{#2}'#1}}
+\newcommand\abbr[2][]{\uppercase{#2}\ifthenelse{\equal{#1}{}}%
+                     {}{#1}}
 
 \newenvironment{metatext}{%
   \textbf{$\hookrightarrow$}
