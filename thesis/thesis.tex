@@ -15,7 +15,8 @@
 \usetikzlibrary{arrows,positioning,fit,calc,decorations.markings}
 \usepackage{todonotes}
 \usepackage[toc,acronym]{glossaries}
-\makeglossaries
+\makenoidxglossaries
+% \makeglossaries
 
 \lstset{%
   frame=L,
@@ -86,6 +87,14 @@
 \newglossaryentry{render tree}{
   name={render tree},
   description={Used by layout engines as the model for the visual representation of the document}
+}
+\newglossaryentry{media queries}{
+  name={media queries},
+  description={The CSS feature of specifying conditional style rules for elements by conditions such as the viewport size}
+}
+\newglossaryentry{viewport}{
+  name={viewport},
+  description={The outer frame that defines the visible area of the document. Usually defined by the browser window, but may be restricted by other factors such as frames}
 }
 
 \newacronym{W3C}{W3C}{World Wide Web Consortium}
@@ -160,10 +169,10 @@
       Heavy use of \gls{web} terminology is being used and intermediate \gls{web} development knowledge is assumed.
       \todo{Philipp wanted this to be more general.}
     \section{Problem statement}
-      By using \gls{CSS} \emph{media queries} developers can specify different style rules for different viewport sizes.
+      By using \gls{CSS} \gls{media queries}, developers can specify different style rules for different \gls{viewport} sizes.
       This is fundamental to creating \gls{responsive} \gls{web} applications.
-      If developers want to build modular applications by composing the application by smaller components (elements, scripts, styles, etc.) media queries are no longer applicable.
-      Modular \gls{responsive} components should be able to react and change style depending on the size that the component has been given by the application, not the viewport size.
+      If developers want to build modular applications by composing the application by smaller components (elements, scripts, styles, etc.) \gls{media queries} are no longer applicable.
+      Modular \gls{responsive} components should be able to react and change style depending on the size that the component has been given by the application, not the \gls{viewport} size.
       The problem can be formulated as: \emph{It is not possible to specify conditional style rules for elements depending on the size of an element}.
       See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
@@ -198,7 +207,7 @@
         \item How should circularity be handled? Should it be detected at runtime or parsetime, and what should happen on detection?
         \item How can one listen to element size changes without any native support?
         \item How can a custom \gls{API} be crafted that will enable element queries and still conform to the \gls{CSS} specification? Is it possible to create an API that feels natural to \gls{web} developers and works in tandem with other tools and frameworks?
-        \item If a custom \gls{API} is developed, how would one make third-party modules (that uses media queries) work without demanding a rewrite of all third-party modules? \todo{Remove me?}
+        \item If a custom \gls{API} is developed, how would one make third-party modules (that uses \gls{media queries}) work without demanding a rewrite of all third-party modules? \todo{Remove me?}
         \item Is it possible to solve the problem with adequate performance for heavy applications?
         \item How can high browser compatibility be achieved?
       \end{itemize}
@@ -213,9 +222,9 @@
       Many frameworks and techniques are being used in \gls{web} development to keep the code from becoming an entangled mess.
       Creating modules facilitates the development and increases reusability.
       Unfortunately, it is currently impossible to create \gls{self-contained} \gls{responsive} modules since conditional styles cannot be applied to elements by element sizes.
-      Without element queries, \gls{responsive} modules force the application to style them properly depending on the viewport sizes, which defeats the purpose of modules.
+      Without element queries, \gls{responsive} modules force the application to style them properly depending on the \gls{viewport} sizes, which defeats the purpose of modules.
       Modules should be \gls{self-contained} (i.e. they work by themselves) and may not require the user to perform the module logic.
-      Another option would be to make the modules context-aware so they can style themselves according to the viewport, but then they would not be reusable (since they assume a specific context).
+      Another option would be to make the modules context-aware so they can style themselves according to the \gls{viewport}, but then they would not be reusable (since they assume a specific context).
       Clearly, no sound option exists for having \gls{responsive} modules.
 
       The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries.
@@ -504,10 +513,10 @@
       \section{Responsive web design}\label{sec:rwd}
         \begin{metatext}
           A few years ago, \gls{web} developers could make assumptions about the screen size of the users.
-          Since typically only desktop computers with monitors accessed \gls{web} sites they were designed for a minimum viewport size.
-          If the size of the viewport was smaller than the supported one, the site would look broken.
+          Since typically only desktop computers with monitors accessed \gls{web} sites they were designed for a minimum \gls{viewport} size.
+          If the size of the \gls{viewport} was smaller than the supported one, the site would look broken.
           This was a valid approach in a time when tablets and smartphones were unheard of.
-          Today, another approach is needed to ensure that sites function properly across a range of different devices and viewport sizes.
+          Today, another approach is needed to ensure that sites function properly across a range of different devices and \gls{viewport} sizes.
           This section is a summary of \normalfont{\cite{book_rwd,wiki_rwd}}.
         \end{metatext}
 
@@ -523,14 +532,14 @@
         Second, this approach doesn't scale well with new devices entering the market.
         For instance, tablets are somewhere in the middle of mobile and laptops in size, which would require another special version of the site.
         Third, the desktop site assumes that desktop users have big screens (which in most of the times is true).
-        However, there is no guarantee that the browser viewport will be big just because the screen is big.
+        However, there is no guarantee that the browser \gls{viewport} will be big just because the screen is big.
         Users might want to have multiple browser windows displayed at the same time on the screen, which would break the assumptions about the layout size available for the site.
         Clearly, a better approach was needed.
 
-        With the release of \gls{CSS} \emph{media queries} new possibilities opened up.
-        Media queries enabled developers to write conditional style rules by media properties such as viewport size.
-        By using media queries, elements can be styled in the following manner:
-        \begin{lstlisting}[caption={The above \gls{CSS} styles the body of the website blue if the viewport is less or equal to 600 pixels wide, and yellow otherwise.},captionpos=b]]
+        With the release of \gls{CSS} \gls{media queries} new possibilities opened up.
+        Media queries enabled developers to write conditional style rules by media properties such as \gls{viewport} size.
+        By using \gls{media queries}, elements can be styled in the following manner:
+        \begin{lstlisting}[caption={The above \gls{CSS} styles the body of the website blue if the \gls{viewport} is less or equal to 600 pixels wide, and yellow otherwise.},captionpos=b]]
 @media screen and (max-width: 600px) {
   body {
     background-color: blue;
@@ -543,8 +552,8 @@
   }
 }
         \end{lstlisting}
-        This can be used to tailor a site for a specific medium or viewport size at runtime.
-        \gls{RWD} refers to the approach of having a single site being \gls{responsive} to different media properties (mainly viewport size) at runtime to improve the user experience.
+        This can be used to tailor a site for a specific medium or \gls{viewport} size at runtime.
+        \gls{RWD} refers to the approach of having a single site being \gls{responsive} to different media properties (mainly \gls{viewport} size) at runtime to improve the user experience.
         With \gls{RWD} it is no longer needed to maintain several versions of a site, instead the site adapts to the user medium and device.
 
       \section{Modularity}\label{sec:modularity}
@@ -797,7 +806,7 @@
         Layouts that only layout the dirty renderers are called \emph{incremental layouts}.
         Layout engines that uses the dirty bit system usually keeps a queue of incremental layout commands.
         The scheduler system later triggers a batch execution of the incremental layout commands asynchronously.
-        A global layout is triggered when the viewport is resized or when styles that affect the whole document are changed (such as \code{font-size}).
+        A global layout is triggered when the \gls{viewport} is resized or when styles that affect the whole document are changed (such as \code{font-size}).
         Because the \gls{API} of \code{getComputedStyle} promises resolved values for all style properties, a call will force a full layout (flushing the incremental layout commands queue).
         When a renderer performs a layout the following usually happens:
         \begin{enumerate}
@@ -863,15 +872,15 @@
       \end{metatext}
 
       Recall from section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having elements respond to the given size.
-      \Gls{responsive} \gls{web} design implements this by using media queries, applying conditional rules by the viewport size.
+      \Gls{responsive} \gls{web} design implements this by using \gls{media queries}, applying conditional rules by the \gls{viewport} size.
       In section~\ref{sec:modularity} the desire for building modular \gls{web} components was presented.
       One implication of building applications in a modular way is that general components become reusable.
-      Since the only way of applying conditional rules to elements today is by using media queries, all \gls{responsive} styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the layout).
+      Since the only way of applying conditional rules to elements today is by using \gls{media queries}, all \gls{responsive} styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the layout).
       The implication of this is that the \gls{HTML} and JavaScript can be written in a modular way, but the \gls{CSS} is left for the user of the module (application) to write which somewhat defeats the purpose of writing modules.
       So developers today have two choices: writing modules that are not \gls{responsive} but \gls{self-contained}, or writing modules that are \gls{responsive} but not \gls{self-contained} (leaving the styling to the user).
 
       The solution to this is element queries, which allows conditional rules to be applied based on any criteria for any element.
-      Figure~\ref{fig:mq-vs-eq} shows the problem with media queries and the element query solution.
+      Figure~\ref{fig:mq-vs-eq} shows the problem with \gls{media queries} and the element query solution.
       The typical use case is to write conditional styles to be applied based on the container element size.
       Although the size of the container element is typically the most interesting element query with \gls{responsive} \gls{web} design, element queries as a concept does not need to be limited to that.
       It is also possible to apply conditional rules by any element display property, color, text alignment, and so on.
@@ -888,10 +897,10 @@
           \includegraphics[width=\linewidth]{images/eq-big}
         \end{minipage}
         \caption{
-          The problem of media queries and the element query solution.
+          The problem of \gls{media queries} and the element query solution.
           Both images shows four instances of a module in different sizes.
           The module is \gls{responsive}, so when it is small it should change color to red and change the inner text a bit.
-          The left version is built with media queries; hence all module instances stay blue even though some are small (only a smaller viewport will trigger the modules to change style).
+          The left version is built with \gls{media queries}; hence all module instances stay blue even though some are small (only a smaller \gls{viewport} will trigger the modules to change style).
           The right version is built with element queries, hence the modules display differently depending on the given size that each module has, which is the desired behavior.}
         \label{fig:mq-vs-eq}
       \end{figure}
@@ -1092,30 +1101,30 @@
             \todo{cite where this has been gathered from?}
           \end{metatext}
 
-          By limiting element queries to special \emph{viewport} container elements that can only be queried by child elements, much of the problems are resolved.
-          This means that a new \gls{HTML} tag will be crafted (perhaps named \code{viewport}) that defines separated viewports in the document.
-          The size of viewports is not dependent on their children, and children may only target the closest ancestor viewport element in the element queries.
-          This way, cyclic rules can no longer occur since the children may not alter the viewport size.
-          The reason that a new \gls{HTML} tag is proposed instead of a new \gls{CSS} property that defines the behavior is because the layout engine in the latter case needs to resolve the styles for all elements in order to know which are viewport elements.
-          With a new \gls{HTML} tag, the layout engine can detect that that the element is a viewport before any resolving styles.
-          \todo{Write why it is important to know viewport elements before resolving styles.}
+          By limiting element queries to special \gls{viewport} container elements that can only be queried by child elements, much of the problems are resolved.
+          This means that a new \gls{HTML} tag will be crafted (perhaps named \code{viewport}) that defines separated \glspl{viewport} in the document.
+          The size of \glspl{viewport} is not dependent on their children, and children may only target the closest ancestor \gls{viewport} element in the element queries.
+          This way, cyclic rules can no longer occur since the children may not alter the \gls{viewport} size.
+          The reason that a new \gls{HTML} tag is proposed instead of a new \gls{CSS} property that defines the behavior is because the layout engine in the latter case needs to resolve the styles for all elements in order to know which are \gls{viewport} elements.
+          With a new \gls{HTML} tag, the layout engine can detect that that the element is a \gls{viewport} before any resolving styles.
+          \todo{Write why it is important to know \gls{viewport} elements before resolving styles.}
 
           This approach also solves many of the performance problems, but not all.
-          The internal \glspl{API} that request non-layout information for the elements using element queries only need to make sure that the containing viewport element has been laid out before resolving the styles (which is a much better situation that the unrestricted version of element queries).
-          Further, the layout can be done in one pass as long as the viewport elements are laid out before the children.
-          It is still a bit inconvenient that the layout engine would need to evaluate all element query selectors in the middle of a layout pass (after the that the viewport elements has been laid out) in order to resolve the styles for the viewport children.
-          Parallelization is also easier, since the queries may only be targeting the closest viewport element.
-          This means that each viewport subtree can be laid out in parallel.
+          The internal \glspl{API} that request non-layout information for the elements using element queries only need to make sure that the containing \gls{viewport} element has been laid out before resolving the styles (which is a much better situation that the unrestricted version of element queries).
+          Further, the layout can be done in one pass as long as the \gls{viewport} elements are laid out before the children.
+          It is still a bit inconvenient that the layout engine would need to evaluate all element query selectors in the middle of a layout pass (after the that the \gls{viewport} elements has been laid out) in order to resolve the styles for the \gls{viewport} children.
+          Parallelization is also easier, since the queries may only be targeting the closest \gls{viewport} element.
+          This means that each \gls{viewport} subtree can be laid out in parallel.
 
           This solution would behave much like the \code{iframe} element layout-wise.
-          It should be noted that \code{iframe} elements are not suitable as an alternative to the proposed \code{viewport} elements, since \code[s]{iframe} are much more limited by nature (creates a new document and script context).
+          It should be noted that \code{iframe} elements are not suitable as an alternative to the proposed \code{viewport} element, since \code{iframe} elements are much more limited by nature (creates a new document and script context).
 
           Obviously, this limits element queries a lot.
-          The fact that the size of the viewport element cannot depend on the children (like normal block elements do), limits the usability.
-          The idea is that the viewport cannot be queried for properties that the children may affect (such as the width and height style properties).
+          The fact that the size of the \gls{viewport} element cannot depend on the children (like normal block elements do), limits the usability.
+          The idea is that the \gls{viewport} cannot be queried for properties that the children may affect (such as the width and height style properties).
           In order to allow the children to query the properties, they cannot be affected by the children.
-          In theory it should mean that if no children query for instance the height of the viewport, then the viewport may depend on the children for it's height.
-          This is a powerful insight, since the general use case would be to write element queries against the width and have the elements adapt their heights accordingly (including the viewport element).
+          In theory it should mean that if no children query for instance the height of the \gls{viewport}, then the \gls{viewport} may depend on the children for it's height.
+          This is a powerful insight, since the general use case would be to write element queries against the width and have the elements adapt their heights accordingly (including the \gls{viewport} element).
           \todo{Back this up. Maybe check with RICG if this is possible?}
 
         \subsection{Element queries with runtime checks}
@@ -1133,9 +1142,9 @@
           This is based on the current information and approaches of \gls{W3C} and \gls{RICG}, and should therefore be regarded as a guideline to how an \gls{API} might look like.
         \end{metatext}
 
-        As presented in subsection~\ref{sec:viewport-elements}, viewport elements solve many of the element query problems and are therefore assumed to be a part of a native \gls{API}.
-        Since it would be favorable to be able to specify multiple conditional rule sets for the element queries (like media queries) the \gls{CSS} syntax may be of the form as presented in listing~\ref{code:mq-eq-syntax}.
-        \begin{lstlisting}[caption={Element queries are assumed to have nested rule sets, like media queries},captionpos=b,label={code:mq-eq-syntax}]]
+        As presented in subsection~\ref{sec:viewport-elements}, \gls{viewport} elements solve many of the element query problems and are therefore assumed to be a part of a native \gls{API}.
+        Since it would be favorable to be able to specify multiple conditional rule sets for the element queries (like \gls{media queries}) the \gls{CSS} syntax may be of the form as presented in listing~\ref{code:mq-eq-syntax}.
+        \begin{lstlisting}[caption={Element queries are assumed to have nested rule sets, like \gls{media queries}},captionpos=b,label={code:mq-eq-syntax}]]
 /* Media query syntax */
 @media ... {
   p {
@@ -1190,7 +1199,7 @@
           \item \textbf{Features}
             \begin{enumerate}
               \item\label{itm:req_resize_detect} The framework needs to augment native element queries in the sense that styles are applied automatically on element resizes.
-              \item Existing modules written with media queries should be automatically converted to element queries so that existing third-party modules can be used in element query empowered applications.
+              \item Existing modules written with \gls{media queries} should be automatically converted to element queries so that existing third-party modules can be used in element query empowered applications.
               \todo{Remove this?}
               \item The features should be flexible and not limited to only the common use cases.
             \end{enumerate}
@@ -1403,7 +1412,7 @@ elq.start(jqueryElementsCollection);
         \end{metatext}
 
           Unfortunately, there is no standard resize event for arbitrary elements.
-          Only frames (elements that render it's content independently of the container element, such as \code{iframe} and \code{object}) support the resize event by standard since they have their own viewport.
+          Only frames (elements that render it's content independently of the container element, such as \code{iframe} and \code{object}) support the resize event by standard since they have their own \gls{viewport}.
           Legacy versions of Internet Explorer (version 8 and down, but also some later versions depending on the document mode and if the browser is in quirks mode) do support the resize event on arbitrary elements.
           Since the framework needs to support all commonly used \gls{HTML} elements a solution to listen to any element resize needs to be found.
           Possible solutions are:
@@ -1468,8 +1477,8 @@ elq.start(jqueryElementsCollection);
     \chapter{Discussion}
   \printbibliography
   \clearpage
-  \printglossary[type=main]
-  \printglossary[type=\acronymtype]
+  \printnoidxglossary[sort=use, type=main]
+  \printnoidxglossary[sort=standard, type=\acronymtype]
   \appendix
   \addappheadtotoc
     \chapter{Resources}
