@@ -14,6 +14,7 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows,positioning,fit,calc,decorations.markings}
 \usepackage{todonotes}
+% \usepackage[toc]{glossaries}
 
 \lstset{%
   frame=L,
@@ -48,6 +49,14 @@
     {}%
 }
 \makeatother
+
+% \newglossaryentry{self-contained}
+% {
+%   name=self-contained,
+%   description={A self-contained module handles its task without any help from the user of the module}
+% }
+
+% \makeglossaries
 
 \title{Modular responsive web design}
 \foreigntitle{Modulär responsiv webbutveckling}
@@ -148,10 +157,10 @@
       Clearly, no sound option exists for having responsive modules.
 
       The last couple of years a lot of articles have been written about the problem and how badly web developers need element queries.
-      As already stated, third-party implementation efforts have been made by small and big entities\todo{Not really happy with this sentence.}, with moderate success.
-      \abbr{w3c} receives requests and questions about it, but the answer seems to lean towards no. \todo{Remove me?}
+      As already stated, third-party implementation efforts have been made with moderate success.
+      \abbr{w3c} receives requests and questions about it, but the answer seems to be that no solution will be provided in the near moment. \todo{"near moment". Have I written this somewhere else?}
       An organization called Responsive Issues Community Group (abbreviated \abbr{ricg}) have started an initial planning regarding element queries.
-      However, things are moving slow and a draft about element queries use cases are still being made.
+      However, things are moving slow and a draft about element queries use cases is still being written.
 
       Solving this problem would be a big advancement to web development, enabling developers to create truly modular components.
       By studying the problem, identifying approaches and providing a third-party solution the community can take a step closer to solve the problem.
@@ -165,7 +174,7 @@
       \begin{itemize}
       \item A third-party implementation of element queries will be developed.
       \item The problems of implementing element queries natively will be addressed.
-      \item Theory about layout engines, \abbr{css}, \abbr{html} and responsive web design will be given to fully understand the problem.
+      \item Theory about layout engines, \abbr{css}, \abbr{html}, and responsive web design will be given to fully understand the problem. \todo{Modular theory?}
       \end{itemize}
 
       \subsection{What will not be done}
@@ -173,10 +182,10 @@
       \item No efforts will be made to solve the problems accompanied with a native solution.
       \item No \abbr{api} or similar will be designed for a native solution.
       \item \abbr{ui} and \abbr{ux} design will not be addressed, other than necessary for understanding the problem.
-      \item No complete history of browsers, the Internet or responsive web design will be given other than necessary.
+      \item No complete history of browsers, the Internet or responsive web design will be given other than necessary.\todo{Rewrite a bit. Seems like a very clumsy sentence.}
       \end{itemize}
     \section{Outline}
-      The thesis is divided into four parts. The first part \emph{\ref{part:background}~\nameref{part:background}} presents some history of the web platform and descriptions of the concepts needed to understand the problem.
+      The thesis is divided into four parts. The first part \emph{\ref{part:background}~\nameref{part:background}} presents some history of the web platform and describes concepts needed to understand the problem.
       The background part starts with the history of browsers and information about market share between them followed by a brief history of the evolution of web development.
       After that, the responsive web design concept will be described along with why modularity is important in software development.
 
@@ -184,11 +193,11 @@
       It starts with describing a reference architecture of layout engines and the parts of layout engines that directly affects element queries will be described in detail.
       Here it will also be presented why element queries impose problems to layout engines on a theoretical level.
       After that, a full description of element queries as a concept and a more in depth analysis of the problems will be given.
-      Possible solutions to the given problems will also be presented followed by a theoretization about how a \abbr{api} could be designed.
+      Possible solutions to the given problems will also be presented followed by a theoretization about how an \abbr{api} could be designed. \todo{Clumsy sentence. change theoretization to something else? Probably?}
 
       The third part \emph{\ref{part:framework}~\nameref{part:framework}} presents the design and implementation of the solution as a third-party framework.
-      Here possible approaches to solving the solution will be presented.
-      Other implementations and solutions will be presented and analyzed followed by a motivation of the chosen approach for the framework.
+      Here possible approaches to solving the problem will be presented.
+      Other implementations and solutions will be described and analyzed followed by a motivation of the chosen approach for the framework.
       Identified technical requirements will be given in order to motivate the framework architecture and \abbr{api} design.
       After that, interesting parts of the implementation will be presented.\todo{Maybe flesh this one out as it has been written.}
 
@@ -200,34 +209,34 @@
         Browsers and the Internet is something that many people today take for granted.
         It is not longer the case that only computer scientists are browsing the web.
         Today the web is becoming increasingly important in both our personal and professional lives.
-        This chapter will give a brief history of browsers and the rise of the web.
+        This chapter will give a brief history of browsers and the rise of the web. \todo{rise of the web, is that valid grammar?}
         This section is a summary of \normalfont{\cite{internet_live_stats,internet_of_things,wiki_hypermedia,w3c_www,oed}}.
       \end{metatext}
 
-      Before addressing the birth of the web, lets define the meaning of the concepts of the \emph{Internet}, \emph{Web} and \emph{World Wide Web}.
+      Before addressing the birth of the web, let's \todo{Using let's here. Should not.} define the meaning of the concepts of the \emph{Internet}, \emph{Web} and \emph{World Wide Web}.
       The word internet can be translated to \emph{something between networks}. 
       When referring to the Internet (capitalized) it is usually the global decentralized internet used for communication between millions of networks using \abbr{tcp/ip}.
       Since the Internet is decentralized, there is no owner.
       Or in other words, the owners are all the network end-points (all users of the Internet).
       One can argue that the owners of the Internet are the \abbr[s]{isp}, providing the services and infrastructure making the Internet possible.
-      On the other hand, the backbones of the Internet are usually co-founded by countries and companies.
-      Or is it the \abbr{icann}\footnote{The Internet Corporation for Assigned Names and Numbers} organization that has the responsibility for managing the \abbr{ip} addresses in the Internet namespace?
+      On the other hand, the backbones of the Internet are usually co-founded by countries and companies. \todo{Maybe only write "nationally?"}
+      Or is it the \abbr{icann}\footnote{The Internet Corporation for Assigned Names and Numbers} organization that has the responsibility for managing the \abbr{ip} addresses in the Internet namespace? \todo{Clumsy sentence.}
       Clearly, the Internet wouldn't be what it is today without all the actors.
       The Internet lays the ground for many systems and applications, including the World Wide Web, file sharing and telephony.
-      In 2014 the number of Internet users was measured to just below 3 billions, and estimations shows that we have surpassed 3 billions users today (no report for 2015 has been made yet).
+      In 2014 the number of Internet users was measured to just below 3 billions, and estimations show that we have surpassed 3 billions users today (no report for 2015 has been made yet).
       Users are here defined as humans having unrestricted access to the Internet.
       If one instead measures the number of connected entities (electronic devices that communicates through the Internet) the numbers are much higher.
       An estimation for 2015 of 25 billions connected entities has been made, and the estimation for 2020 is 50 billions.
       
-      As already stated, the Word Wide Web (abbreviated \abbr{www} or \abbr{w3}) is a system that operates through the Internet.
+      As already stated, the Word Wide Web (abbreviated \abbr{www} or \abbr{w3}) is a system that operates through the Internet. \todo{on top of?}
       The World Wide Web is usually shortened to simply \emph{the web}.
       The web is a system for accessing interlinked hypertext documents and other media such as images and videos.
-      Since not only hypertext is interlinked on the web, the term \emph{hypermedia} can be used as an extension to hypertext that also includes other nonlinear medium of information (images, videos, etc.).
-      Although the term hypermedia has been around for a long time, the term hypertext is still being used as synonym for hypermedia.
+      Since not only hypertext is interlinked on the web, the term \emph{hypermedia} can be used as an extension to hypertext that also includes other nonlinear medium of information (images, videos, etc.). \todo{Are images and videos really nonlinear?}
+      Although the term hypermedia has been around for a long time, the term hypertext is still being used as a synonym for hypermedia. \todo{Is this really true?}
       Further, the web can also be referred to as the universe of information accessible through the web system.
       Therefore, the web is both the system enabling sharing of hypermedia and also all of the accessible hypermedia itself.
       Hypertext documents are today more known by the name \emph{web pages} or simply \emph{pages}.
-      Multiple related pages compose a \emph{web site} or simply a \emph{site} and are usually hosted from the same domain.
+      Multiple related pages compose a \emph{web site} or simply a \emph{site} and are usually hosted from the same domain. \todo{Rewrite to that a site is usually defined to the pages of a domain.}
       To transfer the resources between computers the protocol \abbr{http} is used.
       Typically the way of retrieving resources on the web is by using a \emph{web browser} or simply a \emph{browser}.
       Browsers handle the fetching, parsing and rendering of the hypertext (more about this in section~\ref{sec:browsers}).
@@ -236,7 +245,7 @@
         \begin{metatext}
           Since the web is a system operating on top of the Internet, it is needed to first investigate the origin of the Internet.
           This can be viewed from many angles and different aspects need to be taken into consideration.
-          With that in mind, the origin of the Internet is not something easily pinned down and what will be presented here will be more of a technically interesting history.
+          With that in mind, the origin of the Internet is not something easily pinned down and what will be presented here will be more of a technically interesting history. \todo{More of doesnt feel good.}
           This section is a summary of \normalfont{\cite{overview_of_tcp_ip,internetsociety_history_internet,internet_maps,historyofthings_internet}}.
         \end{metatext}
 
@@ -244,7 +253,7 @@
         With packet switching in place, the very important ancestor of the Internet \abbr{arpanet} (Advanced Research Projects Agency Network) was developed, which was the first network to implement the \abbr{tcp/ip} protocol suite.
         The \abbr{tcp/ip} protocol suite together with packet switching are fundamental technologies of the Internet.
         \abbr{arpanet} was funded by the United States Department of Defense (DoD) in order to interconnect their research sites in the United States.
-        The first nodes of \abbr{arpanet} was installed at four major universities in the western United States in 1969 and two years later the network spanned the whole country.
+        The first nodes of \abbr{arpanet} was installed at four major universities in the western United States in 1969 and two years later the network spanned the whole country. \todo{Write US instead of United States?}
         The first public demonstration of \abbr{arpanet} was held at the International Computer Communication Conference (\abbr{iccc}) in 1972.
         It was also at this time the email system was introduced, which became the largest network application for over a decade.
         In 1973 the network had international connections to Norway and London via a satellite link.
@@ -253,19 +262,19 @@
 
         The number of nodes and hosts of \abbr{arpanet} increased slowly, mainly due to the fact that it was a centralized network owned and operated by the \abbr{us} military.
         In 1974 the \abbr{tcp/ip} stack was proposed in order to have a more robust and scalable system for end-to-end network communication.
-        The \abbr{tcp/ip} stack is a key technology for the decentralization of the \abbr{arpanet}, to allow the massive expansion of the network that later happened.
+        The \abbr{tcp/ip} stack is a key technology for the decentralization of the \abbr{arpanet}, which allowed the massive expansion of the network that later happened.
         In 1983 \abbr{arpanet} switched to the \abbr{tcp/ip} protocols, and the network was split in two.
         One network was still called \abbr{arpanet} and was to be used for research and development sites.
         The other network was called \abbr{milnet} and was used for military purposes.
         The decentralization event was a key point and perhaps the birth of the Internet.
         The Computer Science Network (\abbr{csnet}) was funded by the National Science Foundation (\abbr{nsf}) in 1981 to allow networking benefits to academic intsitutions that could not directly connect to \abbr{arpanet}.
         After the event of decentralizing \abbr{arpanet}, the two networks were connected among many other networks.
-        In 1985 \abbr{nsf} started the National Science Foundation Network (nsfnet) program to promote advanced research and education networking in the \abbr{us}.
+        In 1985 \abbr{nsf} started the National Science Foundation Network (\abbr{nsfnet}) program to promote advanced research and education networking in the \abbr{us}.
         To link the supercomputing centers funded by \abbr{nsf} the \abbr{nsfnet} served as a high speed and long distance backbone network.
         As more networks and sites were linked by the \abbr{nsfnet} network, it became the first backbone of the Internet.
         In 1992, around 6000 networks were connected to the \abbr{nsfnet} backbone with many international networks.
         To this point, the Internet was still a network for scientists, academic institutions and technology enthusiasts.
-        Mainly, because \abbr{nsf} had stated that \abbr{nsfnet} was a network for non-commercial traffic only.
+        Mainly because \abbr{nsf} had stated that \abbr{nsfnet} was a network for non-commercial traffic only.
         In 1993 \abbr{nsf} decided to go back to funding research in supercomputing and high-speed communications instead of funding and running the Internet backbone.
         That, along with an increasing pressure of commercializing the Internet let to another key event in the history of the Internet - the privatization of the \abbr{nsfnet} backbone.
 
@@ -1394,6 +1403,9 @@ elq.start(jqueryElementsCollection);
     \chapter{Related work}
     \chapter{Result}
     \chapter{Discussion}
+  \clearpage
+   
+  % \printglossaries
   \printbibliography
     \appendix
     \addappheadtotoc
