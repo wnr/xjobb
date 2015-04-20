@@ -222,7 +222,7 @@
         \item How can a custom \gls{API} be crafted that will enable element queries and still conform to the \gls{CSS} specification? Is it possible to create an API that feels natural to \gls{web} developers and works in tandem with other tools and frameworks?
         \item If a custom \gls{API} is developed, how would one make \gls{third-party} modules (that uses \gls{media queries}) work without demanding a rewrite of all \gls{third-party} modules? \todo{Remove me?}
         \item Is it possible to solve the problem with adequate performance for heavy applications?
-        \item How can high browser compatibility be achieved?
+        \item How can adequate browser compatibility be achieved?
       \end{itemize}
       The scientific question to be answered is if it is possible to solve the problem  without extending the current \gls{web} standard.
       The hypothesis is that the problem can be solved with high reliability and adequate performance by developing a \gls{third-party} implementation.
@@ -233,21 +233,22 @@
 
     \section{Significance}
       Many frameworks and techniques are being used in \gls{web} development to keep the code from becoming an entangled mess.
-      Creating modules facilitates the development and increases reusability.
-      Unfortunately, it is currently impossible to create \gls{self-contained} \gls{responsive} modules since conditional styles cannot be applied to \glspl{element} by \gls{element} sizes.
+      Creating modules facilitates the development and increases the reusability.
+      Unfortunately, it is currently impossible to create \gls{self-contained} \gls{responsive} modules since conditional styles cannot be applied to \glspl{element} by \gls{element} size criterion.
       Without element queries, \gls{responsive} modules force the application to style them properly depending on the \gls{viewport} sizes, which defeats the purpose of modules.
-      Modules should be \gls{self-contained} (i.e. they work by themselves) and may not require the user to perform the module logic.
-      Another option would be to make the modules context-aware so they can style themselves according to the \gls{viewport}, but then they would not be reusable (since they assume a specific context).
+      Modules should be \gls{self-contained} and may not require the user to perform some of the module logic.
+      Another option would be to make modules context-aware so they can style themselves according to the \gls{viewport}, but then they would not be reusable (since they assume a specific context).
+      Also, changes to the application layout would then require to rewrite the \gls{media queries} of the modules to take the new layout into account.
       Clearly, no sound option exists for having \gls{responsive} modules.
 
       The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries.
       As already stated, \gls{third-party} implementation efforts have been made with moderate success.
-      \gls{W3C} receives requests and questions about it, but the answer seems to be that no solution will be provided in the near moment. \todo{"near moment". Have I written this somewhere else?}
-      An organization called \gls{RICG} have started an initial planning regarding element queries.
+      \gls{W3C} receives requests and questions about it, but the answer seems to be that no solution will be provided in the near future.
+      The \gls{RICG} have started an initial planning regarding element queries.
       However, things are moving slow and a draft about element queries use cases is still being written.
 
-      Solving this problem would be a big advancement to \gls{web} development, enabling developers to create truly modular components.
-      By studying the problem, identifying approaches and providing a \gls{third-party} solution the community can take a step closer to solve the problem.
+      Solving this problem would be a big advancement to \gls{web} development, enabling developers to create truly modular \gls{responsive} components.
+      By studying the problem, identifying approaches and providing a \gls{third-party} solution the community can take a step closer to solve the problem \glslink{native}{natively}.
       If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for \gls{W3C} to make their verdict.
       The outcome of this thesis can also be helpful for \gls{W3C} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
     \section{Delimitations}
@@ -258,7 +259,7 @@
       \begin{itemize}
       \item A \gls{third-party} implementation of element queries will be developed.
       \item The problems of implementing element queries \glslink{native}{natively} will be addressed.
-      \item Theory about layout engines, \gls{CSS}, \gls{HTML}, and \gls{responsive} \gls{web} design will be given to fully understand the problem. \todo{Modular theory?}
+      \item Theory about layout engines and the native languages of the web along with \gls{responsive} \gls{web} design will be given to fully understand the problem. \todo{Modular theory?}
       \end{itemize}
 
       \subsection{What will not be done}
@@ -269,7 +270,7 @@
       \item No complete history of browsers, the Internet or \gls{responsive} \gls{web} design will be given other than necessary.\todo{Rewrite a bit. Seems like a very clumsy sentence.}
       \end{itemize}
     \section{Outline}
-      The thesis is divided into four parts. The first part \emph{\ref{part:background}~\nameref{part:background}} presents some history of the \gls{web} platform and describes concepts needed to understand the problem.
+      This thesis is divided into four parts. The first part \emph{\ref{part:background}~\nameref{part:background}} presents some history of the \gls{web} platform and describes concepts needed to understand the problem.
       The background part starts with the history of browsers and information about market share between them followed by a brief history of the evolution of \gls{web} development.
       After that, the \gls{responsive} \gls{web} design concept will be described along with why modularity is important in software development.
 
