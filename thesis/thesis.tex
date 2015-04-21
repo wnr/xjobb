@@ -94,7 +94,7 @@
 }
 \newglossaryentry{viewport}{
   name={viewport},
-  description={The outer frame that defines the visible area of the document. Usually defined by the browser window, but may be restricted by other factors such as frames}
+  description={The outer frame that defines the visible area of the document. Usually defined by the \gls{browser} window, but may be restricted by other factors such as frames}
 }
 \newglossaryentry{element}{
   name={element},
@@ -102,11 +102,11 @@
 }
 \newglossaryentry{native}{
   name={native},
-  description={Refers to \glspl{API} and systems implemented and provided by browsers. Such APIs and systems are often described by standards specifications}
+  description={Refers to \glspl{API} and systems implemented and provided by \glspl{browser}. Such APIs and systems are often described by standards specifications}
 }
 \newglossaryentry{third-party}{
   name={third-party},
-  description={Refers to \glspl{API} and systems implemented on top of the browser, usually in \gls{JavaScript}. Such APIs and systems must be included by developers into the document, and are usually not described by standards specifications}
+  description={Refers to \glspl{API} and systems implemented on top of the \gls{browser}, usually in \gls{JavaScript}. Such APIs and systems must be included by developers into the document, and are usually not described by standards specifications}
 }
 \newglossaryentry{hypertext}{
   name={hypertext},
@@ -114,7 +114,23 @@
 }
 \newglossaryentry{JavaScript}{
   name={JavaScript},
-  description={\Gls{native} browser script language. Web documents often include JavaScript to make the documents more dynamic and interactable}
+  description={\Gls{native} \gls{browser} script language. Web documents often include JavaScript to make the documents more dynamic and interactable}
+}
+\newglossaryentry{browser}{
+  name={browser},
+  description={Client application for navigating the \gls{WWW} and displaying \gls{web} pages}
+}
+\newglossaryentry{Java applet}{
+  name={Java applet},
+  description={A Java applet is a small application which is written in Java and delivered to users in the form of bytecode. See \url{www.java.com}}
+}
+\newglossaryentry{Flash}{
+  name={Flash},
+  description={Flash is a multimedia and software platform for producing cross platform interactive animations. See \url{www.flash.com}}
+}
+\newglossaryentry{StatCounter}{
+  name={StatCounter},
+  description={Collects and aggregates on a sample exceeding 15 billion page views per month collected from across the StatCounter network of more than 3 million websites}
 }
 
 \newacronym{W3C}{W3C}{World Wide Web Consortium}
@@ -143,13 +159,14 @@
 \newacronym{NCSA}{NCSA}{National Center for Supercomputing Applications}
 \newacronym{KDE}{KDE}{K Desktop Environment}
 \newacronym{CGI}{CGI}{Common Gateway Interface}
-\newacronym{XML}{XML}{Extensible Markup Language}
+\newacronym{XML}{XML}{EXtensible Markup Language}
 \newacronym{AJAX}{AJAX}{Asynchronous \gls{JavaScript} and \acrshort{XML}}
 \newacronym{WHATWG}{WHATWG}{Web Hypertext Application Technology Working Group}
 \newacronym{RWD}{RWD}{Responsive Web Design}
 \newacronym{DOM}{DOM}{Document Object Model}
 \newacronym{URI}{URI}{Unique Resource Identifier}
 \newacronym{CPU}{CPU}{Central Processing Unit}
+\newacronym{DARPA}{DARPA}{Defense Advanced Research Projects Agency}
 
 
 
@@ -212,7 +229,7 @@
         Also, it has been shown that some cyclic rules are impossible to detect at parsetime, due to being dependent on runtime factors.
         \item \textbf{Performance:} 
         Layout engine vendors are interested in performing selector matching and layout computations in parallel to achieve better performance.
-        The research front of browsers have shown successful ways of parallelising the layout engine.
+        The research front of \glspl{browser} have shown successful ways of parallelising the layout engine.
         Element queries implies some undesired limitations to the layout engines.
         With element queries, layout engines need to first compute the layout of all \glspl{element} in order to decide which selectors would conform to the element query conditions and then do a new layout computation with the new style rules activated, and so on until a stable state has been reached.
         Far worse, since selectors would depend on layout style, style and layout computations become very to parallelise.
@@ -220,7 +237,7 @@
     \section{Objective}
       The main objective of this thesis is to design and develop a \gls{third-party} implementation of element queries.
       To do this, it is needed to research existing solution approaches in order to understand and analyze the advantages and shortcomings of the approaches.
-      It is also necessary to be aware of the premises, such as browser limitations and specifications that need to be conformed.
+      It is also necessary to be aware of the premises, such as \gls{browser} limitations and specifications that need to be conformed.
       In addition, research will be done about the problems of implementing element queries \glslink{native}{natively}, to get a deeper understanding of how an official \gls{API} could look like.
       Solving the main problem will require research and empirical studies of many subproblems.
       Examples of such subproblems that needs to be addressed are:
@@ -230,7 +247,7 @@
         \item How can a custom \gls{API} be crafted that will enable element queries and still conform to the \gls{CSS} specification? Is it possible to create an API that feels natural to \gls{web} developers and works in tandem with other tools and frameworks?
         \item If a custom \gls{API} is developed, how would one make \gls{third-party} modules (that uses \gls{media queries}) work without demanding a rewrite of all \gls{third-party} modules? \todo{Remove me?}
         \item Is it possible to solve the problem with adequate performance for heavy applications?
-        \item How can adequate browser compatibility be achieved?
+        \item How can adequate \gls{browser} compatibility be achieved?
       \end{itemize}
       The scientific question to be answered is if it is possible to solve the problem  without extending the current \gls{web} standard.
       The hypothesis is that the problem can be solved with high reliability and adequate performance by developing a \gls{third-party} implementation.
@@ -278,7 +295,7 @@
       \end{itemize}
     \section{Outline}
       This thesis is divided into four parts. The first part \emph{\ref{part:background}~\nameref{part:background}} presents some history of the \gls{web} platform and describes concepts needed to understand the problem.
-      The background part starts with the history of browsers and information about market share between them followed by a brief history of the evolution of \gls{web} development.
+      The background part starts with the history of \glspl{browser} and information about market share between them followed by a brief history of the evolution of \gls{web} development.
       After that, the \gls{responsive} \gls{web} design concept will be described along with why modularity is important in software development.
 
       The second part \emph{\ref{part:theory}~\nameref{part:theory}} presents theoretizations of the problem.
@@ -301,7 +318,7 @@
         Browsers and the Internet is something that many people today take for granted.
         It is not longer the case that only computer scientists are browsing the \gls{web}.
         Today the \gls{web} is becoming increasingly important in both our personal and professional lives.
-        This chapter will give a brief history of browsers and how the \gls{web} transitioned from handling science documents to commercial applications.
+        This chapter will give a brief history of \glspl{browser} and how the \gls{web} transitioned from handling science documents to commercial applications.
         This section is a summary of \normalfont{\cite{internet_live_stats,internet_of_things,wiki_hypermedia,w3c_www,oed}}.
       \end{metatext}
 
@@ -320,7 +337,7 @@
       If one instead measures the number of connected entities (electronic devices that communicates through the Internet) the numbers are much higher.
       An estimation for 2015 of 25 billions connected entities has been made, and the estimation for 2020 is 50 billions.
       
-      As already stated, the \gls{WWW} is a system that operates through the Internet.
+      As already stated, the \gls{WWW} is a system that operates on top of the Internet.
       The \gls{WWW} is usually shortened to simply \emph{the \gls{web}}.
       The \gls{web} is a system for accessing interlinked \gls{hypertext} documents and other media such as images and videos.
       Since not only \gls{hypertext} is interlinked on the \gls{web}, the term \emph{\glslink{hypertext}{hypermedia}} can be used as an extension to \gls{hypertext} that also includes other nonlinear medium of information (images, videos, etc.). \todo{Are images and videos really nonlinear?}
@@ -330,15 +347,16 @@
       Hypertext documents are today more known by the name \emph{\gls{web} pages} or simply \emph{pages}.
       Multiple related pages (that are often served from the same domain) compose a \emph{web site} or simply a \emph{site}.
       Hypertext documents are written in \gls{HTML}, and often includes \gls{CSS} for styling and \gls{JavaScript} for custom user interactions.
+      As a complementary to \gls{HTML}, the \gls{XML} also exists with the purpose of describing data (as contrary to \gls{HTML} which describes the \emph{presentation} of data).
       To transfer the resources between computers the protocol \gls{HTTP} is used.
-      Typically the way of retrieving resources on the \gls{web} is by using a \emph{\gls{web} browser} or simply a \emph{browser}.
+      Typically the way of retrieving resources on the \gls{web} is by using a \emph{\gls{web} \gls{browser}} or simply a \emph{\gls{browser}}.
       Browsers handle the fetching, parsing and rendering of the \gls{hypertext} (more about this in section~\ref{sec:browsers}).
       
-      \section{The origin of the web}
+      \section{The history of the Internet}\label{sec:history-internet}
         \begin{metatext}
-          Since the \gls{web} is a system operating on top of the Internet, it is needed to first investigate the origin of the Internet.
+          Since the \gls{web} is a system operating on top of the Internet, it is needed to first investigate the history of the Internet.
           This can be viewed from many angles and different aspects need to be taken into consideration.
-          With that in mind, the origin of the Internet is not something easily pinned down and what will be presented here will be more of a technically interesting history. \todo{More of doesnt feel good.}
+          With that in mind, the origin of the Internet is not something easily pinned down and what will be presented here will be more technically interesting than the exact history.
           This section is a summary of \normalfont{\cite{overview_of_tcp_ip,internetsociety_history_internet,internet_maps,historyofthings_internet}}.
         \end{metatext}
 
@@ -375,95 +393,95 @@
         With the Internet decentralized and privatized regular people started using it as well as companies.
         Backbones were built across the globe, more international actors and organizations appeared and eventually the Internet as we know it today came to exist.
 
-        \subsection{The World Wide Web}\label{sec:www}
-          \begin{metatext}
-            Now that the history of the Internet has been described, it is time to talk about the birth of the \gls{WWW}.
-            Here the initial ideas of the \gls{web} will be described, the alternatives and how it became a global standard.
-            This subsection is a summary of \normalfont{\cite{wiki_gopher,wiki_www,webdevnotes_history_of_the_internet,webdevnotes_www_basics,historyofthings_internet}}.
-          \end{metatext}
+      \section{The birth of the World Wide Web}\label{sec:www}
+        \begin{metatext}
+          Now that the history of the Internet has been described, it is time to talk about the birth of the web.
+          Here the initial ideas of the \gls{web} will be described, the alternatives and how it became a global standard.
+          This subsection is a summary of \normalfont{\cite{wiki_gopher,wiki_www,webdevnotes_history_of_the_internet,webdevnotes_www_basics,historyofthings_internet}}.
+        \end{metatext}
 
-          \todo[inline]{Should have another subsection or not have this in a subsection. Only one subsection is not nice.}
-          \noindent
-          Recall that the way of exchanging information was to upload and download files between clients and hosts with \gls{FTP}.
-          If a document downloaded was referring to another document, the user had to manually find the server that hosted the other document and download it manually.
-          This was a poor way of digesting information and documents that linked to other resources.
-          In 1989 a proposal for a communication system that allowed interlinked documents was submitted to the management at \abbr{CERN}.
-          The idea was to allow links embedded in text documents, to enable users to view the linked document by clicking it.
-          A quote from the draft:
-          \begin{quote}
-            Imagine, then, the references in this document all being associated with the network address of the thing to which they referred, so that while reading this document you could skip to them with a click of the mouse.
-          \end{quote}
-          This catches the whole essence of the \gls{web} in a sentence --- to interlink resources in an user friendly way.
-          The proposal describes that such text embedded links would be \gls{hypertext}.
-          It continues to explain that interlinked resources does not need to be limited to text documents, multimedia such as images and videos can also be interlinked which would similarly be hypermedia.
-          The concept of browsers is described, with a client-server model the browser would fetch the \gls{hypertext} documents, parse them and handle the fetching of all media linked in the \gls{hypertext}.
+        \noindent
+        Recall from section~\ref{sec:history-internet} that the way of exchanging information was to upload and download files between clients and hosts with \gls{FTP}.
+        If a document downloaded was referring to another document, the user had to manually find the server that hosted the other document and download it manually.
+        This was a poor way of digesting information and documents that linked to other resources.
+        In 1989 a proposal for a communication system that allowed interlinked documents was submitted to the management at \abbr{CERN}.
+        The idea was to allow links to other documents embedded in text documents, directly accesible for users.
+        A quote from the draft:
+        \begin{quote}
+          Imagine, then, the references in this document all being associated with the network address of the thing to which they referred, so that while reading this document you could skip to them with a click of the mouse.
+        \end{quote}
+        This catches the whole essence of the \gls{web} in a sentence --- to interlink resources in an user friendly way.
+        The proposal describes that such text embedded links would be \gls{hypertext}.
+        It continues to explain that interlinked resources does not need to be limited to text documents since multimedia such as images and videos can also be interlinked which would similarly be hypermedia.
+        The concept of \glspl{browser} is described, with a client-server model the \gls{browser} would fetch the \gls{hypertext} documents, parse them and handle the fetching of all media linked in the \gls{hypertext}.
 
-          In 1990, the Hypertext Transfer Protocol (\gls{HTTP}), the \gls{HTML}, a browser and a \gls{web} server had been created and the \gls{web} was born.
-          One year later the \gls{web} was introduced to the public and in 1993 over five hundred international \gls{web} servers existed.
-          It was stated in 1994 that the \gls{web} was to be free without any patents or royalties.
-          At this time the \gls{W3C} was founded by Berners-Lee with support from the Defense Advanced Research Projects Agency and the European Commission.
-          The organization comprised of companies and individuals that wanted to standardize and improve the \gls{web}.
+        In 1990, \gls{HTTP} and \gls{HTML} implemented.
+        A \gls{browser} and a \gls{web} server had also been created and the \gls{web} was born.
+        One year later the \gls{web} was introduced to the public and in 1993 over five hundred international \gls{web} servers existed.
+        It was stated in 1994 that the \gls{web} was to be free without any patents or royalties.
+        At this time \gls{W3C} was founded with support from the \gls{DARPA} and the European Commission.
+        The organization comprised of companies and individuals that wanted to standardize and improve the \gls{web}.
 
-          As a side note, the Gopher protocol was developed in parallel to the \gls{WWW} by the University of Minnesota.
-          It was released in 1991 and quickly gained traction as the \gls{web} still was in very early stages.
-          The goal of the system, just like the \gls{web}, was to overcome the shortcomings of browsing documents with \gls{FTP}.
-          Gopher enabled servers to list the documents present, and also to link to documents on other servers.
-          This created a strong hierarchy between the documents.
-          The listed documents of a server could then be presented as \gls{hypertext} menus to the client (much like a \gls{web} browser).
-          As the protocol was simpler than \gls{HTTP} it was often preferred since it used less network resources.
-          The structure provided by Gopher provided a platform for large electronic library connections.
-          A big difference between the \gls{web} and the Gopher platform is that the Gopher platform provided \gls{hypertext} menus presented as a file system while the \gls{web} \gls{hypertext} links inside \gls{hypertext} documents, which provided greater flexibility.
-          When the University of Minnesota announced that it would charge licensing fees for the implementation, users were somewhat scared away.
-          As the \gls{web} matured, being a more flexible system with more features as well as being totally free it quickly became dominant.
+        As a side note, the Gopher protocol was developed in parallel to the web by the University of Minnesota.
+        It was released in 1991 and quickly gained traction as the \gls{web} still was in very early stages.
+        The goal of the system, just like the \gls{web}, was to overcome the shortcomings of browsing documents with \gls{FTP}.
+        Gopher enabled servers to list the documents present, and also to link to documents on other servers.
+        This created a strong hierarchy between the documents.
+        The listed documents of a server could then be presented as \gls{hypertext} menus to the client (much like a \gls{web} \gls{browser}).
+        As the protocol was simpler than \gls{HTTP} it was often preferred since it used less network resources.
+        The structure provided by Gopher provided a platform for large electronic library connections.
+        A big difference between the \gls{web} and the Gopher platform is that the Gopher platform provided \gls{hypertext} menus presented as a file system while the \gls{web} \gls{hypertext} links inside \gls{hypertext} documents, which provided greater flexibility.
+        When the University of Minnesota announced that it would charge licensing fees for the implementation, users were somewhat scared away.
+        As the \gls{web} matured, being a more flexible system with more features as well as being totally free it quickly became dominant.
 
       \section{The history of browsers}
         \label{sec:browsers}
         \begin{metatext}
           In the mid 1990's the usage of the Internet transitioned from downloading files with \gls{FTP} to instead access resources with the \gls{HTTP} protocol.
-          To fulfill the vision that users would be able to skip to the linked documents ``with a click of the mouse'' the users needed a client to handle the fetching and displaying of the \gls{hypertext} documents, hence the need for browsers were apparent.
-          Here the evolution of the browser clients will be given, while emphasizing the timeline of the popular browsers we use today.
+          To fulfill the vision that users would be able to skip to the linked documents ``with a click of the mouse'' users needed a client to handle the fetching and displaying of the \gls{hypertext} documents, hence the need for \glspl{browser} were apparent.
+          Here the evolution of the \gls{browser} clients will be given, while emphasizing the timeline of the popular \glspl{browser} we use today.
           This section is a summary of \normalfont{\cite{wiki_www,wiki_nexus,wiki_lmb,wiki_libwww,wiki_mosaic,wiki_netscape,wiki_mozilla,wiki_opera,wiki_konqueror,wiki_safari,wiki_webkit,wiki_blink}}.
         \end{metatext}
 
-        The first \gls{web} browser ever made was created in 1990 and was called WorldWideWeb (which was renamed to Nexus to avoid confusion).
-        It was at the time the only way to view the \gls{web}, and the browser only worked on NeXT computers.
+        The first \gls{web} \gls{browser} ever made was created in 1990 and was called WorldWideWeb (which was renamed to Nexus to avoid confusion).
+        It was at the time the only way to view the \gls{web}, and the \gls{browser} only worked on NeXT computers.
         Built with the NeXT framework, it was quite sophisticated.
         It had a \gls{GUI} and a \gls{WYSIWYG} \gls{hypertext} document editor.
-        Unfortunately it couldn't be ported to other platforms, so a new browser called \emph{Line Mode Browser} (\abbr{lmb}) were quickly developed.
-        To ensure compatibility with the earliest computer terminals the browser displayed text, and was operated with text input.
-        Since the browser was operated in the terminal, users could log in to a remote server and use the browser via telnet.
-        The code that the two browsers shared was in 1993 bundled as a library called \emph{libwww}.
-        The library was licensed as \emph{public domain} to encourage the development of \gls{web} browsers.
-        Many browsers were develop at this time.
-        The \emph{Arena} browser served as a testbed browser and authoring tool for Unix.
-        The \emph{ViolaWWW} browser was the first to support embedded scriptable objects, stylesheets and tables.
-        \emph{Lynx} is a text-based browser that supports many protocols (including Gopher and \gls{HTTP}), and is the oldest browser still being used and developed.
-        The list of browsers of this time can be made long.
+        Unfortunately it couldn't be ported to other platforms, so a new \gls{browser} called \emph{Line Mode Browser} (\abbr{lmb}) were quickly developed.
+        To ensure compatibility with the earliest computer terminals the \gls{browser} displayed text, and was operated with text input.
+        Since the \gls{browser} was operated in the terminal, users could log in to a remote server and use the \gls{browser} via telnet.
+        The code that the two \glspl{browser} shared was in 1993 bundled as a library called \emph{libwww}.
+        The library was licensed as \emph{public domain} to encourage the development of \gls{web} \glspl{browser}.
+        Many \glspl{browser} were developed at this time.
+        The \emph{Arena} \gls{browser} served as a testbed \gls{browser} and authoring tool for Unix.
+        The \emph{ViolaWWW} \gls{browser} was the first to support embedded scriptable objects, stylesheets and tables.
+        \emph{Lynx} is a text-based \gls{browser} that supports many protocols (including Gopher and \gls{HTTP}), and is the oldest \gls{browser} still being used and developed.
+        The list of \glspl{browser} of this time can be made long.
 
-        In 1993, the \emph{Mosaic} browser was released by the \gls{NCSA} which came to be the ancestor of many of the popular browsers in use today.
+        In 1993, the \emph{Mosaic} \gls{browser} was released by the \gls{NCSA} which came to be the ancestor of many of the popular \glspl{browser} in use today.
         As Lynx, Mosaic also supported many different protocols.
-        Mosaic quickly became popular, mainly due to the intuitive \gls{GUI}, reliability, simple installation and Windows compatibility.
-        The company \emph{Spyglass, Inc.} licensed the browser from \gls{NCSA} for producing their own browser 1994.
-        Around the same time the leader of the team that developed Mosaic, Marc Andreessen, left \gls{NCSA} to start Mosaic Communications Corporation.
-        The company released their own browser named \emph{Mosaic Netscape} in 1994, which later was to be called \emph{Netscape Navigator} that was internally codenamed \emph{Mozilla}.
-        Microsoft licensed the Spyglass Mosaic browser in 1995, modified and renamed it to \emph{Internet Explorer}.
+        Mosaic quickly became popular, mainly due to its intuitive \gls{GUI}, reliability, simple installation and Windows compatibility.
+        The company \emph{Spyglass, Inc.} licensed the \gls{browser} from \gls{NCSA} for producing their own \gls{browser} in 1994.
+        Around the same time the leader of the team that developed Mosaic, Marc Andreessen, left \gls{NCSA} to start \emph{Mosaic Communications Corporation}.
+        The company released their own \gls{browser} named \emph{Mosaic Netscape} in 1994, which later was to be called \emph{Netscape Navigator} that was internally codenamed \emph{Mozilla}.
+        Microsoft licensed the Spyglass Mosaic \gls{browser} in 1995, modified and renamed it to \emph{Internet Explorer}.
         In 1997 Microsoft started using their own \emph{Trident} layout engine for Internet Explorer.
-        The Norwegian telecommunications company \emph{Telenor} developed their own browser called \emph{Opera} in 1994, which was released 1996.
-        Internet Explorer and Netscape Navigator were the two main browsers for many years, competing for market dominance.
+        The Norwegian telecommunications company \emph{Telenor} developed their own \gls{browser} called \emph{Opera} in 1994, which was released 1996.
+        Internet Explorer and Netscape Navigator were the two main \glspl{browser} for many years, competing for market dominance.
         Netscape couldn't keep up with Microsoft, and was slowly losing market share.
-        In 1998 Netscape started the open source Mozilla project, which made available the source code for their browser.
-        Mozilla was to originally develop a suite of Internet applications, but later switched focus to the \emph{Firefox} browser that had been created in 2002.
+        In 1998 Netscape started the open source Mozilla project, which made available the source code for their \gls{browser}.
+        Mozilla was to originally develop a suite of Internet applications, but later switched focus to the \emph{Firefox} \gls{browser} that had been created in 2002.
         Firefox uses the \emph{Gecko} layout engine developed by Mozilla.
 
-        Another historically important browser is the \emph{Konqueror} browser developed by the free software community \gls{KDE}.
-        The browser was released in 1998 and was bundled in the \gls{KDE} Software Compilation.
+        Another historically important \gls{browser} is the \emph{Konqueror} \gls{browser} developed by the free software community \gls{KDE}.
+        The \gls{browser} was released in 1998 and was bundled in the \gls{KDE} Software Compilation.
         Konqueror used the \abbr{khtml} layout engine, also developed by \gls{KDE}.
-        In 2001, when \emph{Apple Inc.} decided to build their own browser to ship with \abbr{os x}, a \gls{fork} called \gls{WebKit} was made of the \abbr{khtml} project.
-        Apple's browser called \emph{Safari} was released in 2003.
-        The \gls{WebKit} form was made fully open source in 2005.
-        In 2008, \emph{Google Inc.} also released a browser based on \gls{WebKit}, named \emph{Google Chrome}, or shortened \emph{Chrome}.
+        In 2001, when \emph{Apple Inc.} decided to build their own \gls{browser} to ship with \abbr{os x}, a \gls{fork} called \gls{WebKit} was made of the \abbr{khtml} project.
+        Apple's \gls{browser} called \emph{Safari} was released in 2003.
+        The \gls{WebKit} layout engine was made fully open source in 2005.
+        In 2008, \emph{Google Inc.} also released a \gls{browser} based on \gls{WebKit}, named \emph{Chrome}.
         The majority of the source code for Chrome was open sourced as the \emph{Chromium} project.
-        Google decided in 2013 create a \gls{fork} of \gls{WebKit} called \emph{Blink} for their browser.
+        Google decided in 2013 create a \gls{fork} of \gls{WebKit} called \emph{Blink} for their \gls{browser}.
         Opera Software decided in 2013 to base their new version of Opera on the Chromium project, using the Blink \gls{fork}.
 
         \todo{Timeline image and text perhaps}
@@ -471,12 +489,12 @@
 
     \chapter{Web development}
       \begin{metatext}
-        As the history of browsers has been presented, it is time to understand the evolution of \gls{web} development.
-        Browsers are the far most popular tools of accessing content on the \gls{web}, which makes them very important in the modern society.
-        In the dawn of the \gls{web}, browsers were simply applications that fetched and displayed text with embedded links.
-        Today, browsers act more like an operating system (on top of the host system) executing complex \gls{web} applications.
-        There even exist computers that only run a browser, which is sufficient for many users.
-        This chapter will describe the transition from browsers rendering simple documents to being hosts for complex applications.
+        As the history of \glspl{browser} has been presented, it is time to understand the evolution of \gls{web} development.
+        Browsers are the far most popular tools for accessing content on the \gls{web}, which makes them very important in the modern society.
+        In the dawn of the \gls{web}, \glspl{browser} were simply applications that fetched and displayed text with embedded links.
+        Today, \glspl{browser} act more like an operating system (on top of the host system) executing complex \gls{web} applications.
+        There even exist computers that only run a \gls{browser}, which is sufficient for many users.
+        This chapter will describe the transition from \glspl{browser} rendering simple documents to being hosts for complex applications.
         It will also describe two key evolution points in \gls{web} development --- \gls{responsive} \gls{web} design and modular development.
       \end{metatext}
 
@@ -484,84 +502,89 @@
       \todo[inline]{Philipp: Here you should provide an overview of the different sections of the chapter. “In section 3.1 we outline… In section 3.2 we…}
       \section{From documents to applications}
         \begin{metatext}
-          This section will describe the transition from browsers rendering simple documents to being hosts for complex applications.
+          This section will describe the transition from \glspl{browser} rendering simple documents to being hosts for complex applications.
           Since \gls{web} development trends are not easily pinned to exact dates, this section will only present dates as guidance and should not be regarded as exact dates for the events.
           This section is a summary of \normalfont{\cite{wiki_web_dev,wiki_cgi,wiki_css,wiki_ajax,wiki_html5,book_html5}}.
         \end{metatext}
 
-        As described in section~\ref{sec:www}, browsers initially were applications that displayed \gls{hypertext} documents with the ability to fetch linked documents in an user friendly way.
+        As described in section~\ref{sec:www}, \glspl{browser} initially were applications that displayed \gls{hypertext} documents with the ability to fetch linked documents in an user friendly way.
         Static content were written in \gls{HTML}, which could include hyperlinks to other \gls{hypertext} documents or hypermedia.
         Different stylesheet languages were being developed to enable the possibility of separating content styling with the content.
-        In 1996 \gls{W3C} officially recommended the \gls{CSS}, which came to be the preferred way of styling \gls{web} content.
+        In 1996 \gls{W3C} officially recommended \gls{CSS}, which came to be the preferred way of styling \gls{web} content.
         Since \gls{HTML} is only a markup language it is not possible to generate dynamic content, which was sufficient at the time \gls{HTML} was only used for annotating links in research documents.
 
         The need for generated dynamic content grew bigger, and \gls{NCSA} created the first draft of the \gls{CGI} in 1993, which provides an interface between the \gls{web} server and the systems that generate content.
         \gls{CGI} programs are usually referred to as scripts, since many of the popular \gls{CGI} languages are script languages.
         Generating dynamic content on the server is sometimes referred to as \emph{server-side scripting}.
         This enabled developers to generate dynamic websites, with different content for different users for instance.
-        However, when the content had been delivered to the client (browser) it was still static content.
+        However, when the content is delivered to the client (\gls{browser}) it is still being static.
         There is no way for the server to change the content that the client has received, unless the client requests another document.
 
         Around 1996, client side scripting was born.
         The term \gls{DHTML} was being used as an umbrella term for a collection of technologies used together to make pages interactive and animated, where client side scripting played a big role.
         Examples of things that were being done with \gls{DHTML} are; refreshing the pages for the user so that new content is loaded, give feedback on user input without involving the server and animating content.
-        Plugins also existed during this time, which teaches the browsers how to handle and execute programs.
-        \emph{Java applets} and \emph{Flash} are examples of this. \todo{Philipp: Maybe provide references for Java and Flash.}
-        The user then had to download the Java runtime or Flash runtime on the computer.
-        When the runtimes are present, the browser then executed the included Java applets or Flash in the \gls{web} pages by using the external runtimes.
+        Plugins also started to exist during this time that enabled \glspl{browser} to handle and execute embedded programs.
+        \emph{\glspl{Java applet}} and \emph{\gls{Flash}} are examples of browser embedded programs requiring browser plugins to execute.
+        In order for users to view the content, they first need to download the Java runtime or Flash runtime on their computers.
+        When the runtimes have been installed, the \gls{browser} then executes the included Java applets or Flash in the \gls{web} pages by using the external runtimes.
         This enabled \gls{web} developers to use ``real'' programming languages.
-        The drawback of this is that users first had to download the runtimes in order to run the programs embedded in pages.
-        As client side scripting matured and standardized into \emph{\gls{JavaScript}}, plugins slowly decreased in popularity.
-        With the increase of smart devices (such as phones, televisions, cars, game consoles, etc.) that included browsers but limited \gls{third-party} runtimes, plugins quickly went extinct.
-        Today, \gls{web} sites rarely use plugins.
+        The drawback of this is that users first have to download the runtimes in order to run the programs embedded in pages.
+        As native client side scripting matured and standardized into \emph{\gls{JavaScript}}, plugins slowly decreased in popularity.
+        With the increase of smart devices (such as phones, televisions, cars, game consoles, etc.) that included \glspl{browser} but limited \gls{third-party} runtimes, plugins quickly went extinct.
+        Today, \gls{web} sites rarely uses plugins.
 
-        As \gls{JavaScript} and \gls{HTML} supported more features, websites turned into small applications with user sessions (using cookies) and user interfaces.
+        As \gls{JavaScript} and \gls{HTML} supported more features, websites turned into small applications with user sessions and rich \glspl{GUI}.
         Still, parts of the applications were defined as \gls{HTML} pages, fetched from the server when navigating the site.
-        When the \emph{XMLHttpRequest} \gls{API} was supported in the major browsers, pages no longer needed to reload in order to fetch new content as XMLHttpRequest enabled developers to perform asynchronous requests to servers in \gls{JavaScript}.
-        This opened up for the \gls{AJAX} \gls{web} development technique which became a popular way of communicating with servers ``in the background'' of the page. \todo{Mention XML before this sentence so that the abbr is explained properly.}
-        Developers pushed browsers and \gls{HTML} to the limit when creating applications instead of documents that it was originally designed for.
+        When the \emph{XMLHttpRequest} \gls{API} was supported in the major \glspl{browser}, pages no longer needed to reload in order to fetch new content as XMLHttpRequest enabled developers to perform asynchronous requests to servers with \gls{JavaScript}.
+        This opened up for the \gls{AJAX} \gls{web} development technique which became a popular way of communicating with servers ``in the background'' of the page.
+        Developers pushed \glspl{browser} and \gls{HTML} to the limit when creating applications instead of documents that they were originally designed for.
         In a \gls{W3C} meeting in 2004 it was proposed to extend \gls{HTML} to ease the creation of \gls{web} applications, which was rejected.
-        \gls{W3C} was criticized of not listening to the need of the industry, and some members of \gls{W3C} left to create the (\gls{WHATWG}).
-        \gls{WHATWG} started working on specifications to ease the development of \gls{web} applications which came to be named \gls{HTML5}.
-        In 2006, \gls{W3C} realized that \gls{WHATWG} were on the right track, and decided to start working on their own \gls{HTML5} specification based on the \gls{WHATWG} version.
-        \gls{HTML5} is an evolutionary improvement process of \gls{HTML}, which means that browsers are adding support as parts of the specification is finished.
+        \gls{W3C} was criticized of not listening to the need of the industry, and some members of \gls{W3C} left to create the \gls{WHATWG}.
+        \gls{WHATWG} started working on specifications to ease the development of \gls{web} applications which came to be grouped together under the name \gls{HTML5}.
+        In 2006, \gls{W3C} acknowledged that \gls{WHATWG} were on the right track, and decided to start working on their own \gls{HTML5} specification based on the \gls{WHATWG} version.
+        \gls{HTML5} is an evolutionary improvement process of \gls{HTML}, which means that \glspl{browser} are adding support as parts of the specification is finished.
 
         A new era of \glspl{API} and features came along with \gls{HTML5}, which truly enabled developers to create rich client side applications.
         \gls{CSS3} was also recently released which also included many new features.
         Using \gls{HTML5} and \gls{CSS3} developers could utilize advanced graphics programming, geolocation, cache storage, file system access, offline mode, and much more.
-        \todo[inline]{Check this last paragraph.}
 
-        \todo{Write that traditional applications are threatened by \gls{web} applications, since the reach and availability of the \gls{web} is superior to any other distribution platform. Also, no installation is required with \gls{web} applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
+        \todo[inline]{Write that traditional applications are threatened by \gls{web} applications, since the reach and availability of the \gls{web} is superior to any other distribution platform. Also, no installation is required with \gls{web} applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
       \section{Responsive web design}\label{sec:rwd}
         \begin{metatext}
-          A few years ago, \gls{web} developers could make assumptions about the screen size of the users.
+          A few years ago, \gls{web} developers could make assumptions about the screen size of user devices.
           Since typically only desktop computers with monitors accessed \gls{web} sites they were designed for a minimum \gls{viewport} size.
           If the size of the \gls{viewport} was smaller than the supported one, the site would look broken.
           This was a valid approach in a time when tablets and smartphones were unheard of.
           Today, another approach is needed to ensure that sites function properly across a range of different devices and \gls{viewport} sizes.
-          This section is a summary of \normalfont{\cite{book_rwd,wiki_rwd}}.
+          This section is a summary of \normalfont{\cite{book_rwd,wiki_rwd,mjelde2014performance}}.
         \end{metatext}
 
-        According to \emph{StatCounter}\footnote{Statistics are based on aggregate data collected by StatCounter on a sample exceeding 15 billion page views per month collected from across the StatCounter network of more than 3 million websites.}, 37\% of the \gls{web} users are visiting sites on a mobile or tablet device.
+        According to \emph{\gls{StatCounter}}, 37\% of the \gls{web} users are visiting sites on a mobile or tablet device.
         No longer is it valid to not support small screens.
-        Furthermore, it is understood that sites need to be styled differently if they are visited by touch devices or mouse-based devices (such as laptops or desktops).
-        Since \gls{web} developers were not ready for this rapid change of device properties, they resorted to using the same approach that they had done before --- assumptions about the user device, but this time the other way around.
-        When a browser request a resource, an agent string is usually sent with the request to identify what kind of browser the user is using.
+        Furthermore, it is understood that sites need to be styled differently if they are visited by touch devices with small screens or mouse-based devices with large screens.
+        Since \gls{web} developers were not ready for this rapid change of device properties, they resorted to using the same approach that they had done before --- making assumptions about the user device based on the server request.
+        When a \gls{browser} requests a resource, an \emph{agent string} is usually sent with the request to identify what kind of \gls{browser} the user is using.
         By reading the agent string on the server-side, a mobile-friendly version of the site could be served if the user was sending mobile agent strings and the desktop version could be served otherwise.
         The mobile version would be designed for a maximum width, and the desktop would be designed for a minimum width.
+        
         This was a natural reaction since no better techniques existed, but the approach has many flaws.
-        First, the developers now have two versions of a site to maintain and develop in parallel.
+        First, developers now have two versions of a site to maintain and develop in parallel.
         Second, this approach doesn't scale well with new devices entering the market.
         For instance, tablets are somewhere in the middle of mobile and laptops in size, which would require another special version of the site.
-        Third, the desktop site assumes that desktop users have big screens (which in most of the times is true).
-        However, there is no guarantee that the browser \gls{viewport} will be big just because the screen is big.
-        Users might want to have multiple browser windows displayed at the same time on the screen, which would break the assumptions about the layout size available for the site.
+        Further, when desktops support touch actions and smartphones support mouse actions, even more versions of the website needs to be developed in order to satisfy all user devices.
+        Third, the desktop site assumes that desktop users have big screens (which usually is true).
+        However, there is no guarantee that the \gls{browser} \gls{viewport} will be big just because the screen is big.
+        Users might want to have multiple \gls{browser} windows displayed at the same time on the screen, which would break the assumptions about the layout size available for the site.
         Clearly, a better approach was needed.
 
-        With the release of \gls{CSS} \gls{media queries} new possibilities opened up.
-        Media queries enabled developers to write conditional style rules by media properties such as \gls{viewport} size.
-        By using \gls{media queries}, \glspl{element} can be styled in the following manner:
-        \begin{lstlisting}[caption={The above \gls{CSS} styles the body of the website blue if the \gls{viewport} is less or equal to 600 pixels wide, and yellow otherwise.},captionpos=b]]
+        With the release of \gls{CSS3} \gls{media queries} new possibilities opened up.
+        Media queries enabled developers to write conditional style rules by media properties such as the \gls{viewport} size.
+        See listing~\ref{code:mq-example} for an example of how \gls{media queries} can be used to style \glspl{element} differently by the viewport size.
+        This can be used to tailor a site for a specific medium or \gls{viewport} size at runtime.
+        \gls{RWD} refers to the approach of having a single site being \gls{responsive} to different media properties (mainly the \gls{viewport} size) at runtime to improve the user experience.
+        With \gls{RWD} it is no longer needed to maintain several versions of a site, instead the site adapts to the user medium and device.
+
+        \begin{lstlisting}[label={code:mq-example},caption={The above \gls{CSS} styles the body of the website blue if the \gls{viewport} is less or equal to 600 pixels wide, and yellow otherwise.},captionpos=b]]
 @media screen and (max-width: 600px) {
   body {
     background-color: blue;
@@ -574,10 +597,6 @@
   }
 }
         \end{lstlisting}
-        This can be used to tailor a site for a specific medium or \gls{viewport} size at runtime.
-        \gls{RWD} refers to the approach of having a single site being \gls{responsive} to different media properties (mainly \gls{viewport} size) at runtime to improve the user experience.
-        With \gls{RWD} it is no longer needed to maintain several versions of a site, instead the site adapts to the user medium and device.
-
       \section{Modularity}\label{sec:modularity}
         \begin{metatext}
           This section is a summary of \normalfont{\cite{book_modular_programming,book_eloq_js}}.
@@ -595,7 +614,7 @@
     \chapter{Layout engines}
       \begin{metatext}
         Before diving into the theory of element queries, it is important to understand how layout engines work.
-        Only the layout engines of the browser will be of importance, since element queries do not affect any other browser subsystem.
+        Only the layout engines of the \gls{browser} will be of importance, since element queries do not affect any other \gls{browser} subsystem.
         This chapter will give a brief explanation of the layout flow that the engines generally perform, and how content changes affect the engine\todo{Write about content changes or remove this.}.
         It will also cover some optimizations that are done and which parts of the layout process that can be done in parallel.
         The render process will not be described, as it is not relevant for element queries.
@@ -604,7 +623,7 @@
       \todo[inline]{Have an image about the layout flow somewhere?}
       \noindent
       Browsers are complex applications that consist of many subsystems.
-      A reference architecture of browsers has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
+      A reference architecture of \glspl{browser} has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
       \begin{figure}
         \centering
         \begin{tikzpicture}[node distance=1cm, auto, transform shape, scale=0.66]  
@@ -632,11 +651,11 @@
           \draw[myarrow] (ui.east) -- +(1.5, 0) |- (render-backend.east);
         \end{tikzpicture} 
         \medskip
-        \caption{Reference browser architecture. The data persistence system used by the browser engine and the user interface has been omitted.} 
+        \caption{Reference \gls{browser} architecture. The data persistence system used by the \gls{browser} engine and the user interface has been omitted.} 
         \label{fig:browser_architecture}
       \end{figure}
-      It is shown that the layout engine is located between the \emph{browser engine} system and the network, \gls{JavaScript}, \gls{XML} parsing and display backend.
-      The browser engine acts as a high level interface to the layout engine, and is responsible for providing the layout engine with \glspl{URI} that should be rendered with layout options.
+      It is shown that the layout engine is located between the \emph{\gls{browser} engine} system and the network, \gls{JavaScript}, \gls{XML} parsing and display backend.
+      The \gls{browser} engine acts as a high level interface to the layout engine, and is responsible for providing the layout engine with \glspl{URI} that should be rendered with layout options.
       The main responsibility of the layout engine is to render the current state of the fetched \gls{hypertext} document.
       Since documents may (and often do) change dynamically after parsetime, it is important to keep in mind that the job of the layout engine is continuous, and is not a one time operation.
       The parsing of \gls{HTML} is also done by the layout engine (and not in the \gls{XML} subsystem) since \gls{HTML} is less strict and reentrant.
@@ -648,8 +667,8 @@
         \item Render the \glspl{element} of the \gls{render tree}.
       \end{enumerate}
       See section~\ref{sec:dom-tree} and section~\ref{sec:render-tree} for a more in depth explanation of \gls{DOM} and \glspl{render tree}.
-      Modern browsers can display multiple pages at the same time (by using tabs or multiple windows) where each page typically has an instance of the layout engine in a separate process.
-      There are four layout engines that the major browsers use, as presented in table~\ref{table:layout_engines}.
+      Modern \glspl{browser} can display multiple pages at the same time (by using tabs or multiple windows) where each page typically has an instance of the layout engine in a separate process.
+      There are four layout engines that the major \glspl{browser} use, as presented in table~\ref{table:layout_engines}.
       Since Blink is a recent \gls{fork} of \gls{WebKit} they can be grouped as \gls{WebKit}-based layout engines.
       This results in three different layout engines to consider; \gls{WebKit}, Gecko and Trident.
       Due to Trident being closed source, only the \gls{WebKit} based layout engines and Gecko will be considered from now on.
@@ -677,7 +696,7 @@
           \end{tabular}
         \end{minipage}
         \caption{
-          The major layout engines and their browsers with market shares.
+          The major layout engines and their \glspl{browser} with market shares.
           The table to the right has grouped together Blink into \gls{WebKit} since it is a recent for of \gls{WebKit}.
           See section~\ref{sec:layout_engines_market_share} for more information how the market share data was gathered.}
         \label{table:layout_engines}
@@ -696,7 +715,7 @@
         \end{metatext}
 
         \gls{DOM} is a convention for representing and interacting with objects in \gls{XML}-based documents (such as \gls{HTML}).
-        The \gls{DOM} provides an interface for programs (\gls{JavaScript} scripts in the browser) to dynamically access and mutate the content, structure and style of documents.
+        The \gls{DOM} provides an interface for programs (\gls{JavaScript} scripts in the \gls{browser}) to dynamically access and mutate the content, structure and style of documents.
         Each node of the document is a \gls{DOM} object, and therefore the whole document is converted to a tree structure of \gls{DOM} nodes which is referred to as the \gls{DOM} tree.
 
         Layout engines construct \gls{DOM} trees by parsing \gls{HTML} with any included \gls{CSS} and \gls{JavaScript}.
@@ -757,15 +776,15 @@
         To trace how the style of an \gls{element} was computed can be a complex task, since there are many parameters to \gls{element} style computations.
         First, styles for an \gls{element} can be defined in several places:
         \begin{enumerate}
-          \item In the default styles of the browser.
-          \item In the user defined browser style.
+          \item In the default styles of the \gls{browser}.
+          \item In the user defined \gls{browser} style.
           \item In external \gls{CSS} documents.
           \item In internal \gls{CSS} \code{style} tags in the document head.
           \item In inline \gls{CSS} in the \code{style} \gls{element} attribute.
           \item In scripts modifying the \gls{element} style through the \gls{DOM} tree.
           \item In special attributes of the \gls{element} such as \code{bgcolor} (deprecated, but possible).
         \end{enumerate}
-        This can be grouped into author, user and browser styles.
+        This can be grouped into author, user and \gls{browser} styles.
         The four first items can be regarded as \gls{CSS} because they are \emph{cascading} their style rules through \emph{selector matching}.
         Selector matching conceptually finds all \glspl{element} in the \gls{DOM} tree that matches a \gls{CSS} selector, to apply the rule set.
         The rule sets are weighted so that if a property is assigned values by multiple rule sets the one with highest weight will be applied.
@@ -784,11 +803,11 @@
 
         If the cascade results in no value for an \gls{element} style property, then the property can \emph{inherit} a value or have the initial value defined by the \gls{CSS} \emph{property definition}.
         Property definitions describe how the style properties should behave, see table~\ref{table:css_property_definition}.
-        For instance, the width property definition states that legal values are absolute lengths, percentages or \code{auto} (which will let the browser decide).
+        For instance, the width property definition states that legal values are absolute lengths, percentages or \code{auto} (which will let the \gls{browser} decide).
         The percentages are relative to the containing block.
         The initial value is \code{auto}, the properties applies to all \glspl{element} non-replaced inline \glspl{element}, table rows and row groups.
         The value may not be inherited, and the media group is \code{visual}.
-        The computed value is either the absolute length, calculated percentage of the containing block or what the browser decides (in case of \code{auto}).
+        The computed value is either the absolute length, calculated percentage of the containing block or what the \gls{browser} decides (in case of \code{auto}).
         If a property may inherit values, it will inherit the value of the first ancestor that has a value that is not \code{inherited}.
 
         \begin{table}[ht]\center
@@ -857,21 +876,21 @@
           This section is mainly based on \normalfont{\cite{zoomm,parallelizing_the_web_browser,meyerovich2010fast,servo_parallel,servo_blog}}.
         \end{metatext}
 
-        As \gls{web} applications grow bigger and more demanding, browsers continuously need to improve the performance on all levels.
+        As \gls{web} applications grow bigger and more demanding, \glspl{browser} continuously need to improve the performance on all levels.
         Fetching resources over the network is the only thing that is done in parallel today.
-        The rest of the browser system is designed and optimized to run sequentially.
-        On computers, browsers usually achieve parallelism by running each page context in parallel (each tab of the browser window is separate process).
-        This approach is appealing because it utilizes the cores of the machine by still having all subsystems run sequentially for each page, while improving the overall performance of the browser.
+        The rest of the \gls{browser} system is designed and optimized to run sequentially.
+        On computers, \glspl{browser} usually achieve parallelism by running each page context in parallel (each tab of the \gls{browser} window is separate process).
+        This approach is appealing because it utilizes the cores of the machine by still having all subsystems run sequentially for each page, while improving the overall performance of the \gls{browser}.
         However, this approach is not enough.
         The page performance is not improved if only one page is present.
-        For the \gls{web} to be a true competitor to heavy native applications\todo{Reformulate to not use the word native.}, the page performance needs to be increased (not only the overall browser performance).
+        For the \gls{web} to be a true competitor to heavy native applications\todo{Reformulate to not use the word native.}, the page performance needs to be increased (not only the overall \gls{browser} performance).
         It is then important to be able to dedicate multiple cores to one page instead of having all the pages present using their own core (perhaps the non-visible pages in different tabs will share one core while the main visible tab will get access to multiple cores if needed).
         Also, with the number of mobile devices browsing the \gls{web} increasing rapidly it is really important to be able to achieve good parallelism.
         Light devices such as small laptops, mobile devices and tablets share a common goal --- they want to reduce power consumption while increasing the performance.
         This can be achieved with multicore processors that run at lower clock speeds.
         \todo{Write that many cores is preferred over high clock speed? Why?}
-        It has been shown that the performance of mobile browsers is \gls{CPU} bound contrary to the common belief that they are network bandwidth bound \cite{parallelizing_the_web_browser}.
-        This is why most researchers target light devices when trying to parallelize \gls{web} browsers.
+        It has been shown that the performance of mobile \glspl{browser} is \gls{CPU} bound contrary to the common belief that they are network bandwidth bound \cite{parallelizing_the_web_browser}.
+        This is why most researchers target light devices when trying to parallelize \gls{web} \glspl{browser}.
         Of course, once the methods has matured and been implemented, desktops will benefit from this as well.
 
         \gls{CSS} selector matching is a good candidate for parallelization, due to matching nodes to selectors being independent from other selector matches.
@@ -887,7 +906,7 @@
 
     \chapter{Element queries}
       \begin{metatext}
-        Now that a good understanding of browsers (especially the layout engine), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- the solution to modular \gls{responsive} \gls{web} design.
+        Now that a good understanding of \glspl{browser} (especially the layout engine), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- the solution to modular \gls{responsive} \gls{web} design.
         This chapter will define element queries, present how they solve the problem, and address some of the issues hindering element queries from being implemented \glslink{native}{natively}.
         Further, some possible restrictions will be presented to resolve some of the issues.
         \todo{Instead write that some solutions will be presented?}
@@ -929,7 +948,7 @@
 
       \section{Problems}
         \begin{metatext}
-          The main reason why element queries have not been implemented \glslink{native}{natively} in browsers is because they bring problems and limitations to the browsers.
+          The main reason why element queries have not been implemented \glslink{native}{natively} in \glspl{browser} is because they bring problems and limitations to the \glspl{browser}.
           It is important to understand the problems in order to speculate about a potential \gls{native} \gls{API} design.
           In this section the two major problems will be presented; performance and circularity.
         \end{metatext}
@@ -938,7 +957,7 @@
         \subsection{Performance}
           \begin{metatext}
             This subsection will present the performance impacts that element queries have on layout engines.
-            As shown in section~\ref{sec:parallel} browser vendors are very interested in parallelizing their browsers and especially the layout engines to increase the page performance.
+            As shown in section~\ref{sec:parallel} \gls{browser} vendors are very interested in parallelizing their \glspl{browser} and especially the layout engines to increase the page performance.
             Element queries limits the parallelization badly, which will be the focus of this subsection.
             \todo{Referera till w3c mailinglista?}
           \end{metatext}
@@ -1000,7 +1019,7 @@
           Since the matched selector is more specific than the \code{\#foo} selector, the new width of the \gls{element} is 250 pixels.
           Next step will be 2.
           \end{enumerate}
-          Clearly, the browser will be stuck in an infinite layout cycle pending back and forth between step 2 and 3 (250 pixels and 550 pixels).
+          Clearly, the \gls{browser} will be stuck in an infinite layout cycle pending back and forth between step 2 and 3 (250 pixels and 550 pixels).
           The result of this is of course implementation dependent.
           One reasonable outcome of such infinite layout loop is that the layout engine executes one layout pass and then evaluate the next set of matched selectors and so on, which leads to a functioning page but since a relayout is enforced every update, the performance impact is huge.
           This example is somewhat similar to writing \code{while(true);} in \gls{JavaScript}, which obviously is a bad idea.
@@ -1100,9 +1119,9 @@
           In this example the text is static but it could have been added dynamically.
           Also, the inherited font size depends on the closest ancestor with a font size property defined.
           Since ancestors also can have their font sizes defined in relative units, the dependency tree can go up to the root of the document.
-          Further, if no ancestor defines an absolute value for the font size it is up to the browser to default to a size, which is impossible to reason about at parsetime.
+          Further, if no ancestor defines an absolute value for the font size it is up to the \gls{browser} to default to a size, which is impossible to reason about at parsetime.
           This implies that there is no way of telling if the cycle appears or not without actually running the code.
-          Also, the cycle may appear in different browsers and settings, which makes the cycle even harder to detect.
+          Also, the cycle may appear in different \glspl{browser} and settings, which makes the cycle even harder to detect.
           Far worse is that the previous examples have been of the \code{while(true);} character, which gives the false hope that even though it is possible to create cycles developers would never encounter it since ``real'' code would not be close to the examples given here.
           With the third example, this is no longer true.
           Increasing the font size when the layout area is smaller and decreasing the font size when the layout area is bigger is something that is frequently done in \gls{responsive} \gls{web} design.
@@ -1238,10 +1257,10 @@
             \end{enumerate}
           \item \textbf{Compatibility}
             \begin{enumerate}
-              \item Older browsers must be supported.
+              \item Older \glspl{browser} must be supported.
               \item The framework may not require invalid \gls{CSS}, \gls{HTML} or \gls{JavaScript}.
               \item\label{itm:assumption} Dependencies and assumptions about the host application (including the development environment) should be kept low.
-              \item\label{itm:req_prolyfill} The framework must act as a prolyfill\footnote{A polyfill is something that provides a functionality that is expected to be provided \glslink{native}{natively} by browsers. Polyfills usually fixes some standard functionality for browsers that do not yet support it. A prolyfill is a polyfill for something that will probably become a standard.} for \gls{native} element queries.
+              \item\label{itm:req_prolyfill} The framework must act as a prolyfill\footnote{A polyfill is something that provides a functionality that is expected to be provided \glslink{native}{natively} by \glspl{browser}. Polyfills usually fixes some standard functionality for \glspl{browser} that do not yet support it. A prolyfill is a polyfill for something that will probably become a standard.} for \gls{native} element queries.
             \end{enumerate}
         \end{enumerate}
         It would be possible to create a framework that conforms to all of the requirements but added features, automation and compatibility most probably would decrease the performance.
@@ -1289,7 +1308,7 @@
             By having a centralized reporter, it is possible to decide at a global framework-level how much plugins are allowed to report.
             Other options such as throwing exception on errors or warnings could also be set at a global framework-level.
             Also, the framework can make sure that all reports are standardized and can provide extra information such as the name and version of the plugin along with its report.
-            To avoid code duplication, it also beneficial to have a centralized report system so the plugins do not need to perform the same compatibility checks (such as checking if the browser actually supports console reporting).
+            To avoid code duplication, it also beneficial to have a centralized report system so the plugins do not need to perform the same compatibility checks (such as checking if the \gls{browser} actually supports console reporting).
           \item \textbf{Element resize detector:}
             Provides an interface for listening to \gls{element} resize events.
             This system is fundamental to plugins fulfilling requirements \ref{itm:req_resize_detect} and \ref{itm:req_big_rewrite} since it enables the framework to be aware of when \glspl{element} change sizes, instead of the host application keeping track of when \glspl{element} have changed sizes.
@@ -1302,7 +1321,7 @@
           \item \textbf{Batch processor:}
             To avoid layout thrashing, it is important to read and mutate the \gls{DOM} in separate batches.
             This subsystem provides an interface for plugins to store functions to later be executed in a batch.
-            To avoid layout thrashing by other scripts it can beneficial to asynchronously postpone the batch until the next layout cycle of the browser, which is also handled by the subsystem.
+            To avoid layout thrashing by other scripts it can beneficial to asynchronously postpone the batch until the next layout cycle of the \gls{browser}, which is also handled by the subsystem.
           \item \textbf{Plugin handler:}
             Of course, having plugins requires a subsystem for handling them.
             This system provides the interface for developers to add plugins to the framework.
@@ -1435,7 +1454,7 @@ elq.start(jqueryElementsCollection);
 
           Unfortunately, there is no standard resize event for arbitrary \glspl{element}.
           Only frames (\glspl{element} that render it's content independently of the container \gls{element}, such as \code{iframe} and \code{object}) support the resize event by standard since they have their own \gls{viewport}.
-          Legacy versions of Internet Explorer (version 8 and down, but also some later versions depending on the document mode and if the browser is in quirks mode) do support the resize event on arbitrary \glspl{element}.
+          Legacy versions of Internet Explorer (version 8 and down, but also some later versions depending on the document mode and if the \gls{browser} is in quirks mode) do support the resize event on arbitrary \glspl{element}.
           Since the framework needs to support all commonly used \gls{HTML} \glspl{element} a solution to listen to any \gls{element} resize needs to be found.
           Possible solutions are:
           \begin{itemize}
@@ -1453,7 +1472,7 @@ elq.start(jqueryElementsCollection);
               Then a resize event handler can be attached to the frame that emits a resize event for every target \gls{element} resize.
               So in order to listen for resize events for an element, a frame \gls{element} is injected and listened to instead.
           \end{itemize}
-          The first solution is appealing because it does not mutate the \gls{DOM} and it works on all browsers since it does not rely on special \gls{element} behaviors or similar.
+          The first solution is appealing because it does not mutate the \gls{DOM} and it works on all \glspl{browser} since it does not rely on special \gls{element} behaviors or similar.
           However, in order to prevent the \gls{responsive} \glspl{element} lagging behind the size changes of the user interface, the polls need to be performed quite frequently.
           Recall from section~\ref{sec:layout-process} that layout engines typically have a layout queue in order to perform layout in batches for increased performance.
           Each poll would force the layout queue to be flushed since the computed style of \glspl{element} needs to be retrieved in order to know if \glspl{element} have resized or not.
@@ -1466,7 +1485,7 @@ elq.start(jqueryElementsCollection);
           Browsers only need to perform extra work when preparing \glspl{element} for being resize-detectable and when the \glspl{element} actually resize.
           Further, since the resize detection instead is event-based there is no delay between the actual resize and the detection.
           By positioning the injected frames \code{absolute} with width and height set to \code{100\%}, the frames do not affect the visual representation of the document.
-          It has been shown by \cite{backalley} that \code{object} is the most suitable frame \gls{element} to use for this purpose, as they have good browser compatibility, adequate performance and are easy to work with.
+          It has been shown by \cite{backalley} that \code{object} is the most suitable frame \gls{element} to use for this purpose, as they have good \gls{browser} compatibility, adequate performance and are easy to work with.
           However, injecting frames into the \glspl{element} has some implications:
           \begin{itemize}
             \item \textbf{\gls{CSS} selectors may break}:
@@ -1510,29 +1529,29 @@ elq.start(jqueryElementsCollection);
         TODO: Write custom or refer to this \url{http://www.impressivewebs.com/css-terms-definitions/}?
       \section{Layout engine market share statistics}\label{sec:layout_engines_market_share}
         Browser market share was retrieved by \emph{StatCounter}\footnote{StatCounter graph \url{http://gs.statcounter.com/\#all-browser-ww-monthly-201402-201502-bar}}.
-        Since the graph only display browser market share and not layout engine, it is needed to further divide the browsers into layout engine percentages.
+        Since the graph only display \gls{browser} market share and not layout engine, it is needed to further divide the \glspl{browser} into layout engine percentages.
         The Blink engine was introduced with Chrome version 28 and Android version 4.4 \cite{wiki_blink}.
         Since Chrome has very good adoption rate\footnote{According to \url{http://clicky.com/marketshare/global/web-browsers/google-chrome/}} of new versions the Chrome market share percentage of 39.72\% is considered to be Blink based.
         However, Android has not as good adoption rate as Chrome with only 44.2\% using Android version 4.4 and up\footnote{According to \url{https://developer.android.com/about/dashboards/index.html}}.
-        Android has a browser market share of 7.21\%. 44.2\% of the 7.21\% Android browsers is assumed to be Blink based and 55.8\% to be \gls{WebKit} based (since the Android browser was \gls{WebKit} based before Blink).
+        Android has a \gls{browser} market share of 7.21\%. 44.2\% of the 7.21\% Android \glspl{browser} is assumed to be Blink based and 55.8\% to be \gls{WebKit} based (since the Android \gls{browser} was \gls{WebKit} based before Blink).
         Of course, the assumption that users with old versions of Android browse the {\gls{web} as much as users with new versions are probably invalid, but the data source itself is uncertain enough to make such assumptions and the percentages should only be regarded as guidelines.
         Opera with the lowest market share at 3.97\% started using the Blink engine in late 2013 as of version 15.
-        StatCounter shows that 37\% of the Opera users are using Opera Mini (their mobile browser), which does not use the Blink engine (it uses Opera's own Presto layout engine which will be ignored).
+        StatCounter shows that 37\% of the Opera users are using Opera Mini (their mobile \gls{browser}), which does not use the Blink engine (it uses Opera's own Presto layout engine which will be ignored).
         All desktop users of Opera are assumed to be using version 15 or above and hence using the Blink engine.
         The total market share percentage of the Blink engine is then calculated to $39.72 + 0.442\cdot7.21 + 0.37\cdot3.97 = 44.38\%$.
         Safari, with the market share percentage of 7.46\%, has always been \gls{WebKit} based.
         iOS also uses \gls{WebKit} and has the market share percentage of 6.16\%.
         The \gls{WebKit} market share percentage is calculated to $7.46 + 0.558\cdot7.21 + 6.16 = 17.64\%$.
-        FireFox, with the market share percentage of 12.83\%, has always been Gecko based and is the only major browser that uses the Gecko engine.
+        FireFox, with the market share percentage of 12.83\%, has always been Gecko based and is the only major \gls{browser} that uses the Gecko engine.
         The market share percentage of Gecko is therefore 12.83\%.
         Internet Explorer, with the market share percentage of 14.96\%, has been Trident based since version 4.
         Since Internet Explorer 4 is no longer in use\footnote{According to \url{http://www.w3schools.com/browsers/browsers_explorer.asp}}, the market share percentage of the Trident engine is 14.96\%.
       \section{Usage share of browser versions}
         \todo{Put this somewhere else?}
-        For compatability, the framework needs to support older browsers.
-        Most of the end users are using a self updating browser (those browsers are usually referred to as the \emph{evergreen} browsers), which improves the adoption rate of new versions greatly.
-        See figure~\ref{} for the adoption rate of new versions of Chrome for an example of how evergreen browsers keep their users updated.
-        Unfortunately, there are some laggards that still use very outdated versions of some browsers.
+        For compatability, the framework needs to support older \glspl{browser}.
+        Most of the end users are using a self updating \gls{browser} (those \glspl{browser} are usually referred to as the \emph{evergreen} \glspl{browser}), which improves the adoption rate of new versions greatly.
+        See figure~\ref{} for the adoption rate of new versions of Chrome for an example of how evergreen \glspl{browser} keep their users updated.
+        Unfortunately, there are some laggards that still use very outdated versions of some \glspl{browser}.
         Each version of Internet Explorer 8 up to 11 need to be supported since they all still have a significant user share.
         Opera version 12 does also have
 \end{document}
