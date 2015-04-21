@@ -597,9 +597,15 @@
   }
 }
         \end{lstlisting}
+
+        \todo[inline]{Perhaps give an example of a responsive module/view so that the reader understands well why responsiveness is important. This module/view could then act as a testbed for the different EQ approaches.}
       \section{Modularity}\label{sec:modularity}
         \begin{metatext}
-          This section is a summary of \normalfont{\cite{book_modular_programming,book_eloq_js}}.
+          As the web was a platform for \gls{hypertext} documents that quickly transitioned to serving complex applications, few techniques existed for writing modular code.
+          The last couple of years as applications grew bigger, techniques and frameworks have been developed to ease modular development.
+          Modular development is an old concept, but somewhat newborn in the web scene.
+          This section aims to describe what modular development really is, and why it is such an important success factor to software development.
+          This section is partly based on \normalfont{\cite{book_modular_programming,book_eloq_js,rich_hickey}}.
         \end{metatext}
 
         By creating modules that can be used in any context with well-defined responsibilities and dependencies, developing applications is reduced to the task of simply configuring modules (to some extent) to work together which forms a bigger application.
@@ -608,8 +614,28 @@
         The ever so popular frameworks \emph{Angular}, \emph{Backbone}, \emph{Ember}, \emph{Web Components}, \emph{requirejs}, \emph{Browserify}, \emph{Polymer}, \emph{React} and many more all have in common that they embrace coding modular components.
         Many of these frameworks also help with dividing the \gls{HTML} up into modules, creating small packages of style, markup and code.
 
-        \todo[inline]{Philipp: You should also mention that modules enable reuse of components.}
-        \todo[inline]{Flesh this one out, with meta text.}
+        A big challenge to software development is to be able to write software that is reliable (i.e. should not have bugs) and easy to change.
+        What keeps developers from producing such software is often complexity, which hinders developers from reasoning about the software.
+        The word ``complex'' can be defined as \emph{something consisting of interconnected or intertwined parts}.
+        A quote from Rich Hickey:
+        \begin{quote}
+          So if every time I think I pull out a new part of the software I need to comprehend, and it's attached to another thing, I had to pull that other thing into my mind because I can't think about the one without the other.
+          That's the nature of them being intertwined. So every intertwining is adding this burden, and the burden is kind of combinatorial as to the number of things that we can consider.
+          So, fundamentally, this complexity, and by complexity I mean this braiding together of things, is going to limit our ability to understand our systems.
+        \end{quote}
+        By separating the software into well defined parts (i.e. modules) that has a single responsibility and ideally performs a single task, complexity can be reduced.
+        Of course, splitting software up into modules alone does not help reducing complexity.
+        The modules also need to be self-contained, which means that they work by themselved and do not require the user of the module to write its logic.
+        Modules should also be loosely coupled, and may not make any assumptions about the context they will be used in.
+        It is then possible to reason about and change the functionality locally inside the boundary of the module.
+        
+        With modularity comes positive side effects.
+        Loose coupling between modules facilitates unit testing, since it is then possible to test parts of the software in isolation and independent of the system as a whole.
+        Developers can also work on different parts of the software in parallel without being affected by each other, as modules are not allowed to affect each other (other than configurable options or injected strategies).
+        The very nature of modules not being context-aware enables them to be reused in other projects (or other parts of the same application).
+        Reusability is not only important to speed up the development process of new software projects, it also eases managing a large code base.
+        A single module that performs a general task is much simpler to manage than multiple modules performing the same task but being written for different contexts.
+        When a bug arises, the patch would only need to be applied to one module instead of all similar modules that could possibly be affected.
   \part{Theory}\label{part:theory}
     \chapter{Layout engines}
       \begin{metatext}
