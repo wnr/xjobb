@@ -172,7 +172,7 @@
 
 \title{Modular responsive web design}
 \foreigntitle{Modulär responsiv webbutveckling}
-\subtitle{Allowing responsive web modules to respond to custom criteria instead of only viewport size by implementing \emph{element queries}}
+\subtitle{Allowing responsive web modules to respond to custom criteria instead of only the viewport size by implementing \emph{element queries}}
 \author{Lucas Wiener \\ \lowercase{lwiener@kth.se}}
 \date{February 2015}
 \blurb{Master's Thesis at \abbr{csc}\\\hfill\\ Supervisors at \abbr{evry ab}: Tomas Ekholm \& Stefan Sennerö\\Supervisor at \abbr{csc}: Philipp Haller\\Examiner: Mads Dam}
@@ -196,8 +196,6 @@
   \mainmatter
   \pagestyle{newchap}
   \chapter{Introduction}
-    \todo[inline]{Should title be 'the' viewport size?}
-    \todo[inline]{Write somewhere that modular and responsive web development right now are two disjunct terms?}
     \todo[inline]{Container or parent element? Using both now.}
     \todo[inline]{Rename framework to library?}
     \todo[inline]{Write about the targeted browser compatibility. Started writing about this but put it on hold in the appendix.}
@@ -205,18 +203,18 @@
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
       Heavy use of \gls{web} terminology is being used and intermediate \gls{web} development knowledge is assumed.
-      \todo{Philipp wanted this to be more general.}
+      \todo[inline]{Philipp wanted this to be more general.}
     \section{Problem statement}
       By using \gls{CSS} \gls{media queries}, developers can specify different style rules for different \gls{viewport} sizes.
       This is fundamental to creating \gls{responsive} \gls{web} applications.
       If developers want to build modular applications by composing the application by smaller components (\glspl{element}, scripts, styles, etc.) \gls{media queries} are no longer applicable.
       Modular \gls{responsive} components should be able to react and change style depending on the size that the component has been given by the application, not the \gls{viewport} size.
       The problem can be formulated as: \emph{It is not possible to specify conditional style rules for \glspl{element} depending on the size of an element}.
-      See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.\todo{Keep this?}
+      See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
       \todo{Is W3C okay with this?}
       The main international standards organization for the \gls{web}, \gls{W3C}, has unofficially stated that such feature would be infeasible to implement.
-      Many standards organizations are interested in solving the problem and possible solutions are being discussed. \todo{Write which organizations?}
+      Standards organizations are interested in solving the problem and possible solutions are being discussed.
       However, they are still at the initial planning stage so a solution will not be implemented \glslink{native}{natively} in the near future.
       While awaiting a \gls{native} solution it is up to the developers to implement this feature as a \gls{third-party} solution.
       Efforts have been made to create a robust \gls{third-party} solution, with moderate success.
@@ -284,7 +282,7 @@
       \begin{itemize}
       \item A \gls{third-party} implementation of element queries will be developed.
       \item The problems of implementing element queries \glslink{native}{natively} will be addressed.
-      \item Theory about layout engines and the native languages of the web along with \gls{responsive} \gls{web} design will be given to fully understand the problem. \todo{Modular theory?}
+      \item Theory about layout engines, programming languages of the web, \gls{responsive} \gls{web} design and modularity will be given to fully understand the problem.
       \end{itemize}
 
       \subsection{What will not be done}
@@ -302,7 +300,7 @@
       It starts with describing a reference architecture of layout engines and the parts of layout engines that directly affects element queries will be described in detail.
       Here it will also be presented why element queries impose problems to layout engines on a theoretical level.
       After that, a full description of element queries as a concept and a more in depth analysis of the problems will be given.
-      Possible solutions to the given problems will also be presented followed by a theoretization about how an \gls{API} could be designed. \todo{Clumsy sentence. change theoretization to something else? Probably?}
+      Possible solutions to the given problems will also be presented followed by a fictional native \gls{API} description based on probable design decisions.
 
       The third part \emph{\ref{part:framework}~\nameref{part:framework}} presents the design and implementation of the solution as a \gls{third-party} framework.
       Here possible approaches to solving the problem will be presented.
@@ -340,7 +338,7 @@
       As already stated, the \gls{WWW} is a system that operates on top of the Internet.
       The \gls{WWW} is usually shortened to simply \emph{the \gls{web}}.
       The \gls{web} is a system for accessing interlinked \gls{hypertext} documents and other media such as images and videos.
-      Since not only \gls{hypertext} is interlinked on the \gls{web}, the term \emph{\glslink{hypertext}{hypermedia}} can be used as an extension to \gls{hypertext} that also includes other nonlinear medium of information (images, videos, etc.). \todo{Are images and videos really nonlinear?}
+      Since not only \gls{hypertext} is interlinked on the \gls{web}, the term \emph{\glslink{hypertext}{hypermedia}} can be used as an extension to \gls{hypertext} that also includes other nonlinear medium of information (images, videos, etc.).
       Although the term \glslink{hypertext}{hypermedia} has been around for a long time, the term \gls{hypertext} is still being used as a synonym for \glslink{hypertext}{hypermedia}.
       Further, the \gls{web} can also be referred to as the universe of information accessible through the \gls{web} system.
       Therefore, the \gls{web} is both the system enabling sharing of \glslink{hypertext}{hypermedia} and also all of the accessible \glslink{hypertext}{hypermedia} itself.
@@ -484,7 +482,7 @@
         Google decided in 2013 create a \gls{fork} of \gls{WebKit} called \emph{Blink} for their \gls{browser}.
         Opera Software decided in 2013 to base their new version of Opera on the Chromium project, using the Blink \gls{fork}.
 
-        \todo{Timeline image and text perhaps}
+        \todo[inline]{Timeline image and text perhaps}
 
 
     \chapter{Web development}
@@ -853,8 +851,8 @@
 
         This process will resolve most style properties, but as stated in section~\ref{sec:render-tree} some properties require a layout in order to be resolved.
 
-        \todo{How does selector matching work? Parallel?}
-        \todo{Cascading, parallel?}
+        \todo[inline]{How does selector matching work? Parallel?}
+        \todo[inline]{Cascading, parallel?}
 
       \section{The layout process}\label{sec:layout-process}
         \begin{metatext}
@@ -1201,8 +1199,8 @@
             Unfortunately this does not improve the performance at all, which is a major drawback.
           \end{metatext}
 
-          \todo{Should this be incorporated with some other section or be written?}
-          \todo{Maybe write about having a third-party framework as a solution?}
+          \todo[inline]{Should this be incorporated with some other section or be written?}
+          \todo[inline]{Maybe write about having a third-party framework as a solution?}
       \section{Native API design}
         \begin{metatext}
           In this section a possible \gls{native} element query \gls{API} will be presented.
@@ -1338,12 +1336,12 @@
           \item \textbf{Element resize detector:}
             Provides an interface for listening to \gls{element} resize events.
             This system is fundamental to plugins fulfilling requirements \ref{itm:req_resize_detect} and \ref{itm:req_big_rewrite} since it enables the framework to be aware of when \glspl{element} change sizes, instead of the host application keeping track of when \glspl{element} have changed sizes.
-            \todo{Maybe this shouldn't be a core subsystem? Since this system imposes the biggest performance impact. It might make more sense to have this as a plugin.}
+            \todo[inline]{Maybe this shouldn't be a core subsystem? Since this system imposes the biggest performance impact. It might make more sense to have this as a plugin.}
           \item \textbf{Cycle detector:}
             As shown in section~\ref{sec:cyclic-rules} cyclic rules need to be detected at runtime.
             When a plugin wish to update the size state of an \gls{element} (which in turn applies the conditional styles to the \gls{element}) it can ask this system if the update seems to be part of a cycle.
             If the update seems to be part of a cycle, it is up to the plugin how that should be handled.
-            \todo{Write that this system is more general, and could potentially be used for detecting other cyclic behaviors?}
+            \todo[inline]{Write that this system is more general, and could potentially be used for detecting other cyclic behaviors?}
           \item \textbf{Batch processor:}
             To avoid layout thrashing, it is important to read and mutate the \gls{DOM} in separate batches.
             This subsystem provides an interface for plugins to store functions to later be executed in a batch.
