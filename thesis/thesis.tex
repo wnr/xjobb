@@ -106,7 +106,15 @@
 }
 \newglossaryentry{third-party}{
   name={third-party},
-  description={Refers to \glspl{API} and systems implemented on top of the browser, usually in JavaScript. Such APIs and systems must be included by developers into the document, and are usually not described by standards specifications}
+  description={Refers to \glspl{API} and systems implemented on top of the browser, usually in \gls{JavaScript}. Such APIs and systems must be included by developers into the document, and are usually not described by standards specifications}
+}
+\newglossaryentry{hypertext}{
+  name={hypertext},
+  description={Documents with of text and media with links (hyperlinks) to other documents immediately accessible for the user. Often used as a synonym for hypermedia}
+}
+\newglossaryentry{JavaScript}{
+  name={JavaScript},
+  description={\Gls{native} browser script language. Web documents often include JavaScript to make the documents more dynamic and interactable}
 }
 
 \newacronym{W3C}{W3C}{World Wide Web Consortium}
@@ -136,7 +144,7 @@
 \newacronym{KDE}{KDE}{K Desktop Environment}
 \newacronym{CGI}{CGI}{Common Gateway Interface}
 \newacronym{XML}{XML}{Extensible Markup Language}
-\newacronym{AJAX}{AJAX}{Asynchronous JavaScript and \acrshort{XML}}
+\newacronym{AJAX}{AJAX}{Asynchronous \gls{JavaScript} and \acrshort{XML}}
 \newacronym{WHATWG}{WHATWG}{Web Hypertext Application Technology Working Group}
 \newacronym{RWD}{RWD}{Responsive Web Design}
 \newacronym{DOM}{DOM}{Document Object Model}
@@ -266,8 +274,7 @@
       \begin{itemize}
       \item No efforts will be made to solve the problems accompanied with a \gls{native} solution.
       \item No \gls{API} or similar will be designed for a \gls{native} solution.
-      \item User interface and user experience design will not be addressed, other than necessary for understanding the problem.
-      \item No complete history of browsers, the Internet or \gls{responsive} \gls{web} design will be given other than necessary.\todo{Rewrite a bit. Seems like a very clumsy sentence.}
+      \item User interface design will not be addressed, other than necessary for understanding the problem.
       \end{itemize}
     \section{Outline}
       This thesis is divided into four parts. The first part \emph{\ref{part:background}~\nameref{part:background}} presents some history of the \gls{web} platform and describes concepts needed to understand the problem.
@@ -294,37 +301,38 @@
         Browsers and the Internet is something that many people today take for granted.
         It is not longer the case that only computer scientists are browsing the \gls{web}.
         Today the \gls{web} is becoming increasingly important in both our personal and professional lives.
-        This chapter will give a brief history of browsers and the rise of the \gls{web}. \todo{rise of the \gls{web}, is that valid grammar?}
+        This chapter will give a brief history of browsers and how the \gls{web} transitioned from handling science documents to commercial applications.
         This section is a summary of \normalfont{\cite{internet_live_stats,internet_of_things,wiki_hypermedia,w3c_www,oed}}.
       \end{metatext}
 
-      Before addressing the birth of the \gls{web}, let's \todo{Using let's here. Should not.} define the meaning of the concepts of the \emph{Internet} and \emph{World Wide Web}.
-      The word internet can be translated to \emph{something between networks}. 
+      Before addressing the birth of the \gls{web}, it is necessary to define the meaning of the concepts \emph{Internet} and \emph{\gls{WWW}}.
+      The word ``internet'' can be translated to \emph{something between networks}.
       When referring to the Internet (capitalized) it is usually the global decentralized internet used for communication between millions of networks using the \gls{TCP} and \gls{IP} suite.
-      Since the Internet is decentralized, there is no owner.
-      Or in other words, the owners are all the network end-points (all users of the Internet).
+      Since the Internet is decentralized, there is no single owner of the network.
+      In other words, the owners are all the network end-points (all users of the Internet).
       One can argue that the owners of the Internet are the \glspl{ISP}, providing the services and infrastructure making the Internet possible.
-      On the other hand, the backbones of the Internet are usually co-founded by countries and companies. \todo{Maybe only write "nationally?"}
-      Or is it the \gls{ICANN} organization that has the responsibility for managing the \gls{IP} addresses in the Internet namespace? \todo{Clumsy sentence.}
+      On the other hand, the backbones of the Internet are usually co-founded nationally.
+      Also, it is the \gls{ICANN} organization that has the responsibility for managing the \gls{IP} addresses in the Internet namespace, which reduces the ownership of the \glspl{ISP} further.
       Clearly, the Internet wouldn't be what it is today without all the actors.
-      The Internet lays the ground for many systems and applications, including the World Wide Web, file sharing and telephony.
+      The Internet lays the ground for many systems and applications, including the \gls{WWW}, file sharing and telephony.
       In 2014 the number of Internet users was measured to just below 3 billions, and estimations show that we have surpassed 3 billions users today (no report for 2015 has been made yet).
-      Users are here defined as humans having unrestricted access to the Internet.
+      Users are defined as humans having unrestricted access to the Internet.
       If one instead measures the number of connected entities (electronic devices that communicates through the Internet) the numbers are much higher.
       An estimation for 2015 of 25 billions connected entities has been made, and the estimation for 2020 is 50 billions.
       
-      As already stated, the \gls{WWW} is a system that operates through the Internet. \todo{on top of?}
-      The World Wide Web is usually shortened to simply \emph{the \gls{web}}.
-      The \gls{web} is a system for accessing interlinked hypertext documents and other media such as images and videos.
-      Since not only hypertext is interlinked on the \gls{web}, the term \emph{hypermedia} can be used as an extension to hypertext that also includes other nonlinear medium of information (images, videos, etc.). \todo{Are images and videos really nonlinear?}
-      Although the term hypermedia has been around for a long time, the term hypertext is still being used as a synonym for hypermedia. \todo{Is this really true?}
+      As already stated, the \gls{WWW} is a system that operates through the Internet.
+      The \gls{WWW} is usually shortened to simply \emph{the \gls{web}}.
+      The \gls{web} is a system for accessing interlinked \gls{hypertext} documents and other media such as images and videos.
+      Since not only \gls{hypertext} is interlinked on the \gls{web}, the term \emph{\glslink{hypertext}{hypermedia}} can be used as an extension to \gls{hypertext} that also includes other nonlinear medium of information (images, videos, etc.). \todo{Are images and videos really nonlinear?}
+      Although the term \glslink{hypertext}{hypermedia} has been around for a long time, the term \gls{hypertext} is still being used as a synonym for \glslink{hypertext}{hypermedia}.
       Further, the \gls{web} can also be referred to as the universe of information accessible through the \gls{web} system.
-      Therefore, the \gls{web} is both the system enabling sharing of hypermedia and also all of the accessible hypermedia itself.
+      Therefore, the \gls{web} is both the system enabling sharing of \glslink{hypertext}{hypermedia} and also all of the accessible \glslink{hypertext}{hypermedia} itself.
       Hypertext documents are today more known by the name \emph{\gls{web} pages} or simply \emph{pages}.
-      Multiple related pages compose a \emph{web site} or simply a \emph{site} and are usually hosted from the same domain. \todo{Rewrite to that a site is usually defined to the pages of a domain.}
+      Multiple related pages (that are often served from the same domain) compose a \emph{web site} or simply a \emph{site}.
+      Hypertext documents are written in \gls{HTML}, and often includes \gls{CSS} for styling and \gls{JavaScript} for custom user interactions.
       To transfer the resources between computers the protocol \gls{HTTP} is used.
       Typically the way of retrieving resources on the \gls{web} is by using a \emph{\gls{web} browser} or simply a \emph{browser}.
-      Browsers handle the fetching, parsing and rendering of the hypertext (more about this in section~\ref{sec:browsers}).
+      Browsers handle the fetching, parsing and rendering of the \gls{hypertext} (more about this in section~\ref{sec:browsers}).
       
       \section{The origin of the web}
         \begin{metatext}
@@ -369,7 +377,7 @@
 
         \subsection{The World Wide Web}\label{sec:www}
           \begin{metatext}
-            Now that the history of the Internet has been described, it is time to talk about the birth of the World Wide Web.
+            Now that the history of the Internet has been described, it is time to talk about the birth of the \gls{WWW}.
             Here the initial ideas of the \gls{web} will be described, the alternatives and how it became a global standard.
             This subsection is a summary of \normalfont{\cite{wiki_gopher,wiki_www,webdevnotes_history_of_the_internet,webdevnotes_www_basics,historyofthings_internet}}.
           \end{metatext}
@@ -386,9 +394,9 @@
             Imagine, then, the references in this document all being associated with the network address of the thing to which they referred, so that while reading this document you could skip to them with a click of the mouse.
           \end{quote}
           This catches the whole essence of the \gls{web} in a sentence --- to interlink resources in an user friendly way.
-          The proposal describes that such text embedded links would be hypertext.
+          The proposal describes that such text embedded links would be \gls{hypertext}.
           It continues to explain that interlinked resources does not need to be limited to text documents, multimedia such as images and videos can also be interlinked which would similarly be hypermedia.
-          The concept of browsers is described, with a client-server model the browser would fetch the hypertext documents, parse them and handle the fetching of all media linked in the hypertext.
+          The concept of browsers is described, with a client-server model the browser would fetch the \gls{hypertext} documents, parse them and handle the fetching of all media linked in the \gls{hypertext}.
 
           In 1990, the Hypertext Transfer Protocol (\gls{HTTP}), the \gls{HTML}, a browser and a \gls{web} server had been created and the \gls{web} was born.
           One year later the \gls{web} was introduced to the public and in 1993 over five hundred international \gls{web} servers existed.
@@ -396,15 +404,15 @@
           At this time the \gls{W3C} was founded by Berners-Lee with support from the Defense Advanced Research Projects Agency and the European Commission.
           The organization comprised of companies and individuals that wanted to standardize and improve the \gls{web}.
 
-          As a side note, the Gopher protocol was developed in parallel to the World Wide Web by the University of Minnesota.
+          As a side note, the Gopher protocol was developed in parallel to the \gls{WWW} by the University of Minnesota.
           It was released in 1991 and quickly gained traction as the \gls{web} still was in very early stages.
           The goal of the system, just like the \gls{web}, was to overcome the shortcomings of browsing documents with \gls{FTP}.
           Gopher enabled servers to list the documents present, and also to link to documents on other servers.
           This created a strong hierarchy between the documents.
-          The listed documents of a server could then be presented as hypertext menus to the client (much like a \gls{web} browser).
+          The listed documents of a server could then be presented as \gls{hypertext} menus to the client (much like a \gls{web} browser).
           As the protocol was simpler than \gls{HTTP} it was often preferred since it used less network resources.
           The structure provided by Gopher provided a platform for large electronic library connections.
-          A big difference between the \gls{web} and the Gopher platform is that the Gopher platform provided hypertext menus presented as a file system while the \gls{web} hypertext links inside hypertext documents, which provided greater flexibility.
+          A big difference between the \gls{web} and the Gopher platform is that the Gopher platform provided \gls{hypertext} menus presented as a file system while the \gls{web} \gls{hypertext} links inside \gls{hypertext} documents, which provided greater flexibility.
           When the University of Minnesota announced that it would charge licensing fees for the implementation, users were somewhat scared away.
           As the \gls{web} matured, being a more flexible system with more features as well as being totally free it quickly became dominant.
 
@@ -412,7 +420,7 @@
         \label{sec:browsers}
         \begin{metatext}
           In the mid 1990's the usage of the Internet transitioned from downloading files with \gls{FTP} to instead access resources with the \gls{HTTP} protocol.
-          To fulfill the vision that users would be able to skip to the linked documents ``with a click of the mouse'' the users needed a client to handle the fetching and displaying of the hypertext documents, hence the need for browsers were apparent.
+          To fulfill the vision that users would be able to skip to the linked documents ``with a click of the mouse'' the users needed a client to handle the fetching and displaying of the \gls{hypertext} documents, hence the need for browsers were apparent.
           Here the evolution of the browser clients will be given, while emphasizing the timeline of the popular browsers we use today.
           This section is a summary of \normalfont{\cite{wiki_www,wiki_nexus,wiki_lmb,wiki_libwww,wiki_mosaic,wiki_netscape,wiki_mozilla,wiki_opera,wiki_konqueror,wiki_safari,wiki_webkit,wiki_blink}}.
         \end{metatext}
@@ -420,7 +428,7 @@
         The first \gls{web} browser ever made was created in 1990 and was called WorldWideWeb (which was renamed to Nexus to avoid confusion).
         It was at the time the only way to view the \gls{web}, and the browser only worked on NeXT computers.
         Built with the NeXT framework, it was quite sophisticated.
-        It had a \gls{GUI} and a \gls{WYSIWYG} hypertext document editor.
+        It had a \gls{GUI} and a \gls{WYSIWYG} \gls{hypertext} document editor.
         Unfortunately it couldn't be ported to other platforms, so a new browser called \emph{Line Mode Browser} (\abbr{lmb}) were quickly developed.
         To ensure compatibility with the earliest computer terminals the browser displayed text, and was operated with text input.
         Since the browser was operated in the terminal, users could log in to a remote server and use the browser via telnet.
@@ -481,8 +489,8 @@
           This section is a summary of \normalfont{\cite{wiki_web_dev,wiki_cgi,wiki_css,wiki_ajax,wiki_html5,book_html5}}.
         \end{metatext}
 
-        As described in section~\ref{sec:www}, browsers initially were applications that displayed hypertext documents with the ability to fetch linked documents in an user friendly way.
-        Static content were written in \gls{HTML}, which could include hyperlinks to other hypertext documents or hypermedia.
+        As described in section~\ref{sec:www}, browsers initially were applications that displayed \gls{hypertext} documents with the ability to fetch linked documents in an user friendly way.
+        Static content were written in \gls{HTML}, which could include hyperlinks to other \gls{hypertext} documents or hypermedia.
         Different stylesheet languages were being developed to enable the possibility of separating content styling with the content.
         In 1996 \gls{W3C} officially recommended the \gls{CSS}, which came to be the preferred way of styling \gls{web} content.
         Since \gls{HTML} is only a markup language it is not possible to generate dynamic content, which was sufficient at the time \gls{HTML} was only used for annotating links in research documents.
@@ -503,13 +511,13 @@
         When the runtimes are present, the browser then executed the included Java applets or Flash in the \gls{web} pages by using the external runtimes.
         This enabled \gls{web} developers to use ``real'' programming languages.
         The drawback of this is that users first had to download the runtimes in order to run the programs embedded in pages.
-        As client side scripting matured and standardized into \emph{JavaScript}, plugins slowly decreased in popularity.
+        As client side scripting matured and standardized into \emph{\gls{JavaScript}}, plugins slowly decreased in popularity.
         With the increase of smart devices (such as phones, televisions, cars, game consoles, etc.) that included browsers but limited \gls{third-party} runtimes, plugins quickly went extinct.
         Today, \gls{web} sites rarely use plugins.
 
-        As JavaScript and \gls{HTML} supported more features, websites turned into small applications with user sessions (using cookies) and user interfaces.
+        As \gls{JavaScript} and \gls{HTML} supported more features, websites turned into small applications with user sessions (using cookies) and user interfaces.
         Still, parts of the applications were defined as \gls{HTML} pages, fetched from the server when navigating the site.
-        When the \emph{XMLHttpRequest} \gls{API} was supported in the major browsers, pages no longer needed to reload in order to fetch new content as XMLHttpRequest enabled developers to perform asynchronous requests to servers in JavaScript.
+        When the \emph{XMLHttpRequest} \gls{API} was supported in the major browsers, pages no longer needed to reload in order to fetch new content as XMLHttpRequest enabled developers to perform asynchronous requests to servers in \gls{JavaScript}.
         This opened up for the \gls{AJAX} \gls{web} development technique which became a popular way of communicating with servers ``in the background'' of the page. \todo{Mention XML before this sentence so that the abbr is explained properly.}
         Developers pushed browsers and \gls{HTML} to the limit when creating applications instead of documents that it was originally designed for.
         In a \gls{W3C} meeting in 2004 it was proposed to extend \gls{HTML} to ease the creation of \gls{web} applications, which was rejected.
@@ -576,7 +584,7 @@
         \end{metatext}
 
         By creating modules that can be used in any context with well-defined responsibilities and dependencies, developing applications is reduced to the task of simply configuring modules (to some extent) to work together which forms a bigger application.
-        It is today possible to write the \gls{web} client logic in a modular way in JavaScript.
+        It is today possible to write the \gls{web} client logic in a modular way in \gls{JavaScript}.
         The desire of writing modular code can be shown by the popularity of frameworks that helps dividing up the client code into modules.
         The ever so popular frameworks \emph{Angular}, \emph{Backbone}, \emph{Ember}, \emph{Web Components}, \emph{requirejs}, \emph{Browserify}, \emph{Polymer}, \emph{React} and many more all have in common that they embrace coding modular components.
         Many of these frameworks also help with dividing the \gls{HTML} up into modules, creating small packages of style, markup and code.
@@ -610,7 +618,7 @@
           \node[mynode, text width=20em, below=0.5cm of ui] (browser-engine) {Browser Engine};
           \node[mynode, text width=20em, below=0.5cm of browser-engine] (layout-engine) {Layout Engine};
           \node[below=of layout-engine] (dummy) {};
-          \node[mynode, below=of layout-engine, left=0.1cm of dummy] (javascript) {JavaScript};
+          \node[mynode, below=of layout-engine, left=0.1cm of dummy] (javascript) {\gls{JavaScript}};
           \node[mynode, below=of layout-engine, left=0.1cm and 0.1cm of javascript] (networking) {Networking};  
           \node[mynode, below=of layout-engine, right=0.1cm of dummy] (xml) {\gls{XML}};
           \node[mynode, below=of layout-engine, right=0.1cm and 0.1cm of xml] (render-backend) {Render Backend};
@@ -627,9 +635,9 @@
         \caption{Reference browser architecture. The data persistence system used by the browser engine and the user interface has been omitted.} 
         \label{fig:browser_architecture}
       \end{figure}
-      It is shown that the layout engine is located between the \emph{browser engine} system and the network, JavaScript, \gls{XML} parsing and display backend.
+      It is shown that the layout engine is located between the \emph{browser engine} system and the network, \gls{JavaScript}, \gls{XML} parsing and display backend.
       The browser engine acts as a high level interface to the layout engine, and is responsible for providing the layout engine with \glspl{URI} that should be rendered with layout options.
-      The main responsibility of the layout engine is to render the current state of the fetched hypertext document.
+      The main responsibility of the layout engine is to render the current state of the fetched \gls{hypertext} document.
       Since documents may (and often do) change dynamically after parsetime, it is important to keep in mind that the job of the layout engine is continuous, and is not a one time operation.
       The parsing of \gls{HTML} is also done by the layout engine (and not in the \gls{XML} subsystem) since \gls{HTML} is less strict and reentrant.
       In short, layout engines perform four distinct tasks:
@@ -688,10 +696,10 @@
         \end{metatext}
 
         \gls{DOM} is a convention for representing and interacting with objects in \gls{XML}-based documents (such as \gls{HTML}).
-        The \gls{DOM} provides an interface for programs (JavaScript scripts in the browser) to dynamically access and mutate the content, structure and style of documents.
+        The \gls{DOM} provides an interface for programs (\gls{JavaScript} scripts in the browser) to dynamically access and mutate the content, structure and style of documents.
         Each node of the document is a \gls{DOM} object, and therefore the whole document is converted to a tree structure of \gls{DOM} nodes which is referred to as the \gls{DOM} tree.
 
-        Layout engines construct \gls{DOM} trees by parsing \gls{HTML} with any included \gls{CSS} and JavaScript.
+        Layout engines construct \gls{DOM} trees by parsing \gls{HTML} with any included \gls{CSS} and \gls{JavaScript}.
         Parsing of \gls{HTML} is not an easy task because the specification of \gls{HTML} states that it must be forgiving (i.e. accepting malformed markup).
         \todo{Is it true that the spec says that malformed html must be accepted. Servo experience report seems to say otherwise.}
         As \gls{CSS} and JavasScript are stricter, their grammar can be expressed in a formal syntax and can therefore be parsed with a context free grammar parser (which can be autogenerated).
@@ -700,7 +708,7 @@
         If such script mutates the \gls{DOM}, then the parser will need to evaluate the changes made by the script and update the \gls{DOM} tree.
         External scripts need to be fetched in order to be executed, which halts the parsing unless the script \gls{element} states otherwise.
         It should be noted that although \gls{DOM} nodes do include a \code{style} property, the nodes in the \gls{DOM} tree are not affected by the \gls{CSS} cascading, and the style properties do not represent the final style of the \gls{element}.
-        Instead, for scripts to obtain the final computed style for an \gls{element} a special function needs to be called (\code{getComputedStyle} in JavaScript).
+        Instead, for scripts to obtain the final computed style for an \gls{element} a special function needs to be called (\code{getComputedStyle} in \gls{JavaScript}).
         Since externally linked \gls{CSS} documents do not directly affect the \gls{DOM} tree they could conceptually be fetched and parsed after the parsing of the \gls{HTML}.
         However, scripts can request the computed style of \gls{DOM} tree nodes and therefore either the parsing of \gls{HTML} needs to be halted in order to fetch and parse \gls{CSS} when it occurs, or the scripts accessing style properties of \gls{DOM} nodes need to be halted.
         A common optimization is to use a speculative parser that continues to parse the \gls{HTML} when the main parser has halted (for executing the scripts usually).
@@ -890,7 +898,7 @@
       In section~\ref{sec:modularity} the desire for building modular \gls{web} components was presented.
       One implication of building applications in a modular way is that general components become reusable.
       Since the only way of applying conditional rules to \glspl{element} today is by using \gls{media queries}, all \gls{responsive} styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the layout).
-      The implication of this is that the \gls{HTML} and JavaScript can be written in a modular way, but the \gls{CSS} is left for the user of the module (application) to write which somewhat defeats the purpose of writing modules.
+      The implication of this is that the \gls{HTML} and \gls{JavaScript} can be written in a modular way, but the \gls{CSS} is left for the user of the module (application) to write which somewhat defeats the purpose of writing modules.
       So developers today have two choices: writing modules that are not \gls{responsive} but \gls{self-contained}, or writing modules that are \gls{responsive} but not \gls{self-contained} (leaving the styling to the user).
 
       The solution to this is element queries, which allows conditional rules to be applied based on any criteria for any \gls{element}.
@@ -995,7 +1003,7 @@
           Clearly, the browser will be stuck in an infinite layout cycle pending back and forth between step 2 and 3 (250 pixels and 550 pixels).
           The result of this is of course implementation dependent.
           One reasonable outcome of such infinite layout loop is that the layout engine executes one layout pass and then evaluate the next set of matched selectors and so on, which leads to a functioning page but since a relayout is enforced every update, the performance impact is huge.
-          This example is somewhat similar to writing \code{while(true);} in JavaScript, which obviously is a bad idea.
+          This example is somewhat similar to writing \code{while(true);} in \gls{JavaScript}, which obviously is a bad idea.
           However, cyclic rules can also occur in less obvious ways. 
 
           Indirect cyclic rules are somewhat more complex to reason about, than the example given above (which is an example of direct cyclic rules).
@@ -1035,7 +1043,7 @@
             \item The child \gls{element} might be another module, and by adding one line to the parent module (the \code{\#foo} \gls{element}) a cycle has appeared.
             \item The developer has to be well aware of how the display property affects the \gls{element} and what implications the \code{inline-block} has to the \gls{element}.
           \end{itemize}
-          An JavaScript quivalent of this example would perhaps be \code{var bar = true; while(bar);} with the motivation that it is still very obvious that it is an infinite loop but both the while loop and the variable needs to be reviewed.
+          An \gls{JavaScript} quivalent of this example would perhaps be \code{var bar = true; while(bar);} with the motivation that it is still very obvious that it is an infinite loop but both the while loop and the variable needs to be reviewed.
           Also, the variable assignment could happen in another part of the program.
 
           The examples given so far have been simple and easily detectable.
@@ -1231,7 +1239,7 @@
           \item \textbf{Compatibility}
             \begin{enumerate}
               \item Older browsers must be supported.
-              \item The framework may not require invalid \gls{CSS}, \gls{HTML} or JavaScript.
+              \item The framework may not require invalid \gls{CSS}, \gls{HTML} or \gls{JavaScript}.
               \item\label{itm:assumption} Dependencies and assumptions about the host application (including the development environment) should be kept low.
               \item\label{itm:req_prolyfill} The framework must act as a prolyfill\footnote{A polyfill is something that provides a functionality that is expected to be provided \glslink{native}{natively} by browsers. Polyfills usually fixes some standard functionality for browsers that do not yet support it. A prolyfill is a polyfill for something that will probably become a standard.} for \gls{native} element queries.
             \end{enumerate}
@@ -1465,8 +1473,8 @@ elq.start(jqueryElementsCollection);
               Since target \glspl{element} get an extra child (the frame element), \gls{CSS} selectors may behave differently.
               For instance, the selector \code{\#target *} selector also matches the injected frame \gls{element} which may result in the frame being styled in a way that it will be visible or in other ways interfere with the original user interface.
               Also, selectors such as \code{:first-child} and \code{:last-child} since the object \gls{element} is prepended (or appended) to the target \gls{element}.
-            \item \textbf{JavaScript may break}:
-              Similar to with the \gls{CSS} selectors, JavaScript \gls{DOM} selectors may break.
+            \item \textbf{\gls{JavaScript} may break}:
+              Similar to with the \gls{CSS} selectors, \gls{JavaScript} \gls{DOM} selectors may break.
               The first node (or last) of the target \gls{element} may not be what developers expect it to be, since the frame \gls{element} has been injected.
               Also, code that replaced the content of \glspl{element} (such as \code{element.InnerHTML = ...}) undesirably removes the injected frame \gls{element} of if used on the target \gls{element}.
             \item \textbf{The target \gls{element} must be positioned}:
