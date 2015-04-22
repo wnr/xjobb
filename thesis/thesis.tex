@@ -204,6 +204,7 @@
     \todo[inline]{Rename framework to library?}
     \todo[inline]{Write about the targeted browser compatibility. Started writing about this but put it on hold in the appendix.}
     \todo[inline]{Word says that all "their own" is wrong.}
+    \todo[inline]{Change all wikipedia sources to the real sources}
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
       Heavy use of \gls{web} terminology is being used and intermediate \gls{web} development knowledge is assumed.
@@ -644,7 +645,7 @@
       \begin{metatext}
         Before diving into the theory of element queries, it is important to understand how \glspl{layout engine} work.
         Only the \gls{layout engine} of the \gls{browser} will be of importance, since element queries do not affect any other \gls{browser} subsystem.
-        This chapter will give a brief explanation of the layout flow that the engines generally perform, and how content changes affect the engine\todo{Write about content changes or remove this.}.
+        This chapter will give a brief explanation of the layout flow that the engines generally perform.
         It will also cover some optimizations that are done and which parts of the layout process that can be done in parallel.
         The render process will not be described, as it is not relevant for element queries.
         This chapter is mainly based on \normalfont{\cite{browser_architecture,garsiel2011browsers}}.
@@ -680,17 +681,19 @@
           \draw[myarrow] (ui.east) -- +(1.5, 0) |- (render-backend.east);
         \end{tikzpicture} 
         \medskip
-        \caption{Reference \gls{browser} architecture. The data persistence system used by the \gls{browser} engine and the user interface has been omitted.} 
+        \caption{Reference \gls{browser} architecture. The data persistence system, used by the \gls{browser} engine and the user interface, has been omitted.} 
         \label{fig:browser_architecture}
       \end{figure}
       It is shown that the \gls{layout engine} is located between the \emph{\gls{browser} engine} system and the network, \gls{JavaScript}, \gls{XML} parsing and display backend.
-      The \gls{browser} engine acts as a high level interface to the \gls{layout engine}, and is responsible for providing the \gls{layout engine} with \glspl{URI} that should be rendered with layout options.
+      The \gls{browser} engine acts as a high level interface to the \gls{layout engine}, and is responsible for providing the \gls{layout engine} with \glspl{URI} that should be rendered.
+      Additionally, browser engines usally provide layout engines with layout and rendering options such as user preferred font size, zoom, etc.
       The main responsibility of the \gls{layout engine} is to render the current state of the fetched \gls{hypertext} document.
-      Since documents may (and often do) change dynamically after parsetime, it is important to keep in mind that the job of the \gls{layout engine} is continuous, and is not a one time operation.
+      Since documents may (and often do) change dynamically after parsetime.
+      It is important to keep in mind that the job of the \gls{layout engine} is continuous, and is not a one time operation.
       The parsing of \gls{HTML} is also done by the \gls{layout engine} (and not in the \gls{XML} subsystem) since \gls{HTML} is less strict and reentrant.
       In short, \glspl{layout engine} perform four distinct tasks:
       \begin{enumerate}
-        \item Fetch of content (typically \gls{HTML} and \gls{CSS}) and parse it in order to construct a \gls{DOM} tree. \todo{Explain DOM before this?}
+        \item Fetch content (typically \gls{HTML} and \gls{CSS}) and parse it in order to construct a \gls{DOM} tree. \todo{Explain DOM before this?}
         \item Construct a \gls{render tree} of the \gls{DOM} tree.
         \item Layout the \glspl{element} of the \gls{render tree}.
         \item Render the \glspl{element} of the \gls{render tree}.
