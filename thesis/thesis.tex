@@ -70,7 +70,7 @@
 }
 \newglossaryentry{WebKit}{
   name=WebKit,
-  description={The open source layout engine used by Safari. Google's Blink layout engine is a recent \gls{fork} of WebKit}
+  description={The open source \gls{layout engine} used by Safari. Google's Blink \gls{layout engine} is a recent \gls{fork} of WebKit}
 }
 \newglossaryentry{HTML5}{
   name=HTML5,
@@ -86,7 +86,7 @@
 }
 \newglossaryentry{render tree}{
   name={render tree},
-  description={Used by layout engines as the model for the visual representation of the document}
+  description={Used by \glspl{layout engine} as the model for the visual representation of the document}
 }
 \newglossaryentry{media queries}{
   name={media queries},
@@ -131,6 +131,10 @@
 \newglossaryentry{StatCounter}{
   name={StatCounter},
   description={Collects and aggregates on a sample exceeding 15 billion page views per month collected from across the StatCounter network of more than 3 million websites}
+}
+\newglossaryentry{layout engine}{
+  name={layout engine},
+  description={The part of the browser that handles parsing, laying out and rendering web content. Layout engines are often open source and browsers usually acts as a shell on top of a layout engine. Sometimes also called rendering engines}
 }
 
 \newacronym{W3C}{W3C}{World Wide Web Consortium}
@@ -226,10 +230,10 @@
         Some cyclic rules might be possible to detect during \gls{CSS} parsing, but there are so many combinations of style properties that could result in cyclic rules that it will add a lot of complexity to the language, both for implementers and users.
         Also, it has been shown that some cyclic rules are impossible to detect at parsetime, due to being dependent on runtime factors.
         \item \textbf{Performance:} 
-        Layout engine vendors are interested in performing selector matching and layout computations in parallel to achieve better performance.
-        The research front of \glspl{browser} have shown successful ways of parallelising the layout engine.
-        Element queries implies some undesired limitations to the layout engines.
-        With element queries, layout engines need to first compute the layout of all \glspl{element} in order to decide which selectors would conform to the element query conditions and then do a new layout computation with the new style rules activated, and so on until a stable state has been reached.
+        \Gls{layout engine} vendors are interested in performing selector matching and layout computations in parallel to achieve better performance.
+        The research front of \glspl{browser} have shown successful ways of parallelising the \gls{layout engine}.
+        Element queries implies some undesired limitations to the \glspl{layout engine}.
+        With element queries, \glspl{layout engine} need to first compute the layout of all \glspl{element} in order to decide which selectors would conform to the element query conditions and then do a new layout computation with the new style rules activated, and so on until a stable state has been reached.
         Far worse, since selectors would depend on layout style, style and layout computations become very to parallelise.
       \end{itemize}
     \section{Objective}
@@ -282,7 +286,7 @@
       \begin{itemize}
       \item A \gls{third-party} implementation of element queries will be developed.
       \item The problems of implementing element queries \glslink{native}{natively} will be addressed.
-      \item Theory about layout engines, programming languages of the web, \gls{responsive} \gls{web} design and modularity will be given to fully understand the problem.
+      \item Theory about \glspl{layout engine}, programming languages of the web, \gls{responsive} \gls{web} design and modularity will be given to fully understand the problem.
       \end{itemize}
 
       \subsection{What will not be done}
@@ -297,8 +301,8 @@
       After that, the \gls{responsive} \gls{web} design concept will be described along with why modularity is important in software development.
 
       The second part \emph{\ref{part:theory}~\nameref{part:theory}} presents theoretizations of the problem.
-      It starts with describing a reference architecture of layout engines and the parts of layout engines that directly affects element queries will be described in detail.
-      Here it will also be presented why element queries impose problems to layout engines on a theoretical level.
+      It starts with describing a reference architecture of \glspl{layout engine} and the parts of \glspl{layout engine} that directly affects element queries will be described in detail.
+      Here it will also be presented why element queries impose problems to \glspl{layout engine} on a theoretical level.
       After that, a full description of element queries as a concept and a more in depth analysis of the problems will be given.
       Possible solutions to the given problems will also be presented followed by a fictional native \gls{API} description based on probable design decisions.
 
@@ -463,20 +467,20 @@
         Around the same time the leader of the team that developed Mosaic, Marc Andreessen, left \gls{NCSA} to start \emph{Mosaic Communications Corporation}.
         The company released their own \gls{browser} named \emph{Mosaic Netscape} in 1994, which later was to be called \emph{Netscape Navigator} that was internally codenamed \emph{Mozilla}.
         Microsoft licensed the Spyglass Mosaic \gls{browser} in 1995, modified and renamed it to \emph{Internet Explorer}.
-        In 1997 Microsoft started using their own \emph{Trident} layout engine for Internet Explorer.
+        In 1997 Microsoft started using their own \emph{Trident} \gls{layout engine} for Internet Explorer.
         The Norwegian telecommunications company \emph{Telenor} developed their own \gls{browser} called \emph{Opera} in 1994, which was released 1996.
         Internet Explorer and Netscape Navigator were the two main \glspl{browser} for many years, competing for market dominance.
         Netscape couldn't keep up with Microsoft, and was slowly losing market share.
         In 1998 Netscape started the open source Mozilla project, which made available the source code for their \gls{browser}.
         Mozilla was to originally develop a suite of Internet applications, but later switched focus to the \emph{Firefox} \gls{browser} that had been created in 2002.
-        Firefox uses the \emph{Gecko} layout engine developed by Mozilla.
+        Firefox uses the \emph{Gecko} \gls{layout engine} developed by Mozilla.
 
         Another historically important \gls{browser} is the \emph{Konqueror} \gls{browser} developed by the free software community \gls{KDE}.
         The \gls{browser} was released in 1998 and was bundled in the \gls{KDE} Software Compilation.
-        Konqueror used the \abbr{khtml} layout engine, also developed by \gls{KDE}.
+        Konqueror used the \abbr{khtml} \gls{layout engine}, also developed by \gls{KDE}.
         In 2001, when \emph{Apple Inc.} decided to build their own \gls{browser} to ship with \abbr{os x}, a \gls{fork} called \gls{WebKit} was made of the \abbr{khtml} project.
         Apple's \gls{browser} called \emph{Safari} was released in 2003.
-        The \gls{WebKit} layout engine was made fully open source in 2005.
+        The \gls{WebKit} \gls{layout engine} was made fully open source in 2005.
         In 2008, \emph{Google Inc.} also released a \gls{browser} based on \gls{WebKit}, named \emph{Chrome}.
         The majority of the source code for Chrome was open sourced as the \emph{Chromium} project.
         Google decided in 2013 create a \gls{fork} of \gls{WebKit} called \emph{Blink} for their \gls{browser}.
@@ -638,8 +642,8 @@
   \part{Theory}\label{part:theory}
     \chapter{Layout engines}
       \begin{metatext}
-        Before diving into the theory of element queries, it is important to understand how layout engines work.
-        Only the layout engines of the \gls{browser} will be of importance, since element queries do not affect any other \gls{browser} subsystem.
+        Before diving into the theory of element queries, it is important to understand how \glspl{layout engine} work.
+        Only the \gls{layout engine} of the \gls{browser} will be of importance, since element queries do not affect any other \gls{browser} subsystem.
         This chapter will give a brief explanation of the layout flow that the engines generally perform, and how content changes affect the engine\todo{Write about content changes or remove this.}.
         It will also cover some optimizations that are done and which parts of the layout process that can be done in parallel.
         The render process will not be described, as it is not relevant for element queries.
@@ -679,12 +683,12 @@
         \caption{Reference \gls{browser} architecture. The data persistence system used by the \gls{browser} engine and the user interface has been omitted.} 
         \label{fig:browser_architecture}
       \end{figure}
-      It is shown that the layout engine is located between the \emph{\gls{browser} engine} system and the network, \gls{JavaScript}, \gls{XML} parsing and display backend.
-      The \gls{browser} engine acts as a high level interface to the layout engine, and is responsible for providing the layout engine with \glspl{URI} that should be rendered with layout options.
-      The main responsibility of the layout engine is to render the current state of the fetched \gls{hypertext} document.
-      Since documents may (and often do) change dynamically after parsetime, it is important to keep in mind that the job of the layout engine is continuous, and is not a one time operation.
-      The parsing of \gls{HTML} is also done by the layout engine (and not in the \gls{XML} subsystem) since \gls{HTML} is less strict and reentrant.
-      In short, layout engines perform four distinct tasks:
+      It is shown that the \gls{layout engine} is located between the \emph{\gls{browser} engine} system and the network, \gls{JavaScript}, \gls{XML} parsing and display backend.
+      The \gls{browser} engine acts as a high level interface to the \gls{layout engine}, and is responsible for providing the \gls{layout engine} with \glspl{URI} that should be rendered with layout options.
+      The main responsibility of the \gls{layout engine} is to render the current state of the fetched \gls{hypertext} document.
+      Since documents may (and often do) change dynamically after parsetime, it is important to keep in mind that the job of the \gls{layout engine} is continuous, and is not a one time operation.
+      The parsing of \gls{HTML} is also done by the \gls{layout engine} (and not in the \gls{XML} subsystem) since \gls{HTML} is less strict and reentrant.
+      In short, \glspl{layout engine} perform four distinct tasks:
       \begin{enumerate}
         \item Fetch of content (typically \gls{HTML} and \gls{CSS}) and parse it in order to construct a \gls{DOM} tree. \todo{Explain DOM before this?}
         \item Construct a \gls{render tree} of the \gls{DOM} tree.
@@ -692,11 +696,11 @@
         \item Render the \glspl{element} of the \gls{render tree}.
       \end{enumerate}
       See section~\ref{sec:dom-tree} and section~\ref{sec:render-tree} for a more in depth explanation of \gls{DOM} and \glspl{render tree}.
-      Modern \glspl{browser} can display multiple pages at the same time (by using tabs or multiple windows) where each page typically has an instance of the layout engine in a separate process.
-      There are four layout engines that the major \glspl{browser} use, as presented in table~\ref{table:layout_engines}.
-      Since Blink is a recent \gls{fork} of \gls{WebKit} they can be grouped as \gls{WebKit}-based layout engines.
-      This results in three different layout engines to consider; \gls{WebKit}, Gecko and Trident.
-      Due to Trident being closed source, only the \gls{WebKit} based layout engines and Gecko will be considered from now on.
+      Modern \glspl{browser} can display multiple pages at the same time (by using tabs or multiple windows) where each page typically has an instance of the \gls{layout engine} in a separate process.
+      There are four \glspl{layout engine} that the major \glspl{browser} use, as presented in table~\ref{table:layout_engines}.
+      Since Blink is a recent \gls{fork} of \gls{WebKit} they can be grouped as \gls{WebKit}-based \glspl{layout engine}.
+      This results in three different \glspl{layout engine} to consider; \gls{WebKit}, Gecko and Trident.
+      Due to Trident being closed source, only the \gls{WebKit} based \glspl{layout engine} and Gecko will be considered from now on.
 
       \begin{table}[ht]\center
         \tiny
@@ -721,7 +725,7 @@
           \end{tabular}
         \end{minipage}
         \caption{
-          The major layout engines and their \glspl{browser} with market shares.
+          The major \glspl{layout engine} and their \glspl{browser} with market shares.
           The table to the right has grouped together Blink into \gls{WebKit} since it is a recent for of \gls{WebKit}.
           See section~\ref{sec:layout_engines_market_share} for more information how the market share data was gathered.}
         \label{table:layout_engines}
@@ -743,7 +747,7 @@
         The \gls{DOM} provides an interface for programs (\gls{JavaScript} scripts in the \gls{browser}) to dynamically access and mutate the content, structure and style of documents.
         Each node of the document is a \gls{DOM} object, and therefore the whole document is converted to a tree structure of \gls{DOM} nodes which is referred to as the \gls{DOM} tree.
 
-        Layout engines construct \gls{DOM} trees by parsing \gls{HTML} with any included \gls{CSS} and \gls{JavaScript}.
+        \Glspl{layout engine} construct \gls{DOM} trees by parsing \gls{HTML} with any included \gls{CSS} and \gls{JavaScript}.
         Parsing of \gls{HTML} is not an easy task because the specification of \gls{HTML} states that it must be forgiving (i.e. accepting malformed markup).
         \todo{Is it true that the spec says that malformed html must be accepted. Servo experience report seems to say otherwise.}
         As \gls{CSS} and JavasScript are stricter, their grammar can be expressed in a formal syntax and can therefore be parsed with a context free grammar parser (which can be autogenerated).
@@ -766,7 +770,7 @@
 
       \section{Render trees}\label{sec:render-tree}
         \begin{metatext}
-          When the \gls{DOM} tree has been constructed and all external \gls{CSS} has been fetched and parsed, it is time for the layout engine to create the \gls{render tree}.
+          When the \gls{DOM} tree has been constructed and all external \gls{CSS} has been fetched and parsed, it is time for the \gls{layout engine} to create the \gls{render tree}.
           Here an explanation of the creation process and the structure of \glspl{render tree} will be given.
           This section is mainly based on \normalfont{\cite{garsiel2011browsers,w3c_css21}}.
         \end{metatext}
@@ -774,7 +778,7 @@
         A \gls{render tree} is a visual representation of the document.
         In contrast to the \gls{DOM} tree, the \gls{render tree} only contains of \glspl{element} that will be rendered.
         The nodes of the \gls{render tree} are called \emph{renderers} (also known as \emph{frames} or \emph{render objects}), as the \glspl{element} are responsible for their own and all subnodes layout and rendering.
-        In order to know how to render themselves, the final style of each renderer needs to be computed which is done by the layout engine while constructing the tree.
+        In order to know how to render themselves, the final style of each renderer needs to be computed which is done by the \gls{layout engine} while constructing the tree.
         Each renderer represents a rectangle (given by style size and position) with a given style.
         There are different types of renderers, which affect how the renderer rectangle is computed.
         The type can be directly affected by the display style property.
@@ -870,7 +874,7 @@
         To avoid global layouts when a renderer has been changed, a dirty bit system is usually implemented.
         The system marks which renderers in the tree that need a layout, which avoids layout of unaffected \glspl{element}.
         Layouts that only layout the dirty renderers are called \emph{incremental layouts}.
-        Layout engines that uses the dirty bit system usually keeps a queue of incremental layout commands.
+        \Glspl{layout engine} that uses the dirty bit system usually keeps a queue of incremental layout commands.
         The scheduler system later triggers a batch execution of the incremental layout commands asynchronously.
         A global layout is triggered when the \gls{viewport} is resized or when styles that affect the whole document are changed (such as \code{font-size}).
         Because the \gls{API} of \code{getComputedStyle} promises resolved values for all style properties, a call will force a full layout (flushing the incremental layout commands queue).
@@ -896,7 +900,7 @@
         \begin{metatext}
           No longer can performance of an application increase over time without any code changes (as opposed to the times when \gls{CPU} clock speeds increased rapidly).
           Now, applications need to utilize the multiple cores of the \gls{CPU} instead of relying on high clock speed.
-          Parallelization is something layout engine vendors are very interested in, and much research is being done about utilizing multiple cores to increase the speed of the engine.
+          Parallelization is something \gls{layout engine} vendors are very interested in, and much research is being done about utilizing multiple cores to increase the speed of the engine.
           In this section a small summary will be given about the current research front, and how the parallelization can be approached.
           This section is mainly based on \normalfont{\cite{zoomm,parallelizing_the_web_browser,meyerovich2010fast,servo_parallel,servo_blog}}.
         \end{metatext}
@@ -931,7 +935,7 @@
 
     \chapter{Element queries}
       \begin{metatext}
-        Now that a good understanding of \glspl{browser} (especially the layout engine), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- the solution to modular \gls{responsive} \gls{web} design.
+        Now that a good understanding of \glspl{browser} (especially the \gls{layout engine}), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- the solution to modular \gls{responsive} \gls{web} design.
         This chapter will define element queries, present how they solve the problem, and address some of the issues hindering element queries from being implemented \glslink{native}{natively}.
         Further, some possible restrictions will be presented to resolve some of the issues.
         \todo{Instead write that some solutions will be presented?}
@@ -981,8 +985,8 @@
         \todo{What to write here?}
         \subsection{Performance}
           \begin{metatext}
-            This subsection will present the performance impacts that element queries have on layout engines.
-            As shown in section~\ref{sec:parallel} \gls{browser} vendors are very interested in parallelizing their \glspl{browser} and especially the layout engines to increase the page performance.
+            This subsection will present the performance impacts that element queries have on \glspl{layout engine}.
+            As shown in section~\ref{sec:parallel} \gls{browser} vendors are very interested in parallelizing their \glspl{browser} and especially the \glspl{layout engine} to increase the page performance.
             Element queries limits the parallelization badly, which will be the focus of this subsection.
             \todo{Referera till w3c mailinglista?}
           \end{metatext}
@@ -999,9 +1003,9 @@
           As already stated, this only occurs when the layout has changed in a way that changes the element query selectors.
           Unfortunately, this means that if there is any matching element query selector at page load, two layout passes will always be performed.
 
-          Further, it is common for internal \glspl{API} in layout engines to request updated \gls{element} styles that do not require layout to resolve (non-layout properties such as \code{color} and \code{font-family}).
+          Further, it is common for internal \glspl{API} in \glspl{layout engine} to request updated \gls{element} styles that do not require layout to resolve (non-layout properties such as \code{color} and \code{font-family}).
           Since a layout of the element query selector target is required in order to resolve the correct \gls{element} style, such internal \glspl{API} requires a layout in order to obtain the correct \gls{element} style (even for non-layout related properties).
-          Also, layout engines would not be able to layout subtrees in parallel since an \gls{element} in one subtree might affect an \gls{element} in another subtree.
+          Also, \glspl{layout engine} would not be able to layout subtrees in parallel since an \gls{element} in one subtree might affect an \gls{element} in another subtree.
 
           \todo{Totally forgot to write about parallel problems}
 
@@ -1046,7 +1050,7 @@
           \end{enumerate}
           Clearly, the \gls{browser} will be stuck in an infinite layout cycle pending back and forth between step 2 and 3 (250 pixels and 550 pixels).
           The result of this is of course implementation dependent.
-          One reasonable outcome of such infinite layout loop is that the layout engine executes one layout pass and then evaluate the next set of matched selectors and so on, which leads to a functioning page but since a relayout is enforced every update, the performance impact is huge.
+          One reasonable outcome of such infinite layout loop is that the \gls{layout engine} executes one layout pass and then evaluate the next set of matched selectors and so on, which leads to a functioning page but since a relayout is enforced every update, the performance impact is huge.
           This example is somewhat similar to writing \code{while(true);} in \gls{JavaScript}, which obviously is a bad idea.
           However, cyclic rules can also occur in less obvious ways. 
 
@@ -1171,14 +1175,14 @@
           This means that a new \gls{HTML} tag will be crafted (perhaps named \code{viewport}) that defines separated \glspl{viewport} in the document.
           The size of \glspl{viewport} is not dependent on their children, and children may only target the closest ancestor \gls{viewport} \gls{element} in the element queries.
           This way, cyclic rules can no longer occur since the children may not alter the \gls{viewport} size.
-          The reason that a new \gls{HTML} tag is proposed instead of a new \gls{CSS} property that defines the behavior is because the layout engine in the latter case needs to resolve the styles for all \glspl{element} in order to know which are \gls{viewport} \glspl{element}.
-          With a new \gls{HTML} tag, the layout engine can detect that that the \gls{element} is a \gls{viewport} before any resolving styles.
+          The reason that a new \gls{HTML} tag is proposed instead of a new \gls{CSS} property that defines the behavior is because the \gls{layout engine} in the latter case needs to resolve the styles for all \glspl{element} in order to know which are \gls{viewport} \glspl{element}.
+          With a new \gls{HTML} tag, the \gls{layout engine} can detect that that the \gls{element} is a \gls{viewport} before any resolving styles.
           \todo{Write why it is important to know \gls{viewport} \glspl{element} before resolving styles.}
 
           This approach also solves many of the performance problems, but not all.
           The internal \glspl{API} that request non-layout information for the \glspl{element} using element queries only need to make sure that the containing \gls{viewport} \gls{element} has been laid out before resolving the styles (which is a much better situation that the unrestricted version of element queries).
           Further, the layout can be done in one pass as long as the \gls{viewport} \glspl{element} are laid out before the children.
-          It is still a bit inconvenient that the layout engine would need to evaluate all element query selectors in the middle of a layout pass (after the that the \gls{viewport} \glspl{element} has been laid out) in order to resolve the styles for the \gls{viewport} children.
+          It is still a bit inconvenient that the \gls{layout engine} would need to evaluate all element query selectors in the middle of a layout pass (after the that the \gls{viewport} \glspl{element} has been laid out) in order to resolve the styles for the \gls{viewport} children.
           Parallelization is also easier, since the queries may only be targeting the closest \gls{viewport} \gls{element}.
           This means that each \gls{viewport} subtree can be laid out in parallel.
 
@@ -1499,7 +1503,7 @@ elq.start(jqueryElementsCollection);
           \end{itemize}
           The first solution is appealing because it does not mutate the \gls{DOM} and it works on all \glspl{browser} since it does not rely on special \gls{element} behaviors or similar.
           However, in order to prevent the \gls{responsive} \glspl{element} lagging behind the size changes of the user interface, the polls need to be performed quite frequently.
-          Recall from section~\ref{sec:layout-process} that layout engines typically have a layout queue in order to perform layout in batches for increased performance.
+          Recall from section~\ref{sec:layout-process} that \glspl{layout engine} typically have a layout queue in order to perform layout in batches for increased performance.
           Each poll would force the layout queue to be flushed since the computed style of \glspl{element} needs to be retrieved in order to know if \glspl{element} have resized or not.
           The performance impact of polling the \gls{DOM} frequently is not desirable.
           Since the polling is be performed all the time, the overall page performance will be decreased even if the page is idle, which is undesirable especially for devices running on battery.
@@ -1549,19 +1553,19 @@ elq.start(jqueryElementsCollection);
   \addappheadtotoc
     \chapter{Resources}
       \section{Practical problem formulation document}\label{sec:problem-formulation}
-        TODO: Should this be in the real document instead of appendix?          
+        \todo[inline]{Should this be in the real document instead of appendix?}
       \section{CSS terminology}
-        TODO: Write custom or refer to this \url{http://www.impressivewebs.com/css-terms-definitions/}?
+        \todo[inline]{Write custom or refer to this \url{http://www.impressivewebs.com/css-terms-definitions/}?}
       \section{Layout engine market share statistics}\label{sec:layout_engines_market_share}
         Browser market share was retrieved by \emph{StatCounter}\footnote{StatCounter graph \url{http://gs.statcounter.com/\#all-browser-ww-monthly-201402-201502-bar}}.
-        Since the graph only display \gls{browser} market share and not layout engine, it is needed to further divide the \glspl{browser} into layout engine percentages.
+        Since the graph only display \gls{browser} market share and not \gls{layout engine}, it is needed to further divide the \glspl{browser} into \gls{layout engine} percentages.
         The Blink engine was introduced with Chrome version 28 and Android version 4.4 \cite{wiki_blink}.
         Since Chrome has very good adoption rate\footnote{According to \url{http://clicky.com/marketshare/global/web-browsers/google-chrome/}} of new versions the Chrome market share percentage of 39.72\% is considered to be Blink based.
         However, Android has not as good adoption rate as Chrome with only 44.2\% using Android version 4.4 and up\footnote{According to \url{https://developer.android.com/about/dashboards/index.html}}.
         Android has a \gls{browser} market share of 7.21\%. 44.2\% of the 7.21\% Android \glspl{browser} is assumed to be Blink based and 55.8\% to be \gls{WebKit} based (since the Android \gls{browser} was \gls{WebKit} based before Blink).
         Of course, the assumption that users with old versions of Android browse the {\gls{web} as much as users with new versions are probably invalid, but the data source itself is uncertain enough to make such assumptions and the percentages should only be regarded as guidelines.
         Opera with the lowest market share at 3.97\% started using the Blink engine in late 2013 as of version 15.
-        StatCounter shows that 37\% of the Opera users are using Opera Mini (their mobile \gls{browser}), which does not use the Blink engine (it uses Opera's own Presto layout engine which will be ignored).
+        StatCounter shows that 37\% of the Opera users are using Opera Mini (their mobile \gls{browser}), which does not use the Blink engine (it uses Opera's own Presto \gls{layout engine} which will be ignored).
         All desktop users of Opera are assumed to be using version 15 or above and hence using the Blink engine.
         The total market share percentage of the Blink engine is then calculated to $39.72 + 0.442\cdot7.21 + 0.37\cdot3.97 = 44.38\%$.
         Safari, with the market share percentage of 7.46\%, has always been \gls{WebKit} based.
