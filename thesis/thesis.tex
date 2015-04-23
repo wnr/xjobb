@@ -1,4 +1,9 @@
 \documentclass[a4paper,11pt]{kth-mag}
+
+\usepackage{silence}
+\WarningFilter{glossaries}{Overriding \printglossary}
+\WarningFilter{glossaries}{Overriding `theglossary'}
+
 \usepackage[T1]{fontenc}
 \usepackage{textcomp}
 \usepackage{lmodern}
@@ -82,7 +87,7 @@
 }
 \newglossaryentry{responsive}{
   name=responsive,
-  description={Elements and content of the document can detect size changes and act accordingly. Usually a restructure of content is performed at certain breakpoints}
+  description={Elements and content of the \gls{document} can detect size changes and act accordingly. Usually a restructure of content is performed at certain breakpoints}
 }
 \newglossaryentry{render tree}{
   name={render tree},
@@ -94,11 +99,11 @@
 }
 \newglossaryentry{viewport}{
   name={viewport},
-  description={The outer frame that defines the visible area of the document. Usually defined by the \gls{browser} window, but may be restricted by other factors such as frames}
+  description={The outer frame that defines the visible area of the \gls{document}. Usually defined by the \gls{browser} window, but may be restricted by other factors such as frames}
 }
 \newglossaryentry{element}{
   name={element},
-  description={HTML documents consists of elements, which can be regarded as the building blocks of web pages. A web page describes a tree structure of elements and text}
+  description={HTML \glspl{document} consists of elements, which can be regarded as the building blocks of \gls{web} pages. A \gls{web} page describes a tree structure of elements and text}
 }
 \newglossaryentry{native}{
   name={native},
@@ -106,15 +111,15 @@
 }
 \newglossaryentry{third-party}{
   name={third-party},
-  description={Refers to \glspl{API} and systems implemented on top of the \gls{browser}, usually in \gls{JavaScript}. Such APIs and systems must be included by developers into the document, and are usually not described by standards specifications}
+  description={Refers to \glspl{API} and systems implemented on top of the \gls{browser}, usually in \gls{JavaScript}. Such APIs and systems must be included by developers into the \gls{document}, and are usually not described by standards specifications}
 }
 \newglossaryentry{hypertext}{
   name={hypertext},
-  description={Documents with of text and media with links (hyperlinks) to other documents immediately accessible for the user. Often used as a synonym for hypermedia}
+  description={\Glspl{document} with text and media with links (hyperlinks) to other \glspl{document} immediately accessible for the user. Often used as a synonym for hypermedia}
 }
 \newglossaryentry{JavaScript}{
   name={JavaScript},
-  description={\Gls{native} \gls{browser} script language. Web documents often include JavaScript to make the documents more dynamic and interactable}
+  description={\Gls{native} \gls{browser} script language. \Gls{web} \glspl{document} often include JavaScript to make the \glspl{document} more dynamic and interactable}
 }
 \newglossaryentry{browser}{
   name={browser},
@@ -134,7 +139,11 @@
 }
 \newglossaryentry{layout engine}{
   name={layout engine},
-  description={The part of the browser that handles parsing, laying out and rendering web content. Layout engines are often open source and browsers usually acts as a shell on top of a layout engine. Sometimes also called rendering engines}
+  description={The part of the browser that handles parsing, laying out and rendering \gls{web} content. Layout engines are often open source and browsers usually acts as a shell on top of a layout engine. Sometimes also called rendering engines}
+}
+\newglossaryentry{document}{
+  name={document},
+  description={Strictly defined as something that has an \gls{URI} and can return representations of the identified resource in response to HTTP requests. If otherwise states, document will refer to \gls{HTML} \gls{web} pages in this thesis. In \gls{JavaScript}, document refers to the \gls{DOM} root}
 }
 
 \newacronym{W3C}{W3C}{World Wide Web Consortium}
@@ -321,7 +330,7 @@
         Browsers and the Internet is something that many people today take for granted.
         It is not longer the case that only computer scientists are browsing the \gls{web}.
         Today the \gls{web} is becoming increasingly important in both our personal and professional lives.
-        This chapter will give a brief history of \glspl{browser} and how the \gls{web} transitioned from handling science documents to commercial applications.
+        This chapter will give a brief history of \glspl{browser} and how the \gls{web} transitioned from handling science \glspl{document} to commercial applications.
         This section is a summary of \normalfont{\cite{internet_live_stats,internet_of_things,wiki_hypermedia,w3c_www,oed}}.
       \end{metatext}
 
@@ -342,14 +351,14 @@
       
       As already stated, the \gls{WWW} is a system that operates on top of the Internet.
       The \gls{WWW} is usually shortened to simply \emph{the \gls{web}}.
-      The \gls{web} is a system for accessing interlinked \gls{hypertext} documents and other media such as images and videos.
+      The \gls{web} is a system for accessing interlinked \gls{hypertext} \glspl{document} and other media such as images and videos.
       Since not only \gls{hypertext} is interlinked on the \gls{web}, the term \emph{\glslink{hypertext}{hypermedia}} can be used as an extension to \gls{hypertext} that also includes other nonlinear medium of information (images, videos, etc.).
       Although the term \glslink{hypertext}{hypermedia} has been around for a long time, the term \gls{hypertext} is still being used as a synonym for \glslink{hypertext}{hypermedia}.
       Further, the \gls{web} can also be referred to as the universe of information accessible through the \gls{web} system.
       Therefore, the \gls{web} is both the system enabling sharing of \glslink{hypertext}{hypermedia} and also all of the accessible \glslink{hypertext}{hypermedia} itself.
-      Hypertext documents are today more known by the name \emph{\gls{web} pages} or simply \emph{pages}.
+      Hypertext \glspl{document} are today more known by the name \emph{\gls{web} pages} or simply \emph{pages}.
       Multiple related pages (that are often served from the same domain) compose a \emph{web site} or simply a \emph{site}.
-      Hypertext documents are written in \gls{HTML}, and often includes \gls{CSS} for styling and \gls{JavaScript} for custom user interactions.
+      Hypertext \glspl{document} are written in \gls{HTML}, and often includes \gls{CSS} for styling and \gls{JavaScript} for custom user interactions.
       As a complementary to \gls{HTML}, the \gls{XML} also exists with the purpose of describing data (as contrary to \gls{HTML} which describes the \emph{presentation} of data).
       To transfer the resources between computers the protocol \gls{HTTP} is used.
       Typically the way of retrieving resources on the \gls{web} is by using a \emph{\gls{web} \gls{browser}} or simply a \emph{\gls{browser}}.
@@ -405,18 +414,18 @@
 
         \noindent
         Recall from section~\ref{sec:history-internet} that the way of exchanging information was to upload and download files between clients and hosts with \gls{FTP}.
-        If a document downloaded was referring to another document, the user had to manually find the server that hosted the other document and download it manually.
-        This was a poor way of digesting information and documents that linked to other resources.
-        In 1989 a proposal for a communication system that allowed interlinked documents was submitted to the management at \abbr{CERN}.
-        The idea was to allow links to other documents embedded in text documents, directly accesible for users.
+        If a \gls{document} downloaded was referring to another \gls{document}, the user had to manually find the server that hosted the other \gls{document} and download it manually.
+        This was a poor way of digesting information and \glspl{document} that linked to other resources.
+        In 1989 a proposal for a communication system that allowed interlinked \glspl{document} was submitted to the management at \abbr{CERN}.
+        The idea was to allow links to other \glspl{document} embedded in text \glspl{document}, directly accesible for users.
         A quote from the draft:
         \begin{quote}
-          Imagine, then, the references in this document all being associated with the network address of the thing to which they referred, so that while reading this document you could skip to them with a click of the mouse.
+          Imagine, then, the references in this \gls{document} all being associated with the network address of the thing to which they referred, so that while reading this \gls{document} you could skip to them with a click of the mouse.
         \end{quote}
         This catches the whole essence of the \gls{web} in a sentence --- to interlink resources in an user friendly way.
         The proposal describes that such text embedded links would be \gls{hypertext}.
-        It continues to explain that interlinked resources does not need to be limited to text documents since multimedia such as images and videos can also be interlinked which would similarly be hypermedia.
-        The concept of \glspl{browser} is described, with a client-server model the \gls{browser} would fetch the \gls{hypertext} documents, parse them and handle the fetching of all media linked in the \gls{hypertext}.
+        It continues to explain that interlinked resources does not need to be limited to text \glspl{document} since multimedia such as images and videos can also be interlinked which would similarly be hypermedia.
+        The concept of \glspl{browser} is described, with a client-server model the \gls{browser} would fetch the \gls{hypertext} \glspl{document}, parse them and handle the fetching of all media linked in the \gls{hypertext}.
 
         In 1990, \gls{HTTP} and \gls{HTML} implemented.
         A \gls{browser} and a \gls{web} server had also been created and the \gls{web} was born.
@@ -427,13 +436,13 @@
 
         As a side note, the Gopher protocol was developed in parallel to the web by the University of Minnesota.
         It was released in 1991 and quickly gained traction as the \gls{web} still was in very early stages.
-        The goal of the system, just like the \gls{web}, was to overcome the shortcomings of browsing documents with \gls{FTP}.
-        Gopher enabled servers to list the documents present, and also to link to documents on other servers.
-        This created a strong hierarchy between the documents.
-        The listed documents of a server could then be presented as \gls{hypertext} menus to the client (much like a \gls{web} \gls{browser}).
+        The goal of the system, just like the \gls{web}, was to overcome the shortcomings of browsing \glspl{document} with \gls{FTP}.
+        Gopher enabled servers to list the \glspl{document} present, and also to link to \glspl{document} on other servers.
+        This created a strong hierarchy between the \glspl{document}.
+        The listed \glspl{document} of a server could then be presented as \gls{hypertext} menus to the client (much like a \gls{web} \gls{browser}).
         As the protocol was simpler than \gls{HTTP} it was often preferred since it used less network resources.
         The structure provided by Gopher provided a platform for large electronic library connections.
-        A big difference between the \gls{web} and the Gopher platform is that the Gopher platform provided \gls{hypertext} menus presented as a file system while the \gls{web} \gls{hypertext} links inside \gls{hypertext} documents, which provided greater flexibility.
+        A big difference between the \gls{web} and the Gopher platform is that the Gopher platform provided \gls{hypertext} menus presented as a file system while the \gls{web} \gls{hypertext} links inside \gls{hypertext} \glspl{document}, which provided greater flexibility.
         When the University of Minnesota announced that it would charge licensing fees for the implementation, users were somewhat scared away.
         As the \gls{web} matured, being a more flexible system with more features as well as being totally free it quickly became dominant.
 
@@ -441,7 +450,7 @@
         \label{sec:browsers}
         \begin{metatext}
           In the mid 1990's the usage of the Internet transitioned from downloading files with \gls{FTP} to instead access resources with the \gls{HTTP} protocol.
-          To fulfill the vision that users would be able to skip to the linked documents ``with a click of the mouse'' users needed a client to handle the fetching and displaying of the \gls{hypertext} documents, hence the need for \glspl{browser} were apparent.
+          To fulfill the vision that users would be able to skip to the linked \glspl{document} ``with a click of the mouse'' users needed a client to handle the fetching and displaying of the \gls{hypertext} \glspl{document}, hence the need for \glspl{browser} were apparent.
           Here the evolution of the \gls{browser} clients will be given, while emphasizing the timeline of the popular \glspl{browser} we use today.
           This section is a summary of \normalfont{\cite{wiki_www,wiki_nexus,wiki_lmb,wiki_libwww,wiki_mosaic,wiki_netscape,wiki_mozilla,wiki_opera,wiki_konqueror,wiki_safari,wiki_webkit,wiki_blink}}.
         \end{metatext}
@@ -449,7 +458,7 @@
         The first \gls{web} \gls{browser} ever made was created in 1990 and was called WorldWideWeb (which was renamed to Nexus to avoid confusion).
         It was at the time the only way to view the \gls{web}, and the \gls{browser} only worked on NeXT computers.
         Built with the NeXT framework, it was quite sophisticated.
-        It had a \gls{GUI} and a \gls{WYSIWYG} \gls{hypertext} document editor.
+        It had a \gls{GUI} and a \gls{WYSIWYG} \gls{hypertext} \gls{document} editor.
         Unfortunately it couldn't be ported to other platforms, so a new \gls{browser} called \emph{Line Mode Browser} (\abbr{lmb}) were quickly developed.
         To ensure compatibility with the earliest computer terminals the \gls{browser} displayed text, and was operated with text input.
         Since the \gls{browser} was operated in the terminal, users could log in to a remote server and use the \gls{browser} via telnet.
@@ -497,7 +506,7 @@
         In the dawn of the \gls{web}, \glspl{browser} were simply applications that fetched and displayed text with embedded links.
         Today, \glspl{browser} act more like an operating system (on top of the host system) executing complex \gls{web} applications.
         There even exist computers that only run a \gls{browser}, which is sufficient for many users.
-        This chapter will describe the transition from \glspl{browser} rendering simple documents to being hosts for complex applications.
+        This chapter will describe the transition from \glspl{browser} rendering simple \glspl{document} to being hosts for complex applications.
         It will also describe two key evolution points in \gls{web} development --- \gls{responsive} \gls{web} design and modular development.
       \end{metatext}
 
@@ -505,23 +514,23 @@
       \todo[inline]{Philipp: Here you should provide an overview of the different sections of the chapter. “In section 3.1 we outline… In section 3.2 we…}
       \section{From documents to applications}
         \begin{metatext}
-          This section will describe the transition from \glspl{browser} rendering simple documents to being hosts for complex applications.
+          This section will describe the transition from \glspl{browser} rendering simple \glspl{document} to being hosts for complex applications.
           Since \gls{web} development trends are not easily pinned to exact dates, this section will only present dates as guidance and should not be regarded as exact dates for the events.
           This section is a summary of \normalfont{\cite{wiki_web_dev,wiki_cgi,wiki_css,wiki_ajax,wiki_html5,book_html5}}.
         \end{metatext}
 
-        As described in section~\ref{sec:www}, \glspl{browser} initially were applications that displayed \gls{hypertext} documents with the ability to fetch linked documents in an user friendly way.
-        Static content were written in \gls{HTML}, which could include hyperlinks to other \gls{hypertext} documents or hypermedia.
+        As described in section~\ref{sec:www}, \glspl{browser} initially were applications that displayed \gls{hypertext} \glspl{document} with the ability to fetch linked \glspl{document} in an user friendly way.
+        Static content were written in \gls{HTML}, which could include hyperlinks to other \gls{hypertext} \glspl{document} or hypermedia.
         Different stylesheet languages were being developed to enable the possibility of separating content styling with the content.
         In 1996 \gls{W3C} officially recommended \gls{CSS}, which came to be the preferred way of styling \gls{web} content.
-        Since \gls{HTML} is only a markup language it is not possible to generate dynamic content, which was sufficient at the time \gls{HTML} was only used for annotating links in research documents.
+        Since \gls{HTML} is only a markup language it is not possible to generate dynamic content, which was sufficient at the time \gls{HTML} was only used for annotating links in research \glspl{document}.
 
         The need for generated dynamic content grew bigger, and \gls{NCSA} created the first draft of the \gls{CGI} in 1993, which provides an interface between the \gls{web} server and the systems that generate content.
         \gls{CGI} programs are usually referred to as scripts, since many of the popular \gls{CGI} languages are script languages.
         Generating dynamic content on the server is sometimes referred to as \emph{server-side scripting}.
         This enabled developers to generate dynamic websites, with different content for different users for instance.
         However, when the content is delivered to the client (\gls{browser}) it is still being static.
-        There is no way for the server to change the content that the client has received, unless the client requests another document.
+        There is no way for the server to change the content that the client has received, unless the client requests another \gls{document}.
 
         Around 1996, client side scripting was born.
         The term \gls{DHTML} was being used as an umbrella term for a collection of technologies used together to make pages interactive and animated, where client side scripting played a big role.
@@ -540,7 +549,7 @@
         Still, parts of the applications were defined as \gls{HTML} pages, fetched from the server when navigating the site.
         When the \emph{XMLHttpRequest} \gls{API} was supported in the major \glspl{browser}, pages no longer needed to reload in order to fetch new content as XMLHttpRequest enabled developers to perform asynchronous requests to servers with \gls{JavaScript}.
         This opened up for the \gls{AJAX} \gls{web} development technique which became a popular way of communicating with servers ``in the background'' of the page.
-        Developers pushed \glspl{browser} and \gls{HTML} to the limit when creating applications instead of documents that they were originally designed for.
+        Developers pushed \glspl{browser} and \gls{HTML} to the limit when creating applications instead of \glspl{document} that they were originally designed for.
         In a \gls{W3C} meeting in 2004 it was proposed to extend \gls{HTML} to ease the creation of \gls{web} applications, which was rejected.
         \gls{W3C} was criticized of not listening to the need of the industry, and some members of \gls{W3C} left to create the \gls{WHATWG}.
         \gls{WHATWG} started working on specifications to ease the development of \gls{web} applications which came to be grouped together under the name \gls{HTML5}.
@@ -551,7 +560,7 @@
         \gls{CSS3} was also recently released which also included many new features.
         Using \gls{HTML5} and \gls{CSS3} developers could utilize advanced graphics programming, geolocation, cache storage, file system access, offline mode, and much more.
 
-        \todo[inline]{Write that traditional applications are threatened by \gls{web} applications, since the reach and availability of the \gls{web} is superior to any other distribution platform. Also, no installation is required with \gls{web} applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
+        \todo[inline]{Write that traditional applications are threatened by web applications, since the reach and availability of the web is superior to any other distribution platform. Also, no installation is required with web applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
       \section{Responsive web design}\label{sec:rwd}
         \begin{metatext}
           A few years ago, \gls{web} developers could make assumptions about the screen size of user devices.
@@ -604,7 +613,7 @@
         \todo[inline]{Perhaps give an example of a responsive module/view so that the reader understands well why responsiveness is important. This module/view could then act as a testbed for the different EQ approaches.}
       \section{Modularity}\label{sec:modularity}
         \begin{metatext}
-          As the web was a platform for \gls{hypertext} documents that quickly transitioned to serving complex applications, few techniques existed for writing modular code.
+          As the web was a platform for \gls{hypertext} \glspl{document} that quickly transitioned to serving complex applications, few techniques existed for writing modular code.
           The last couple of years as applications grew bigger, techniques and frameworks have been developed to ease modular development.
           Modular development is an old concept, but somewhat newborn in the web scene.
           This section aims to describe what modular development really is, and why it is such an important success factor to software development.
@@ -633,7 +642,7 @@
         It is then possible to reason about them and change the functionality locally inside the boundary of a module.
         
         With modularity comes positive side effects.
-        Loose coupling between modules facilitates unit testing, since it is then possible to test parts of the software in isolation and independent of the system as a whole.
+        Loose coupling between modules facilitates integration testing of each module, since it is then possible to test parts of the software in isolation and independent of the system as a whole.
         Developers can also work on different parts of the software in parallel without being affected by each other, as modules are not allowed to affect each other (other than configurable options or injected strategies).
         The very nature of modules not being context-aware enables them to be reused in other projects (or other parts of the same application).
         Reusability is not only important to speed up the development process of new software projects, it also eases managing a large code base.
@@ -684,22 +693,21 @@
         \caption{Reference \gls{browser} architecture. The data persistence system, used by the \gls{browser} engine and the user interface, has been omitted.} 
         \label{fig:browser_architecture}
       \end{figure}
-      It is shown that the \gls{layout engine} is located between the \emph{\gls{browser} engine} system and the network, \gls{JavaScript}, \gls{XML} parsing and display backend.
-      The \gls{browser} engine acts as a high level interface to the \gls{layout engine}, and is responsible for providing the \gls{layout engine} with \glspl{URI} that should be rendered.
-      Additionally, browser engines usally provide layout engines with layout and rendering options such as user preferred font size, zoom, etc.
-      The main responsibility of the \gls{layout engine} is to render the current state of the fetched \gls{hypertext} document.
-      Since documents may (and often do) change dynamically after parsetime.
-      It is important to keep in mind that the job of the \gls{layout engine} is continuous, and is not a one time operation.
+      It is shown that the \gls{layout engine} is located between the \emph{\gls{browser} engine} system and the network, \gls{JavaScript}, \gls{XML} parsing, and display backend.
+      The \gls{browser} engine acts as a high level interface to the \gls{layout engine}, and is responsible for providing the \gls{layout engine} with \glspl{URI} of content that should be fetched and rendered.
+      Additionally, browser engines usally provide the layout engine with layout and rendering options such as user preferred font size, zoom, etc.
+      The main responsibility of the \gls{layout engine} is to render the current state of the fetched \gls{hypertext} \gls{document}.
+      Since \glspl{document} may (and often do) change dynamically after parsetime it is important to keep in mind that the job of the \gls{layout engine} is continuous, and is not a one time operation.
       The parsing of \gls{HTML} is also done by the \gls{layout engine} (and not in the \gls{XML} subsystem) since \gls{HTML} is less strict and reentrant.
       In short, \glspl{layout engine} perform four distinct tasks:
       \begin{enumerate}
-        \item Fetch content (typically \gls{HTML} and \gls{CSS}) and parse it in order to construct a \gls{DOM} tree. \todo{Explain DOM before this?}
+        \item Fetch content (typically \gls{HTML}, \gls{CSS} and \gls{JavaScript}) and parse it in order to construct a \gls{DOM} tree. \todo{Explain DOM before this?}
         \item Construct a \gls{render tree} of the \gls{DOM} tree.
         \item Layout the \glspl{element} of the \gls{render tree}.
         \item Render the \glspl{element} of the \gls{render tree}.
       \end{enumerate}
       See section~\ref{sec:dom-tree} and section~\ref{sec:render-tree} for a more in depth explanation of \gls{DOM} and \glspl{render tree}.
-      Modern \glspl{browser} can display multiple pages at the same time (by using tabs or multiple windows) where each page typically has an instance of the \gls{layout engine} in a separate process.
+      Modern \glspl{browser} can display multiple pages at the same time (by using tabs, multiple windows or frames) where each page typically has an instance of the \gls{layout engine} in a separate process.
       There are four \glspl{layout engine} that the major \glspl{browser} use, as presented in table~\ref{table:layout_engines}.
       Since Blink is a recent \gls{fork} of \gls{WebKit} they can be grouped as \gls{WebKit}-based \glspl{layout engine}.
       This results in three different \glspl{layout engine} to consider; \gls{WebKit}, Gecko and Trident.
@@ -728,7 +736,7 @@
           \end{tabular}
         \end{minipage}
         \caption{
-          The major \glspl{layout engine} and their \glspl{browser} with market shares.
+          The major \glspl{layout engine} and \glspl{browser} with market shares.
           The table to the right has grouped together Blink into \gls{WebKit} since it is a recent for of \gls{WebKit}.
           See section~\ref{sec:layout_engines_market_share} for more information how the market share data was gathered.}
         \label{table:layout_engines}
@@ -741,14 +749,13 @@
       \section{Constructing DOM trees}\label{sec:dom-tree}
         \begin{metatext}
           Here a brief explanation of \gls{DOM} trees will be given, and how they are constructed.
-          In order to construct a \gls{DOM} tree, the content need to be parsed which also will be covered.
-          Since parsing of content is not very relevant for element queries, it will be addressed only briefly.
+          In order to construct a \gls{DOM} tree, the content need to be parsed which also will be covered briefly.
           This section is mainly based on \normalfont{\cite{w3c_dom,garsiel2011browsers,w3c_css21}}.
         \end{metatext}
 
-        \gls{DOM} is a convention for representing and interacting with objects in \gls{XML}-based documents (such as \gls{HTML}).
-        The \gls{DOM} provides an interface for programs (\gls{JavaScript} scripts in the \gls{browser}) to dynamically access and mutate the content, structure and style of documents.
-        Each node of the document is a \gls{DOM} object, and therefore the whole document is converted to a tree structure of \gls{DOM} nodes which is referred to as the \gls{DOM} tree.
+        The \gls{DOM} is a convention for representing and interacting with objects in \gls{XML}-based \glspl{document} (such as \gls{HTML}).
+        The \gls{DOM} provides an interface for programs (\gls{JavaScript} in the \gls{browser}) to access and mutate the structure, style, and content of \glspl{document}.
+        Each node of the \gls{document} is a \gls{DOM} object, and therefore the whole \gls{document} is converted to a tree structure of \gls{DOM} nodes which is referred to as the \gls{DOM} tree.
 
         \Glspl{layout engine} construct \gls{DOM} trees by parsing \gls{HTML} with any included \gls{CSS} and \gls{JavaScript}.
         Parsing of \gls{HTML} is not an easy task because the specification of \gls{HTML} states that it must be forgiving (i.e. accepting malformed markup).
@@ -760,7 +767,7 @@
         External scripts need to be fetched in order to be executed, which halts the parsing unless the script \gls{element} states otherwise.
         It should be noted that although \gls{DOM} nodes do include a \code{style} property, the nodes in the \gls{DOM} tree are not affected by the \gls{CSS} cascading, and the style properties do not represent the final style of the \gls{element}.
         Instead, for scripts to obtain the final computed style for an \gls{element} a special function needs to be called (\code{getComputedStyle} in \gls{JavaScript}).
-        Since externally linked \gls{CSS} documents do not directly affect the \gls{DOM} tree they could conceptually be fetched and parsed after the parsing of the \gls{HTML}.
+        Since externally linked \gls{CSS} \glspl{document} do not directly affect the \gls{DOM} tree they could conceptually be fetched and parsed after the parsing of the \gls{HTML}.
         However, scripts can request the computed style of \gls{DOM} tree nodes and therefore either the parsing of \gls{HTML} needs to be halted in order to fetch and parse \gls{CSS} when it occurs, or the scripts accessing style properties of \gls{DOM} nodes need to be halted.
         A common optimization is to use a speculative parser that continues to parse the \gls{HTML} when the main parser has halted (for executing the scripts usually).
         The speculative parser does not change the \gls{DOM} tree, instead it searches for external resources that can be fetched in parallel while waiting for the main parser to continue.
@@ -778,7 +785,7 @@
           This section is mainly based on \normalfont{\cite{garsiel2011browsers,w3c_css21}}.
         \end{metatext}
 
-        A \gls{render tree} is a visual representation of the document.
+        A \gls{render tree} is a visual representation of the \gls{document}.
         In contrast to the \gls{DOM} tree, the \gls{render tree} only contains of \glspl{element} that will be rendered.
         The nodes of the \gls{render tree} are called \emph{renderers} (also known as \emph{frames} or \emph{render objects}), as the \glspl{element} are responsible for their own and all subnodes layout and rendering.
         In order to know how to render themselves, the final style of each renderer needs to be computed which is done by the \gls{layout engine} while constructing the tree.
@@ -787,13 +794,13 @@
         The type can be directly affected by the display style property.
 
         Typically nodes in the \gls{DOM} tree map in a 1:1 relation to nodes in the \gls{render tree}, but the relation can also be smaller or larger.
-        The \gls{render tree} only contains nodes that will affect the rendered result, so nodes that do not affect the layout flow of the document and that aren't visible will not be present in the \gls{render tree}.
+        The \gls{render tree} only contains nodes that will affect the rendered result, so nodes that do not affect the layout flow of the \gls{document} and that aren't visible will not be present in the \gls{render tree}.
         For instance, a \gls{DOM} node element with the \code{display} property set to \code{none} will have the relation 1:0 (it will not be present in the \gls{render tree} because it is not visible and will not affect the layout flow).
         It should be noted that \glspl{element} with the \code{visibility} property set to \code{hidden} will be present in the \gls{render tree}, although they are not visible, since they still affect the layout flow.
 
         Even though all style properties have been resolved for each node in the \gls{render tree} (through \gls{CSS} cascading), the renderers still do not know about the size and position of the rectangle.
         This is because some properties cannot be computed by just computing the styles for an \gls{element}.
-        Some properties depend on the flow of the document, and needs to be resolved through a layout.
+        Some properties depend on the flow of the \gls{document}, and needs to be resolved through a layout.
         The layout process will resolve the final position and size for all renderers.
 
       \section{Style computation}\label{sec:style-computation}
@@ -810,8 +817,8 @@
         \begin{enumerate}
           \item In the default styles of the \gls{browser}.
           \item In the user defined \gls{browser} style.
-          \item In external \gls{CSS} documents.
-          \item In internal \gls{CSS} \code{style} tags in the document head.
+          \item In external \gls{CSS} \glspl{document}.
+          \item In internal \gls{CSS} \code{style} tags in the \gls{document} head.
           \item In inline \gls{CSS} in the \code{style} \gls{element} attribute.
           \item In scripts modifying the \gls{element} style through the \gls{DOM} tree.
           \item In special attributes of the \gls{element} such as \code{bgcolor} (deprecated, but possible).
@@ -870,7 +877,7 @@
           This section is mainly based on \normalfont{\cite{garsiel2011browsers}}.
         \end{metatext}
 
-        The layout (also called \emph{reflow}) of \gls{HTML} is flow based, which means that document layout can generally be performed top to bottom and left to right in one pass.
+        The layout (also called \emph{reflow}) of \gls{HTML} is flow based, which means that \gls{document} layout can generally be performed top to bottom and left to right in one pass.
         This is possible because the geometry of \glspl{element} typically do not depend on the siblings or children\todo{Seems weird to say that flow is not dependent on children, since the height is propagated upwards.}.
         Layout is performed recursively by starting at the root of the tree, let the renderer render itself and all of its children which will render themselves and their children and so on.
         When a layout is performed on the whole \gls{render tree} it is called a \emph{global layout}.
@@ -879,7 +886,7 @@
         Layouts that only layout the dirty renderers are called \emph{incremental layouts}.
         \Glspl{layout engine} that uses the dirty bit system usually keeps a queue of incremental layout commands.
         The scheduler system later triggers a batch execution of the incremental layout commands asynchronously.
-        A global layout is triggered when the \gls{viewport} is resized or when styles that affect the whole document are changed (such as \code{font-size}).
+        A global layout is triggered when the \gls{viewport} is resized or when styles that affect the whole \gls{document} are changed (such as \code{font-size}).
         Because the \gls{API} of \code{getComputedStyle} promises resolved values for all style properties, a call will force a full layout (flushing the incremental layout commands queue).
         When a renderer performs a layout the following usually happens:
         \begin{enumerate}
@@ -1021,7 +1028,7 @@
 
           The most obvious occurrences of cyclic rules are when there are specified conflicting width constraints and width updates for an \gls{element}.
           See listing~\ref{code:cyclic-simple} for the perhaps most simple example of cyclic rules.
-          The syntax of element queries will be presented in section~\ref{}, and is not important to understand the problem.
+          The syntax of element queries will be presented in section~\ref{sec:native-eq}\todo{Have the explanation before this section? On the other hand this section is needed for the motivation of the syntax of the native API}, and is not important to understand the problem.
           \begin{lstlisting}[caption={Very simple example of cyclic rules.}, captionpos=b, label={code:cyclic-simple}]
 #foo {
   width: 250px;
@@ -1150,7 +1157,7 @@
           They are impossible to determine at parsetime.
           In this example the text is static but it could have been added dynamically.
           Also, the inherited font size depends on the closest ancestor with a font size property defined.
-          Since ancestors also can have their font sizes defined in relative units, the dependency tree can go up to the root of the document.
+          Since ancestors also can have their font sizes defined in relative units, the dependency tree can go up to the root of the \gls{document}.
           Further, if no ancestor defines an absolute value for the font size it is up to the \gls{browser} to default to a size, which is impossible to reason about at parsetime.
           This implies that there is no way of telling if the cycle appears or not without actually running the code.
           Also, the cycle may appear in different \glspl{browser} and settings, which makes the cycle even harder to detect.
@@ -1175,12 +1182,12 @@
           \end{metatext}
 
           By limiting element queries to special \gls{viewport} container \glspl{element} that can only be queried by child \glspl{element}, much of the problems are resolved.
-          This means that a new \gls{HTML} tag will be crafted (perhaps named \code{viewport}) that defines separated \glspl{viewport} in the document.
+          This means that a new \gls{HTML} tag will be crafted (perhaps named \code{viewport}) that defines separated \glspl{viewport} in the \gls{document}.
           The size of \glspl{viewport} is not dependent on their children, and children may only target the closest ancestor \gls{viewport} \gls{element} in the element queries.
           This way, cyclic rules can no longer occur since the children may not alter the \gls{viewport} size.
           The reason that a new \gls{HTML} tag is proposed instead of a new \gls{CSS} property that defines the behavior is because the \gls{layout engine} in the latter case needs to resolve the styles for all \glspl{element} in order to know which are \gls{viewport} \glspl{element}.
           With a new \gls{HTML} tag, the \gls{layout engine} can detect that that the \gls{element} is a \gls{viewport} before any resolving styles.
-          \todo{Write why it is important to know \gls{viewport} \glspl{element} before resolving styles.}
+          \todo{Write why it is important to know viewport elements before resolving styles.}
 
           This approach also solves many of the performance problems, but not all.
           The internal \glspl{API} that request non-layout information for the \glspl{element} using element queries only need to make sure that the containing \gls{viewport} \gls{element} has been laid out before resolving the styles (which is a much better situation that the unrestricted version of element queries).
@@ -1190,7 +1197,7 @@
           This means that each \gls{viewport} subtree can be laid out in parallel.
 
           This solution would behave much like the \code{iframe} \gls{element} layout-wise.
-          It should be noted that \code{iframe} \glspl{element} are not suitable as an alternative to the proposed \code{viewport} \gls{element}, since \code{iframe} elements are much more limited by nature (creates a new document and script context).
+          It should be noted that \code{iframe} \glspl{element} are not suitable as an alternative to the proposed \code{viewport} \gls{element}, since \code{iframe} elements are much more limited by nature (creates a new \gls{document} and script context).
 
           Obviously, this limits element queries a lot.
           The fact that the size of the \gls{viewport} \gls{element} cannot depend on the children (like normal block \glspl{element} do), limits the usability.
@@ -1209,7 +1216,7 @@
 
           \todo[inline]{Should this be incorporated with some other section or be written?}
           \todo[inline]{Maybe write about having a third-party framework as a solution?}
-      \section{Native API design}
+      \section{Native API design}\label{sec:native-eq}
         \begin{metatext}
           In this section a possible \gls{native} element query \gls{API} will be presented.
           This is based on the current information and approaches of \gls{W3C} and \gls{RICG}, and should therefore be regarded as a guideline to how an \gls{API} might look like.
@@ -1235,15 +1242,15 @@
 
         \todo{Continue this if possible?}
   \part{Third-party framework}\label{part:framework}
-    \todo[inline]{Write somewhere that it might be an option to not have a resize detection system, but instead let the user manually check the \glspl{element} when they may have changed.}
+    \todo[inline]{Write somewhere that it might be an option to not have a resize detection system, but instead let the user manually check the elements when they may have changed.}
     \todo[inline]{Write about the simple cycle detector.}
-    \todo[inline]{Write about the N layouts, and how it was fixed with the batch processing. Investigate how this behaves for nested \glspl{element}.}
+    \todo[inline]{Write about the N layouts, and how it was fixed with the batch processing. Investigate how this behaves for nested elements.}
     \todo[inline]{Write about the drawbacks (invalid layout at page load, injecting objects is heavy, DOM is mutated.)}
 
     \chapter{Analysis of approaches}
       \section{Current implementations}
         \todo[inline]{Write about GSS, Tommy's implementation and the different approaches}
-        \todo[inline]{Write somewhere that an extra layout on \gls{element} resize is inevitable since it is required in theory.}
+        \todo[inline]{Write somewhere that an extra layout on elements resize is inevitable since it is required in theory.}
     \chapter{Framework design}
       \begin{metatext}
         Before starting the actual implementation, it is important to have an overall design to follow.
@@ -1311,7 +1318,7 @@
           The roles of each subsystem of the core framework will also be explained.
         \end{metatext}
 
-        \todo[inline]{Here the style state of the \gls{element} is talked about. Maybe this should have been mentioned before? Perhaps in the chapter text?}
+        \todo[inline]{Here the style state of the element is talked about. Maybe this should have been mentioned before? Perhaps in the chapter text?}
 
         To decide if a subsystem of the solution should be in the framework core or a plugin is a difficult task.
         A balance needs to be found between ease of use, performance and extendability.
@@ -1486,7 +1493,7 @@ elq.start(jqueryElementsCollection);
 
           Unfortunately, there is no standard resize event for arbitrary \glspl{element}.
           Only frames (\glspl{element} that render it's content independently of the container \gls{element}, such as \code{iframe} and \code{object}) support the resize event by standard since they have their own \gls{viewport}.
-          Legacy versions of Internet Explorer (version 8 and down, but also some later versions depending on the document mode and if the \gls{browser} is in quirks mode) do support the resize event on arbitrary \glspl{element}.
+          Legacy versions of Internet Explorer (version 8 and down, but also some later versions depending on the \gls{document} mode and if the \gls{browser} is in quirks mode) do support the resize event on arbitrary \glspl{element}.
           Since the framework needs to support all commonly used \gls{HTML} \glspl{element} a solution to listen to any \gls{element} resize needs to be found.
           Possible solutions are:
           \begin{itemize}
@@ -1511,12 +1518,11 @@ elq.start(jqueryElementsCollection);
           The performance impact of polling the \gls{DOM} frequently is not desirable.
           Since the polling is be performed all the time, the overall page performance will be decreased even if the page is idle, which is undesirable especially for devices running on battery.
           This is not a great solution since reading the \gls{DOM} constantly can be affect the performance negatively. \todo{Should make quick test to see how much CPU it uses when polling frequently}
-          \todo{Write that in theory the detection of resize is delayed by the frequency of the polling?}
 
           The third solution does mutate the \gls{DOM} and relies on special \gls{element} behavior, but it offers many advantages.
           Browsers only need to perform extra work when preparing \glspl{element} for being resize-detectable and when the \glspl{element} actually resize.
           Further, since the resize detection instead is event-based there is no delay between the actual resize and the detection.
-          By positioning the injected frames \code{absolute} with width and height set to \code{100\%}, the frames do not affect the visual representation of the document.
+          By positioning the injected frames \code{absolute} with width and height set to \code{100\%}, the frames do not affect the visual representation of the \gls{document}.
           It has been shown by \cite{backalley} that \code{object} is the most suitable frame \gls{element} to use for this purpose, as they have good \gls{browser} compatibility, adequate performance and are easy to work with.
           However, injecting frames into the \glspl{element} has some implications:
           \begin{itemize}
@@ -1536,11 +1542,12 @@ elq.start(jqueryElementsCollection);
               This way the target \gls{element} can be changed to \code{relative} positioning with the special style properties removed, to obtain the same visual representation as the \code{static} version.
           \end{itemize}
 
-          \todo{Write that it might be up to the user to decide if solution 1 or 3 is desired? Or is it always better to use 3?}
+          \todo[inline]{Write that in theory the detection of resize is delayed by the frequency of the polling?}
+          \todo[inline]{Write that it might be up to the user to decide if solution 1 or 3 is desired? Or is it always better to use 3?}
         \subsection{Native resize event}
-          \todo{remove me?}
+          \todo[inline]{remove me?}
         \subsection{Object injection}
-          \todo{remove me?}
+          \todo[inline]{remove me?}
       \section{Detecting runtime cycles}\label{sec:imp_cycle_detector}
       \section{Avoiding layout thrashing}\label{sec:imp_batch_processor}
 
@@ -1550,7 +1557,7 @@ elq.start(jqueryElementsCollection);
     \chapter{Discussion}
   \printbibliography
   \clearpage
-  \printnoidxglossary[sort=use, type=main]
+  \printnoidxglossary[sort=standard, type=main]
   \printnoidxglossary[sort=standard, type=\acronymtype]
   \appendix
   \addappheadtotoc
@@ -1582,7 +1589,7 @@ elq.start(jqueryElementsCollection);
         \todo{Put this somewhere else?}
         For compatability, the framework needs to support older \glspl{browser}.
         Most of the end users are using a self updating \gls{browser} (those \glspl{browser} are usually referred to as the \emph{evergreen} \glspl{browser}), which improves the adoption rate of new versions greatly.
-        See figure~\ref{} for the adoption rate of new versions of Chrome for an example of how evergreen \glspl{browser} keep their users updated.
+        See figure~\todo{Have a figure or not? If yes, then reference it here.} for the adoption rate of new versions of Chrome for an example of how evergreen \glspl{browser} keep their users updated.
         Unfortunately, there are some laggards that still use very outdated versions of some \glspl{browser}.
         Each version of Internet Explorer 8 up to 11 need to be supported since they all still have a significant user share.
         Opera version 12 does also have
