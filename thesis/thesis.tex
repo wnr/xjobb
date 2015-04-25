@@ -145,6 +145,10 @@
   name={document},
   description={Strictly defined as something that has an \gls{URI} and can return representations of the identified resource in response to HTTP requests. If otherwise states, document will refer to \gls{HTML} \gls{web} pages in this thesis. In \gls{JavaScript}, document refers to the \gls{DOM} root}
 }
+\newglossaryentry{XHTML}{
+  name={XHTML},
+  description={Well-formed XML-based markup language that extends or mirros \gls{HTML}. May be parsed by \gls{XML} parsers since it conforms to the stricter \gls{XML} syntax}
+}
 
 \newacronym{W3C}{W3C}{World Wide Web Consortium}
 \newacronym{CSS}{CSS}{Cascading Style Sheets}
@@ -1539,7 +1543,90 @@ elq.start(jqueryElementsCollection);
 %           \end{lstlisting}
 
         \subsection{Plugins}
+          \begin{metatext}
+            So far, only prerequisites for third-party element queries has been presented.
+            Now, it is time to describe the systems and \glspl{API} that will actually realize element queries as \abbr{elq} plugins.
+            It should be noted that the plugins presented here is the suggested solution to element queries according to the research of this thesis.
+            They are designed for good performance, good compatibility, and ease of use.
+            For extreme requirements or corner cases, custom \abbr{elq} plugins might be preferred.
+          \end{metatext}
+
+          \abbr{elq} plugins may use custom element attributes to define rules and plugin options.
+          The \gls{HTML} standard supports custom attributes prefixed with \code{data-}.
+          The stricter \gls{XHTML} standard additionally requires all attributes to have values (i.e. not be empty).
+          Modern browsers usually permits to discard the \code{data-} prefix for custom attributes.
+          For visual reasons, custom attributes will be written in the shortest possible way in this thesis (without the \code{data-} prefix and sometimes without values).
+          It should be noted that although not written in the examples, the framework and all plugins support all combinations of custom attribute declarations so if desired, the framework is able to conform to the \gls{XHTML} standard.
+
           \subsubsection{Breakpoints}
+            This is the plugin that listens to element resizes and updates their size states according to predefined breakpoints.
+            The name of the plugin is \code{elq-breakpoints} and it does not have any dependencies (other than the element resize detector of the \abbr{elq} core).
+            The main idea of the plugin is to apply classes to target elements that reflects in which size state they are.
+            Each element defines breakpoints to which the plugin will update the size state.
+            The breakpoints of an element are defined by custom element attributes.
+            See listing~\ref{code:elq-breakpoints-example} for an example of breakpoints definitions.
+            \begin{lstlisting}[caption={Example an \gls{HTML} element that uses the \code{elq-breakpoints} plugin.},captionpos=b,label={code:elq-breakpoints-example}]]
+<div id="target" elq elq-breakpoints elq-breakpoints-width="300 500">
+  ...
+</div>
+            \end{lstlisting}
+            The \code{elq} attribute states that it is an \abbr{elq} element, and the \code{elq-breakpoints} attribute states that the element should be handled by the plugin.
+            The \code{elq-breakpoints\-width="300 500"} tells the plugin that the element should have two width breakpoints at 300 and 500 pixels.
+            Height breakpoints are defined in the same way with the \code{elq-breakpoints-height} attribute.
+            The possible size states of the element would then be (in pixels):
+            \begin{itemize}
+              \item $width < 300$
+              \item $300 <= width < 500$
+              \item $500 <= width$
+            \end{itemize}
+            The plugin will append classes to the element that reflects the size state of the element.
+            For each breakpoint, one class will be present that tells if the size is above or below the breakpoint.
+            The number of size states of an element in a dimension is given by $n_{ss}(n_b) = n_b + 1$, where $n_b$ is the number of breakpoints in that dimension.
+            The number of breakpoint classes of an element in a dimension is given by $n_{bc}(n_{b}) = 2n_b$.
+            The number of breakpoint classes active at the same time for an element in a dimension is given by $n_{abc}(n_{b}) = n_{b}$.
+            The format of the classes are \code{elq-[dimension]-[above|below]-[breakpoint]}.
+            For example, if the example element is below 300 pixels wide, it will have the following two classes present:
+            \begin{itemize}
+              \item \code{elq-width-below-300}
+              \item \code{elq-width-below-500}
+            \end{itemize}
+
+            Breakpoint classes are utilized for applying conditional styles for elements based on the size state of the target element.
+            See listing~\ref{code:elq-breakpoints-style} for conditional styles of the target element and it's children.
+            \begin{lstlisting}[caption={Example of conditional styles using the \code{elq-breakpoints} plugin classes},captionpos=b,label={code:elq-breakpoints-style}]]
+#target {
+  color: black;
+  font-size: 15px;
+}
+
+#target.elq-width-below-300 {
+  font-size: 10px;
+}
+
+#target.elq-width-above-300 {
+  color: red;
+}
+
+#target.elq-width-above-500 {
+  font-size: 20px;
+}
+
+#target.elq-width-above-500 p {
+  padding: 10px;
+}
+
+#target.elq-width-below-500 p {
+  padding: 5px;
+}
+            \end{lstlisting}
+            In this example it is shown that elements can be conditionally styled depending on their own sizes.
+            Additionally, children can be styled by stating the target element size state as the left-most selector.
+            In the example, all paragraph elements \code{p} will be styled conditionally depending on the target element size state.
+
+
+            \todo[inline]{How about elements that want to write element queries against a child? CSS cant go upwards, but might be supported in the future. See \url{http://dev.w3.org/csswg/selectors-4/\#relational}. This could be supported with an extended version of mirror that doesn't only go upwards.}
+            \todo[inline]{Write about HTML compatability with data- prefix and empty attributes.}
+            \todo[inline]{Example of how to register the plugin with an elq instance + options?}
           \subsubsection{Mirror}
           \subsubsection{Prolyfill}
     \chapter{Implementation}
