@@ -1379,7 +1379,7 @@
         The role of the framework is to provide plugins with systems to be used for performing element query tasks, which is done through the plugin \gls{API}.
         Three plugins will be developed; 
 
-        \subsection{Public API}
+        \subsection{Public API}\label{sec:public-api}
           \todo[inline]{Write how to install it. AMD, script, commonjs, etc.}
 
           In section~\ref{sec:techincal-goals} it was determined that advanced users must be able to change the subsystems used in the core.
@@ -1483,6 +1483,61 @@ elq.start(jqueryElementsCollection);
           \end{lstlisting}
 
         \subsection{Plugin API}
+          The plugin \gls{API} is a superset of the public \gls{API}.
+          Plugins have additional direct access to most core subsystems presented in section~\ref{sec:arcithecture}.
+          The plugin \gls{API} access is given to a plugin when it is registered (i.e. when the \abbr{elq} instance invokes the \code{make} function of the plugin definition).
+          Recall from subsection~\ref{sec:public-api} that the \code{make} function of the plugin definition is given two parameters at invokation; \code{elq} and \code{options}.
+          The first parameter is a reference to the \abbr{ELQ} instance (to which the plugin was registered) extended with the plugin \gls{API}.
+          Direct access is given to the following core subsystems:
+          \begin{itemize}
+            \item \textbf{Reporter}: via the \code{elq.reporter} property that refers to the reporter instance.
+            \item \textbf{Cycle detector}: via the \code{elq.cycleDetector} property that refers to the cycle detector instance.
+            \item \textbf{Batch processor}: via the \code{elq.createBatchProcessor} property that refers to a function that creates a batch processor intance.
+            \item \textbf{\abbr{ID} handler}: via the \code{elq.idHandler} property that refers to the \abbr{ID} handler instance. \todo{Include id handler in section \ref{sec:arcithecture}?}
+          \end{itemize}
+          Direct access is not given to the plugin handler and element resize detector subsystems since their \glspl{API} are already exposed in the public \gls{API}.
+
+          The reporter has three methods; \code{log}, \code{warn} and \code{error}.
+          They are used to report information, warnings and errors respectively.
+          The default reporter is a wrapper around the native \code{console} object, and has therefore the same \gls{API} as it.
+
+          The cycle detector has a method \code{isUpdateCyclic} that tells if the desired state update of an element is part of a cycle.
+          To do so, it requires two parameters; the element that the update should be applied to, and the state update itself.
+          A third time parameter, that tells when the update was requested, is optional and will default to the time of the method call.
+
+          Instead of having a single batch processor instance shared among all framework entities (i.e. core subsystems and plugins), each entity has to create an own instance.
+          This to avoid entities interfering with each other while performing batch processing.
+          For example, some entities might want to force the batch to process at a point where it would be beneficial for other entities to delay the batch.
+          The \code{createBatchProcessor} accepts an optional options object parameter and returns a batch processor instance that has two methods; \code{add} and \code{force}.
+          The \code{add} method requires a function parameter that will be called when the batch is processed.
+          Since the batch processor is leveled, as motivated in section~\ref{}, the method also accepts an optional parameter that defines at which level the given function should be processed.
+          The \code{force} method commence the processing of the batch, which can happen synchronously or asynchronously a the optional parameter.
+          Two important options to the \code{createBatchProcessor} are the \code{async} and \code{auto} options.
+          If the \code{async} option is enabled, the batch will be processed asynchronously as soon as possible after that the \code{force} method has been invoked.
+          If the \code{auto} option is enabled, \code{force} will be invoked when the first function of the batch has been added (this implies that \code{async} has to be enabled).
+
+          The \abbr{ID} handler has one method \code{get} that returns the \abbr{ID} of the required element parameter.
+          If the element does not have any \abbr{ID} one will be assigned to the element.
+          It is possible to override the assignment with an option parameter.
+
+          \todo[inline]{Code examples?}
+
+%           \begin{lstlisting}[caption={},captionpos=b,label={code:elq-plugin-api}]]
+% ...
+% // The make function of a plugin definition object.
+% make: function(elq, options) {
+%   // Possible to access the reporter subsystem, which has the same API as the console object.
+%   elq.reporter.log("same", "API", "as", "console");
+
+%   return {
+%     start: function(elements) {
+
+%     }
+%   };
+% }
+% ...
+%           \end{lstlisting}
+
         \subsection{Plugins}
           \subsubsection{Breakpoints}
           \subsubsection{Mirror}
