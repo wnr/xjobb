@@ -123,7 +123,7 @@
 }
 \newglossaryentry{browser}{
   name={browser},
-  description={Client application for navigating the \gls{WWW} and displaying \gls{web} pages}
+  description={Client application for navigating the \gls{WWW} and displaying \gls{web} pages. More formally known as a user agent}
 }
 \newglossaryentry{Java applet}{
   name={Java applet},
@@ -185,7 +185,7 @@
 \newacronym{CPU}{CPU}{Central Processing Unit}
 \newacronym{DARPA}{DARPA}{Defense Advanced Research Projects Agency}
 \newacronym{CERN}{CERN}{Conseil Europeen pour la Recherche Nucleaire}
-
+\newacronym{OS}{OS}{Operating System}
 
 
 \title{Modular responsive web design}
@@ -231,9 +231,9 @@
       The problem can be formulated as: \emph{It is not possible to specify conditional style rules for \glspl{element} depending on the size of an element}.
       See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
-      \todo{Is W3C okay with this?}
+      \todo{Is W3C okay with this? No they are not. Need to reformulate.}
       The main international standards organization for the \gls{web}, \gls{W3C}, has unofficially stated that such feature would be infeasible to implement.
-      Standards organizations are interested in solving the problem and possible solutions are being discussed.
+      Participants of the W3C, which include both paying members and the public, are interested in solving the problem and possible solutions are being discussed.
       However, they are still at the initial planning stage so a solution will not be implemented \glslink{native}{natively} in the near future.
       While awaiting a \gls{native} solution it is up to the developers to implement this feature as a \gls{third-party} solution.
       Efforts have been made to create a robust \gls{third-party} solution, with moderate success.
@@ -249,13 +249,13 @@
         The research front of \glspl{browser} have shown successful ways of parallelising the \gls{layout engine}.
         Element queries implies some undesired limitations to the \glspl{layout engine}.
         With element queries, \glspl{layout engine} need to first compute the layout of all \glspl{element} in order to decide which selectors would conform to the element query conditions and then do a new layout computation with the new style rules activated, and so on until a stable state has been reached.
-        Far worse, since selectors would depend on layout style, style and layout computations become very to parallelise.
+        Far worse, since selectors would depend on layout style, style and layout computations become hard to parallelise.
       \end{itemize}
     \section{Objective}
       The main objective of this thesis is to design and develop a \gls{third-party} implementation of element queries.
       To do this, it is needed to research existing solution approaches in order to understand and analyze the advantages and shortcomings of the approaches.
-      It is also necessary to be aware of the premises, such as \gls{browser} limitations and specifications that need to be conformed.
-      In addition, research will be done about the problems of implementing element queries \glslink{native}{natively}, to get a deeper understanding of how an official \gls{API} could look like.
+      It is also necessary to be aware of the premises, such as \gls{browser} limitations and specifications that one must conform to.
+      In addition, research will be done about the problems of implementing element queries \glslink{native}{natively}, to get a deeper understanding of the potential shape of a standardized \gls{API}. \todo{Marcos: I will research the problems of.}
       Solving the main problem will require research and empirical studies of many subproblems.
       Examples of such subproblems that needs to be addressed are:
       \begin{itemize}
@@ -263,10 +263,10 @@
         \item How can one listen to \gls{element} size changes without any \gls{native} support?
         \item How can a custom \gls{API} be crafted that will enable element queries and still conform to the \gls{CSS} specification? Is it possible to create an API that feels natural to \gls{web} developers and works in tandem with other tools and frameworks?
         \item If a custom \gls{API} is developed, how would one make \gls{third-party} modules (that uses \gls{media queries}) work without demanding a rewrite of all \gls{third-party} modules? \todo{Remove me?}
-        \item Is it possible to solve the problem with adequate performance for heavy applications?
+        \item Is it possible to solve the problem with adequate performance for heavy applications? \todo{Explain heavy or reformulate}
         \item How can adequate \gls{browser} compatibility be achieved?
       \end{itemize}
-      The scientific question to be answered is if it is possible to solve the problem  without extending the current \gls{web} standard.
+      The scientific question to be answered is if it is possible to solve the problem  without extending the current \gls{web} standard. \todo{Which current web standard? There is currently no standard for this. If you mean "CSS", that's a family of standards. Please be clear what you mean here.}
       The hypothesis is that the problem can be solved with high reliability and adequate performance by developing a \gls{third-party} implementation.
       \todo{Remove me?}
       A reliable implementation should also enable existing \gls{responsive} components to react to a specified criterion (parent container size for example) with no modifications to the components.
@@ -276,7 +276,7 @@
     \section{Significance}
       Many frameworks and techniques are being used in \gls{web} development to keep the code from becoming an entangled mess.
       Creating modules facilitates the development and increases the reusability.
-      Unfortunately, it is currently impossible to create \gls{self-contained} \gls{responsive} modules since conditional styles cannot be applied to \glspl{element} by \gls{element} size criterion.
+      Unfortunately, it is currently impossible to create \gls{self-contained} \gls{responsive} modules since conditional styles cannot be applied to \glspl{element} by \gls{element} size criterion. \todo{Explain self-contained responsive modules}
       Without element queries, \gls{responsive} modules force the application to style them properly depending on the \gls{viewport} sizes, which defeats the purpose of modules.
       Modules should be \gls{self-contained} and may not require the user to perform some of the module logic.
       Another option would be to make modules context-aware so they can style themselves according to the \gls{viewport}, but then they would not be reusable (since they assume a specific context).
@@ -286,12 +286,11 @@
       The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries.
       As already stated, \gls{third-party} implementation efforts have been made with moderate success.
       \gls{W3C} receives requests and questions about it, but the answer seems to be that no solution will be provided in the near future.
-      The \gls{RICG} have started an initial planning regarding element queries.
-      However, things are moving slow and a draft about element queries use cases is still being written.
+      The \gls{RICG} have started an initial planning regarding element queries and a draft \cite{ricg_draft} about element queries use cases is being written.
 
       Solving this problem would be a big advancement to \gls{web} development, enabling developers to create truly modular \gls{responsive} components.
       By studying the problem, identifying approaches and providing a \gls{third-party} solution the community can take a step closer to solve the problem \glslink{native}{natively}.
-      If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for \gls{W3C} to make their verdict.
+      If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for the \gls{W3C} standardize a solution. \todo{Would like to reformulate this to not being so confident that a standard will definately be developed}
       The outcome of this thesis can also be helpful for \gls{W3C} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
     \section{Delimitations}
       The focus of this thesis lays on developing a \gls{third-party} framework that realizes element queries.
@@ -349,23 +348,25 @@
       Also, it is the \gls{ICANN} organization that has the responsibility for managing the \gls{IP} addresses in the Internet namespace, which reduces the ownership of the \glspl{ISP} further.
       Clearly, the Internet wouldn't be what it is today without all the actors.
       The Internet lays the ground for many systems and applications, including the \gls{WWW}, file sharing and telephony.
-      In 2014 the number of Internet users was measured to just below 3 billions, and estimations show that we have surpassed 3 billions users today (no report for 2015 has been made yet).
-      Users are defined as humans having unrestricted access to the Internet.
+      In 2014 the number of Internet users was measured to just below 3 billions, and estimations show that we have surpassed 3 billions users today (no report for 2015 has been published yet).
+      Users are defined as humans having access to the Internet at home.
       If one instead measures the number of connected entities (electronic devices that communicates through the Internet) the numbers are much higher.
-      An estimation for 2015 of 25 billions connected entities has been made, and the estimation for 2020 is 50 billions.
+      An estimation for 2015 of 25 billions connected entities has been made, and the estimation for 2020 is 50 billion.
       
       As already stated, the \gls{WWW} is a system that operates on top of the Internet.
       The \gls{WWW} is usually shortened to simply \emph{the \gls{web}}.
-      The \gls{web} is a system for accessing interlinked \gls{hypertext} \glspl{document} and other media such as images and videos.
-      Since not only \gls{hypertext} is interlinked on the \gls{web}, the term \emph{\glslink{hypertext}{hypermedia}} can be used as an extension to \gls{hypertext} that also includes other nonlinear medium of information (images, videos, etc.).
+      The \gls{web} is an information space that interoperates through standardized protocols and standards, which affords users with the ability to access various types of resources.
+      This can include interlinked \gls{hypertext} \glspl{document}, which themselves can contain other media such as images and videos, and/or data services.
+      Since not only \gls{hypertext} is interlinked on the \gls{web}, the term \emph{\glslink{hypertext}{hypermedia}} can be used as an extension to \gls{hypertext} that also includes other nonlinear medium of information.
       Although the term \glslink{hypertext}{hypermedia} has been around for a long time, the term \gls{hypertext} is still being used as a synonym for \glslink{hypertext}{hypermedia}.
       Further, the \gls{web} can also be referred to as the universe of information accessible through the \gls{web} system.
       Therefore, the \gls{web} is both the system enabling sharing of \glslink{hypertext}{hypermedia} and also all of the accessible \glslink{hypertext}{hypermedia} itself.
-      Hypertext \glspl{document} are today more known by the name \emph{\gls{web} pages} or simply \emph{pages}.
+      Hypertext \glspl{document} are today more known by the name \emph{\gls{web} pages} or simply \emph{pages}. \todo{Maybe drop the term pages since it is a bit outdated?}
       Multiple related pages (that are often served from the same domain) compose a \emph{web site} or simply a \emph{site}.
       Hypertext \glspl{document} are written in \gls{HTML}, and often includes \gls{CSS} for styling and \gls{JavaScript} for custom user interactions.
       As a complementary to \gls{HTML}, the \gls{XML} also exists with the purpose of describing data (as contrary to \gls{HTML} which describes the \emph{presentation} of data).
       To transfer the resources between computers the protocol \gls{HTTP} is used.
+      Typically the way of retrieving resources on the web is by using a \emph{\glslink{browser}{user agent}}, known colloquially as a \gls{web} \emph{\gls{browser}}.
       Typically the way of retrieving resources on the \gls{web} is by using a \emph{\gls{web} \gls{browser}} or simply a \emph{\gls{browser}}.
       Browsers handle the fetching, parsing and rendering of the \gls{hypertext} (more about this in section~\ref{sec:browsers}).
       
@@ -432,10 +433,10 @@
         It continues to explain that interlinked resources does not need to be limited to text \glspl{document} since multimedia such as images and videos can also be interlinked which would similarly be hypermedia.
         The concept of \glspl{browser} is described, with a client-server model the \gls{browser} would fetch the \gls{hypertext} \glspl{document}, parse them and handle the fetching of all media linked in the \gls{hypertext}.
 
-        In 1990, \gls{HTTP} and \gls{HTML} implemented.
-        A \gls{browser} and a \gls{web} server had also been created and the \gls{web} was born.
+        In 1990, \gls{HTTP} and \gls{HTML} were implemented by Tim Bernes Lee at \gls{CERN}.
+        A \gls{browser} and a \gls{web} server were also created and the \gls{web} was born.
         One year later the \gls{web} was introduced to the public and in 1993 over five hundred international \gls{web} servers existed.
-        It was stated in 1994 that the \gls{web} was to be free without any patents or royalties.
+        It was stated in 1994 by \gls{CERN} that the \gls{web} was to be free without any patents or royalties.
         At this time \gls{W3C} was founded with support from the \gls{DARPA} and the European Commission.
         The organization comprised of companies and individuals that wanted to standardize and improve the \gls{web}.
 
@@ -464,7 +465,7 @@
         It was at the time the only way to view the \gls{web}, and the \gls{browser} only worked on NeXT computers.
         Built with the NeXT framework, it was quite sophisticated.
         It had a \gls{GUI} and a \gls{WYSIWYG} \gls{hypertext} \gls{document} editor.
-        Unfortunately it couldn't be ported to other platforms, so a new \gls{browser} called \emph{Line Mode Browser} (\abbr{lmb}) were quickly developed.
+        Unfortunately it couldn't be ported to other platforms, so a new \gls{browser} called \emph{Line Mode Browser} (\abbr{lmb}) was quickly developed.
         To ensure compatibility with the earliest computer terminals the \gls{browser} displayed text, and was operated with text input.
         Since the \gls{browser} was operated in the terminal, users could log in to a remote server and use the \gls{browser} via telnet.
         In 1993, the core browser code was extracted and rewritten in C to be bundled as a library called \emph{libwww}.
@@ -498,7 +499,7 @@
         The \gls{WebKit} \gls{layout engine} was made fully open source in 2005.
         In 2008, \emph{Google Inc.} also released a \gls{browser} based on \gls{WebKit}, named \emph{Chrome}.
         The majority of the source code for Chrome was open sourced as the \emph{Chromium} project.
-        Google decided in 2013 create a \gls{fork} of \gls{WebKit} called \emph{Blink} for their \gls{browser}.
+        Google decided in 2013 to create a \gls{fork} of \gls{WebKit} called \emph{Blink} for their \gls{browser}.
         Opera Software decided in 2013 to base their new version of Opera on the Chromium project, using the Blink \gls{fork}.
 
         \todo[inline]{Timeline image and text perhaps}
@@ -525,7 +526,7 @@
         \end{metatext}
 
         As described in section~\ref{sec:www}, \glspl{browser} initially were applications that displayed \gls{hypertext} \glspl{document} with the ability to fetch linked \glspl{document} in an user friendly way.
-        Static content were written in \gls{HTML}, which could include hyperlinks to other \gls{hypertext} \glspl{document} or hypermedia.
+        Static content was written in \gls{HTML}, which could include hyperlinks to other \gls{hypertext} \glspl{document} or hypermedia.
         Different stylesheet languages were being developed to enable the possibility of separating content styling with the content.
         In 1996 \gls{W3C} officially recommended \gls{CSS}, which came to be the preferred way of styling \gls{web} content.
         Since \gls{HTML} is only a markup language it is not possible to generate dynamic content, which was sufficient at the time \gls{HTML} was only used for annotating links in research \glspl{document}.
@@ -534,21 +535,20 @@
         \gls{CGI} programs are usually referred to as scripts, since many of the popular \gls{CGI} languages are script languages.
         Generating dynamic content on the server is sometimes referred to as \emph{server-side scripting}.
         This enabled developers to generate dynamic websites, with different content for different users for instance.
-        However, when the content is delivered to the client (\gls{browser}) it is still being static.
-        There is no way for the server to change the content that the client has received, unless the client requests another \gls{document}.
+        However, when the content is delivered to the client (\gls{browser}) it is still static.
+        There was no way for the server to change the content that the client has received, unless the client requests another \gls{document}.
 
         Around 1996, client side scripting was born.
         The term \gls{DHTML} was being used as an umbrella term for a collection of technologies used together to make pages interactive and animated, where client side scripting played a big role.
-        Examples of things that were being done with \gls{DHTML} are; refreshing the pages for the user so that new content is loaded, give feedback on user input without involving the server and animating content.
+        Examples of things that were being done with \gls{DHTML} are; refreshing pages for the user so that new content is loaded, give feedback on user input without involving the server and animating content.
         Plugins also started to exist during this time that enabled \glspl{browser} to handle and execute embedded programs.
         \emph{\glspl{Java applet}} and \emph{\gls{Flash}} are examples of browser embedded programs requiring browser plugins to execute.
-        In order for users to view the content, they first need to download the Java runtime or Flash runtime on their computers.
-        When the runtimes have been installed, the \gls{browser} then executes the included Java applets or Flash in the \gls{web} pages by using the external runtimes.
-        This enabled \gls{web} developers to use ``real'' programming languages.
-        The drawback of this is that users first have to download the runtimes in order to run the programs embedded in pages.
-        As native client side scripting matured and standardized into \emph{\gls{JavaScript}}, plugins slowly decreased in popularity.
-        With the increase of smart devices (such as phones, televisions, cars, game consoles, etc.) that included \glspl{browser} but limited \gls{third-party} runtimes, plugins quickly went extinct.
-        Today, \gls{web} sites rarely uses plugins.
+        In concept, users have to install the plugin runtime in order for the browser to be able to execute the plugin programs, which is undesired since it adds a barrier between users and the content.
+        However, plugins enabled developers to access some capabilities that were lacking in browsers (e.g., video playback, programmable graphics, and interactive animations).
+        Some \glspl{OS} and \glspl{browser} ships with preinstalled plugins, while others do not support plugins at all.
+
+        With the increase of smart devices (such as phones, televisions, cars, game consoles, etc.) that includes \glspl{browser} with limited \gls{third-party} runtimes, plugins quickly decreased in popularity.
+        Additionally, as the web platform was improved and users being discoraged by browsers from installing plugins due to security issues, the use of plugins decreased further.
 
         As \gls{JavaScript} and \gls{HTML} supported more features, websites turned into small applications with user sessions and rich \glspl{GUI}.
         Still, parts of the applications were defined as \gls{HTML} pages, fetched from the server when navigating the site.
@@ -563,7 +563,7 @@
 
         A new era of \glspl{API} and features came along with \gls{HTML5}, which truly enabled developers to create rich client side applications.
         \gls{CSS3} was also recently released which also included many new features.
-        Using \gls{HTML5} and \gls{CSS3} developers could utilize advanced graphics programming, geolocation, cache storage, file system access, offline mode, and much more.
+        Using \gls{HTML5} and \gls{CSS3} developers could utilize advanced graphics programming, geolocation, local and session storage, advanced input, offline mode, and much more.
 
         \todo[inline]{Write that traditional applications are threatened by web applications, since the reach and availability of the web is superior to any other distribution platform. Also, no installation is required with web applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
       \section{Responsive web design}\label{sec:rwd}
@@ -580,13 +580,13 @@
         No longer is it valid to not support small screens.
         Furthermore, it is understood that sites need to be styled differently if they are visited by touch devices with small screens or mouse-based devices with large screens.
         Since \gls{web} developers were not ready for this rapid change of device properties, they resorted to using the same approach that they had done before --- making assumptions about the user device based on the server request.
-        When a \gls{browser} requests a resource, an \emph{agent string} is usually sent with the request to identify what kind of \gls{browser} the user is using.
-        By reading the agent string on the server-side, a mobile-friendly version of the site could be served if the user was sending mobile agent strings and the desktop version could be served otherwise.
+        When a \gls{browser} requests a resource, an \emph{\glslink{browser}{user agent} string} is usually sent with the request to identify what kind of \gls{browser} the user is using. \todo{Explain \glslink{browser}{user agent}, that all browsera are \glspl{browser}{user agent} but not the other way around.}
+        By reading the \glslink{browser}{user agent} string on the server-side, a mobile-friendly version of the site could be served if the user was sending mobile \glslink{browser}{user agent} strings and the desktop version could be served otherwise.
         The mobile version would be designed for a maximum width, and the desktop would be designed for a minimum width.
         
         This was a natural reaction since no better techniques existed, but the approach has many flaws.
-        First, developers now have two versions of a site to maintain and develop in parallel.
-        Second, this approach doesn't scale well with new devices entering the market.
+        First, developers now have multiple versions of a site to maintain and develop in parallel.
+        Second, this approach doesn't scale well with new devices entering the market. \todo{Not only devices (also browser). But is this really true with the layout concept?}
         For instance, tablets are somewhere in the middle of mobile and laptops in size, which would require another special version of the site.
         Further, when desktops support touch actions and smartphones support mouse actions, even more versions of the website needs to be developed in order to satisfy all user devices.
         Third, the desktop site assumes that desktop users have big screens (which usually is true).
@@ -596,7 +596,7 @@
 
         With the release of \gls{CSS3} \gls{media queries} new possibilities opened up.
         Media queries enabled developers to write conditional style rules by media properties such as the \gls{viewport} size.
-        See listing~\ref{code:mq-example} for an example of how \gls{media queries} can be used to style \glspl{element} differently by the viewport size.
+        See listing~\ref{code:mq-example} for an example of how \gls{media queries} can be used to style \glspl{element} differently with relation to the viewport size.
         This can be used to tailor a site for a specific medium or \gls{viewport} size at runtime.
         \gls{RWD} refers to the approach of having a single site being \gls{responsive} to different media properties (mainly the \gls{viewport} size) at runtime to improve the user experience.
         With \gls{RWD} it is no longer needed to maintain several versions of a site, instead the site adapts to the user medium and device.
@@ -956,7 +956,7 @@
       \end{metatext}
 
       Recall from section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} respond to the given size.
-      \Gls{responsive} \gls{web} design implements this by using \gls{media queries}, applying conditional rules by the \gls{viewport} size.
+      \Gls{responsive} \gls{web} design implements this by using \gls{media queries}, applying conditional rules with relation to the \gls{viewport} size.
       In section~\ref{sec:modularity} the desire for building modular \gls{web} components was presented.
       One implication of building applications in a modular way is that general components become reusable.
       Since the only way of applying conditional rules to \glspl{element} today is by using \gls{media queries}, all \gls{responsive} styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the layout).
@@ -1223,7 +1223,8 @@
       \section{Native API design}\label{sec:native-eq}
         \begin{metatext}
           In this section a possible \gls{native} element query \gls{API} will be presented.
-          This is based on the current information and approaches of \gls{W3C} and \gls{RICG}, and should therefore be regarded as a guideline to how an \gls{API} might look like.
+          This is based on the current information and approaches of \gls{W3C} and \gls{RICG}, and should therefore be regarded as a guideline of the shape of a potential standardized \gls{API}.
+          \todo{Is guideline the right word? Seems a bit too confident. Also, cite here the sources of the information this section is based on?}
         \end{metatext}
 
         As presented in subsection~\ref{sec:viewport-elements}, \gls{viewport} \glspl{element} solve many of the element query problems and are therefore assumed to be a part of a \gls{native} \gls{API}.
@@ -1632,7 +1633,7 @@ elq.start(jqueryElementsCollection);
             As of the \gls{CSS3} specification, there is no way to select ancestor elements of an element.
             For instance, \code{p img} is a selector that matches all image elements that are contained by a paragraph.
             However, it is not possible to construct a selector that matches all paragraphs that contains images.
-            
+
           \subsubsection{Prolyfill}
     \chapter{Implementation}
       \section{Element resize detection}\label{sec:imp_erd}
