@@ -712,11 +712,11 @@
         \item Render the \glspl{element} of the \gls{render tree}.
       \end{enumerate}
       See section~\ref{sec:dom-tree} and section~\ref{sec:render-tree} for a more in depth explanation of \gls{DOM} and \glspl{render tree}.
-      Modern \glspl{browser} can display multiple pages at the same time (by using tabs, multiple windows or frames) where each page typically has an instance of the \gls{layout engine} in a separate process.
+      \Glspl{browser} can typically display multiple pages at the same time (by using tabs, multiple windows or frames) where each page has an instance of the \gls{layout engine}.
       There are four \glspl{layout engine} that the major \glspl{browser} use, as presented in table~\ref{table:layout_engines}.
-      Since Blink is a recent \gls{fork} of \gls{WebKit} they can be grouped as \gls{WebKit}-based \glspl{layout engine}.
-      This results in three different \glspl{layout engine} to consider; \gls{WebKit}, Gecko and Trident.
-      Due to Trident being closed source, only the \gls{WebKit} based \glspl{layout engine} and Gecko will be considered from now on.
+      Since Blink is a recent \gls{fork} of \gls{WebKit} they have been grouped together as \gls{WebKit}-based \glspl{layout engine}.
+      This results in three distinct \glspl{layout engine} to consider; \gls{WebKit}, Gecko and Trident.
+      Due to Trident being closed source, only the \gls{WebKit}-based \glspl{layout engine} and Gecko will be considered in this chapter. \todo{Only this chapter or the whole thesis?}
 
       \begin{table}[ht]\center
         \tiny
@@ -760,25 +760,40 @@
 
         The \gls{DOM} is a convention for representing and interacting with objects in \gls{XML}-based \glspl{document} (such as \gls{HTML}).
         The \gls{DOM} provides an interface for programs (\gls{JavaScript} in the \gls{browser}) to access and mutate the structure, style, and content of \glspl{document}.
-        Each node of the \gls{document} is a \gls{DOM} object, and therefore the whole \gls{document} is converted to a tree structure of \gls{DOM} nodes which is referred to as the \gls{DOM} tree.
+        Elements of the \gls{document} is converted to \gls{DOM} nodes, and therefore the whole \gls{document} is represented as a tree structure of \gls{DOM} nodes which is referred to as the \gls{DOM} tree.
 
         \Glspl{layout engine} construct \gls{DOM} trees by parsing \gls{HTML} with any included \gls{CSS} and \gls{JavaScript}.
-        Parsing of \gls{HTML} is not an easy task, partly because it is expected (alhough not required) of layout engines to be forgiving of errors (such as handling malformated \gls{HTML}).
+        Parsing of \gls{HTML} is not an easy task, partly because it is expected (alhough not required) of layout engines to be forgiving of errors, such as handling malformated \gls{HTML}.
         As \gls{CSS} and JavasScript are stricter, their grammar can be expressed in a formal syntax and can therefore be parsed with a context free grammar parser.
-        Another big quirk to parsing \gls{HTML} is that it is reentrant, which means that the source may change during parsing.
+        Another big quirk to parsing \gls{HTML} is that it is reentrant that means that the source may change during parsing, see listing~\ref{code:reentrant-html}.
         Script \glspl{element} are to be executed synchronously when it is occurred by the parser.
         If such script mutates the \gls{DOM}, then the parser will need to evaluate the changes made by the script and update the \gls{DOM} tree.
         External scripts need to be fetched in order to be executed, which halts the parsing unless the script \gls{element} states otherwise.
         It should be noted that although \gls{DOM} nodes do include a \code{style} property, the nodes in the \gls{DOM} tree are not affected by the \gls{CSS} cascading, and the style properties do not represent the final style of the \gls{element}.
         Instead, for scripts to obtain the final computed style for an \gls{element} a special function needs to be called (\code{getComputedStyle} in \gls{JavaScript}).
         Since externally linked \gls{CSS} \glspl{document} do not directly affect the \gls{DOM} tree they could conceptually be fetched and parsed after the parsing of the \gls{HTML}.
-        However, scripts can request the computed style of \gls{DOM} tree nodes and therefore either the parsing of \gls{HTML} needs to be halted in order to fetch and parse \gls{CSS} when it occurs, or the scripts accessing style properties of \gls{DOM} nodes need to be halted.
+        However, scripts can request the computed style of \gls{DOM} nodes and therefore either the parsing of \gls{HTML} needs to be halted in order to fetch and parse \gls{CSS} when needed, or the scripts accessing style properties of \gls{DOM} nodes need to be halted.
         A common optimization is to use a speculative parser that continues to parse the \gls{HTML} when the main parser has halted (for executing the scripts usually).
         The speculative parser does not change the \gls{DOM} tree, instead it searches for external resources that can be fetched in parallel while waiting for the main parser to continue.
 
-        \todo[inline]{Philipp: Maybe check the official HTML specs about this.}
+        \begin{lstlisting}[caption={Simple example of reentrant HTML. The layout engine needs to reconstruct the \gls{DOM} tree after executing the JavaScript. The page will not be rendered until all JavaScript has been executed.}, captionpos=b, label={code:reentrant-html}]
+<html>
+  <body>
+    <div id="container">
+      <p id="tip">When in doubt, mumble.</p>
+    </div>
+    <script>
+      var container     = document.getElementById("container");
+      var tip           = document.getElementById("tip");
+      var intro         = document.createElement("h4");
+      intro.innerHTML   = "A tip:";
+      container.insertBefore(intro, tip);
+    </script>
+  </body>
+</html>
+        \end{lstlisting}
+
         \todo[inline]{Philipp: Yes, a picture of the DOM corresponding to some HTML would be good.}
-        \todo[inline]{code example of reentrant html?}
         \todo[inline]{Figure of how the DOM tree looks like? Maybe example HTML and DOM tree figure.}
         \todo[inline]{Write about media type, and how the CSS is calculated if it is in this stage?}
 
