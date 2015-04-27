@@ -805,27 +805,27 @@
         \end{metatext}
 
         A \gls{render tree} is a visual representation of the \gls{document}.
-        In contrast to the \gls{DOM} tree, the \gls{render tree} only contains of \glspl{element} that will be rendered.
-        The nodes of the \gls{render tree} are called \emph{renderers} (also known as \emph{frames} or \emph{render objects}), as the \glspl{element} are responsible for their own and all subnodes layout and rendering.
+        In contrast to the \gls{DOM} tree, the \gls{render tree} only contains \glspl{element} that will be rendered.
+        The nodes of the \gls{render tree} are called \emph{renderers} (also known as \emph{frames} or \emph{render objects}), as the nodes are responsible for their own and all subnodes layout and rendering.
         In order to know how to render themselves, the final style of each renderer needs to be computed which is done by the \gls{layout engine} while constructing the tree.
-        Each renderer represents a rectangle (given by style size and position) with a given style.
+        Each renderer represents a rectangle (with a size and position) with a given style.
         There are different types of renderers, which affect how the renderer rectangle is computed.
-        The type can be directly affected by the display style property.
+        The type can be directly affected by the \code{display} style property.
 
-        Typically nodes in the \gls{DOM} tree map in a 1:1 relation to nodes in the \gls{render tree}, but the relation can also be smaller or larger.
+        Typically nodes of the \gls{DOM} tree has a 1:1 relation to nodes of the \gls{render tree}, but the relation can also be smaller or larger.
         The \gls{render tree} only contains nodes that will affect the rendered result, so nodes that do not affect the layout flow of the \gls{document} and that aren't visible will not be present in the \gls{render tree}.
-        For instance, a \gls{DOM} node element with the \code{display} property set to \code{none} will have the relation 1:0 (it will not be present in the \gls{render tree} because it is not visible and will not affect the layout flow).
-        It should be noted that \glspl{element} with the \code{visibility} property set to \code{hidden} will be present in the \gls{render tree}, although they are not visible, since they still affect the layout flow.
+        For instance, a \gls{DOM} node with the \code{display} property set to \code{none} will have the relation 1:0 (it will not be present in the \gls{render tree} because it is not visible and will not affect the layout flow).
+        It should be noted that nodes with the \code{visibility} style property set to \code{hidden} will be present in the \gls{render tree}, although they are not visible, since they still affect the layout flow.
 
         Even though all style properties have been resolved for each node in the \gls{render tree} (through \gls{CSS} cascading), the renderers still do not know about the size and position of the rectangle.
-        This is because some properties cannot be computed by just computing the styles for an \gls{element}.
-        Some properties depend on the flow of the \gls{document}, and needs to be resolved through a layout.
-        The layout process will resolve the final position and size for all renderers.
+        This is because some properties cannot be resolved by style cascading.
+        Some properties depend on the flow of the \gls{document}, and needs to be computed through a layout.
+        The layout process will resolve the final position and size of all renderers.
 
       \section{Style computation}\label{sec:style-computation}
         \begin{metatext}
           Both the \gls{render tree} and scripts need to be able to get the final style of an \gls{element}.
-          In order to know the final style of an \gls{element}, the style for each \gls{element} must be computed.
+          In order to know the final style of an \gls{element}, the style for each \gls{element} must be resolved.
           Here a brief explanation of selector matching, style cascading, inheritance and rule set specificity will be given.
           \gls{CSS} property definitions will also be described.
           This section is mainly based on \normalfont{\cite{garsiel2011browsers,w3c_css21,w3c_css_style_attr}}.
