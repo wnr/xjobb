@@ -107,11 +107,11 @@
 }
 \newglossaryentry{native}{
   name={native},
-  description={Refers to \glspl{API} and systems implemented and provided by \glspl{browser}. Such APIs and systems are often described by standards specifications}
+  description={Refers to \glspl{API} and systems implemented and provided by \glspl{browser}. Such \glspl{API} and systems are often described by standards specifications}
 }
 \newglossaryentry{third-party}{
   name={third-party},
-  description={Refers to \glspl{API} and systems implemented on top of the \gls{browser}, usually in \gls{JavaScript}. Such APIs and systems must be included by developers into the \gls{document}, and are usually not described by standards specifications}
+  description={Refers to \glspl{API} and systems implemented on top of the \gls{browser}, usually in \gls{JavaScript}. Such \glspl{API} and systems must be included by developers into the \gls{document}, and are usually not described by standards specifications}
 }
 \newglossaryentry{hypertext}{
   name={hypertext},
@@ -143,17 +143,17 @@
 }
 \newglossaryentry{document}{
   name={document},
-  description={Strictly defined as something that has an \gls{URI} and can return representations of the identified resource in response to HTTP requests. If otherwise states, document will refer to \gls{HTML} \gls{web} pages in this thesis. In \gls{JavaScript}, document refers to the \gls{DOM} root}
+  description={Strictly defined as something that has a \gls{URI} and can return representations of the identified resource in response to \gls{HTTP} requests. If otherwise states, document will refer to \gls{HTML} \gls{web} pages in this thesis. In \gls{JavaScript}, document refers to the \gls{DOM} root}
 }
 \newglossaryentry{XHTML}{
   name={XHTML},
-  description={Well-formed XML-based markup language that extends or mirros \gls{HTML}. May be parsed by \gls{XML} parsers since it conforms to the stricter \gls{XML} syntax}
+  description={Well-formed \gls{XML}-based markup language that extends or mirros \gls{HTML}. May be parsed by \gls{XML} parsers since it conforms to the stricter \gls{XML} syntax}
 }
 
 \newacronym{W3C}{W3C}{World Wide Web Consortium}
 \newacronym{CSS}{CSS}{Cascading Style Sheets}
 \newacronym{HTML}{HTML}{HyperText Markup Language}
-\newacronym{DHTML}{DHTML}{Dynamic HTML}
+\newacronym{DHTML}{DHTML}{Dynamic \gls{HTML}}
 \newacronym{API}{API}{Application Program Interface}
 \newacronym{RICG}{RICG}{Responsive Issues Community Group}
 \newacronym{TCP}{TCP}{Transmission Control Protocol}
@@ -232,8 +232,8 @@
       See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
       \todo{Is W3C okay with this? No they are not. Need to reformulate.}
-      The main international standards organization for the \gls{web}, \gls{W3C}, has unofficially stated that such feature would be infeasible to implement.
-      Participants of the W3C, which include both paying members and the public, are interested in solving the problem and possible solutions are being discussed.
+      The main international standards organization for the \gls{web}, the \gls{W3C}, has unofficially stated that such feature would be infeasible to implement.
+      Participants of the \gls{W3C}, which include both paying members and the public, are interested in solving the problem and possible solutions are being discussed.
       However, they are still at the initial planning stage so a solution will not be implemented \glslink{native}{natively} in the near future.
       While awaiting a \gls{native} solution it is up to the developers to implement this feature as a \gls{third-party} solution.
       Efforts have been made to create a robust \gls{third-party} solution, with moderate success.
@@ -261,7 +261,7 @@
       \begin{itemize}
         \item How should circularity be handled? Should it be detected at runtime or parsetime, and what should happen on detection?
         \item How can one listen to \gls{element} size changes without any \gls{native} support?
-        \item How can a custom \gls{API} be crafted that will enable element queries and still conform to the \gls{CSS} specification? Is it possible to create an API that feels natural to \gls{web} developers and works in tandem with other tools and frameworks?
+        \item How can a custom \gls{API} be crafted that will enable element queries and still conform to the \gls{CSS} specification? Is it possible to create an \gls{API} that feels natural to \gls{web} developers and works in tandem with other tools and frameworks?
         \item If a custom \gls{API} is developed, how would one make \gls{third-party} modules (that uses \gls{media queries}) work without demanding a rewrite of all \gls{third-party} modules? \todo{Remove me?}
         \item Is it possible to solve the problem with adequate performance for heavy applications? \todo{Explain heavy or reformulate}
         \item How can adequate \gls{browser} compatibility be achieved?
@@ -285,13 +285,13 @@
 
       The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries.
       As already stated, \gls{third-party} implementation efforts have been made with moderate success.
-      \gls{W3C} receives requests and questions about it, but the answer seems to be that no solution will be provided in the near future.
+      The \gls{W3C} receives requests and questions about it, but the answer seems to be that no solution will be provided in the near future.
       The \gls{RICG} have started an initial planning regarding element queries and a draft \cite{ricg_draft} about element queries use cases is being written.
 
       Solving this problem would be a big advancement to \gls{web} development, enabling developers to create truly modular \gls{responsive} components.
       By studying the problem, identifying approaches and providing a \gls{third-party} solution the community can take a step closer to solve the problem \glslink{native}{natively}.
       If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for the \gls{W3C} standardize a solution. \todo{Would like to reformulate this to not being so confident that a standard will definately be developed}
-      The outcome of this thesis can also be helpful for \gls{W3C} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
+      The outcome of this thesis can also be helpful for the \gls{W3C} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
     \section{Delimitations}
       The focus of this thesis lays on developing a \gls{third-party} framework that realizes element queries.
       All theoretical studies and work will be performed to support the development of the framework.
@@ -338,7 +338,7 @@
         This section is a summary of \normalfont{\cite{internet_live_stats,internet_of_things,wiki_hypermedia,w3c_www,oed}}.
       \end{metatext}
 
-      Before addressing the birth of the \gls{web}, it is necessary to define the meaning of the concepts \emph{Internet} and \emph{\gls{WWW}}.
+      Before addressing the birth of the \gls{web}, it is necessary to define the meaning of the \emph{Internet} and the \emph{\gls{WWW}}.
       The word ``internet'' can be translated to \emph{something between networks}.
       When referring to the Internet (capitalized) it is usually the global decentralized internet used for communication between millions of networks using the \gls{TCP} and \gls{IP} suite.
       Since the Internet is decentralized, there is no single owner of the network.
@@ -422,7 +422,7 @@
         Recall from section~\ref{sec:history-internet} that the way of exchanging information was to upload and download files between clients and hosts with \gls{FTP}.
         If a \gls{document} downloaded was referring to another \gls{document}, the user had to manually find the server that hosted the other \gls{document} and download it manually.
         This was a poor way of digesting information and \glspl{document} that linked to other resources.
-        In 1989 a proposal for a communication system that allowed interlinked \glspl{document} was submitted to the management at the \gls{CERN}.
+        In 1989 a proposal for a communication system that allowed interlinked \glspl{document} was submitted to the management at \gls{CERN}.
         The idea was to allow links to other \glspl{document} embedded in text \glspl{document}, directly accesible for users.
         A quote from the draft:
         \begin{quote}
@@ -437,7 +437,7 @@
         A \gls{browser} and a \gls{web} server were also created and the \gls{web} was born.
         One year later the \gls{web} was introduced to the public and in 1993 over five hundred international \gls{web} servers existed.
         It was stated in 1994 by \gls{CERN} that the \gls{web} was to be free without any patents or royalties.
-        At this time \gls{W3C} was founded with support from the \gls{DARPA} and the European Commission.
+        At this time the \gls{W3C} was founded with support from the \gls{DARPA} and the European Commission.
         The organization comprised of companies and individuals that wanted to standardize and improve the \gls{web}.
 
         As a side note, the Gopher protocol was developed in parallel to the web by the University of Minnesota.
@@ -479,8 +479,8 @@
         In 1993, the \emph{Mosaic} \gls{browser} was released by the \gls{NCSA} which came to be the ancestor of many of the popular \glspl{browser} in use today.
         As Lynx, Mosaic also supported many different protocols.
         Mosaic quickly became popular, mainly due to its intuitive \gls{GUI}, reliability, simple installation and Windows compatibility.
-        The company \emph{Spyglass, Inc.} licensed the \gls{browser} from \gls{NCSA} for producing their own \gls{browser} in 1994.
-        Around the same time the leader of the team that developed Mosaic, Marc Andreessen, left \gls{NCSA} to start \emph{Mosaic Communications Corporation}.
+        The company \emph{Spyglass, Inc.} licensed the \gls{browser} from the \gls{NCSA} for producing their own \gls{browser} in 1994.
+        Around the same time the leader of the team that developed Mosaic, Marc Andreessen, left the \gls{NCSA} to start \emph{Mosaic Communications Corporation}.
         The company released their own \gls{browser} named \emph{Mosaic Netscape} in 1994, which later was to be called \emph{Netscape Navigator} that was internally codenamed \emph{Mozilla}.
         Microsoft licensed the Spyglass Mosaic \gls{browser} in 1995, modified and renamed it to \emph{Internet Explorer}.
         In 1997 Microsoft started using their own \emph{Trident} \gls{layout engine} for Internet Explorer.
@@ -528,10 +528,10 @@
         As described in section~\ref{sec:www}, \glspl{browser} initially were applications that displayed \gls{hypertext} \glspl{document} with the ability to fetch linked \glspl{document} in an user friendly way.
         Static content was written in \gls{HTML}, which could include hyperlinks to other \gls{hypertext} \glspl{document} or hypermedia.
         Different stylesheet languages were being developed to enable the possibility of separating content styling with the content.
-        In 1996 \gls{W3C} officially recommended \gls{CSS}, which came to be the preferred way of styling \gls{web} content.
+        In 1996 the \gls{W3C} officially recommended \gls{CSS}, which came to be the preferred way of styling \gls{web} content.
         Since \gls{HTML} is only a markup language it is not possible to generate dynamic content, which was sufficient at the time \gls{HTML} was only used for annotating links in research \glspl{document}.
 
-        The need for generated dynamic content grew bigger, and \gls{NCSA} created the first draft of the \gls{CGI} in 1993, which provides an interface between the \gls{web} server and the systems that generate content.
+        The need for generated dynamic content grew bigger, and the \gls{NCSA} created the first draft of the \gls{CGI} in 1993, which provides an interface between the \gls{web} server and the systems that generate content.
         \gls{CGI} programs are usually referred to as scripts, since many of the popular \gls{CGI} languages are script languages.
         Generating dynamic content on the server is sometimes referred to as \emph{server-side scripting}.
         This enabled developers to generate dynamic websites, with different content for different users for instance.
@@ -556,9 +556,9 @@
         This opened up for the \gls{AJAX} \gls{web} development technique which became a popular way of communicating with servers ``in the background'' of the page.
         Developers pushed \glspl{browser} and \gls{HTML} to the limit when creating applications instead of \glspl{document} that they were originally designed for.
         In a \gls{W3C} meeting in 2004 it was proposed to extend \gls{HTML} to ease the creation of \gls{web} applications, which was rejected.
-        \gls{W3C} was criticized of not listening to the need of the industry, and some members of \gls{W3C} left to create the \gls{WHATWG}.
-        \gls{WHATWG} started working on specifications to ease the development of \gls{web} applications which came to be grouped together under the name \gls{HTML5}.
-        In 2006, \gls{W3C} acknowledged that \gls{WHATWG} were on the right track, and decided to start working on their own \gls{HTML5} specification based on the \gls{WHATWG} version.
+        The \gls{W3C} was criticized of not listening to the need of the industry, and some members of the \gls{W3C} left to create the \gls{WHATWG}.
+        The \gls{WHATWG} started working on specifications to ease the development of \gls{web} applications which came to be grouped together under the name \gls{HTML5}.
+        In 2006, the \gls{W3C} acknowledged that \gls{WHATWG} were on the right track, and decided to start working on their own \gls{HTML5} specification based on the \gls{WHATWG} version.
         \gls{HTML5} is an evolutionary improvement process of \gls{HTML}, which means that \glspl{browser} are adding support as parts of the specification is finished.
 
         A new era of \glspl{API} and features came along with \gls{HTML5}, which truly enabled developers to create rich client side applications.
@@ -912,7 +912,7 @@
 
       \section{Parallelization}\label{sec:parallel}
         \begin{metatext}
-          No longer can performance of an application increase over time without any code changes (as opposed to the times when \gls{CPU} clock speeds increased rapidly).
+          No longer can performance of an application increase over time without any code changes (as opposed to the times when the \gls{CPU} clock speeds increased rapidly).
           Now, applications need to utilize the multiple cores of the \gls{CPU} instead of relying on high clock speed.
           Parallelization is something \gls{layout engine} vendors are very interested in, and much research is being done about utilizing multiple cores to increase the speed of the engine.
           In this section a small summary will be given about the current research front, and how the parallelization can be approached.
@@ -1181,7 +1181,7 @@
         \subsection{Viewport elements}\label{sec:viewport-elements}
           \begin{metatext}
             This solution limits element queries a lot, but avoids many of the problems this way.
-            This approach has been discussed at \gls{W3C} and \gls{RICG} assumes that this is a prerequisite to a \gls{native} implementation.
+            This approach has been discussed at the \gls{W3C} and the \gls{RICG} assumes that this is a prerequisite to a \gls{native} implementation.
             \todo{cite where this has been gathered from?}
           \end{metatext}
 
@@ -1223,7 +1223,7 @@
       \section{Native API design}\label{sec:native-eq}
         \begin{metatext}
           In this section a possible \gls{native} element query \gls{API} will be presented.
-          This is based on the current information and approaches of \gls{W3C} and \gls{RICG}, and should therefore be regarded as a guideline of the shape of a potential standardized \gls{API}.
+          This is based on the current information and approaches of the \gls{W3C} and the \gls{RICG}, and should therefore be regarded as a guideline of the shape of a potential standardized \gls{API}.
           \todo{Is guideline the right word? Seems a bit too confident. Also, cite here the sources of the information this section is based on?}
         \end{metatext}
 
