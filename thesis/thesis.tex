@@ -246,10 +246,10 @@
         Also, it has been shown that some cyclic rules are impossible to detect at parsetime, due to being dependent on runtime factors.
         \item \textbf{Performance:} 
         \Gls{layout engine} vendors are interested in performing selector matching and layout computations in parallel to achieve better performance.
-        The research front of \glspl{browser} have shown successful ways of parallelising the \gls{layout engine}.
+        The research front of \glspl{browser} have shown successful ways of parallelizing the \gls{layout engine}.
         Element queries implies some undesired limitations to the \glspl{layout engine}.
         With element queries, \glspl{layout engine} need to first compute the layout of all \glspl{element} in order to decide which selectors would conform to the element query conditions and then do a new layout computation with the new style rules activated, and so on until a stable state has been reached.
-        Far worse, since selectors would depend on layout style, style and layout computations become hard to parallelise.
+        Far worse, since selectors would depend on layout style, style and layout computations become hard to parallelize.
       \end{itemize}
     \section{Objective}
       The main objective of this thesis is to design and develop a \gls{third-party} implementation of element queries.
