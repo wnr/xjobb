@@ -1626,8 +1626,13 @@ elq.start(jqueryElementsCollection);
 
             \todo[inline]{How about elements that want to write element queries against a child? CSS cant go upwards, but might be supported in the future. See \url{http://dev.w3.org/csswg/selectors-4/\#relational}. This could be supported with an extended version of mirror that doesn't only go upwards.}
             \todo[inline]{Write about HTML compatability with data- prefix and empty attributes.}
-            \todo[inline]{Example of how to register the plugin with an elq instance + options?}
+            \todo[inline]{Example of how to register the plugin with an elq instance + options?a }
           \subsubsection{Mirror}
+            This plugin is needed as an addition to the \code{elq-breakpoints} plugin in some cases due to limitations of CSS.
+            As of the \gls{CSS3} specification, there is no way to select ancestor elements of an element.
+            For instance, \code{p img} is a selector that matches all image elements that are contained by a paragraph.
+            However, it is not possible to construct a selector that matches all paragraphs that contains images.
+            
           \subsubsection{Prolyfill}
     \chapter{Implementation}
       \section{Element resize detection}\label{sec:imp_erd}
