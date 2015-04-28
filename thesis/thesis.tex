@@ -1345,9 +1345,9 @@
 
         To decide if a subsystem of the solution should be in the framework core or a plugin is a difficult task.
         A balance needs to be found between ease of use, performance and extendability.
-        All subsystems of the core needs to provide a fundamental functionality to the framework and also needs to be general enough to be used by plugins in different ways.
+        All subsystems of the core need to provide a fundamental functionality to the framework and also need to be general enough to be used by plugins in different ways.
         If a plugin needs to write a custom version of a subsystem in the core in order to work, the subsystem should perhaps not be part of the core.
-        Each subsystem added to the core will impact the performance negatively for all users, so they must impose a real value to the existing and future plugins.
+        Each subsystem added to the core will impact the performance negatively (by slower load time in the best case) for all users, so they must impose a real value to existing and future plugins.
         The subsystems of the core always have the risk of being redundant, unnecessary and in other ways unwanted for some use cases.
         Therefore it is important that it is possible for developers to either remove them or change them.
         This way the more advanced users can choose which subsystems to alter, keeping the framework easy to use for the common use cases.
@@ -1357,7 +1357,7 @@
         Figure~\ref{fig:elq_architecture} shows the overall architecture of the framework.
         The core consists of fundamental and general subsystems that are utilized by plugins.
         Developers should never be programming against the core directly, and it can therefore only be accessed by plugins through the hidden plugin \gls{API}.
-        The framework provides a small public \gls{API} which is mainly used to invoke and handle the plugins.
+        The framework provides a small public \gls{API} which is mainly used to invoke and handle plugins.
         The plugins form the bigger part of the public \gls{API} in the sense that they decide which features exist and how they work.
         It should be noted that plugins may provide \glspl{API} through the framework by registering methods, or by specifying custom syntax (such as markup or \gls{CSS}) which is beyond the control of the core.
         Plugins may also have interplugin \glspl{API} and dependencies, which also is beyond the control of the core.
@@ -1367,17 +1367,17 @@
         \begin{itemize}
           \item \textbf{Reporter:}
             Responsible for reporting information, warnings and errors to the developer.
-            By having a centralized reporter, it is possible to decide at a global framework-level how much plugins are allowed to report.
-            Other options such as throwing exception on errors or warnings could also be set at a global framework-level.
+            By having a centralized reporter, it is possible to decide at a global framework level how much plugins are allowed to report.
+            Other options such as throwing exception on errors or warnings could also be set at a global framework level.
             Also, the framework can make sure that all reports are standardized and can provide extra information such as the name and version of the plugin along with its report.
-            To avoid code duplication, it also beneficial to have a centralized report system so the plugins do not need to perform the same compatibility checks (such as checking if the \gls{browser} actually supports console reporting).
+            To avoid code duplication, it also beneficial to have a centralized report system so plugins do not need to perform the same compatibility checks (such as checking if the \gls{browser} actually supports console reporting).
           \item \textbf{Element resize detector:}
             Provides an interface for listening to \gls{element} resize events.
             This system is fundamental to plugins fulfilling requirements \ref{itm:req_resize_detect} and \ref{itm:req_big_rewrite} since it enables the framework to be aware of when \glspl{element} change sizes, instead of the host application keeping track of when \glspl{element} have changed sizes.
             \todo[inline]{Maybe this shouldn't be a core subsystem? Since this system imposes the biggest performance impact. It might make more sense to have this as a plugin.}
           \item \textbf{Cycle detector:}
             As shown in section~\ref{sec:cyclic-rules} cyclic rules need to be detected at runtime.
-            When a plugin wish to update the size state of an \gls{element} (which in turn applies the conditional styles to the \gls{element}) it can ask this system if the update seems to be part of a cycle.
+            When a plugin wish to update the size state of an \gls{element} (which in turn applies the conditional styles) it can ask this system if the update seems to be part of a cycle.
             If the update seems to be part of a cycle, it is up to the plugin how that should be handled.
             \todo[inline]{Write that this system is more general, and could potentially be used for detecting other cyclic behaviors?}
           \item \textbf{Batch processor:}
@@ -1400,10 +1400,12 @@
 
         Recall from section~\ref{sec:arcithecture} that the bigger part of the public \gls{API} is provided by plugins.
         The role of the framework is to provide plugins with systems to be used for performing element query tasks, which is done through the plugin \gls{API}.
-        Three plugins will be developed; 
+        Three plugins will be developed; \code{breakpoints}, \code{mirror} and \code{prolyfill}.
+        The \code{breakpoints} plugin provides 
 
         \subsection{Public API}\label{sec:public-api}
           \todo[inline]{Write how to install it. AMD, script, commonjs, etc.}
+          \todo[inline]{Move getPlugin to Plugin API and make use return the plugin instance}
 
           In section~\ref{sec:techincal-goals} it was determined that advanced users must be able to change the subsystems used in the core.
           Therefore no global framework instance will be instantiated automatically on load.
