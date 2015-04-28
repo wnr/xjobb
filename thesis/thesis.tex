@@ -219,6 +219,7 @@
     \todo[inline]{Write about the targeted browser compatibility. Started writing about this but put it on hold in the appendix.}
     \todo[inline]{Word says that all "their own" is wrong.}
     \todo[inline]{Change all wikipedia sources to the real sources}
+    \todo[inline]{Change self-contained to encapsulated?}
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
       Heavy use of \gls{web} terminology is being used and intermediate \gls{web} development knowledge is assumed.
@@ -843,27 +844,27 @@
           \item In special attributes of the \gls{element} such as \code{bgcolor} (deprecated, but possible).
         \end{enumerate}
         This can be grouped into author, user and \gls{browser} styles.
-        The four first items can be regarded as \gls{CSS} because they are \emph{cascading} their style rules through \emph{selector matching}.
-        Selector matching conceptually finds all \glspl{element} in the \gls{DOM} tree that matches a \gls{CSS} selector, to apply the rule set.
+        The four first items have in common that they are \emph{cascading} their style rules through \emph{selector matching}, and may define rule sets.
+        Selector matching conceptually finds all \glspl{element} in the \gls{DOM} tree that matches a \gls{CSS} selector, to apply style declarations of the rule set.
         The rule sets are weighted so that if a property is assigned values by multiple rule sets the one with highest weight will be applied.
         The weighting process starts with the origin of the style:
         \begin{itemize}
           \item In case of normal rule declarations, the style weighting relation is: $browser < user < author$.
           \item Important rule declarations have the following relation: $author < user$.
         \end{itemize}
-        The weighting process continues by calculating the \emph{specificity} of all rule set selectors, the higher the specificity the higher the rule set will be weighted.
+        The weighting process continues by calculating the \emph{specificity} of all rule set selectors, the higher the specificity the higher the rule set will be weighted. \todo{Explain specificity?}
         This will make rule sets with more specific selectors override rule sets with more general selectors.
         Finally, if two rule declarations have the same weight, origin and specificity the rule set specified last will win.
         Inline \gls{CSS} does not cascade since all rules given are automatically matched with the \gls{element} of the style attribute.
         However, inline \gls{CSS} is considered with highest possible specificity when performing the style cascade.
-        It is important to note that the styling methods number five and six are conceptually the same, since they both alter the style property of the \gls{DOM} \gls{element}.
-        The last item is deprecated, and all styles applied this way will be weighted as low as possible.
+        It is important to note that the styling methods number five and six are conceptually the same, since they both alter the style property of the \gls{DOM} representation of the \gls{element}.
+        The last item method deprecated, and all styles applied this way are weighted as low as possible.
 
-        If the cascade results in no value for an \gls{element} style property, then the property can \emph{inherit} a value or have the initial value defined by the \gls{CSS} \emph{property definition}.
-        Property definitions describe how the style properties should behave, see table~\ref{table:css_property_definition}.
-        For instance, the width property definition states that legal values are absolute lengths, percentages or \code{auto} (which will let the \gls{browser} decide).
+        If the cascade results in no value for an \gls{element} style property, then the property can \emph{inherit} a value or have an initial value defined by the \gls{CSS} \emph{property definition}.
+        Property definitions describe how the style properties should behave, see table~\ref{table:css_property_definition} for the format of property definitions.
+        For instance, the \code{width} property definition states that legal values are absolute lengths, percentages or \code{auto} (which will let the \gls{browser} decide).
         The percentages are relative to the containing block.
-        The initial value is \code{auto}, the properties applies to all \glspl{element} non-replaced inline \glspl{element}, table rows and row groups.
+        The initial value is \code{auto}, the properties applies to all non-replaced inline \glspl{element}, table rows and row groups.
         The value may not be inherited, and the media group is \code{visual}.
         The computed value is either the absolute length, calculated percentage of the containing block or what the \gls{browser} decides (in case of \code{auto}).
         If a property may inherit values, it will inherit the value of the first ancestor that has a value that is not \code{inherited}.
@@ -887,6 +888,7 @@
 
         \todo[inline]{How does selector matching work? Parallel?}
         \todo[inline]{Cascading, parallel?}
+        \todo[inline]{Explain the syntax of CSS?}
 
       \section{The layout process}\label{sec:layout-process}
         \begin{metatext}
@@ -906,15 +908,15 @@
         \Glspl{layout engine} that uses the dirty bit system usually keeps a queue of incremental layout commands.
         The scheduler system later triggers a batch execution of the incremental layout commands asynchronously.
         A global layout is triggered when the \gls{viewport} is resized or when styles that affect the whole \gls{document} are changed (such as \code{font-size}).
-        Because the \gls{API} of \code{getComputedStyle} promises resolved values for all style properties, a call will force a full layout (flushing the incremental layout commands queue).
+        Because the \gls{API} of \code{getComputedStyle} promises resolved values for all style properties, calling the function forces a full layout (flushing the incremental layout commands queue).
         When a renderer performs a layout the following usually happens:
         \begin{enumerate}
-          \item The own width is determined.
-          \item Positions all children and request them to layout themselves (with given position and width).
-          \item The heights, margins and paddings of the children are accumulated in order to decide the own height.
+          \item The own width of the renderer is determined.
+          \item The renderer positions all children and requests them to layout themselves (with given position and width).
+          \item The heights, margins and paddings of the children are accumulated in order to decide the own height of the renderer.
         \end{enumerate}
         Of course, only the children that need a layout will be affected (dirty, or global layout) in step 2.
-        So, the widths and positions are sent down in the tree and the height is sent up in the tree in order to construct the final layout.
+        So, the widths and positions are sent down in the tree and the heights are sent up in the tree in order to construct the final layout.
 
         The widths are calculated by the \code{width} style of the \glspl{element}, relative to the container \gls{element} width.
         Margins and paddings are also taken into account when calculating the widths.
@@ -923,33 +925,34 @@
         The renderer that has decided it needs to break the content up into multiple renderers propagates to the parent renderer that it needs to perform the breaking.
         When the parent renderer has created the renderers needed to fit the content with the given height, layout is performed on the new renderers and then the final height can be calculated and propagated upwards.
 
-        \todo{Is incremental layout commands really batch processed?}
+        \todo[inline]{Are incremental layout commands really batch processed?}
 
       \section{Parallelization}\label{sec:parallel}
         \begin{metatext}
           No longer can performance of an application increase over time without any code changes (as opposed to the times when the \gls{CPU} clock speeds increased rapidly).
           Now, applications need to utilize the multiple cores of the \gls{CPU} instead of relying on high clock speed.
-          Parallelization is something \gls{layout engine} vendors are very interested in, and much research is being done about utilizing multiple cores to increase the speed of the engine.
+          Parallelization is something \gls{layout engine} vendors are interested in, and research is being done about utilizing multiple cores to increase the performance of the engines.
           In this section a small summary will be given about the current research front, and how the parallelization can be approached.
           This section is mainly based on \normalfont{\cite{zoomm,parallelizing_the_web_browser,meyerovich2010fast,servo_parallel,servo_blog}}.
+          \todo{Check so that the section actually does what the meta says}
         \end{metatext}
 
         As \gls{web} applications grow bigger and more demanding, \glspl{browser} continuously need to improve the performance on all levels.
         Fetching resources over the network is the only thing that is done in parallel today.
         The rest of the \gls{browser} system is designed and optimized to run sequentially.
-        On computers, \glspl{browser} usually achieve parallelism by running each page context in parallel (each tab of the \gls{browser} window is separate process).
+        On computers, \glspl{browser} usually achieve parallelism by running each page context in parallel (each tab and window of the \gls{browser} runs in a separate process).
         This approach is appealing because it utilizes the cores of the machine by still having all subsystems run sequentially for each page, while improving the overall performance of the \gls{browser}.
         However, this approach is not enough.
         The page performance is not improved if only one page is present.
         For the \gls{web} to be a true competitor to heavy native applications\todo{Reformulate to not use the word native.}, the page performance needs to be increased (not only the overall \gls{browser} performance).
-        It is then important to be able to dedicate multiple cores to one page instead of having all the pages present using their own core (perhaps the non-visible pages in different tabs will share one core while the main visible tab will get access to multiple cores if needed).
-        Also, with the number of mobile devices browsing the \gls{web} increasing rapidly it is really important to be able to achieve good parallelism.
-        Light devices such as small laptops, mobile devices and tablets share a common goal --- they want to reduce power consumption while increasing the performance.
+        It is then important to be able to dedicate multiple cores to one page instead of having all the pages present using their own core (perhaps all non-visible pages can share one core while the main visible page can have access to multiple cores if needed).
+        Also, with the number of mobile devices browsing the \gls{web} increasing rapidly it is important to be able to achieve good parallelism.
+        Light devices such as small laptops, mobile phones and tablets share a common goal --- they want to reduce power consumption while increasing the performance.
         This can be achieved with multicore processors that run at lower clock speeds.
         \todo{Write that many cores is preferred over high clock speed? Why?}
         It has been shown that the performance of mobile \glspl{browser} is \gls{CPU} bound contrary to the common belief that they are network bandwidth bound \cite{parallelizing_the_web_browser}.
-        This is why most researchers target light devices when trying to parallelize \gls{web} \glspl{browser}.
-        Of course, once the methods has matured and been implemented, desktops will benefit from this as well.
+        This is why many researchers target light devices when trying to parallelize \gls{web} \glspl{browser}.
+        Of course, once the methods has matured and been implemented, desktop layout engines will benefit from parallelization as well.
 
         \gls{CSS} selector matching is a good candidate for parallelization, due to matching nodes to selectors being independent from other selector matches.
         A successful parallelization of selector matching has been achieved with locality-aware task parallelism \cite{parallelizing_the_web_browser}.
@@ -964,17 +967,17 @@
 
     \chapter{Element queries}
       \begin{metatext}
-        Now that a good understanding of \glspl{browser} (especially the \gls{layout engine}), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- the solution to modular \gls{responsive} \gls{web} design.
-        This chapter will define element queries, present how they solve the problem, and address some of the issues hindering element queries from being implemented \glslink{native}{natively}.
-        Further, some possible restrictions will be presented to resolve some of the issues.
+        Now that a good understanding of \glspl{browser} (especially the \gls{layout engine}), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- the key concept to modular \gls{responsive} \gls{web} design.
+        This chapter will define element queries, present why they are needed, and address some of the issues hindering element queries from being implemented \glslink{native}{natively}.
+        Further, some possible restrictions will be presented to resolve some of the \gls{native} issues.
         \todo{Instead write that some solutions will be presented?}
       \end{metatext}
 
-      Recall from section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} respond to the given size.
+      Recall from section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} respond to size changes.
       \Gls{responsive} \gls{web} design implements this by using \gls{media queries}, applying conditional rules with relation to the \gls{viewport} size.
       In section~\ref{sec:modularity} the desire for building modular \gls{web} components was presented.
-      One implication of building applications in a modular way is that general components become reusable.
-      Since the only way of applying conditional rules to \glspl{element} today is by using \gls{media queries}, all \gls{responsive} styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the layout).
+      One positive outcome of building applications in a modular way is that general components become reusable.
+      Since the only way of applying conditional rules to \glspl{element} today is by using \gls{media queries}, all \gls{responsive} styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the application layout).
       The implication of this is that the \gls{HTML} and \gls{JavaScript} can be written in a modular way, but the \gls{CSS} is left for the user of the module (application) to write which somewhat defeats the purpose of writing modules.
       So developers today have two choices: writing modules that are not \gls{responsive} but \gls{self-contained}, or writing modules that are \gls{responsive} but not \gls{self-contained} (leaving the styling to the user).
 
@@ -1015,20 +1018,20 @@
         \subsection{Performance}
           \begin{metatext}
             This subsection will present the performance impacts that element queries have on \glspl{layout engine}.
-            As shown in section~\ref{sec:parallel} \gls{browser} vendors are very interested in parallelizing their \glspl{browser} and especially the \glspl{layout engine} to increase the page performance.
-            Element queries limits the parallelization badly, which will be the focus of this subsection.
+            As shown in section~\ref{sec:parallel} \gls{layout engine} vendors are interested in parallelizing their engines to increase the page performance.
+            Element queries limits the parallelization, which will be the focus of this subsection.
             \todo{Referera till w3c mailinglista?}
           \end{metatext}
 
-          Recall from section~\ref{sec:layout-process} that the box size and position for each \gls{element} is calculated at in the layout process, and cannot be determined before an actual layout has happened.
+          Recall from section~\ref{sec:layout-process} that the rectangle size and position for each \gls{element} is calculated in the layout process, and cannot be determined before an actual layout has happened.
           This imposes that a layout pass needs to be performed before knowing the \gls{element} sizes.
           If element queries are present that rely on the size of \glspl{element}, which is the identified common use case, the following process needs to happen:
           \begin{enumerate}
             \item A layout pass needs to be performed in order to calculate the size of the \glspl{element} targeted by element queries.
             \item The element query conditional rules need to be evaluated against the \glspl{element} to know which rules should be applied (element query selector matching).
-            \item If the element query selector matching has resulted in a different matching set than in step 1, another layout pass (with the new rules applied) needs to be performed.
+            \item If the element query selector matching has resulted in a different matching set than in step 1, the process is repeated (with the new rules applied).
           \end{enumerate}
-          So for each element query selector matching change result in performing another layout, discarding at least a subtree of the previous layout.
+          So, an element query selector matching change result in performing another layout, discarding at least a subtree of the previous layout.
           As already stated, this only occurs when the layout has changed in a way that changes the element query selectors.
           Unfortunately, this means that if there is any matching element query selector at page load, two layout passes will always be performed.
 
@@ -1322,11 +1325,11 @@
               \item\label{itm:req_prolyfill} The framework must act as a prolyfill\footnote{A polyfill is something that provides a functionality that is expected to be provided \glslink{native}{natively} by \glspl{browser}. Polyfills usually fixes some standard functionality for \glspl{browser} that do not yet support it. A prolyfill is a polyfill for something that will probably become a standard.} for \gls{native} element queries.
             \end{enumerate}
         \end{enumerate}
-        It would be possible to create a framework that conforms to all of the requirements but added features, automation and compatibility most probably would decrease the performance.
-        In the same way, too many advanced features may decrease the ease of use and simplicity of the \glspl{API}.
+        It would be possible to create a framework that conforms to all of the requirements but added features, automation and compatibility most probably would decrease the performance and load time.
+        In the same way, too many advanced features may decrease the ease of use and simplicity of the \gls{API}.
         Some feature may also restrict the compatibility.
         Trying to conform to all of the requirements and trying to find a balance would result in a worse solution than a framework tailored for specific requirements.
-        By providing a good framework foundation and plugins for different use cases it is up to developers too choose the right plugins for each project.
+        By providing a good framework foundation and plugins for different use cases it is up to developers to choose the right plugins for each project.
         This way, developers are composing their own custom tailored solution for their specific use cases.
         In addition, by letting the plugins satisfy the requirements it is easy to extend the framework with new plugins when new requirements arise.
         For instance, the requirement~\ref{itm:req_prolyfill} is beneficial to satisfy with a plugin since the \gls{API} for \gls{native} element queries can only be guessed at this point of time, which will probably lead to frequent changes to the plugin.
@@ -1334,7 +1337,7 @@
 
       \section{Architecture}\label{sec:arcithecture}
         \begin{metatext}
-          As it has been shown that a plugin based framework is most suitable, it is time to present the overall architecture of the framework.
+          As it has been shown that a plugin based framework is suitable, it is time to present the overall architecture of the framework.
           The roles of each subsystem of the core framework will also be explained.
         \end{metatext}
 
