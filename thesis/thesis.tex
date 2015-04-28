@@ -967,7 +967,7 @@
 
     \chapter{Element queries}
       \begin{metatext}
-        Now that a good understanding of \glspl{browser} (especially the \gls{layout engine}), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- the key concept to modular \gls{responsive} \gls{web} design.
+        Now that a good understanding of \glspl{browser} (especially the \gls{layout engine}), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- the solution to the modular \gls{responsive} \gls{web} design problem.
         This chapter will define element queries, present why they are needed, and address some of the issues hindering element queries from being implemented \glslink{native}{natively}.
         Further, some possible restrictions will be presented to resolve some of the \gls{native} issues.
         \todo{Instead write that some solutions will be presented?}
@@ -1020,6 +1020,7 @@
             This subsection will present the performance impacts that element queries have on \glspl{layout engine}.
             As shown in section~\ref{sec:parallel} \gls{layout engine} vendors are interested in parallelizing their engines to increase the page performance.
             Element queries limits the parallelization, which will be the focus of this subsection.
+            This subsection is partly based on \normalfont{\cite{w3c_eq_mail}}.
             \todo{Referera till w3c mailinglista?}
           \end{metatext}
 
@@ -1043,26 +1044,26 @@
 
         \subsection{Circularity}\label{sec:cyclic-rules}
           \begin{metatext}
-            This subsection will show how cyclic rules may occur and why it is such a major problem.
+            This subsection will show how cyclic rules may occur and why it is a problem.
             It will also be presented why cyclic rules must be detected at runtime.
-            Some examples of will be given to better understand the complexity of the problem.
+            Some examples will be given to better understand the complexity of the problem.
           \end{metatext}
 
-          The most obvious occurrences of cyclic rules are when there are specified conflicting width constraints and width updates for an \gls{element}.
-          See listing~\ref{code:cyclic-simple} for the perhaps most simple example of cyclic rules.
+          The most obvious occurrences of cyclic rules are when there are specified conflicting width element queries and width updates for an \gls{element}.
+          See listing~\ref{code:cyclic-simple} for the perhaps simplest example of cyclic rules.
           The syntax of element queries will be presented in section~\ref{sec:native-eq}\todo{Have the explanation before this section? On the other hand this section is needed for the motivation of the syntax of the native API}, and is not important to understand the problem.
-          \begin{lstlisting}[caption={Very simple example of cyclic rules.}, captionpos=b, label={code:cyclic-simple}]
+          \begin{lstlisting}[caption={Simple example of cyclic rules with directly conflicting width element queries and updates.}, captionpos=b, label={code:cyclic-simple}]
 #foo {
   width: 250px;
 }
 
 #foo:eq(max-width: 300px) {
-  /* This rule will be applied only when the width of #foo is < 300px. */
+  /* This rule will be applied only when the width of #foo is <= 300px. */
   width: 550px;
 }
 
 #foo:eq(min-width: 500px) {
-  /* This rule will be applied only when the width of #foo is > 500px. */
+  /* This rule will be applied only when the width of #foo is >= 500px. */
   width: 250px;
 }
           \end{lstlisting}
@@ -1090,100 +1091,88 @@
           For instance, if the \code{\#foo} \gls{element} matches the width of a child \gls{element}, and the child changes width depending on the parent width, a cycle might occur.
           Consider the code in listing~\ref{code:cyclic-2}.
           
-          \begin{lstlisting}[caption={Example of indirect cyclic rules.}, captionpos=b, label={code:cyclic-2}]
+          \begin{lstlisting}[caption={Example of indirect cyclic rules. Here the user (\code{\#foo}) of the module (\code{\#module}) creates cyclic rules indirectly by specifying that it should match the width of the module.}, captionpos=b, label={code:cyclic-2}]
 /* HTML */
 <div id="foo">
-  <div id="child"></div>
-</div>
-
-/* CSS */
-#foo {
-  /* Will match the width of the child element. */
-  display: inline-block;
-}
-
-#child {
-  width: 250px;
-}
-
-#foo:eq(max-width: 300px) #child {
-  /* This rule applies only when the width of #foo is < 300px. */
-  width: 550px;
-}
-
-#foo:eq(min-width: 500px) #child {
-  /* This rule applies only when the width of #foo is > 500px. */
-  width: 250px;
-}
-          \end{lstlisting}
-          What makes this situation more complex than the previous example is that it is less obvious for numerous reasons:
-          \begin{itemize}
-            \item The rules of the child \gls{element} and the rules of the \code{\#foo} \gls{element} might be separated into different parts of the stylesheet (or even different stylesheets).
-            The problem cannot be found without considering both of the rule sets.
-            \item The child \gls{element} might be another module, and by adding one line to the parent module (the \code{\#foo} \gls{element}) a cycle has appeared.
-            \item The developer has to be well aware of how the display property affects the \gls{element} and what implications the \code{inline-block} has to the \gls{element}.
-          \end{itemize}
-          An \gls{JavaScript} quivalent of this example would perhaps be \code{var bar = true; while(bar);} with the motivation that it is still very obvious that it is an infinite loop but both the while loop and the variable needs to be reviewed.
-          Also, the variable assignment could happen in another part of the program.
-
-          The examples given so far have been simple and easily detectable.
-          However, cycles can occur in a much more complex way.
-          The two given examples could both be identified as cyclic by simply reviewing the \gls{CSS} code.
-          It is also possible for a program to analyze the examples to deduce that they are cyclic.
-          Unfortunately, not all cycles can be detected by static analyze.
-          Consider the code in listing~\ref{code:cyclic-3}.
-          \begin{lstlisting}[caption={Example of indirect cyclic rules.}, captionpos=b, label={code:cyclic-3}]
-/* HTML */
-<div id="foo">
-  <div id="child">
-    When in doubt, mumble.
+  <div id="module">
+    <div id="child"></div>
   </div>
 </div>
 
 /* CSS */
 #foo {
-  /* Will match the width of the child element. */
+  /* Will match the width of the child element #module. */
   display: inline-block;
 }
 
+#module {
+  /* Matches the width of the parent element #foo. */
+  width: 100%;
+}
+
 #child {
-  font-size: 1.5em;
+  width: 250px;
 }
 
-#foo:eq(max-width: 300px) #child {
-  /* This rule applies only when the width of #foo is < 300px. */
-  font-size: 3em;
+#module:eq(max-width: 300px) #child {
+  /* This rule applies only when the width of #module is <= 300px. */
+  width: 550px;
 }
 
-#foo:eq(min-width: 500px) #child { 
-  /* This rule applies only when the width of #foo is > 500px. */
-  font-size: 1em;
+#module:eq(min-width: 500px) #child {
+  /* This rule applies only when the width of #module is >= 500px. */
+  width: 250px;
 }
           \end{lstlisting}
-          In this example, it is virtually impossible to tell if the rules are cyclic.
-          So what happens is that the \code{\#foo} \gls{element} get the size of the child \gls{element}, which width depend on the text inside it.
-          The width of the text depends on the font size, which is initially set to \code{1.5em}.
-          The \code{em} unit is relative to the inherited font size of the \gls{element}.
+          What makes this situation more complex than the previous example is that it is less obvious for the devloper to identify that there are cyclic rules.
+          First, the problem cannot be found without considering the rule sets of both the module and the \code{\#foo} element.
+          Second, the rules of the module elements and the rules of the \code{\#foo} \gls{element} might be separated into different parts of the stylesheet or different stylesheets.
+          Third, the user of the module must be aware of how it styles itself in order to understaind the limitations it imposes.
+          By adding adding one line to the containg element \code{\#foo} a cycle appears in another part of the program (in the module).
+          A \gls{JavaScript} quivalent of this example would perhaps be \code{var bar = true; while(bar);} with the motivation that it is still obvious that it results in an infinite loop but both the loop and the variable needs to be considered.
+          Also, the variable assignment could happen in another part of the program.
+
+          The examples given so far have been simple, and can easily be identified as cyclic by reviewing the \gls{CSS} code.
+          It would also be possible for a static analyzer to detect the cycles. \todo{Write at parse time instead of static analyzer?}
+          However, cycles can occur in a complexer way that cannot be detected by a static analyzer.
+          Consider the code in listing~\ref{code:cyclic-3}.
+          \begin{lstlisting}[caption={Example of cyclic rules that cannot be detected by a static analyzer.}, captionpos=b, label={code:cyclic-3}]
+/* HTML */
+<span id="foo">
+  When in doubt, mumble.
+</span>
+
+#foo:eq(max-width: 300px) {
+  /* This rule applies only when the width of #foo is <= 300px. */
+  font-size: 2em;
+}
+          \end{lstlisting}
+          In this example, it is virtually impossible to tell if the rules are cyclic for a static analyzer.
+          It could perhaps guess that it could result in a cycle in some cases but that is also the point of the example --- it is only cyclic in some scenarios.
+          The size of the \code{\#foo} element will depend on the content of it (i.e, the text).
+          The width of the text depends on the font size, which is inherited.
           So the width of the \code{\#foo} \gls{element} is dependent on the inherited font size.
-          When the \code{\#foo} \gls{element} is below 300 pixels wide, the font size of the child is increased to \code{3em} and when above 500 pixels the font size is decreased to \code{1em}.
-          So if \code{3em} results in a font size big enough to make the child \gls{element} bigger than 500 pixels, and if \code{1em} results in a font size small enough to make the child \gls{element} smaller than 300 pixels the rules are cyclic.
+          When the \code{\#foo} \gls{element} is below 300 pixels wide, the font size of the element is increased to \code{2em} (which is a unit that is relative to the inherited value).
+          If a \code{2em} font size results in a computed font size big enough to make the \gls{element} wider than 300 pixels, the \code{\#foo:eq(max-width: 300px)} selector will not match and therefore the element will no longer have font size \code{2em}.
+          Since the element width is decreased below 300 pixels when the font size of \code{2em} no longer is applied, the selector will match again --- the rules are cyclic.
+          However, in another scenario the inherited font size might not be big enough to make the \code{\#foo} element wider than 300 pixels which would not result in a cycle.
           The factors that creates the cycle are the following:
           \begin{itemize}
-            \item The display type of the \code{\#foo} \gls{element}
-            \item The \gls{element} queries of the child \gls{element}
-            \item The font size value of the child \gls{element}
-            \item \textbf{The inherited font size of the \code{\#foo} \gls{element}}
-            \item \textbf{The text of the child \gls{element}}
+            \item The display type of the \gls{element}
+            \item The \gls{element} queries of the \gls{element}
+            \item The font size value of the \gls{element}
+            \item \textbf{The inherited font size of the \gls{element}}
+            \item \textbf{The content of the \gls{element}}
           \end{itemize}
-          The bolded factors are of a far worse type than the ones presented until now.
+          The factors in bold are of a far worse type than the ones presented.
           They are impossible to determine at parsetime.
           In this example the text is static but it could have been added dynamically.
-          Also, the inherited font size depends on the closest ancestor with a font size property defined.
+          Also, the inherited font size value on the closest ancestor with a font size property defined.
           Since ancestors also can have their font sizes defined in relative units, the dependency tree can go up to the root of the \gls{document}.
           Further, if no ancestor defines an absolute value for the font size it is up to the \gls{browser} to default to a size, which is impossible to reason about at parsetime.
           This implies that there is no way of telling if the cycle appears or not without actually running the code.
-          Also, the cycle may appear in different \glspl{browser} and settings, which makes the cycle even harder to detect.
-          Far worse is that the previous examples have been of the \code{while(true);} character, which gives the false hope that even though it is possible to create cycles developers would never encounter it since ``real'' code would not be close to the examples given here.
+          Also, the cycle may appear in different \glspl{browser} and settings, which makes the cycle even harder to detect.\todo{Also write that it depends on the content, which might not be present at parsetime.}
+          Far worse is that the previous examples have been of the \code{while(true);} character, which gives the false hope that even though it is possible to create cycles developers would never encounter it since ``real'' code would not be close to the examples given here. \todo{Thinking about removing this... This does not seem like a valid use case, since the layout area is depending on the content.}
           With the third example, this is no longer true.
           Increasing the font size when the layout area is smaller and decreasing the font size when the layout area is bigger is something that is frequently done in \gls{responsive} \gls{web} design.
           Typically \gls{web} site authors want the font size to increase on handheld devices, to increase the readability.
