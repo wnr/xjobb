@@ -1133,10 +1133,10 @@
           Also, the variable assignment could happen in another part of the program.
 
           The examples given so far have been simple, and can easily be identified as cyclic by reviewing the \gls{CSS} code.
-          It would also be possible for a static analyzer to detect the cycles. \todo{Write at parse time instead of static analyzer?}
-          However, cycles can occur in a complexer way that cannot be detected by a static analyzer.
+          It would also be possible for the browser (or any other program) to detect the cycles at parsetime.
+          However, cycles can occur in a complexer way that cannot be detected at parsetime.
           Consider the code in listing~\ref{code:cyclic-3}.
-          \begin{lstlisting}[caption={Example of cyclic rules that cannot be detected by a static analyzer.}, captionpos=b, label={code:cyclic-3}]
+          \begin{lstlisting}[caption={Example of cyclic rules that cannot be detected at parsetime.}, captionpos=b, label={code:cyclic-3}]
 /* HTML */
 <span id="foo">
   When in doubt, mumble.
@@ -1147,7 +1147,7 @@
   font-size: 2em;
 }
           \end{lstlisting}
-          In this example, it is virtually impossible to tell if the rules are cyclic for a static analyzer.
+          In this example, it is impossible to deduce if the rules are cyclic at parsetime.
           It could perhaps guess that it could result in a cycle in some cases but that is also the point of the example --- it is only cyclic in some scenarios.
           The size of the \code{\#foo} element will depend on the content of it (i.e, the text).
           The width of the text depends on the font size, which is inherited.
@@ -1164,19 +1164,20 @@
             \item \textbf{The inherited font size of the \gls{element}}
             \item \textbf{The content of the \gls{element}}
           \end{itemize}
-          The factors in bold are of a far worse type than the ones presented.
-          They are impossible to determine at parsetime.
+          The factors in bold are of a far worse character than the other ones presented, since they may depend on runtime actions and values.
           In this example the text is static but it could have been added dynamically.
-          Also, the inherited font size value on the closest ancestor with a font size property defined.
-          Since ancestors also can have their font sizes defined in relative units, the dependency tree can go up to the root of the \gls{document}.
+          Also, the inherited font size value depends on the closest ancestor with a font size property defined.
+          Since ancestors can have their font sizes defined in relative units, the dependency tree can go up to the root of the \gls{document}.
           Further, if no ancestor defines an absolute value for the font size it is up to the \gls{browser} to default to a size, which is impossible to reason about at parsetime.
           This implies that there is no way of telling if the cycle appears or not without actually running the code.
-          Also, the cycle may appear in different \glspl{browser} and settings, which makes the cycle even harder to detect.\todo{Also write that it depends on the content, which might not be present at parsetime.}
-          Far worse is that the previous examples have been of the \code{while(true);} character, which gives the false hope that even though it is possible to create cycles developers would never encounter it since ``real'' code would not be close to the examples given here. \todo{Thinking about removing this... This does not seem like a valid use case, since the layout area is depending on the content.}
-          With the third example, this is no longer true.
-          Increasing the font size when the layout area is smaller and decreasing the font size when the layout area is bigger is something that is frequently done in \gls{responsive} \gls{web} design.
-          Typically \gls{web} site authors want the font size to increase on handheld devices, to increase the readability.
-          Of course, the numbers given in the example might not be reasonable, but in concept it is valid use case that may result in cyclic rules.
+          Also, the cycle may appear in different \glspl{browser} and settings, which makes the cycle even harder to detect.
+          
+          \todo[inline]{Try to descibe a scenario where a cycle appears, that is actually a valid use case?}
+          % Far worse is that the previous examples have been of the \code{while(true);} character, which gives the false hope that even though it is possible to create cycles developers would never encounter it since ``real'' code would not be close to the examples given here.
+          % With the third example, this is no longer true.
+          % Increasing the font size when the layout area is smaller and decreasing the font size when the layout area is bigger is something that is frequently done in \gls{responsive} \gls{web} design.
+          % Typically \gls{web} site authors want the font size to increase on handheld devices, to increase the readability.
+          % Of course, the numbers given in the example might not be reasonable, but in concept it is valid use case that may result in cyclic rules.
 
       \section{Possible solutions}
         \begin{metatext}
