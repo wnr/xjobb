@@ -26,7 +26,8 @@
 \lstset{%
   frame=L,
   basicstyle=\tiny,
-  xleftmargin=\parindent
+  xleftmargin=\parindent,
+  escapeinside={(*@}{@*)}
 }
 
 \bibliography{bibliography.bib}
@@ -1193,37 +1194,65 @@
           \begin{metatext}
             This solution limits element queries a lot, but avoids many of the problems this way while still enabling element queries for the common use case.
             This approach has been discussed at the \gls{W3C} and the initial draft of the \gls{RICG} assumes that this is a prerequisite to a \gls{native} implementation.
-            The subsection is mainly based on \normalfont{\cite{w3c_eq_mail,ricg_irc_log,ricg_issue_viewport}}.
+            The subsection is mainly based on \normalfont{\cite{w3c_eq_mail,ricg_irc_log,ricg_issue_viewport,w3c_css21}}.
           \end{metatext}
 
           By limiting element queries to special \gls{viewport} container \glspl{element} that can only be queried by child \glspl{element}, much of the problems are resolved.
           This means that a new \gls{HTML} tag would be crafted (perhaps named \code{viewport}) that defines separated \glspl{viewport} in the \gls{document}.
-          In order to avoid cyclic rules, the size of \code{viewport} \glspl{element} would not be dependent on their children, and element queries may only target the closest ancestor \code{viewport} of the targeted selector element.
-          This way, cyclic rules can no longer occur due to size changes of children since the children may not alter the \gls{viewport} size.
-          With such viewport element, the only way cyclic rules can occur is if the viewport element has rule sets that styles it differently depending on the size of itself (by using element queries).
-          Since the behavior of some style properties of the \code{viewport} already need to be redefined (such as \code{display: inline;}) such style rules could also be handled specially for \code{viewport} \glspl{element}. \todo{Flesh this out a bit? Give example of when a cycle still can occur, and why it is valid to restyle the viewport with element queries (nested viewports for instance)}
-          The reason that a new \gls{HTML} tag is proposed instead of a new \gls{CSS} property that defines the behavior is because the \gls{layout engine} in the latter case needs to resolve the styles for all \glspl{element} in order to know which are \gls{viewport} \glspl{element}.
-          With a new \gls{HTML} tag, the \gls{layout engine} can detect that that the \gls{element} is a \gls{viewport} before resolving any styles.
-          \todo[inline]{Write that viewport elements may only be part of selectors with combinators, cannot occur more than once and may not be the last in the selector.}
-          \todo[inline]{Write why it is important to know viewport elements before resolving styles.}
+          In order to avoid cyclic rules, the following limitations to the \code{viewport} would be defined:
+          \begin{enumerate}
+            \item\label{viewport-rule-1} The size of the \gls{element} may not be dependent on its children. This implies that all \gls{CSS} that causes the \gls{element} to be shrinked to fit the content are invalid.
+            \item\label{viewport-rule-2} The selector may only include the \code{viewport} \gls{element} targeted by element queries as a part of the expression of an selector (not the right-most simple selector).
+            \item\label{viewport-rule-3} Only the nearest \code{viewport} ancestor of the right-most simple selector may be targeted for element queries in selectors.
+          \end{enumerate}
+          See listing~\ref{code:viewport-selectors} for examples of valid and invalid CSS selectors according to the rules defined above.
+          \begin{lstlisting}[caption={Examples of valid and invalid selectors with the imaginary \code{viewport} element.}, captionpos=b, label={code:viewport-selectors}]
+/* HTML */
+<viewport id="outer">
+  <viewport id="inner">
+    <p id="foo">Imaginary viewport elements</p>
+  </viewport>
+</viewport>
 
+/* CSS */
+
+/* valid */
+viewport:eq(width > 500) p { ... }
+
+/* valid */
+viewport viewport:eq(width > 500) p { ... }
+
+/* invalid, violates rule (*@\ref{viewport-rule-1}@*) */
+viewport { display: inline; }
+
+/* invalid, violates rule (*@\ref{viewport-rule-2}@*) */
+p viewport:eq(width > 500) { ... }
+
+/* invaid, violates rule (*@\ref{viewport-rule-3}@*) */
+viewport:eq(width > 1000) viewport:eq(width > 500) p { ... }
+
+/* invalid, violates rule (*@\ref{viewport-rule-3}@*) */
+#outer:eq(width > 500) #foo { ... }
+          \end{lstlisting}
+          
           This approach also solves many of the performance problems, but not all.
-          The internal \glspl{API} that request non-layout information for the \glspl{element} using element queries only need to make sure that the containing \gls{viewport} \gls{element} has been laid out before resolving the styles (which is a much better situation that the unrestricted version of element queries).
-          Further, the layout can be done in one pass as long as the \gls{viewport} \glspl{element} are laid out before the children.
-          It is still a bit inconvenient that the \gls{layout engine} would need to evaluate all element query selectors in the middle of a layout pass (after the that the \gls{viewport} \glspl{element} has been laid out) in order to resolve the styles for the \gls{viewport} children.
-          Parallelization is also easier, since the queries may only be targeting the closest \gls{viewport} \gls{element}.
-          This means that each \gls{viewport} subtree can be laid out in parallel.
-
-          This solution would behave much like the \code{iframe} \gls{element} layout-wise.
-          It should be noted that \code{iframe} \glspl{element} are not suitable as an alternative to the proposed \code{viewport} \gls{element}, since \code{iframe} elements are much more limited by nature (creates a new \gls{document} and script context).
+          The reason that a new \gls{HTML} tag is proposed instead of a new \gls{CSS} property that defines the behavior is because the \gls{layout engine} in the latter case needs to resolve the styles for all \glspl{element} in order to know which are \gls{viewport} \glspl{element}.
+          With a new \gls{HTML} tag, the \gls{layout engine} can know after it has parsed the \gls{HTML} which \glspl{element} are supposed to be treated at separate viewports.
+          This way, parallelizing the selector matching and style computation is possible (as opposed to if the style for each element needs to be resolved in order to know the \code{viewport} \glspl{element}).
+          Also, the internal \glspl{API} that request non-layout information for the \glspl{element} using element queries only need to make sure that the containing \gls{viewport} \gls{element} has been laid out before resolving the styles.
+          The layout can be done in one pass as long as the \gls{viewport} \glspl{element} are laid out before their children.
+          Since the queries may only be targeting the nearest \gls{viewport} \gls{element} ancestor, each \gls{viewport} subtree can be laid out in parallel.
+          However, it is still inconvenient that the \gls{layout engine} would need to evaluate all element query selectors in the middle of a layout pass (after the that the \gls{viewport} \glspl{element} has been laid out) in order to resolve the styles for the \gls{viewport} children.
 
           Obviously, this limits element queries a lot.
           The fact that the size of the \gls{viewport} \gls{element} cannot depend on the children (like normal block \glspl{element} do), limits the usability.
+          The \code{viewport} \gls{element} would behave much like the \code{iframe} \gls{element} layout-wise.
+          It should be noted that \code{iframe} \glspl{element} are not suitable as an alternative to the proposed \code{viewport} \gls{element}, since \code{iframe} elements are much more limited by nature (creates a new \gls{document} and script context).
           The idea is that the \gls{viewport} cannot be queried for properties that the children may affect (such as the width and height style properties).
           In order to allow the children to query the properties, they cannot be affected by the children.
-          In theory it should mean that if no children query for instance the height of the \gls{viewport}, then the \gls{viewport} may depend on the children for it's height.
+          In theory it should mean that if no child query for instance the height of the \gls{viewport}, then the \gls{viewport} may depend on the children for it's height.
           This is a powerful insight, since the general use case would be to write element queries against the width and have the \glspl{element} adapt their heights accordingly (including the \gls{viewport} \gls{element}).
-          \todo{Back this up. Maybe check with RICG if this is possible?}
+          \todo[inline]{Maybe note seamless iframe in theory works in the same way. But would it be relevant?}
 
         \subsection{Element queries with runtime checks}
           \begin{metatext}
