@@ -221,11 +221,14 @@
     \todo[inline]{Word says that all "their own" is wrong.}
     \todo[inline]{Change all wikipedia sources to the real sources}
     \todo[inline]{Change self-contained to encapsulated?}
+    \todo[inline]{self-container -> encapsulated perhaps}
+    \todo[inline,color=green]{Marcos: I don't think you ever defined what a "native solution" actually is.}
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
       Heavy use of \gls{web} terminology is being used and intermediate \gls{web} development knowledge is assumed.
       \todo[inline]{Philipp wanted this to be more general.}
     \section{Problem statement}
+      \todo[inline,color=green]{Marcos: Where does the content for this section come from? Is this something you are presupposing as part of the problem or have other expressed this view? if so, please add some references here or make it clear that this is your hypothesis.}
       By using \gls{CSS} \gls{media queries}, developers can specify different style rules for different \gls{viewport} sizes.
       This is fundamental to creating \gls{responsive} \gls{web} applications.
       If developers want to build modular applications by composing the application by smaller components (\glspl{element}, scripts, styles, etc.) \gls{media queries} are no longer applicable.
@@ -233,11 +236,12 @@
       The problem can be formulated as: \emph{It is not possible to specify conditional style rules for \glspl{element} depending on the size of an element}.
       See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
-      \todo{Is W3C okay with this? No they are not. Need to reformulate.}
+      \todo[color=green]{Marcos: Cannot write this. Must reformulate. Waiting for Marcos's respose to my questions.}
       The main international standards organization for the \gls{web}, the \gls{W3C}, has unofficially stated that such feature would be infeasible to implement.
       Participants of the \gls{W3C}, which include both paying members and the public, are interested in solving the problem and possible solutions are being discussed.
       However, they are still at the initial planning stage so a solution will not be implemented \glslink{native}{natively} in the near future.
       While awaiting a \gls{native} solution it is up to the developers to implement this feature as a \gls{third-party} solution.
+      \todo[color=green]{Marcos: citation}
       Efforts have been made to create a robust \gls{third-party} solution, with moderate success.
       Since all current \gls{third-party} solutions have shortcomings, there is still no de facto solution that developers use and the problem remains unsolved.
       Some problems with implementing element queries \glslink{native}{natively} in \gls{CSS} are:
@@ -245,9 +249,11 @@
         \item \textbf{Circularity:}
         If style rules can be applied by criteria of other \glspl{element}, it is possible to create cyclic rules (infinite loops of styling).
         Some cyclic rules might be possible to detect during \gls{CSS} parsing, but there are so many combinations of style properties that could result in cyclic rules that it will add a lot of complexity to the language, both for implementers and users.
+        \todo[color=green]{Marcos: citation}
         Also, it has been shown that some cyclic rules are impossible to detect at parsetime, due to being dependent on runtime factors.
         \item \textbf{Performance:} 
         \Gls{layout engine} vendors are interested in performing selector matching and layout computations in parallel to achieve better performance.
+        \todo[color=green]{Marcos: citation}
         The research front of \glspl{browser} have shown successful ways of parallelizing the \gls{layout engine}.
         Element queries implies some undesired limitations to the \glspl{layout engine}.
         With element queries, \glspl{layout engine} need to first compute the layout of all \glspl{element} in order to decide which selectors would conform to the element query conditions and then do a new layout computation with the new style rules activated, and so on until a stable state has been reached.
@@ -257,28 +263,38 @@
       The main objective of this thesis is to design and develop a \gls{third-party} implementation of element queries.
       To do this, it is needed to research existing solution approaches in order to understand and analyze the advantages and shortcomings of the approaches.
       It is also necessary to be aware of the premises, such as \gls{browser} limitations and specifications that one must conform to.
-      In addition, research will be done about the problems of implementing element queries \glslink{native}{natively}, to get a deeper understanding of the potential shape of a standardized \gls{API}. \todo{Marcos: I will research the problems of.}
+      \todo[color=green]{Marcos: I will research the problems of.}
+      In addition, research will be done about the problems of implementing element queries \glslink{native}{natively}, to get a deeper understanding of the potential shape of a standardized \gls{API}.
       Solving the main problem will require research and empirical studies of many subproblems.
       Examples of such subproblems that needs to be addressed are:
       \begin{itemize}
         \item How should circularity be handled? Should it be detected at runtime or parsetime, and what should happen on detection?
+        \todo[inline, color=green]{Marcos: Or if nothing should be done at all. There are other places in CSS where circularity could be a problem, and nothing is done about it... so, maybe it's not a big deal?}
+        \todo[inline]{Waiting for Marcos to reply to my questions.}
         \item How can one listen to \gls{element} size changes without any \gls{native} support?
+        \todo[inline,color=green]{Marcos: How can one listen to element size changes without any native support?}
+        \todo[inline]{I've been using listen since JS is talking about event "listeners". I'm awaiting Marcos response regarding this.}
         \item How can a custom \gls{API} be crafted that will enable element queries and still conform to the \gls{CSS} specification? Is it possible to create an \gls{API} that feels natural to \gls{web} developers and works in tandem with other tools and frameworks?
-        \item If a custom \gls{API} is developed, how would one make \gls{third-party} modules (that uses \gls{media queries}) work without demanding a rewrite of all \gls{third-party} modules? \todo{Remove me?}
-        \item Is it possible to solve the problem with adequate performance for heavy applications? \todo{Explain heavy or reformulate}
+        \item If a custom \gls{API} is developed, how would one make \gls{third-party} modules (that uses \gls{media queries}) work without demanding a rewrite of all \gls{third-party} modules?
+        \todo[inline]{I want to remove this. Marcos agrees. Don't know if I'm allowed since I wrote about this in the specification. Waiting answer from Mads.}
+        \item Is it possible to solve the problem with adequate performance for heavy applications?
+        \todo[inline,color=green]{Marcos: Explain heavy or reformulate}
         \item How can adequate \gls{browser} compatibility be achieved?
+        \todo[inline,color=green]{Marcos: Clarify.}
+        \todo[inline]{Might be sufficient to just write "legacy" browser support.}
       \end{itemize}
-      The scientific question to be answered is if it is possible to solve the problem  without extending the current \gls{web} standard. \todo{Which current web standard? There is currently no standard for this. If you mean "CSS", that's a family of standards. Please be clear what you mean here.}
+      The scientific question to be answered is if it is possible to solve the problem  without extending the current \gls{web} standard.
+      \todo[color=green]{Marcos: Which current web standard? There is currently no standard for this. If you mean "CSS", that's a family of standards. Please be clear what you mean here.}
       The hypothesis is that the problem can be solved with high reliability and adequate performance by developing a \gls{third-party} implementation.
-      \todo{Remove me?}
+      \todo{I want to remove this. Marcos agrees. Don't know if I'm allowed since I wrote about this in the specification. Waiting answer from Mads.}
       A reliable implementation should also enable existing \gls{responsive} components to react to a specified criterion (parent container size for example) with no modifications to the components.
       The goal of this thesis should be considered fulfilled if a solution was successfully implemented or described, or if the problems hindering a solution are thoroughly documented.
-      \todo{Is it really interesting for the reader to know when it was fulfilled or not? I know at this point of time that it has been fulfilled, so the other case is no more relevant.}
 
     \section{Significance}
       Many frameworks and techniques are being used in \gls{web} development to keep the code from becoming an entangled mess.
       Creating modules facilitates the development and increases the reusability.
-      Unfortunately, it is currently impossible to create \gls{self-contained} \gls{responsive} modules since conditional styles cannot be applied to \glspl{element} by \gls{element} size criterion. \todo{Explain self-contained responsive modules}
+      Unfortunately, it is currently impossible to create \gls{self-contained} \gls{responsive} modules since conditional styles cannot be applied to \glspl{element} by \gls{element} size criterion.
+      \todo[color=green]{Marcos: Explain self-contained responsive modules}
       Without element queries, \gls{responsive} modules force the application to style them properly depending on the \gls{viewport} sizes, which defeats the purpose of modules.
       Modules should be \gls{self-contained} and may not require the user to perform some of the module logic.
       Another option would be to make modules context-aware so they can style themselves according to the \gls{viewport}, but then they would not be reusable (since they assume a specific context).
@@ -286,8 +302,11 @@
       Clearly, no sound option exists for having \gls{responsive} modules.
 
       The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries.
+      \todo[color=green]{Marcos: Please add references to these.}
       As already stated, \gls{third-party} implementation efforts have been made with moderate success.
+      \todo[color=green]{Marcos: Citation to polyfills needed.}
       The \gls{W3C} receives requests and questions about it, but the answer seems to be that no solution will be provided in the near future.
+      \todo[color=green]{Marcos: Citatin needed.}
       The \gls{RICG} have started an initial planning regarding element queries and a draft \cite{ricg_draft} about element queries use cases is being written.
 
       Solving this problem would be a big advancement to \gls{web} development, enabling developers to create truly modular \gls{responsive} components.
@@ -295,6 +314,7 @@
       If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for the \gls{W3C} standardize a solution. \todo{Would like to reformulate this to not being so confident that a standard will definately be developed}
       The outcome of this thesis can also be helpful for the \gls{W3C} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
     \section{Delimitations}
+      \todo[inline,color=green]{Marcos: You already stated this before. I would remove this section.}
       The focus of this thesis lays on developing a \gls{third-party} framework that realizes element queries.
       All theoretical studies and work will be performed to support the development of the framework.
 
@@ -347,6 +367,7 @@
       In other words, the owners are all the network end-points (all users of the Internet).
       One can argue that the owners of the Internet are the \glspl{ISP}, providing the services and infrastructure making the Internet possible.
       On the other hand, the backbones of the Internet are usually co-founded nationally.
+      \todo[color=green]{Marcos: s/co-founded/controlled ?}
       Also, it is the \gls{ICANN} organization that has the responsibility for managing the \gls{IP} addresses in the Internet namespace, which reduces the ownership of the \glspl{ISP} further.
       Clearly, the Internet wouldn't be what it is today without all the actors.
       The Internet lays the ground for many systems and applications, including the \gls{WWW}, file sharing and telephony.
@@ -363,10 +384,13 @@
       Although the term \glslink{hypertext}{hypermedia} has been around for a long time, the term \gls{hypertext} is still being used as a synonym for \glslink{hypertext}{hypermedia}.
       Further, the \gls{web} can also be referred to as the universe of information accessible through the \gls{web} system.
       Therefore, the \gls{web} is both the system enabling sharing of \glslink{hypertext}{hypermedia} and also all of the accessible \glslink{hypertext}{hypermedia} itself.
-      Hypertext \glspl{document} are today more known by the name \emph{\gls{web} pages} or simply \emph{pages}. \todo{Maybe drop the term pages since it is a bit outdated?}
+      Hypertext \glspl{document} are today more known by the name \emph{\gls{web} pages} or simply \emph{pages}.
+      \todo[color=green]{Marcos: Maybe drop the term pages since it is a bit outdated?}
       Multiple related pages (that are often served from the same domain) compose a \emph{web site} or simply a \emph{site}.
       Hypertext \glspl{document} are written in \gls{HTML}, and often includes \gls{CSS} for styling and \gls{JavaScript} for custom user interactions.
       As a complementary to \gls{HTML}, the \gls{XML} also exists with the purpose of describing data (as contrary to \gls{HTML} which describes the \emph{presentation} of data).
+      \todo[color=green]{Marcos: Drop this. XHTML is deprecated (and it's just a serialization of HTML as XML... it doesn't add anything).}
+      \todo{Awaiting Marcos to answer my followup question to this.}
       To transfer the resources between computers the protocol \gls{HTTP} is used.
       Typically the way of retrieving resources on the web is by using a \emph{\glslink{browser}{user agent}}, known colloquially as a \gls{web} \emph{\gls{browser}}.
       Typically the way of retrieving resources on the \gls{web} is by using a \emph{\gls{web} \gls{browser}} or simply a \emph{\gls{browser}}.
@@ -379,6 +403,8 @@
           With that in mind, the origin of the Internet is not something easily pinned down and what will be presented here will be more technically interesting than the exact history.
           This section is a summary of \normalfont{\cite{overview_of_tcp_ip,internetsociety_history_internet,internet_maps,historyofthings_internet}}.
         \end{metatext}
+
+        \todo[inline,color=green]{Marcos: This doesn't relate to your thesis at all, TBH - which is about layout problems. I would remove this unless it somehow relates to layout of information.}
 
         In the early 1960's \emph{packet switching} was being researched, which is a prerequisite of internetworking.
         With packet switching in place, the very important ancestor of the Internet \gls{ARPANET} was developed, which was the first network to implement the \gls{TCP}/\gls{IP} suite.
@@ -420,6 +446,8 @@
           This subsection is a summary of \normalfont{\cite{wiki_gopher,wiki_www,webdevnotes_history_of_the_internet,webdevnotes_www_basics,historyofthings_internet}}.
         \end{metatext}
 
+        \todo[inline,color=green]{Marcos: Same with this. This has been described many times, I would recommend dropping this as it adds little value and doesn't relate to layout problems.}
+
         \noindent
         Recall from section~\ref{sec:history-internet} that the way of exchanging information was to upload and download files between clients and hosts with \gls{FTP}.
         If a \gls{document} downloaded was referring to another \gls{document}, the user had to manually find the server that hosted the other \gls{document} and download it manually.
@@ -439,7 +467,9 @@
         A \gls{browser} and a \gls{web} server were also created and the \gls{web} was born.
         One year later the \gls{web} was introduced to the public and in 1993 over five hundred international \gls{web} servers existed.
         It was stated in 1994 by \gls{CERN} that the \gls{web} was to be free without any patents or royalties.
+        \todo[color=green]{Marcos: Citation needed.}
         At this time the \gls{W3C} was founded with support from the \gls{DARPA} and the European Commission.
+        \todo[color=green]{Marcos: citation needed.}
         The organization comprised of companies and individuals that wanted to standardize and improve the \gls{web}.
 
         As a side note, the Gopher protocol was developed in parallel to the web by the University of Minnesota.
@@ -463,11 +493,15 @@
           This section is a summary of \normalfont{\cite{wiki_www,tim_wiki,kesan2003deconstructing,sink2003memoirs,wiki_mozilla,wiki_opera,wiki_konqueror,wiki_safari,wiki_webkit,wiki_blink}}.
         \end{metatext}
 
+        \todo[inline,color=green]{Marcos: This only gets interesting (with relation to the thesis) when you start talking about layout. The rest of the history is not relevant to the thesis.}
+
         The first \gls{web} \gls{browser} ever made was created in 1990 and was called WorldWideWeb (which was renamed to Nexus to avoid confusion).
+        \todo[color=green]{Marcos: Confusion with what?}
         It was at the time the only way to view the \gls{web}, and the \gls{browser} only worked on NeXT computers.
         Built with the NeXT framework, it was quite sophisticated.
         It had a \gls{GUI} and a \gls{WYSIWYG} \gls{hypertext} \gls{document} editor.
         Unfortunately it couldn't be ported to other platforms, so a new \gls{browser} called \emph{Line Mode Browser} (\abbr{lmb}) was quickly developed.
+        \todo[color=green]{Marcos: Developed by who?}
         To ensure compatibility with the earliest computer terminals the \gls{browser} displayed text, and was operated with text input.
         Since the \gls{browser} was operated in the terminal, users could log in to a remote server and use the \gls{browser} via telnet.
         In 1993, the core browser code was extracted and rewritten in C to be bundled as a library called \emph{libwww}.
@@ -578,6 +612,8 @@
           This section is a summary of \normalfont{\cite{book_rwd,wiki_rwd,mjelde2014performance}}.
         \end{metatext}
 
+        \todo[inline,color=green]{Marcos: Remember that developers might be also targeting actual browsers, not just "mobile" or "desktop".}
+        \todo{Awaiting Marcos to answer my question to this.}
         According to \emph{\gls{StatCounter}}, 37\% of the \gls{web} users are visiting sites on a mobile or tablet device.
         No longer is it valid to not support small screens.
         Furthermore, it is understood that sites need to be styled differently if they are visited by touch devices with small screens or mouse-based devices with large screens.
@@ -588,7 +624,8 @@
         
         This was a natural reaction since no better techniques existed, but the approach has many flaws.
         First, developers now have multiple versions of a site to maintain and develop in parallel.
-        Second, this approach doesn't scale well with new devices entering the market. \todo{Not only devices (also browser). But is this really true with the layout concept?}
+        Second, this approach doesn't scale well with new devices entering the market.
+        \todo[color=green]{Not only devices (also browser). But is this really true with the layout concept?}
         For instance, tablets are somewhere in the middle of mobile and laptops in size, which would require another special version of the site.
         Further, when desktops support touch actions and smartphones support mouse actions, even more versions of the website needs to be developed in order to satisfy all user devices.
         Third, the desktop site assumes that desktop users have big screens (which usually is true).
@@ -627,6 +664,8 @@
           This section is partly based on \normalfont{\cite{book_modular_programming,book_eloq_js,rich_hickey}}.
         \end{metatext}
 
+        \todo[inline,color=green]{Marcos: This section is not balanced, you should also describe criticisms of modular design. I.e., they eventually lead to complexity or modules that don't integrate. }
+        \todo[inline]{Waiting for Marcos response}
         By creating modules that can be used in any context with well-defined responsibilities and dependencies, developing applications is reduced to the task of simply configuring modules (to some extent) to work together which forms a bigger application.
         It is today possible to write the \gls{web} client logic in a modular way in \gls{JavaScript}.
         The desire of writing modular code can be shown by the popularity of frameworks that helps dividing up the client code into modules.
@@ -1011,6 +1050,8 @@
         \label{fig:mq-vs-eq}
       \end{figure}
 
+      \todo[inline]{Write about the pseudo-syntax that will be used as example from now on?}
+
       \section{Problems}
         \begin{metatext}
           The main reason why element queries have not been implemented \glslink{native}{natively} in \glspl{browser} is because they bring problems and limitations to the \glspl{browser}.
@@ -1061,13 +1102,13 @@
   width: 250px;
 }
 
-#foo:eq(max-width: 300px) {
-  /* This rule will be applied only when the width of #foo is <= 300px. */
+#foo:eq(width < 300px) {
+  /* This rule will be applied only when the width of #foo is < 300px. */
   width: 550px;
 }
 
-#foo:eq(min-width: 500px) {
-  /* This rule will be applied only when the width of #foo is >= 500px. */
+#foo:eq(width > 500px) {
+  /* This rule will be applied only when the width of #foo is > 500px. */
   width: 250px;
 }
           \end{lstlisting}
@@ -1075,13 +1116,13 @@
           The following happens to the \gls{element}:
           \begin{enumerate}
           \item The initial width of the \code{\#foo} \gls{element} is set to 250 pixels.
-          After a layout, the \code{\#foo:eq(max-width: 300px)} matches and therefore next step will be 2.
-          \item The width of the \gls{element} is under 300 pixels, so the selector \code{\#foo:eq(max-width: 300px)} matches.
-          Note that the \code{\#foo:eq(min-width: 500px)} does not match, since the width is under 500 pixels.
+          After a layout, the \code{\#foo:eq(width < 300px)} matches and therefore next step will be 2.
+          \item The width of the \gls{element} is under 300 pixels, so the selector \code{\#foo:eq(width < 300px)} matches.
+          Note that the \code{\#foo:eq(width > 500px)} does not match, since the width is under 500 pixels.
           Since the matched selector is more specific than the \code{\#foo} selector, the new width of the \gls{element} is 550 pixels.
           Next step will be 3.
-          \item The width of the \gls{element} is above 500 pixels, so the selector \code{\#foo:eq(min-width: 500px)} matches.
-          Note that the \code{\#foo:eq(max-width: 300px)} does not match, since the width is above 300 pixels.
+          \item The width of the \gls{element} is above 500 pixels, so the selector \code{\#foo:eq(width > 500px)} matches.
+          Note that the \code{\#foo:eq(width < 300px)} does not match, since the width is above 300 pixels.
           Since the matched selector is more specific than the \code{\#foo} selector, the new width of the \gls{element} is 250 pixels.
           Next step will be 2.
           \end{enumerate}
@@ -1146,8 +1187,8 @@
   When in doubt, mumble.
 </span>
 
-#foo:eq(max-width: 300px) {
-  /* This rule applies only when the width of #foo is <= 300px. */
+#foo:eq(width < 300px) {
+  /* This rule applies only when the width of #foo is < 300px. */
   font-size: 2em;
 }
           \end{lstlisting}
@@ -1157,7 +1198,7 @@
           The width of the text depends on the font size, which is inherited.
           So the width of the \code{\#foo} \gls{element} is dependent on the inherited font size.
           When the \code{\#foo} \gls{element} is below 300 pixels wide, the font size of the element is increased to \code{2em} (which is a unit that is relative to the inherited value).
-          If a \code{2em} font size results in a computed font size big enough to make the \gls{element} wider than 300 pixels, the \code{\#foo:eq(max-width: 300px)} selector will not match and therefore the element will no longer have font size \code{2em}.
+          If a \code{2em} font size results in a computed font size big enough to make the \gls{element} wider than 300 pixels, the \code{\#foo:eq(width < 300px)} selector will not match and therefore the element will no longer have font size \code{2em}.
           Since the element width is decreased below 300 pixels when the font size of \code{2em} no longer is applied, the selector will match again --- the rules are cyclic.
           However, in another scenario the inherited font size might not be big enough to make the \code{\#foo} element wider than 300 pixels which would not result in a cycle.
           The factors that creates the cycle are the following:
@@ -1216,22 +1257,22 @@
 /* CSS */
 
 /* valid */
-viewport:eq(width > 500) p { ... }
+viewport:eq(width > 500px) p { ... }
 
 /* valid */
-viewport viewport:eq(width > 500) p { ... }
+viewport viewport:eq(width > 500px) p { ... }
 
 /* invalid, violates rule (*@\ref{viewport-rule-1}@*) */
 viewport { display: inline; }
 
 /* invalid, violates rule (*@\ref{viewport-rule-2}@*) */
-p viewport:eq(width > 500) { ... }
+p viewport:eq(width > 500px) { ... }
 
 /* invaid, violates rule (*@\ref{viewport-rule-3}@*) */
-viewport:eq(width > 1000) viewport:eq(width > 500) p { ... }
+viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
 
 /* invalid, violates rule (*@\ref{viewport-rule-3}@*) */
-#outer:eq(width > 500) #foo { ... }
+#outer:eq(width > 500px) #foo { ... }
           \end{lstlisting}
           
           This approach also solves many of the performance problems, but not all.
@@ -1268,6 +1309,8 @@ viewport:eq(width > 1000) viewport:eq(width > 500) p { ... }
           This is based on the current information and approaches of the \gls{W3C} and the \gls{RICG}, and should therefore be regarded as a guideline of the shape of a potential standardized \gls{API}.
           \todo{Is guideline the right word? Seems a bit too confident. Also, cite here the sources of the information this section is based on?}
         \end{metatext}
+
+        \todo[inline]{Review this section. Should it still exist? The content of it is probably invalid.}
 
         As presented in subsection~\ref{sec:viewport-elements}, \gls{viewport} \glspl{element} solve many of the element query problems and are therefore assumed to be a part of a \gls{native} \gls{API}.
         Since it would be favorable to be able to specify multiple conditional rule sets for the element queries (like \gls{media queries}) the \gls{CSS} syntax may be of the form as presented in listing~\ref{code:mq-eq-syntax}.
