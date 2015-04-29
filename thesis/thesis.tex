@@ -747,6 +747,7 @@
           See section~\ref{sec:layout_engines_market_share} for more information how the market share data was gathered.}
         \label{table:layout_engines}
       \end{table}
+      \todo[inline]{Remove decimals of percentages since they are estimated?}
 
       %The content fetching and parsing is an advanced topic by itself, but is not relevant for element queries since they impose no fundamental changes to process.
       %Also, rendering the final layout with the render backend is not affected by element queries.
@@ -973,6 +974,8 @@
         \todo{Instead write that some solutions will be presented?}
       \end{metatext}
 
+      \todo[inline]{Describe a common use case? The thesis talks about "the common/general use case" a lot, but never really defines what that is.}
+
       Recall from section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} respond to size changes.
       \Gls{responsive} \gls{web} design implements this by using \gls{media queries}, applying conditional rules with relation to the \gls{viewport} size.
       In section~\ref{sec:modularity} the desire for building modular \gls{web} components was presented.
@@ -1182,24 +1185,27 @@
       \section{Possible solutions}
         \begin{metatext}
           Now that the problems of element queries have been presented, it is time to show some possible solutions to the problems.
-          The different solution approaches either limits element queries in some way or solves only a subproblem, so no perfect solution that keeps element queries unlimited with decent performance has been found.
+          The different solution approaches either limits element queries in some way or solves only a subproblem, so no perfect solution that keeps element queries unlimited with decent performance and low complexity has been found.
         \end{metatext}
 
         \todo{Write somewhere that iframes are not a solution? But they are close to a solution...}
         \subsection{Viewport elements}\label{sec:viewport-elements}
           \begin{metatext}
-            This solution limits element queries a lot, but avoids many of the problems this way.
-            This approach has been discussed at the \gls{W3C} and the \gls{RICG} assumes that this is a prerequisite to a \gls{native} implementation.
-            \todo{cite where this has been gathered from?}
+            This solution limits element queries a lot, but avoids many of the problems this way while still enabling element queries for the common use case.
+            This approach has been discussed at the \gls{W3C} and the initial draft of the \gls{RICG} assumes that this is a prerequisite to a \gls{native} implementation.
+            The subsection is mainly based on \normalfont{\cite{w3c_eq_mail,ricg_irc_log,ricg_issue_viewport}}.
           \end{metatext}
 
           By limiting element queries to special \gls{viewport} container \glspl{element} that can only be queried by child \glspl{element}, much of the problems are resolved.
-          This means that a new \gls{HTML} tag will be crafted (perhaps named \code{viewport}) that defines separated \glspl{viewport} in the \gls{document}.
-          The size of \glspl{viewport} is not dependent on their children, and children may only target the closest ancestor \gls{viewport} \gls{element} in the element queries.
-          This way, cyclic rules can no longer occur since the children may not alter the \gls{viewport} size.
+          This means that a new \gls{HTML} tag would be crafted (perhaps named \code{viewport}) that defines separated \glspl{viewport} in the \gls{document}.
+          In order to avoid cyclic rules, the size of \code{viewport} \glspl{element} would not be dependent on their children, and element queries may only target the closest ancestor \code{viewport} of the targeted selector element.
+          This way, cyclic rules can no longer occur due to size changes of children since the children may not alter the \gls{viewport} size.
+          With such viewport element, the only way cyclic rules can occur is if the viewport element has rule sets that styles it differently depending on the size of itself (by using element queries).
+          Since the behavior of some style properties of the \code{viewport} already need to be redefined (such as \code{display: inline;}) such style rules could also be handled specially for \code{viewport} \glspl{element}. \todo{Flesh this out a bit? Give example of when a cycle still can occur, and why it is valid to restyle the viewport with element queries (nested viewports for instance)}
           The reason that a new \gls{HTML} tag is proposed instead of a new \gls{CSS} property that defines the behavior is because the \gls{layout engine} in the latter case needs to resolve the styles for all \glspl{element} in order to know which are \gls{viewport} \glspl{element}.
-          With a new \gls{HTML} tag, the \gls{layout engine} can detect that that the \gls{element} is a \gls{viewport} before any resolving styles.
-          \todo{Write why it is important to know viewport elements before resolving styles.}
+          With a new \gls{HTML} tag, the \gls{layout engine} can detect that that the \gls{element} is a \gls{viewport} before resolving any styles.
+          \todo[inline]{Write that viewport elements may only be part of selectors with combinators, cannot occur more than once and may not be the last in the selector.}
+          \todo[inline]{Write why it is important to know viewport elements before resolving styles.}
 
           This approach also solves many of the performance problems, but not all.
           The internal \glspl{API} that request non-layout information for the \glspl{element} using element queries only need to make sure that the containing \gls{viewport} \gls{element} has been laid out before resolving the styles (which is a much better situation that the unrestricted version of element queries).
