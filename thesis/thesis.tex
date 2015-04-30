@@ -224,6 +224,9 @@
     \todo[inline]{Change self-contained to encapsulated?}
     \todo[inline]{self-container -> encapsulated perhaps}
     \todo[inline,color=green]{Marcos: you might want to add some kind of marker for words that are defined (e.g., an underline).}
+    \todo[inline,color=red]{Tomas: Missing a proper guidenance (and outline) of my work vs summaries of other work. Which parts should expert web developers read?}
+    \todo[inline,color=red]{Tomas: Show which cite's are used for which parts of the sections better. Could still be done in the metatext by just describing what the cited resource address. Or perhaps just citing the resource again where neccesary in the text.}
+    \todo[inline,color=red]{Tomas: Don't think that the intro should be so "selling", write about what "will" be done and hypothesis and such. Write instead what "have" been done, what you have personally done and stuff like that.}
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
       Heavy use of \gls{web} terminology is being used and intermediate \gls{web} development knowledge is beneficial.
@@ -304,7 +307,6 @@
       If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for the \gls{W3C} standardize a solution. \todo{Would like to reformulate this to not being so confident that a standard will definately be developed}
       The outcome of this thesis can also be helpful for the \gls{W3C} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
     \section{Delimitations}
-      \todo[inline,color=green]{Marcos: You already stated this before. I would remove this section.}
       The focus of this thesis lays on developing a \gls{third-party} framework that realizes element queries.
       All theoretical studies and work will be performed to support the development of the framework.
 
@@ -527,10 +529,6 @@
         The majority of the source code for Chrome was open sourced as the \emph{Chromium} project.
         Google decided in 2013 to create a \gls{fork} of \gls{WebKit} called \emph{Blink} for their \gls{browser}.
         Opera Software decided in 2013 to base their new version of Opera on the Chromium project, using the Blink \gls{fork}.
-
-        \todo[inline]{Timeline image and text perhaps}
-
-
     \chapter{Web development}
       \begin{metatext}
         As the history of \glspl{browser} has been presented, it is time to understand the evolution of \gls{web} development.
@@ -993,7 +991,6 @@
         The layout process can also be parallelized, since the layout process has been shown to be sub-tree independent for non-float \glspl{element} \cite{servo_parallel,servo_blog}.
         Siblings of the layout tree can be processed independently of each other (in the general case), and is suitable to parallelize with a work stealing system.
         
-        \todo[inline]{Write about the fork-join model of the parallelization as described in servo?}
         \todo[inline]{Philipp: It would be very interesting to just shortly summarize typical performance gains due to parallelization.}
 
     \chapter{Element queries}\label{chp:eq}
@@ -1056,7 +1053,6 @@
             As shown in section~\ref{sec:parallel} \gls{layout engine} vendors are interested in parallelizing their engines to increase the page performance.
             Element queries limits the parallelization, which will be the focus of this subsection.
             This subsection is partly based on \normalfont{\cite{w3c_eq_mail}}.
-            \todo{Referera till w3c mailinglista?}
           \end{metatext}
 
           Recall from section~\ref{sec:layout-process} that the rectangle size and position for each \gls{element} is calculated in the layout process, and cannot be determined before an actual layout has happened.
