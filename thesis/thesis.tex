@@ -224,10 +224,13 @@
     \todo[inline]{Change self-contained to encapsulated?}
     \todo[inline]{self-container -> encapsulated perhaps}
     \todo[inline,color=green]{Marcos: I don't think you ever defined what a "native solution" actually is.}
+    \todo[inline,color=green]{Marcos: you might want to add some kind of marker for words that are defined (e.g., an underline).}
+    \todo[inline,color=green]{Marcos: listener -> observer}
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
       Heavy use of \gls{web} terminology is being used and intermediate \gls{web} development knowledge is assumed.
       \todo[inline]{Philipp wanted this to be more general.}
+      \todo[inline,color=green]{Just maybe add a note at the start that states that there is a bit of technical jargon and hence there is a glossary at the end of the document (and maybe underline the words, if Latex will do it). I didn't find out until later that there was a glossary. That helps the reader better understand/look up ambiguous/contentious terms to see how you are using them.}
     \section{Problem statement}
       \todo[inline,color=green]{Marcos: Where does the content for this section come from? Is this something you are presupposing as part of the problem or have other expressed this view? if so, please add some references here or make it clear that this is your hypothesis.}
       By using \gls{CSS} \gls{media queries}, developers can specify different style rules for different \gls{viewport} sizes.
@@ -237,12 +240,15 @@
       The problem can be formulated as: \emph{It is not possible to specify conditional style rules for \glspl{element} depending on the size of an element}.
       See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
-      \todo[color=green]{Marcos: Cannot write this. Must reformulate. Waiting for Marcos's respose to my questions.}
+      \todo[color=green]{Marcos: Instead write that it will be shown in the thesis that element queries imposes problems to implement (as identified by W3C perhaps)}
       The main international standards organization for the \gls{web}, the \gls{W3C}, has unofficially stated that such feature would be infeasible to implement.
       Participants of the \gls{W3C}, which include both paying members and the public, are interested in solving the problem and possible solutions are being discussed.
       However, they are still at the initial planning stage so a solution will not be implemented \glslink{native}{natively} in the near future.
       While awaiting a \gls{native} solution it is up to the developers to implement this feature as a \gls{third-party} solution.
       Efforts have been made to create a robust \gls{third-party} solution, with moderate success \cite{eq_imp_localised-css,eq_imp_breakpointsjs,eq_imp_mediaclass,eq_imp_elementquery,eq_imp_element-queries,eq_imp_responsive-elements,eq_imp_magichtml,eq_imp_sickles,eq_imp_css-element-queries,eq_imp_responsive-elements-2,eq_imp_selector_queries,eq_imp_eqjs,eq_imp_breaks2000,eq_imp_classquery,eq_imp_eqcss,eq_imp_gss}.
+      \todo{Refer to the section of the report that presents all implementations instead.}
+      \todo[color=green]{Marcos: Just add "many of these can be found in the reference section of this thesis, and are discussed in later chapters" or some such. Then the reader knows that you are not making unsourced claims (and gives motivation to keep reading!:)). }
+      \todo[color=green]{Marcos: Could mention that all prolyfills are experiments and no real effort has been made to implement EQ in browsers.}
       Since all current \gls{third-party} solutions have shortcomings, there is still no de facto solution that developers use and the problem remains unsolved.
       Some problems with implementing element queries \glslink{native}{natively} in \gls{CSS} are:
       \begin{itemize}
@@ -251,6 +257,7 @@
         Some cyclic rules might be possible to detect during \gls{CSS} parsing, but there are so many combinations of style properties that could result in cyclic rules that it will add a lot of complexity to the language, both for implementers and users.
         \todo[color=green]{Marcos: citation}
         Also, it has been shown that some cyclic rules are impossible to detect at parsetime, due to being dependent on runtime factors.
+        \todo[color=green]{Marcos: Write that this will be shown later in the report instead, or reference to that section, or something like that.}
         \item \textbf{Performance:} 
         \Gls{layout engine} vendors are interested in performing selector matching and layout computations in parallel to achieve better performance.
         \todo[color=green]{Marcos: citation}
@@ -258,6 +265,7 @@
         Element queries implies some undesired limitations to the \glspl{layout engine}.
         With element queries, \glspl{layout engine} need to first compute the layout of all \glspl{element} in order to decide which selectors would conform to the element query conditions and then do a new layout computation with the new style rules activated, and so on until a stable state has been reached.
         Far worse, since selectors would depend on layout style, style and layout computations become hard to parallelize.
+        \todo{Same here as above.}
       \end{itemize}
     \section{Objective}
       The main objective of this thesis is to design and develop a \gls{third-party} implementation of element queries.
@@ -270,17 +278,19 @@
       \begin{itemize}
         \item How should circularity be handled? Should it be detected at runtime or parsetime, and what should happen on detection?
         \todo[inline, color=green]{Marcos: Or if nothing should be done at all. There are other places in CSS where circularity could be a problem, and nothing is done about it... so, maybe it's not a big deal?}
-        \todo[inline]{Waiting for Marcos to reply to my questions.}
         \item How can one listen to \gls{element} size changes without any \gls{native} support?
         \todo[inline,color=green]{Marcos: How can one listen to element size changes without any native support?}
-        \todo[inline]{I've been using listen since JS is talking about event "listeners". I'm awaiting Marcos response regarding this.}
+        \todo[inline]{JS is using both "listen" and "observe". Marcos thinks observe sounds more natural. Should probably stick to that then.}
         \item How can a custom \gls{API} be crafted that will enable element queries and still conform to the \gls{CSS} specification? Is it possible to create an \gls{API} that feels natural to \gls{web} developers and works in tandem with other tools and frameworks?
+        \todo[inline]{What I mean here is if it is possible to create a solution that does not shut out other tools. If the solution requires a special DOM handling process, it could be hard to use with frameworks such as Angular, React, and so on. I think this is a pretty important thing to keep in mind. Perhaps I should reformulate?}
+        \todo[inline,color=green]{Marcos: Should clarify here. Write the above.}
         \item If a custom \gls{API} is developed, how would one make \gls{third-party} modules (that uses \gls{media queries}) work without demanding a rewrite of all \gls{third-party} modules?
         \todo[inline]{I want to remove this. Marcos agrees. Don't know if I'm allowed since I wrote about this in the specification. Waiting answer from Mads.}
         \item Is it possible to solve the problem with adequate performance for heavy applications?
         \todo[inline,color=green]{Marcos: Explain heavy or reformulate}
         \item How can adequate \gls{browser} compatibility be achieved?
         \todo[inline,color=green]{Marcos: Clarify.}
+        \todo[inline,color=green]{Marcos: I think this needs to be really clear. You should state more clearly what you are *not doing* - i.e., to show that you don't need a native soluton}
         \todo[inline]{Might be sufficient to just write "legacy" browser support.}
       \end{itemize}
       The scientific question to be answered is if it is possible to solve the problem  without extending the current \gls{web} standard.
@@ -293,6 +303,7 @@
     \section{Significance}
       Many frameworks and techniques are being used in \gls{web} development to keep the code from becoming an entangled mess.
       Creating modules facilitates the development and increases the reusability.
+      \todo[color=green]{Marcos: Add reference to later part of thesis.}
       Unfortunately, it is currently impossible to create \gls{self-contained} \gls{responsive} modules since conditional styles cannot be applied to \glspl{element} by \gls{element} size criterion.
       \todo[color=green]{Marcos: Explain self-contained responsive modules}
       Without element queries, \gls{responsive} modules force the application to style them properly depending on the \gls{viewport} sizes, which defeats the purpose of modules.
@@ -590,6 +601,7 @@
         Still, parts of the applications were defined as \gls{HTML} pages, fetched from the server when navigating the site.
         When the \emph{XMLHttpRequest} \gls{API} was supported in the major \glspl{browser}, pages no longer needed to reload in order to fetch new content as XMLHttpRequest enabled developers to perform asynchronous requests to servers with \gls{JavaScript}.
         This opened up for the \gls{AJAX} \gls{web} development technique which became a popular way of communicating with servers ``in the background'' of the page.
+        \todo[color=green]{Marcos: Remember that AJAX is a total misnomer :) It has little to do with XML, or JS really, + many people made sync requests, as allowed by XMLHttpRequest. You could say that asynchronously fetching of data over HTTP to then dynamically update presentation was colloquially referred to as "AJAX". }
         Developers pushed \glspl{browser} and \gls{HTML} to the limit when creating applications instead of \glspl{document} that they were originally designed for.
         In a \gls{W3C} meeting in 2004 it was proposed to extend \gls{HTML} to ease the creation of \gls{web} applications, which was rejected.
         The \gls{W3C} was criticized of not listening to the need of the industry, and some members of the \gls{W3C} left to create the \gls{WHATWG}.
@@ -664,8 +676,7 @@
           This section is partly based on \normalfont{\cite{book_modular_programming,book_eloq_js,rich_hickey}}.
         \end{metatext}
 
-        \todo[inline,color=green]{Marcos: This section is not balanced, you should also describe criticisms of modular design. I.e., they eventually lead to complexity or modules that don't integrate. }
-        \todo[inline]{Waiting for Marcos response}
+        \todo[inline,color=green]{Marcos: The point being that modularization that is not well managed can lead to inconsistency (seen throughout the platform).}
         By creating modules that can be used in any context with well-defined responsibilities and dependencies, developing applications is reduced to the task of simply configuring modules (to some extent) to work together which forms a bigger application.
         It is today possible to write the \gls{web} client logic in a modular way in \gls{JavaScript}.
         The desire of writing modular code can be shown by the popularity of frameworks that helps dividing up the client code into modules.
