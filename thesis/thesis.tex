@@ -230,12 +230,11 @@
       For readers that are not familiar with web terminology there is a glossary at the end of the document.
       \todo[inline]{Write that glossary words will be underlines or something else?}
       \todo[inline]{Philipp wanted this to be more general.}
-    \section{Problem statement}
-      \todo[inline,color=green]{Marcos: Where does the content for this section come from? Is this something you are presupposing as part of the problem or have other expressed this view? if so, please add some references here or make it clear that this is your hypothesis.}
+    \section{Problem statement}\label{sec:problem}
       By using \gls{CSS} \gls{media queries}, developers can specify different style rules for different \gls{viewport} sizes.
-      This is fundamental to creating \gls{responsive} \gls{web} applications.
+      This is fundamental to creating \gls{responsive} \gls{web} applications, as shown in section~\ref{sec:rwd}.
       If developers want to build modular applications by composing the application by smaller components (\glspl{element}, scripts, styles, etc.) \gls{media queries} are no longer applicable.
-      Modular \gls{responsive} components should be able to react and change style depending on the size that the component has been given by the application, not the \gls{viewport} size.
+      Modular \gls{responsive} components should be able to react and change style depending on the size that the component has been given by the application, not the \gls{viewport} size. \todo{Do I need to have a reference for this?}
       The problem can be formulated as: \emph{It is not possible to specify conditional style rules for \glspl{element} depending on the size of an element}.
       See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
@@ -244,7 +243,7 @@
       Additionally, implementing element queries imposes circularity and performance problems, as shown in chapter~\ref{chp:eq}, which needs to be resolved before writing a standard.
       While awaiting a \gls{native} solution it is up to the developers to implement this feature as a \gls{third-party} solution.
       As presented in chapter~\ref{ch:current_approaches}, efforts have been made to create a robust \gls{third-party} solution, with moderate success.
-      \todo[color=green]{Marcos: Could mention that all prolyfills are experiments and no real effort has been made to implement EQ in browsers.}
+      It should be noted that no effort of implementing a native solution have been made.
       Since all current \gls{third-party} solutions have shortcomings, there is still no de facto solution that developers use and the problem remains unsolved.
       % Some problems with implementing element queries \glslink{native}{natively} in \gls{CSS} are:
       % \begin{itemize}
@@ -264,7 +263,7 @@
       %   \todo{Same here as above.}
       % \end{itemize}
     \section{Objective}
-      The main objective of this thesis is to design and develop a \gls{third-party} implementation of element queries.
+      The main objective of this thesis is to design and develop a \gls{third-party} non-\gls{native} implementation of element queries.
       To do this, it is needed to research existing solution approaches in order to understand and analyze the advantages and shortcomings of the approaches.
       It is also necessary to be aware of the premises, such as \gls{browser} limitations and specifications that one must conform to.
       \todo[color=green]{Marcos: I will research the problems of.}
@@ -272,34 +271,23 @@
       Solving the main problem will require research and empirical studies of many subproblems.
       Examples of such subproblems that needs to be addressed are:
       \begin{itemize}
-        \item How should circularity be handled? Should it be detected at runtime or parsetime, and what should happen on detection?
-        \todo[inline, color=green]{Marcos: Or if nothing should be done at all. There are other places in CSS where circularity could be a problem, and nothing is done about it... so, maybe it's not a big deal?}
+        \item Should circularity be handled? If yes, should it be detected at runtime or parsetime, and what should happen on detection?
         \item How can one observe \gls{element} size changes without any \gls{native} support?
-        \item How can a custom \gls{API} be crafted that will enable element queries and still conform to the \gls{CSS} specification? Is it possible to create an \gls{API} that feels natural to \gls{web} developers and works in tandem with other tools and frameworks?
-        \todo[inline]{What I mean here is if it is possible to create a solution that does not shut out other tools. If the solution requires a special DOM handling process, it could be hard to use with frameworks such as Angular, React, and so on. I think this is a pretty important thing to keep in mind. Perhaps I should reformulate?}
-        \todo[inline,color=green]{Marcos: Should clarify here. Write the above.}
-        \item If a custom \gls{API} is developed, how would one make \gls{third-party} modules (that uses \gls{media queries}) work without demanding a rewrite of all \gls{third-party} modules?
-        \todo[inline]{I want to remove this. Marcos agrees. Don't know if I'm allowed since I wrote about this in the specification. Waiting answer from Mads.}
-        \item Is it possible to solve the problem with adequate performance for heavy applications?
-        \todo[inline,color=green]{Marcos: Explain heavy or reformulate}
-        \item How can adequate \gls{browser} compatibility be achieved?
-        \todo[inline,color=green]{Marcos: Clarify.}
-        \todo[inline,color=green]{Marcos: I think this needs to be really clear. You should state more clearly what you are *not doing* - i.e., to show that you don't need a native soluton}
-        \todo[inline]{Might be sufficient to just write "legacy" browser support.}
+        \item
+          How can a custom \gls{API} be crafted that will enable element queries and still conform to the language specifications? Is it possible to create an \gls{API} that feels natural to \gls{web} developers and works in tandem with other tools and frameworks?
+          For instance, if the \gls{API} requires custom \gls{CSS} syntax then \gls{CSS} preprocessors, linters and validators cannot be used anymore.
+          Likewise, if the \gls{API} requires a special \gls{element} handling process, it could be hard to use with popular frameworks. \todo{Should I give examples like Angular React Backbone Bootstrap?}
+        \item Is it possible to solve the problem with adequate performance for large applications that make heavy use of responsive modules?
+        \item How can adequate \gls{browser} compatibility with legacy browsers be achieved without \gls{native} support?
       \end{itemize}
-      The scientific question to be answered is if it is possible to solve the problem  without extending the current \gls{web} standard.
-      \todo[color=green]{Marcos: Which current web standard? There is currently no standard for this. If you mean "CSS", that's a family of standards. Please be clear what you mean here.}
+      The scientific question to be answered is if it is possible to solve the problem without extending any language specification of the \gls{web}.
       The hypothesis is that the problem can be solved with high reliability and adequate performance by developing a \gls{third-party} implementation.
-      \todo{I want to remove this. Marcos agrees. Don't know if I'm allowed since I wrote about this in the specification. Waiting answer from Mads.}
-      A reliable implementation should also enable existing \gls{responsive} components to react to a specified criterion (parent container size for example) with no modifications to the components.
       The goal of this thesis should be considered fulfilled if a solution was successfully implemented or described, or if the problems hindering a solution are thoroughly documented.
 
     \section{Significance}
       Many frameworks and techniques are being used in \gls{web} development to keep the code from becoming an entangled mess.
-      Creating modules facilitates the development and increases the reusability.
-      \todo[color=green]{Marcos: Add reference to later part of thesis.}
+      Creating modules facilitates the development and increases the reusability, as shown in section~\ref{sec:modularity}.
       Unfortunately, it is currently impossible to create \gls{self-contained} \gls{responsive} modules since conditional styles cannot be applied to \glspl{element} by \gls{element} size criterion.
-      \todo[color=green]{Marcos: Explain self-contained responsive modules}
       Without element queries, \gls{responsive} modules force the application to style them properly depending on the \gls{viewport} sizes, which defeats the purpose of modules.
       Modules should be \gls{self-contained} and may not require the user to perform some of the module logic.
       Another option would be to make modules context-aware so they can style themselves according to the \gls{viewport}, but then they would not be reusable (since they assume a specific context).
@@ -308,11 +296,8 @@
 
       The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries.
       \todo[color=green]{Marcos: Please add references to these.}
-      As already stated, \gls{third-party} implementation efforts have been made with moderate success.
-      \todo[color=green]{Marcos: Citation to polyfills needed.}
-      The \gls{W3C} receives requests and questions about it, but the answer seems to be that no solution will be provided in the near future.
-      \todo[color=green]{Marcos: Citatin needed.}
-      The \gls{RICG} have started an initial planning regarding element queries and a draft \cite{ricg_draft} about element queries use cases is being written.
+      As already stated in section~\ref{sec:problem}, \gls{third-party} implementation efforts have been made with moderate success.
+      The \gls{W3C} receives requests and questions about it, and the \gls{RICG} have started writing a draft \cite{ricg_draft} about element queries use cases.
 
       Solving this problem would be a big advancement to \gls{web} development, enabling developers to create truly modular \gls{responsive} components.
       By studying the problem, identifying approaches and providing a \gls{third-party} solution the community can take a step closer to solve the problem \glslink{native}{natively}.
@@ -1375,8 +1360,6 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
           \item \textbf{Features}
             \begin{enumerate}
               \item\label{itm:req_resize_detect} The framework needs to augment \gls{native} element queries in the sense that styles are applied automatically on \gls{element} resizes.
-              \item Existing modules written with \gls{media queries} should be automatically converted to element queries so that existing third-party modules can be used in element query empowered applications.
-              \todo{Remove this?}
               \item The features should be flexible and not limited to only the common use cases.
             \end{enumerate}
           \item \textbf{Ease of use}
@@ -1387,7 +1370,7 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
             \end{enumerate}
           \item \textbf{Performance}
             \begin{enumerate}
-              \item The framework needs to have adequate performance to empower heavy applications running on light devices.
+              \item The framework needs to have adequate performance to empower large applications running on light devices.
               \item The framework load time needs to be kept low.
             \end{enumerate}
           \item \textbf{Compatibility}
