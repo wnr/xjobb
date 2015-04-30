@@ -223,14 +223,13 @@
     \todo[inline]{Change all wikipedia sources to the real sources}
     \todo[inline]{Change self-contained to encapsulated?}
     \todo[inline]{self-container -> encapsulated perhaps}
-    \todo[inline,color=green]{Marcos: I don't think you ever defined what a "native solution" actually is.}
     \todo[inline,color=green]{Marcos: you might want to add some kind of marker for words that are defined (e.g., an underline).}
-    \todo[inline,color=green]{Marcos: listener -> observer}
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
-      Heavy use of \gls{web} terminology is being used and intermediate \gls{web} development knowledge is assumed.
+      Heavy use of \gls{web} terminology is being used and intermediate \gls{web} development knowledge is beneficial.
+      For readers that are not familiar with web terminology there is a glossary at the end of the document.
+      \todo[inline]{Write that glossary words will be underlines or something else?}
       \todo[inline]{Philipp wanted this to be more general.}
-      \todo[inline,color=green]{Just maybe add a note at the start that states that there is a bit of technical jargon and hence there is a glossary at the end of the document (and maybe underline the words, if Latex will do it). I didn't find out until later that there was a glossary. That helps the reader better understand/look up ambiguous/contentious terms to see how you are using them.}
     \section{Problem statement}
       \todo[inline,color=green]{Marcos: Where does the content for this section come from? Is this something you are presupposing as part of the problem or have other expressed this view? if so, please add some references here or make it clear that this is your hypothesis.}
       By using \gls{CSS} \gls{media queries}, developers can specify different style rules for different \gls{viewport} sizes.
@@ -278,9 +277,7 @@
       \begin{itemize}
         \item How should circularity be handled? Should it be detected at runtime or parsetime, and what should happen on detection?
         \todo[inline, color=green]{Marcos: Or if nothing should be done at all. There are other places in CSS where circularity could be a problem, and nothing is done about it... so, maybe it's not a big deal?}
-        \item How can one listen to \gls{element} size changes without any \gls{native} support?
-        \todo[inline,color=green]{Marcos: How can one listen to element size changes without any native support?}
-        \todo[inline]{JS is using both "listen" and "observe". Marcos thinks observe sounds more natural. Should probably stick to that then.}
+        \item How can one observe \gls{element} size changes without any \gls{native} support?
         \item How can a custom \gls{API} be crafted that will enable element queries and still conform to the \gls{CSS} specification? Is it possible to create an \gls{API} that feels natural to \gls{web} developers and works in tandem with other tools and frameworks?
         \todo[inline]{What I mean here is if it is possible to create a solution that does not shut out other tools. If the solution requires a special DOM handling process, it could be hard to use with frameworks such as Angular, React, and so on. I think this is a pretty important thing to keep in mind. Perhaps I should reformulate?}
         \todo[inline,color=green]{Marcos: Should clarify here. Write the above.}
@@ -1450,7 +1447,7 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
             Also, the framework can make sure that all reports are standardized and can provide extra information such as the name and version of the plugin along with its report.
             To avoid code duplication, it also beneficial to have a centralized report system so plugins do not need to perform the same compatibility checks (such as checking if the \gls{browser} actually supports console reporting).
           \item \textbf{Element resize detector:}
-            Provides an interface for listening to \gls{element} resize events.
+            Provides an interface for observing \gls{element} resize events.
             This system is fundamental to plugins fulfilling requirements \ref{itm:req_resize_detect} and \ref{itm:req_big_rewrite} since it enables the framework to be aware of when \glspl{element} change sizes, instead of the host application keeping track of when \glspl{element} have changed sizes.
             \todo[inline]{Maybe this shouldn't be a core subsystem? Since this system imposes the biggest performance impact. It might make more sense to have this as a plugin.}
           \item \textbf{Cycle detector:}
@@ -1658,7 +1655,7 @@ elq.start(jqueryElementsCollection);
           It should be noted that although not written in the examples, the framework and all plugins support all combinations of custom attribute declarations so if desired, the framework is able to conform to the \gls{XHTML} standard.
 
           \subsubsection{Breakpoints}
-            This is the plugin that listens to element resizes and updates their size states according to predefined breakpoints.
+            This is the plugin that observes element resizes and updates their size states according to predefined breakpoints.
             The name of the plugin is \code{elq-breakpoints} and it does not have any dependencies (other than the element resize detector of the \abbr{elq} core).
             The main idea of the plugin is to apply classes to target elements that reflects in which size state they are.
             Each element defines breakpoints to which the plugin will update the size state.
@@ -1744,7 +1741,7 @@ elq.start(jqueryElementsCollection);
           Unfortunately, there is no standard resize event for arbitrary \glspl{element}.
           Only frames (\glspl{element} that render it's content independently of the container \gls{element}, such as \code{iframe} and \code{object}) support the resize event by standard since they have their own \gls{viewport}.
           Legacy versions of Internet Explorer (version 8 and down, but also some later versions depending on the \gls{document} mode and if the \gls{browser} is in quirks mode) do support the resize event on arbitrary \glspl{element}.
-          Since the framework needs to support all commonly used \gls{HTML} \glspl{element} a solution to listen to any \gls{element} resize needs to be found.
+          Since the framework needs to support all commonly used \gls{HTML} \glspl{element} a solution to observe resize events of any \gls{element} needs to be found.
           Possible solutions are:
           \begin{itemize}
             \item \textbf{Polling}:
@@ -1756,10 +1753,10 @@ elq.start(jqueryElementsCollection);
               By injecting multiple \glspl{element}, into the target \gls{element}\todo{Describe target element}, that have overflowing content scroll events occurs when the target \gls{element} is resized.
               Five \glspl{element} needs to be injected; one container \gls{element} that is styled to have the same size as the target \gls{element} that contains all the other \glspl{element}
             \item \textbf{Injecting frames}:
-              Since frame \glspl{element} are the only ones that support resize events \glslink{native}{natively}, the idea is to inject frame \glspl{element} as children to the \glspl{element} that one want to listen for resize changes (also called \emph{target \glspl{element}}).
+              Since frame \glspl{element} are the only ones that support resize events \glslink{native}{natively}, the idea is to inject frame \glspl{element} as children to the \glspl{element} that one wants to observe resize events of (also called \emph{target \glspl{element}}).
               By styling the frame so that it depends on the target \gls{element} and set the size to be 100 percent, the frame will always be the same size as the target element.
               Then a resize event handler can be attached to the frame that emits a resize event for every target \gls{element} resize.
-              So in order to listen for resize events for an element, a frame \gls{element} is injected and listened to instead.
+              So in order to observe resize events of an element, a frame \gls{element} is injected and observed instead.
           \end{itemize}
           The first solution is appealing because it does not mutate the \gls{DOM} and it works on all \glspl{browser} since it does not rely on special \gls{element} behaviors or similar.
           However, in order to prevent the \gls{responsive} \glspl{element} lagging behind the size changes of the user interface, the polls need to be performed quite frequently.
