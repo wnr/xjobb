@@ -239,33 +239,30 @@
       The problem can be formulated as: \emph{It is not possible to specify conditional style rules for \glspl{element} depending on the size of an element}.
       See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
-      \todo[color=green]{Marcos: Instead write that it will be shown in the thesis that element queries imposes problems to implement (as identified by W3C perhaps)}
-      The main international standards organization for the \gls{web}, the \gls{W3C}, has unofficially stated that such feature would be infeasible to implement.
-      Participants of the \gls{W3C}, which include both paying members and the public, are interested in solving the problem and possible solutions are being discussed.
-      However, they are still at the initial planning stage so a solution will not be implemented \glslink{native}{natively} in the near future.
+      Participants, which include both paying members and the public, of the main international standards organization for the \gls{web}, the \gls{W3C} are interested in solving the problem and possible solutions are being discussed.
+      However, they are still at the initial planning stage \cite{ricg_site} so a solution will not be implemented \glslink{native}{natively} in the near future.
+      Additionally, implementing element queries imposes circularity and performance problems, as shown in chapter~\ref{chp:eq}, which needs to be resolved before writing a standard.
       While awaiting a \gls{native} solution it is up to the developers to implement this feature as a \gls{third-party} solution.
-      Efforts have been made to create a robust \gls{third-party} solution, with moderate success \cite{eq_imp_localised-css,eq_imp_breakpointsjs,eq_imp_mediaclass,eq_imp_elementquery,eq_imp_element-queries,eq_imp_responsive-elements,eq_imp_magichtml,eq_imp_sickles,eq_imp_css-element-queries,eq_imp_responsive-elements-2,eq_imp_selector_queries,eq_imp_eqjs,eq_imp_breaks2000,eq_imp_classquery,eq_imp_eqcss,eq_imp_gss}.
-      \todo{Refer to the section of the report that presents all implementations instead.}
-      \todo[color=green]{Marcos: Just add "many of these can be found in the reference section of this thesis, and are discussed in later chapters" or some such. Then the reader knows that you are not making unsourced claims (and gives motivation to keep reading!:)). }
+      As presented in chapter~\ref{ch:current_approaches}, efforts have been made to create a robust \gls{third-party} solution, with moderate success.
       \todo[color=green]{Marcos: Could mention that all prolyfills are experiments and no real effort has been made to implement EQ in browsers.}
       Since all current \gls{third-party} solutions have shortcomings, there is still no de facto solution that developers use and the problem remains unsolved.
-      Some problems with implementing element queries \glslink{native}{natively} in \gls{CSS} are:
-      \begin{itemize}
-        \item \textbf{Circularity:}
-        If style rules can be applied by criteria of other \glspl{element}, it is possible to create cyclic rules (infinite loops of styling).
-        Some cyclic rules might be possible to detect during \gls{CSS} parsing, but there are so many combinations of style properties that could result in cyclic rules that it will add a lot of complexity to the language, both for implementers and users.
-        \todo[color=green]{Marcos: citation}
-        Also, it has been shown that some cyclic rules are impossible to detect at parsetime, due to being dependent on runtime factors.
-        \todo[color=green]{Marcos: Write that this will be shown later in the report instead, or reference to that section, or something like that.}
-        \item \textbf{Performance:} 
-        \Gls{layout engine} vendors are interested in performing selector matching and layout computations in parallel to achieve better performance.
-        \todo[color=green]{Marcos: citation}
-        The research front of \glspl{browser} have shown successful ways of parallelizing the \gls{layout engine}.
-        Element queries implies some undesired limitations to the \glspl{layout engine}.
-        With element queries, \glspl{layout engine} need to first compute the layout of all \glspl{element} in order to decide which selectors would conform to the element query conditions and then do a new layout computation with the new style rules activated, and so on until a stable state has been reached.
-        Far worse, since selectors would depend on layout style, style and layout computations become hard to parallelize.
-        \todo{Same here as above.}
-      \end{itemize}
+      % Some problems with implementing element queries \glslink{native}{natively} in \gls{CSS} are:
+      % \begin{itemize}
+      %   \item \textbf{Circularity:}
+      %   If style rules can be applied by criteria of other \glspl{element}, it is possible to create cyclic rules (infinite loops of styling).
+      %   Some cyclic rules might be possible to detect during \gls{CSS} parsing, but there are so many combinations of style properties that could result in cyclic rules that it will add a lot of complexity to the language, both for implementers and users.
+      %   \todo[color=green]{Marcos: citation}
+      %   Also, it has been shown that some cyclic rules are impossible to detect at parsetime, due to being dependent on runtime factors.
+      %   \todo[color=green]{Marcos: Write that this will be shown later in the report instead, or reference to that section, or something like that.}
+      %   \item \textbf{Performance:} 
+      %   \Gls{layout engine} vendors are interested in performing selector matching and layout computations in parallel to achieve better performance.
+      %   \todo[color=green]{Marcos: citation}
+      %   The research front of \glspl{browser} have shown successful ways of parallelizing the \gls{layout engine}.
+      %   Element queries implies some undesired limitations to the \glspl{layout engine}.
+      %   With element queries, \glspl{layout engine} need to first compute the layout of all \glspl{element} in order to decide which selectors would conform to the element query conditions and then do a new layout computation with the new style rules activated, and so on until a stable state has been reached.
+      %   Far worse, since selectors would depend on layout style, style and layout computations become hard to parallelize.
+      %   \todo{Same here as above.}
+      % \end{itemize}
     \section{Objective}
       The main objective of this thesis is to design and develop a \gls{third-party} implementation of element queries.
       To do this, it is needed to research existing solution approaches in order to understand and analyze the advantages and shortcomings of the approaches.
@@ -1014,7 +1011,7 @@
         \todo[inline]{Write about the fork-join model of the parallelization as described in servo?}
         \todo[inline]{Philipp: It would be very interesting to just shortly summarize typical performance gains due to parallelization.}
 
-    \chapter{Element queries}
+    \chapter{Element queries}\label{chp:eq}
       \begin{metatext}
         Now that a good understanding of \glspl{browser} (especially the \gls{layout engine}), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- the solution to the modular \gls{responsive} \gls{web} design problem.
         This chapter will define element queries, present why they are needed, and address some of the issues hindering element queries from being implemented \glslink{native}{natively}.
@@ -1345,7 +1342,8 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
     \todo[inline]{Write about the N layouts, and how it was fixed with the batch processing. Investigate how this behaves for nested elements.}
     \todo[inline]{Write about the drawbacks (invalid layout at page load, injecting objects is heavy, DOM is mutated.)}
 
-    \chapter{Analysis of approaches}
+    \chapter{Analysis of approaches}\label{ch:current_approaches}
+      \cite{eq_imp_localised-css,eq_imp_breakpointsjs,eq_imp_mediaclass,eq_imp_elementquery,eq_imp_element-queries,eq_imp_responsive-elements,eq_imp_magichtml,eq_imp_sickles,eq_imp_css-element-queries,eq_imp_responsive-elements-2,eq_imp_selector_queries,eq_imp_eqjs,eq_imp_breaks2000,eq_imp_classquery,eq_imp_eqcss,eq_imp_gss}
       \section{Current implementations}
         \todo[inline]{Write about GSS, Tommy's implementation and the different approaches}
         \todo[inline]{Write somewhere that an extra layout on elements resize is inevitable since it is required in theory.}
