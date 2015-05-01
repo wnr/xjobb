@@ -146,10 +146,6 @@
   name={document},
   description={Strictly defined as something that has a \gls{URI} and can return representations of the identified resource in response to \gls{HTTP} requests. If otherwise states, document will refer to \gls{HTML} \gls{web} pages in this thesis. In \gls{JavaScript}, document refers to the \gls{DOM} root}
 }
-\newglossaryentry{XHTML}{
-  name={XHTML},
-  description={Well-formed \gls{XML}-based markup language that extends or mirros \gls{HTML}. May be parsed by \gls{XML} parsers since it conforms to the stricter \gls{XML} syntax}
-}
 
 \newacronym{W3C}{W3C}{World Wide Web Consortium}
 \newacronym{CSS}{CSS}{Cascading Style Sheets}
@@ -1720,10 +1716,9 @@ elq.start(jqueryElementsCollection);
 
           \abbr{elq} plugins may use custom element attributes to define rules and plugin options.
           The \gls{HTML} standard supports custom attributes prefixed with \code{data-}.
-          The stricter \gls{XHTML} standard additionally requires all attributes to have values (i.e. not be empty).
           Modern browsers usually permits to discard the \code{data-} prefix for custom attributes.
-          For visual reasons, custom attributes will be written in the shortest possible way in this thesis (without the \code{data-} prefix and sometimes without values).
-          It should be noted that although not written in the examples, the framework and all plugins support all combinations of custom attribute declarations so if desired, the framework is able to conform to the \gls{XHTML} standard.
+          For visual reasons, custom attributes will be written in the shortest possible way in this thesis (without the \code{data-} prefix).
+          It should be noted that although not written in the examples, the framework and all plugins support all combinations of custom attribute declarations so if desired, the framework is able to conform to the \gls{HTML} standard.
 
           \subsubsection{Breakpoints}
             This is the plugin that observes element resizes and updates their size states according to predefined breakpoints.
