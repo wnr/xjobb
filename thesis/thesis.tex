@@ -1317,9 +1317,12 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
     \todo[inline]{Write about the drawbacks (invalid layout at page load, injecting objects is heavy, DOM is mutated.)}
 
     \chapter{Analysis of approaches}\label{ch:current_approaches}
+      \todo[inline]{Write meta.}
+      \todo[inline]{Write about media query CSS approach as an approach?}
+
       There are numerous implementations of third-party element query frameworks. This chapter will list and analyze them.
       Since many of them share the same characteristics, they will be classified and each class will be analyzed as a group.
-      Identified element query third-party frameworks that directly or indirectly enables element queries are \cite{eq_imp_localised-css,eq_imp_breakpointsjs,eq_imp_mediaclass,eq_imp_elementquery,eq_imp_element-queries,eq_imp_responsive-elements,eq_imp_magichtml,eq_imp_sickles,eq_imp_css-element-queries,eq_imp_responsive-elements-2,eq_imp_selector_queries,eq_imp_eqjs,eq_imp_breaks2000,eq_imp_classquery,eq_imp_eqcss,eq_imp_gss}.
+      Identified element query third-party frameworks that directly or indirectly enables element queries are the ones presented in table~\ref{table:approaches-classifications}.
       They can be divided into the following classes:
       \begin{itemize}
         \item \textbf{Valid syntax}: Approaches that conforms to the \gls{CSS}, \gls{HTML}, and \gls{JavaScript} standards.
@@ -1331,7 +1334,7 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
       \end{itemize}
       It should be noted that most of the current approaches are combinations of different classes.
       See table~\ref{table:approaches-classifications} for a classification of current approaches.
-      It should be noted that \cite{eq_imp_gss} has been left out deliberately, as their approach will be analyzed by itself in section~\ref{}.
+      \todo{Not really happy with the dynamic vs static. Need to define this exactly. Is it dynamic because CSS is parsed at runtime or does it need a way to rerun the framework on new elements as well?}
       \begin{table}[ht]\center
         \tiny
         \begin{tabular}[t]{ l p{3cm} l l l p{3cm} }
@@ -1339,7 +1342,8 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
           \hline
           \cite{eq_imp_magichtml} &             MagicHTML &                                   Invalid &   Semi-automatic &  Static &    Compiles invalid CSS to valid CSS at server side. \\
           \cite{eq_imp_eqcss} &                 EQCSS &                                       Invalid &   Semi-automatic &  Dynamic     \\
-          \cite{eq_imp_localised-css} &         Localised CSS &                               Invalid &   Automatic &       Dynamic &   Runtime parsing of CSS. Unfinished. Polling. \\
+          \cite{eq_imp_prollyfill-min-width} &  Element Media Queries &                       Invalid &   Automatic &       Dynamic &   \\
+          \cite{eq_imp_localised-css} &         Localised CSS &                               Invalid &   Automatic &       Dynamic &   Unfinished. Polling. \\
           \cite{eq_imp_gss} &                   Grid Style Sheets 2.0 &                       Invalid &   Automatic &       Dynamic &   Limited browser support. \\
           \cite{eq_imp_classquery} &            Class Query &                                 Valid &     - &               Static &    Writes media queries to style on load. \\
           \cite{eq_imp_breakpointsjs} &         breakpoints.js &                              Valid &     Semi-Automatic &  Dynamic &   JS-centric approach. \\
@@ -1353,7 +1357,6 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
           \cite{eq_imp_element-queries} &       Element Queries &                             Valid &     Automatic &       Dynamic &   \\
           \cite{eq_imp_eqjs} &                  eq.js &                                       Valid &     Automatic &       Dynamic &   \\
           \cite{eq_imp_css-element-queries} &   CSS Element Queries &                         Valid &     Automatic &       Dynamic &   Parses CSS. \\
-          \cite{eq_imp_prollyfill-min-width} & TODO & & &  &
         \end{tabular}
         \caption{Classification of current approaches.}
         \label{table:approaches-classifications}
@@ -1372,11 +1375,11 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
       % \cite{eq_imp_selector_queries}      Valid syntax.   Semi-automatic. Dynamic.
       % \cite{eq_imp_element-queries}       Valid syntax.   Automatic. Dynamic.
       % \cite{eq_imp_eqjs}                  Valid syntax.   Automatic. Dynamic
-      % \cite{eq_imp_css-element-queries}   Valid sytnax.   Automatic. Dynamic. Parses CSS.
-      % \cite{eq_imp_prollyfill-min-width} TODO:
+      % \cite{eq_imp_css-element-queries}   Valid syntax.   Automatic. Dynamic. Parses CSS.
+      % \cite{eq_imp_prollyfill-min-width}  Invalid syntax. Automatic. Dynamic. Parses CSS.
       % \cite{eq_imp_gss}
       
-      The approaches \cite{eq_imp_magichtml,eq_imp_eqcss,eq_imp_localised-css,eq_imp_gss} have in common that they require developers to write cunstom (invalid) \gls{CSS}.
+      The approaches \cite{eq_imp_magichtml,eq_imp_eqcss,eq_imp_prollyfill-min-width,eq_imp_localised-css,eq_imp_gss} have in common that they require developers to write cunstom (invalid) \gls{CSS}.
       Since they do no longer conform the \gls{CSS} specification, there are no longer any limitations to what can be done with \gls{CSS}.
       As shown by \cite{eq_imp_eqcss,eq_imp_gss} quite advanced features can be implemented this way.
       Additionally, teaching \gls{CSS} new tricks implies that it is possible to implement an solution to element queries that does not require any changes to the \gls{HTML}, which can be preferable since all styling then can be written in \gls{CSS} (which is the purpose of \gls{CSS}).
