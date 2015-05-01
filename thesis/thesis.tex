@@ -1017,10 +1017,25 @@ function doubleWidths(elements) {
 
 // 1000 div elements as only children of a div container.
 var elements = [...];
-doubleWidths(elements); // ~600 ms
+doubleWidths(elements); // ~700 ms
         \end{lstlisting}
 
-        \begin{lstlisting}[caption={Example of avoiding layout thrashing by batch processing reads and writes to the \gls{DOM}. The code reads and double the widths of 1000 elements in \textasciitilde6 ms.}, captionpos=b, label={code:thrashing-example-fixed}]
+        \begin{figure}
+          \centering
+          \includegraphics[width=\linewidth]{images/layout-thrashing-example-1}
+          \includegraphics[width=\linewidth]{images/layout-thrashing-example-1-big}
+          \caption{}
+          \label{fig:layout-thrashing-example-1}
+        \end{figure}
+
+        \begin{figure}
+          \centering
+          \includegraphics[width=\linewidth]{images/layout-thrashing-example-1-fixed}
+          \caption{}
+          \label{fig:layout-thrashing-example-1}
+        \end{figure}
+
+        \begin{lstlisting}[caption={Example of avoiding layout thrashing by batch processing reads and writes to the \gls{DOM}. The code reads and double the widths of 1000 elements in \textasciitilde7 ms.}, captionpos=b, label={code:thrashing-example-fixed}]
 /* JS */
 
 /* Doubles the width of each element in the elements collection parameter. */
@@ -1041,7 +1056,7 @@ function doubleWidths(elements) {
 
 // 1000 div elements as only children of a div container.
 var elements = [...];
-doubleWidths(elements); // ~6 ms
+doubleWidths(elements); // ~7 ms
         \end{lstlisting}
 
     \chapter{Element queries}\label{chp:eq}

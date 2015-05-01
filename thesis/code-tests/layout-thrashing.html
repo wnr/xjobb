@@ -28,12 +28,10 @@
 
 
                 function doubleWidths(elements) {
-                    console.time("doubleWidths");
                     elements.forEach(function readWriteWidth(element) {
                         var width = parseSize(getComputedStyle(element).width);
                         element.style.width = width * 2 + "px";
                     });
-                    console.timeEnd("doubleWidths");
                 }
 
                 setTimeout(doubleWidths.bind(null, elements), 1000);

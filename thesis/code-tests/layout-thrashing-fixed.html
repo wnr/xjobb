@@ -28,7 +28,6 @@
 
 
                 function doubleWidths(elements) {
-                    console.time("doubleWidths");
                     var widths = [];
 
                     elements.forEach(function getWidths(element) {
@@ -39,7 +38,6 @@
                     elements.forEach(function writeWidths(element, index) {
                         element.style.width = widths[index] * 2 + "px";
                     });
-                    console.timeEnd("doubleWidths");
                 }
 
                 setTimeout(doubleWidths.bind(null, elements), 1000);
