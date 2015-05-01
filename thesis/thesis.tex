@@ -1330,7 +1330,7 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
       \begin{itemize}
         \item \textbf{Valid syntax}: Approaches that conforms to the \gls{CSS}, \gls{HTML}, and \gls{JavaScript} standards.
         \item \textbf{Invalid syntax}: Approaches that requires custom (invalid) syntax or in any other way do not conform to the standards described above.
-        \item \textbf{Static}: Approaches that in a compilation step calculates desired element queries and transforms them into media query powered layouts.
+        \item \textbf{Static}: Approaches that in a compilation step calculates desired element queries and transforms them into valid \gls{CSS} with an element query runtime or media queries. These approaches do not support layout changes at runtime.
         \item \textbf{Dynamic}: Approaches that handles element queries at runtime (and therefore support pages that changes dynamically).
         \item \textbf{Automatic}: Approaches that updates affected element queries on viewport and element resize events automatically.
         \item \textbf{Semi-automatic}: Approaches that partly updates affected element queries. Usually only viewport resize events are handled automatically.
@@ -1338,28 +1338,27 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
       It should be noted that most of the current approaches are combinations of different classes.
       See table~\ref{table:approaches-classifications} for a classification of current approaches.
       It should be noted that \cite{eq_imp_gss} has been left out deliberately, as their approach will be analyzed by itself in section~\ref{}.
-
       \begin{table}[ht]\center
         \tiny
-        \begin{tabular}[t]{ l l l l p{5cm} }
-          Implementation & Syntax & Automation & Behavior & Comments \\
+        \begin{tabular}[t]{ l p{3cm} l l l p{3cm} }
+          \multicolumn{2}{l}{Implementation} & Syntax & Automation & Behavior & Comments \\
           \hline
-          \cite{eq_imp_magichtml} & Invalid syntax & Semi-automatic & Static \\
-          \cite{eq_imp_eqcss} & Invalid syntax & Semi-automatic &  Dynamic \\
-          \cite{eq_imp_localised-css} & Invalid syntax & Automatic & Dynamic & Runtime parsing of CSS. Unfinished. Polling. \\
-          \cite{eq_imp_classquery} & Valid syntax & - & Static & Writes media queries to style on load\\
-          \cite{eq_imp_breakpointsjs} & Valid syntax & Semi-Automatic & Dynamic & JS-centric approach \\
-          \cite{eq_imp_mediaclass} & Valid syntax & Semi-automatic & Dynamic & Custom inline JS syntax \\
-          \cite{eq_imp_elementquery} & Valid syntax & Semi-automatic & Dynamic & \\
-          \cite{eq_imp_responsive-elements} & Valid syntax & Semi-Automatic & Dynamic & \\
-          \cite{eq_imp_sickles} & Valid syntax & Semi-automatic & Dynamic & Part of bootstrap-like framework. No JS API, instead parses CSS. \\
-          \cite{eq_imp_responsive-elements-2} & Valid syntax & Semi-automatic & Dynamic & \\
-          \cite{eq_imp_breaks2000} & Valid syntax & Semi-automatic & Dynamic & \\
-          \cite{eq_imp_selector_queries} & Valid syntax & Semi-automatic & Dynamic & \\
-          \cite{eq_imp_element-queries} & Valid syntax & Automatic & Dynamic & \\
-          \cite{eq_imp_eqjs} & Valid syntax & Automatic & Dynamic & \\
-          \cite{eq_imp_css-element-queries} & Valid syntax & Automatic & Dynamic & Parses CSS \\
-
+          \cite{eq_imp_magichtml} &             MagicHTML &                                   Invalid &   Semi-automatic &  Static &    Compiles invalid CSS to valid CSS at server side. \\
+          \cite{eq_imp_eqcss} &                 EQCSS &                                       Invalid &   Semi-automatic &  Dynamic     \\
+          \cite{eq_imp_localised-css} &         Localised CSS &                               Invalid &   Automatic &       Dynamic &   Runtime parsing of CSS. Unfinished. Polling. \\
+          \cite{eq_imp_gss} &                   Grid Style Sheets 2.0 &                       Invalid &   Automatic &       Dynamic &   Limited browser support. \\
+          \cite{eq_imp_classquery} &            Class Query &                                 Valid &     - &               Static &    Writes media queries to style on load. \\
+          \cite{eq_imp_breakpointsjs} &         breakpoints.js &                              Valid &     Semi-Automatic &  Dynamic &   JS-centric approach. \\
+          \cite{eq_imp_mediaclass} &            MediaClass &                                  Valid &     Semi-automatic &  Dynamic &   Custom inline JS syntax. \\
+          \cite{eq_imp_elementquery} &          ElementQuery &                                Valid &     Semi-automatic &  Dynamic &   \\
+          \cite{eq_imp_responsive-elements} &   Responsive Elements &                         Valid &     Semi-Automatic &  Dynamic &   \\
+          \cite{eq_imp_sickles} &               SickleS &                                     Valid &     Semi-automatic &  Dynamic &   Part of bootstrap-like framework. No JS API, instead parses CSS. \\
+          \cite{eq_imp_responsive-elements-2} & Responsive Elements &                         Valid &     Semi-automatic &  Dynamic &   \\
+          \cite{eq_imp_breaks2000} &            breaks2000 &                                  Valid &     Semi-automatic &  Dynamic &   \\
+          \cite{eq_imp_selector_queries} &      Selector queries and responsive containers &  Valid &     Semi-automatic &  Dynamic &   \\
+          \cite{eq_imp_element-queries} &       Element Queries &                             Valid &     Automatic &       Dynamic &   \\
+          \cite{eq_imp_eqjs} &                  eq.js &                                       Valid &     Automatic &       Dynamic &   \\
+          \cite{eq_imp_css-element-queries} &   CSS Element Queries &                         Valid &     Automatic &       Dynamic &   Parses CSS. \\
         \end{tabular}
         \caption{Classification of current approaches.}
         \label{table:approaches-classifications}
@@ -1379,8 +1378,45 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
       % \cite{eq_imp_element-queries}       Valid syntax.   Automatic. Dynamic.
       % \cite{eq_imp_eqjs}                  Valid syntax.   Automatic. Dynamic
       % \cite{eq_imp_css-element-queries}   Valid sytnax.   Automatic. Dynamic. Parses CSS.
-
       % \cite{eq_imp_gss}
+      
+      The approaches \cite{eq_imp_magichtml,eq_imp_eqcss,eq_imp_localised-css,eq_imp_gss} have in common that they require developers to write cunstom (invalid) \gls{CSS}.
+      Since they do no longer conform the \gls{CSS} specification, there are no longer any limitations to what can be done with \gls{CSS}.
+      As shown by \cite{eq_imp_eqcss,eq_imp_gss} quite advanced features can be implemented this way.
+      Additionally, teaching \gls{CSS} new tricks implies that it is possible to implement an solution to element queries that does not require any changes to the \gls{HTML}, which can be preferable since all styling then can be written in \gls{CSS} (which is the purpose of \gls{CSS}).
+      However, there are numerous flaws to the approaches that requires invalid \gls{CSS}.
+      First, it requires a compilation step in order to produce valid \gls{CSS} that layout engines understand.
+      This can either be done at server side or in the browser at run time.
+      The advantage of having the compilation step at server side is increased performance since the browser will understand the \gls{CSS} directly.
+      However, having compiled the \gls{CSS} at server side the the layout of the page cannot be changed at run time.
+      By instead having the compilations step at run time, dynamic layouts are possible.
+      The performance impact of having the compilation step at runtime can be significant for the following reasons:
+      \begin{itemize}
+        \item The received \gls{CSS} cannot be understood by the browser, and therefore all parsing and reasoning about it has to be postponed until the framework script executes.
+        Note that the layout engines could in theory parse the \gls{CSS} and perform speculative selector matching while waiting for other parts of the page to finish (such as executing scripts), which cannot be done with invalid \gls{CSS}.
+        \item When the framework script executes, it has to parse the custom \gls{CSS}, a process which is most likely slower than native parsing.
+        \item When parsed, the framework needs to apply it's logic to the parsed \gls{CSS} and produce valid \gls{CSS}. The produced \gls{CSS} needs to be applied to the document by mutating the \gls{DOM}.
+        \todo{Write about reentrant HTML and layout thrashing etc?}
+        \item The layout engine will need to parse the \gls{CSS} added to the \gls{DOM}, which means that the styles of the page has been parsed twice.
+        \item The custom parser engine will need to be included in the page, which implies a bigger framework script size.
+      \end{itemize}
+      Additional problems with custom \gls{CSS}, that also applies to custom \gls{CSS} compiled at server side, are:
+      \begin{itemize}
+        \item 
+          By not conforming to \gls{CSS} standards many tools such as preprocessors, validators and linters will no longer be compatible.
+          Also, editors and other code-displaying tools will not be able to understand the syntax and will therefore not be able to highlight the code properly.
+          It should be noted that it is in some cases possible to create plugins or similar to such tools to extend their capabilities.
+        \item
+          The \gls{API} and parser will need to be kept up to date with \gls{CSS} standards in order to make sure new features of \gls{CSS} are supported and that they are not conflicting with the custom \gls{API}.
+        \item
+          \todo[inline]{Problems with documentation, resources and tutorials since the syntax is custom?}
+      \end{itemize}
+
+
+
+
+      \todo[inline]{Insight: Custom CSS: If a page has normal CSS present and performs getComputedStyle(), the script will be blocked until the CSS has been resolved so that the valid styles will be returned. If invalid CSS is present (a la Tommy's approach), then does the script wait or does it result in the wrong styles being returned? Probably.}
+      \todo[inline]{Insight: Is it true that if a approach does not listen to element resizes and does not support layout changes, a static approach is always best?}
 
       \section{Current implementations}
         \todo[inline]{Write about GSS, Tommy's implementation and the different approaches}
