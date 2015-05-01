@@ -146,6 +146,14 @@
   name={document},
   description={Strictly defined as something that has a \gls{URI} and can return representations of the identified resource in response to \gls{HTTP} requests. If otherwise states, document will refer to \gls{HTML} \gls{web} pages in this thesis. In \gls{JavaScript}, document refers to the \gls{DOM} root}
 }
+\newglossaryentry{layout thrashing}{
+  name={layout thrashing},
+  description={When the layout engine is forced to flush the incremental layout command queue repeatedly due to JavaScript, forcing each incremental layout to be processed separately when they could in theory be processed in a \glslink{batch processing}{batch}}
+}
+\newglossaryentry{batch processing}{
+  name={batch processing},
+  description={Refers to when multiple instructions are processed together. Batch processing is desired when there is an overhead associated with preparing the system prior to execution. With batch processing, the system can be prepared once for all instructions instead}
+}
 
 \newacronym{W3C}{W3C}{World Wide Web Consortium}
 \newacronym{CSS}{CSS}{Cascading Style Sheets}
@@ -929,7 +937,7 @@
         The system marks which renderers in the tree that need a layout, which avoids layout of unaffected \glspl{element}.
         Layouts that only layout the dirty renderers are called \emph{incremental layouts}.
         \Glspl{layout engine} that uses the dirty bit system usually keeps a queue of incremental layout commands.
-        The scheduler system later triggers a batch execution of the incremental layout commands asynchronously.
+        The scheduler system later triggers a \glslink{batch processing}{batch execution} of the incremental layout commands asynchronously.
         A global layout is triggered when the \gls{viewport} is resized or when styles that affect the whole \gls{document} are changed (such as \code{font-size}).
         Because the \gls{API} of \code{getComputedStyle} promises resolved values for all style properties, calling the function forces a full layout (flushing the incremental layout commands queue).
         When a renderer performs a layout the following usually happens:
@@ -986,6 +994,55 @@
         Siblings of the layout tree can be processed independently of each other (in the general case), and is suitable to parallelize with a work stealing system.
         
         \todo[inline]{Philipp: It would be very interesting to just shortly summarize typical performance gains due to parallelization.}
+
+      \section{Layout thrashing and how to avoid it}
+        \begin{metatext}
+          This section will present what \gls{layout thrashing} is and how it can be prevented.
+          Avoiding \gls{layout thrashing} is important when optimizing \gls{DOM} manipulations, and will be a key element to constructing a performant third-party framework.
+        \end{metatext}
+
+        Recall from section \ref{sec:layout-process} that \glspl{layout engine} store incremental layout commands in a queue in order to \glslink{batch processing}{batch process} layouts.
+        The term \gls{layout thrashing} refers to when the layout queue repeatedly is being flushed by scripts, forcing the \gls{layout engine} to perform multiple independent layouts that could have in theory been \gls{batch processing}{batch processed}.
+        Layouts are \emph{thrashed} since the layout engine usually needs to perform layout on the whole subtree of the affected element for each incremental layout command, hence thrashing the previous most of the work it did for the previous layout command.
+        \begin{lstlisting}[caption={Example of layout thrashing. The code reads and double the widths of 1000 elements in \textasciitilde600 ms.}, captionpos=b, label={code:thrashing-example}]
+/* JS */
+
+/* Doubles the width of each element in the elements collection parameter. */
+function doubleWidths(elements) {
+    elements.forEach(function readWriteWidth(element) {
+        var width = parseSize(getComputedStyle(element).width);
+        element.style.width = width * 2 + "px";
+    });
+}
+
+// 1000 div elements as only children of a div container.
+var elements = [...];
+doubleWidths(elements); // ~600 ms
+        \end{lstlisting}
+
+        \begin{lstlisting}[caption={Example of avoiding layout thrashing by batch processing reads and writes to the \gls{DOM}. The code reads and double the widths of 1000 elements in \textasciitilde6 ms.}, captionpos=b, label={code:thrashing-example-fixed}]
+/* JS */
+
+/* Doubles the width of each element in the elements collection parameter. */
+function doubleWidths(elements) {
+    var widths = [];
+
+    // First retrieve all element widths.
+    elements.forEach(function getWidths(element) {
+        var width = parseSize(getComputedStyle(element).width);
+        widths.push(width);
+    });
+
+    // Then mutate the DOM with the new widths.
+    elements.forEach(function writeWidths(element, index) {
+        element.style.width = widths[index] * 2 + "px";
+    });
+}
+
+// 1000 div elements as only children of a div container.
+var elements = [...];
+doubleWidths(elements); // ~6 ms
+        \end{lstlisting}
 
     \chapter{Element queries}\label{chp:eq}
       \begin{metatext}
@@ -1405,13 +1462,15 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
           By not conforming to \gls{CSS} standards many tools such as preprocessors, validators and linters will no longer be compatible.
           Also, editors and other code-displaying tools will not be able to understand the syntax and will therefore not be able to highlight the code properly.
           It should be noted that it is in some cases possible to create plugins or similar to such tools to extend their capabilities.
-        \item
-          The \gls{API} and parser will need to be kept up to date with \gls{CSS} standards in order to make sure new features of \gls{CSS} are supported and that they are not conflicting with the custom \gls{API}.
+        \item The \gls{API} and parser will need to be kept up to date with \gls{CSS} standards in order to make sure new features of \gls{CSS} are supported and that they are not conflicting with the custom \gls{API}.
+        \item \todo[inline]{Write that scripts are not allowed to access content of CSS server from another domain than the script?}
         \item
           \todo[inline]{Problems with documentation, resources and tutorials since the syntax is custom?}
       \end{itemize}
 
-
+      \section{GSS}
+      \section{CSS Element Queries}
+      \section{eq.js}
 
 
       \todo[inline]{Insight: Custom CSS: If a page has normal CSS present and performs getComputedStyle(), the script will be blocked until the CSS has been resolved so that the valid styles will be returned. If invalid CSS is present (a la Tommy's approach), then does the script wait or does it result in the wrong styles being returned? Probably.}
@@ -1525,9 +1584,9 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
             If the update seems to be part of a cycle, it is up to the plugin how that should be handled.
             \todo[inline]{Write that this system is more general, and could potentially be used for detecting other cyclic behaviors?}
           \item \textbf{Batch processor:}
-            To avoid layout thrashing, it is important to read and mutate the \gls{DOM} in separate batches.
-            This subsystem provides an interface for plugins to store functions to later be executed in a batch.
-            To avoid layout thrashing by other scripts it can beneficial to asynchronously postpone the batch until the next layout cycle of the \gls{browser}, which is also handled by the subsystem.
+            To avoid \gls{layout thrashing}, it is important to read and mutate the \gls{DOM} in separate \glslink{batch processing}{batches}.
+            This subsystem provides an interface for plugins to store functions to later be executed in a \glslink{batch processing}{batch}.
+            To avoid \gls{layout thrashing} by other scripts it can beneficial to asynchronously postpone the \glslink{batch processing}{batch} until the next layout cycle of the \gls{browser}, which is also handled by the subsystem.
           \item \textbf{Plugin handler:}
             Of course, having plugins requires a subsystem for handling them.
             This system provides the interface for developers to add plugins to the framework.
@@ -1661,7 +1720,7 @@ elq.start(jqueryElementsCollection);
           \begin{itemize}
             \item \textbf{Reporter}: via the \code{elq.reporter} property that refers to the reporter instance.
             \item \textbf{Cycle detector}: via the \code{elq.cycleDetector} property that refers to the cycle detector instance.
-            \item \textbf{Batch processor}: via the \code{elq.createBatchProcessor} property that refers to a function that creates a batch processor intance.
+            \item \textbf{Batch processor}: via the \code{elq.createBatchProcessor} property that refers to a function that creates a \glslink{batch processing}{batch processor} intance.
             \item \textbf{\abbr{ID} handler}: via the \code{elq.idHandler} property that refers to the \abbr{ID} handler instance. \todo{Include id handler in section \ref{sec:arcithecture}?}
           \end{itemize}
           Direct access is not given to the plugin handler and element resize detector subsystems since their \glspl{API} are already exposed in the public \gls{API}.
@@ -1674,16 +1733,16 @@ elq.start(jqueryElementsCollection);
           To do so, it requires two parameters; the element that the update should be applied to, and the state update itself.
           A third time parameter, that tells when the update was requested, is optional and will default to the time of the method call.
 
-          Instead of having a single batch processor instance shared among all framework entities (i.e. core subsystems and plugins), each entity has to create an own instance.
-          This to avoid entities interfering with each other while performing batch processing.
-          For example, some entities might want to force the batch to process at a point where it would be beneficial for other entities to delay the batch.
-          The \code{createBatchProcessor} accepts an optional options object parameter and returns a batch processor instance that has two methods; \code{add} and \code{force}.
-          The \code{add} method requires a function parameter that will be called when the batch is processed.
-          Since the batch processor is leveled, as motivated in section~\ref{}, the method also accepts an optional parameter that defines at which level the given function should be processed.
-          The \code{force} method commence the processing of the batch, which can happen synchronously or asynchronously a the optional parameter.
+          Instead of having a single \glslink{batch processing}{batch processor} instance shared among all framework entities (i.e. core subsystems and plugins), each entity has to create an own instance.
+          This to avoid entities interfering with each other while performing \gls{batch processing}.
+          For example, some entities might want to force the \glslink{batch processing}{batch} to process at a point where it would be beneficial for other entities to delay the \glslink{batch processing}{batch}.
+          The \code{createBatchProcessor} accepts an optional options object parameter and returns a \glslink{batch processing}{batch processor} instance that has two methods; \code{add} and \code{force}.
+          The \code{add} method requires a function parameter that will be called when the \glslink{batch processing}{batch} is processed.
+          Since the \glslink{batch processing}{batch processor} is leveled, as motivated in section~\ref{}, the method also accepts an optional parameter that defines at which level the given function should be processed.
+          The \code{force} method commence the processing of the \glslink{batch processing}{batch}, which can happen synchronously or asynchronously a the optional parameter.
           Two important options to the \code{createBatchProcessor} are the \code{async} and \code{auto} options.
-          If the \code{async} option is enabled, the batch will be processed asynchronously as soon as possible after that the \code{force} method has been invoked.
-          If the \code{auto} option is enabled, \code{force} will be invoked when the first function of the batch has been added (this implies that \code{async} has to be enabled).
+          If the \code{async} option is enabled, the \glslink{batch processing}{batch} will be processed asynchronously as soon as possible after that the \code{force} method has been invoked.
+          If the \code{auto} option is enabled, \code{force} will be invoked when the first function of the \glslink{batch processing}{batch} has been added (this implies that \code{async} has to be enabled).
 
           The \abbr{ID} handler has one method \code{get} that returns the \abbr{ID} of the required element parameter.
           If the element does not have any \abbr{ID} one will be assigned to the element.
@@ -1828,7 +1887,7 @@ elq.start(jqueryElementsCollection);
           \end{itemize}
           The first solution is appealing because it does not mutate the \gls{DOM} and it works on all \glspl{browser} since it does not rely on special \gls{element} behaviors or similar.
           However, in order to prevent the \gls{responsive} \glspl{element} lagging behind the size changes of the user interface, the polls need to be performed quite frequently.
-          Recall from section~\ref{sec:layout-process} that \glspl{layout engine} typically have a layout queue in order to perform layout in batches for increased performance.
+          Recall from section~\ref{sec:layout-process} that \glspl{layout engine} typically have a layout queue in order to perform layout in \glslink{batch processing}{batches} for increased performance.
           Each poll would force the layout queue to be flushed since the computed style of \glspl{element} needs to be retrieved in order to know if \glspl{element} have resized or not.
           The performance impact of polling the \gls{DOM} frequently is not desirable.
           Since the polling is be performed all the time, the overall page performance will be decreased even if the page is idle, which is undesirable especially for devices running on battery.

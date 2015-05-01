@@ -1,0 +1,49 @@
+<html>
+    <head></head>
+    <body>
+        <div id="container">
+            
+        </div>
+
+        <script>
+            function createChild() {
+                var child = document.createElement("div");
+                child.style.width = "50%";
+                child.style.height = "20px";
+                child.style.background = "red";
+                document.getElementById("container").appendChild(child);
+            }
+
+            for(var i = 0; i < 1000; i++) {
+                createChild();
+            }
+
+            document.addEventListener('DOMContentLoaded', function DomReady() {
+                function parseSize(size) {
+                    return parseFloat(size.replace(/px/, ""));
+                }
+
+                var elements = document.getElementById("container").children;
+                elements = Array.prototype.slice.call(elements, 0);
+
+
+                function doubleWidths(elements) {
+                    console.time("doubleWidths");
+                    var widths = [];
+
+                    elements.forEach(function getWidths(element) {
+                        var width = parseSize(getComputedStyle(element).width);
+                        widths.push(width);
+                    });
+
+                    elements.forEach(function writeWidths(element, index) {
+                        element.style.width = widths[index] * 2 + "px";
+                    });
+                    console.timeEnd("doubleWidths");
+                }
+
+                setTimeout(doubleWidths.bind(null, elements), 1000);
+            });
+        </script>
+    </body>
+</html>
