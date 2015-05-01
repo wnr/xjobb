@@ -377,7 +377,7 @@
       Hypertext \glspl{document} are written in \gls{HTML}, and often includes \gls{CSS} for styling and \gls{JavaScript} for custom user interactions.
       As a complementary to \gls{HTML}, the \gls{XML} also exists with the purpose of describing data (as contrary to \gls{HTML} which describes the \emph{presentation} of data).
       \todo[color=green]{Marcos: Drop this. XHTML is deprecated (and it's just a serialization of HTML as XML... it doesn't add anything).}
-      \todo{Awaiting Marcos to answer my followup question to this.}
+      \todo{Waiting with this todo, since XML is talked about in later parts of the thesis as well. This seems like a natural introduction to XML.}
       To transfer the resources between computers the protocol \gls{HTTP} is used.
       Typically the way of retrieving resources on the web is by using a \emph{\glslink{browser}{user agent}}, known colloquially as a \gls{web} \emph{\gls{browser}}.
       Typically the way of retrieving resources on the \gls{web} is by using a \emph{\gls{web} \gls{browser}} or simply a \emph{\gls{browser}}.
@@ -597,19 +597,18 @@
         \end{metatext}
 
         \todo[inline,color=green]{Marcos: Remember that developers might be also targeting actual browsers, not just "mobile" or "desktop".}
-        \todo{Awaiting Marcos to answer my question to this.}
         According to \emph{\gls{StatCounter}}, 37\% of the \gls{web} users are visiting sites on a mobile or tablet device.
         No longer is it valid to not support small screens.
         Furthermore, it is understood that sites need to be styled differently if they are visited by touch devices with small screens or mouse-based devices with large screens.
         Since \gls{web} developers were not ready for this rapid change of device properties, they resorted to using the same approach that they had done before --- making assumptions about the user device based on the server request.
-        When a \gls{browser} requests a resource, an \emph{\glslink{browser}{user agent} string} is usually sent with the request to identify what kind of \gls{browser} the user is using. \todo{Explain \glslink{browser}{user agent}, that all browsera are \glspl{browser}{user agent} but not the other way around.}
+        When a \gls{browser} requests a resource, an \emph{\glslink{browser}{user agent} string} is usually sent with the request to identify what kind of \gls{browser} the user is using. \todo{Explain user agent, that all browsers are user agents but not the other way around.}
         By reading the \glslink{browser}{user agent} string on the server-side, a mobile-friendly version of the site could be served if the user was sending mobile \glslink{browser}{user agent} strings and the desktop version could be served otherwise.
         The mobile version would be designed for a maximum width, and the desktop would be designed for a minimum width.
         
         This was a natural reaction since no better techniques existed, but the approach has many flaws.
         First, developers now have multiple versions of a site to maintain and develop in parallel.
         Second, this approach doesn't scale well with new devices entering the market.
-        \todo[color=green]{Not only devices (also browser). But is this really true with the layout concept?}
+        \todo[color=green]{Marcos: Not only devices (also browser).}
         For instance, tablets are somewhere in the middle of mobile and laptops in size, which would require another special version of the site.
         Further, when desktops support touch actions and smartphones support mouse actions, even more versions of the website needs to be developed in order to satisfy all user devices.
         Third, the desktop site assumes that desktop users have big screens (which usually is true).
