@@ -297,8 +297,7 @@
       Also, changes to the application layout would then require to rewrite the \gls{media queries} of the modules to take the new layout into account.
       Clearly, no sound option exists for having \gls{responsive} modules.
 
-      The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries.
-      \todo[color=green]{Marcos: Please add references to these.}
+      The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries \cite{eq_article_localised-css,eq_article_backalley,eq_article_mqhack,eq_article_tabatkjr,eq_article_filament,eq_article_tyson,eq_article_neal,eq_article_css-tricks,eq_article_hugo,eq_article_fremycompany,eq_article_discource,eq_article_matt}.
       As already stated in section~\ref{sec:problem}, \gls{third-party} implementation efforts have been made with moderate success.
       The \gls{W3C} receives requests and questions about it, and the \gls{RICG} have started writing a draft \cite{ricg_draft} about element queries use cases.
 
@@ -1359,6 +1358,7 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
           \cite{eq_imp_element-queries} &       Element Queries &                             Valid &     Automatic &       Dynamic &   \\
           \cite{eq_imp_eqjs} &                  eq.js &                                       Valid &     Automatic &       Dynamic &   \\
           \cite{eq_imp_css-element-queries} &   CSS Element Queries &                         Valid &     Automatic &       Dynamic &   Parses CSS. \\
+          \cite{eq_imp_prollyfill-min-width} & TODO & & &  &
         \end{tabular}
         \caption{Classification of current approaches.}
         \label{table:approaches-classifications}
@@ -1378,6 +1378,7 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
       % \cite{eq_imp_element-queries}       Valid syntax.   Automatic. Dynamic.
       % \cite{eq_imp_eqjs}                  Valid syntax.   Automatic. Dynamic
       % \cite{eq_imp_css-element-queries}   Valid sytnax.   Automatic. Dynamic. Parses CSS.
+      % \cite{eq_imp_prollyfill-min-width} TODO:
       % \cite{eq_imp_gss}
       
       The approaches \cite{eq_imp_magichtml,eq_imp_eqcss,eq_imp_localised-css,eq_imp_gss} have in common that they require developers to write cunstom (invalid) \gls{CSS}.
