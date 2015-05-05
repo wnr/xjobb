@@ -1004,9 +1004,8 @@
         Recall from section \ref{sec:layout-process} that \glspl{layout engine} store incremental layout commands in a queue in order to \glslink{batch processing}{batch process} layouts.
         The term \gls{layout thrashing} refers to when the layout queue repeatedly is being flushed by scripts, forcing the \gls{layout engine} to perform multiple independent layouts that could have in theory been \gls{batch processing}{batch processed}.
         Layouts are \emph{thrashed} since the layout engine usually needs to perform layout on the whole subtree of the affected element for each incremental layout command, hence thrashing the previous most of the work it did for the previous layout command.
-        \begin{lstlisting}[caption={Example of layout thrashing. The code reads and double the widths of 1000 elements in \textasciitilde600 ms.}, captionpos=b, label={code:thrashing-example}]
-/* JS */
-
+        See listing~\ref{code:thrashing-example} for an example of \gls{JavaScript} code that results in layout thrashing.
+        \begin{lstlisting}[caption={Example of layout thrashing. The code reads and double the widths of 1000 \glspl{element} in \textasciitilde700 ms. The \code{parseSize} function is not important to understand the example.}, captionpos=b, label={code:thrashing-example}]
 /* Doubles the width of each element in the elements collection parameter. */
 function doubleWidths(elements) {
     elements.forEach(function readWriteWidth(element) {
@@ -1019,25 +1018,28 @@ function doubleWidths(elements) {
 var elements = [...];
 doubleWidths(elements); // ~700 ms
         \end{lstlisting}
+        For each element given as parameter to the \code{doubleWidths} function, the \code{readWriteWidth} function is called with an element as argument.
+        In that function, the computed style of the element is requested, which will force a style calculation for that element.
+        If any \gls{DOM} node affecting the element is marked as dirty, a layout will also need to be performed before returning the computed style of the element.
+        When the computed style has been acquired, the width of the element is set to a new value, which is a \gls{DOM} mutation that will need to be synchronized with the render tree.
+        Therefore, the element and its ancestors will be marked as dirty.
+        The next time \code{getComputedStyle} is called, which happens when processing the next element in the array, a layout will be forced since \gls{DOM} nodes that affects the elements has been marked as dirty.
+        See figure~\ref{fig:layout-thrashing-example-1} for a visualization of the execution of the \code{doubleWidths} function.
+        It is shown in the figure that style computations and layout is performed in each iteration.
+        The total time spent on style calculations is \textasciitilde40 ms and layout is \textasciitilde600 ms, which leaves \textasciitilde60 ms for the actual script execution.
 
-        \begin{figure}
+        \pagebreak %TODO: Removed this?
+        \begin{figure}[h]
           \centering
-          \includegraphics[width=\linewidth]{images/layout-thrashing-example-1}
-          \includegraphics[width=\linewidth]{images/layout-thrashing-example-1-big}
-          \caption{}
+          \includegraphics[scale=0.5]{images/layout-thrashing-example-1-big}
+          \includegraphics[scale=0.5]{images/layout-thrashing-example-1}
+          \caption{Two timeline figures of executing the example code given in listing~\ref{code:thrashing-example}. Both figures show the same timeline, where the top figure shows the while execution and the bottom only shows a small section of the whole execution. Notice that they do not share the same time axis. Here it is clear that layout thrashing occurs, since layout is being done repeatedly throughout the whole execution (each iteration in the loop).}
           \label{fig:layout-thrashing-example-1}
         \end{figure}
-
-        \begin{figure}
-          \centering
-          \includegraphics[width=\linewidth]{images/layout-thrashing-example-1-fixed}
-          \caption{}
-          \label{fig:layout-thrashing-example-1}
-        \end{figure}
-
-        \begin{lstlisting}[caption={Example of avoiding layout thrashing by batch processing reads and writes to the \gls{DOM}. The code reads and double the widths of 1000 elements in \textasciitilde7 ms.}, captionpos=b, label={code:thrashing-example-fixed}]
-/* JS */
-
+        
+        To avoid layout thrashing, the computed style requests and \gls{DOM} manipulations needs to be performed in batches, as presented in listing~\ref{code:thrashing-example-fixed}.
+        While it is algorithmically inefficient to iterate over the same collection twice --- the batched approach executes roughly 100 times faster than the original version.
+        \begin{lstlisting}[caption={Example of avoiding layout thrashing by batch processing reads and writes to the \gls{DOM}. The code reads and double the widths of 1000 \glspl{element} in \textasciitilde7 ms.}, captionpos=b, label={code:thrashing-example-fixed}]
 /* Doubles the width of each element in the elements collection parameter. */
 function doubleWidths(elements) {
     var widths = [];
@@ -1058,7 +1060,41 @@ function doubleWidths(elements) {
 var elements = [...];
 doubleWidths(elements); // ~7 ms
         \end{lstlisting}
+        Now, the \code{doubleWidths} function performs two batches that both iterations over the elements collection.
+        In the first batch, all widths of all elements are acquired and stored in a collection.
+        Since no \gls{DOM} mutation occurs in the first batch, the layout engine do not need to perform any layout while retrieving the styles.
+        In the second batch, all elements are assigned the new widths based on the widths retrieved in the first batch.
+        Since the script does not read the \gls{DOM} in any way during in the second batch, all \gls{DOM} mutations can be queued by the layout engine to be batch processed.
+        See figure~\ref{fig:layout-thrashing-example-1-fixed} for a visualization of the execution of the batched example version.
+        In the figure, it is clear that the layout engine is able to first execute the JavaScript, and later perform all style and layout computations in a batch.
+        The total time spent on style calculations has been reduced to \textasciitilde2 ms, layout to \textasciitilde1.5 ms, and the actual script execution to \textasciitilde3.5 ms.
+        It should be noted that both versions recalculate styles for the same number of elements.
+        Pausing the JavaScript context and switching the layout engine to style computation causes an overhead cost, from now on denoted by the constant $O_{s}$.
+        The style calculation was reduced from \textasciitilde40 ms to \textasciitilde2 ms because the first version calculated the style of each element one at a time and therefore suffered from $nO_{s}$ in overhead, where $n$ is the number of elements.
+        Since the second version enabled the layout engine to calculate the style of all elements in a batch, the overhead was reduced to only $O_{s}$.
+        However, it should be noted that both versions have time complexity $O(n)$.
+        
+        The major part of time reduction is due to the layout being significantly reduced.
+        The reason why the layout was significantly reduced is because the two version do not perform layout on the same amount of elements.
+        When an element and its ancestors has been marked as dirty, a layout will need to be performed on the subtree which contains at least all $n$ elements and possibly some ancestor elements.
+        So the minimum number of nodes that will be need to be laid out is given by $n + n_{a}$, where $n_a$ is the number of ancestor elements.
+        Since the first version forces the layout engine to perform a layout in each iteration, the minimum number of elements laid out is given by $n(n + n_a)$.
+        Similar to style computation, performing a layout also has an overhead cost $O_{l}$.
+        Let $C_{l}$ denote the time it takes for the layout engine to layout one element, then the total time needed for layout in the first version is given by $T(n) = n(O_{l} + C_{l}(n + n_a))$.
+        The second version enables the layout engine to batch process the \gls{DOM} manipulations, and therefore only one layout of the subtree will need to be performed, which results in the minumum number of elements laid out being $n + n_a$.
+        The total time needed for layout in the second version is then given by $T(n) = O_{l} + C_{l}(n + n_a)$.
+        The first version has time complexity $O(n^2)$ while the second version has time complexity $O(n)$, which is a significant optimization.
+        \begin{figure}[h]
+          \centering
+          \includegraphics[scale=0.5]{images/layout-thrashing-example-1-fixed}
+          \caption{A timeline of executing the example code given in listing~\ref{code:thrashing-example-fixed}. It is clear in the figure that layout thrashing does not occur, since all style computation and layout is performed in a batch after that the example code has finished executing.}
+          \label{fig:layout-thrashing-example-1-fixed}
+        \end{figure}
 
+        \todo[inline]{Have a T(n) function for style computations aswell?}
+        \todo[inline]{Analyze the numbers to give some rough numbers on overhead and cost times?}
+        \todo[inline]{Explain that $n_a$ is not a parameter to the T function?}
+        \todo[inline]{Refer to some section in the appendix for how to read the timeline images?}
     \chapter{Element queries}\label{chp:eq}
       \begin{metatext}
         Now that a good understanding of \glspl{browser} (especially the \gls{layout engine}), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- the solution to the modular \gls{responsive} \gls{web} design problem.
