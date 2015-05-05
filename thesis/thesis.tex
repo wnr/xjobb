@@ -144,7 +144,7 @@
 }
 \newglossaryentry{document}{
   name={document},
-  description={Strictly defined as something that has a \gls{URI} and can return representations of the identified resource in response to \gls{HTTP} requests. If otherwise states, document will refer to \gls{HTML} \gls{web} pages in this thesis. In \gls{JavaScript}, document refers to the \gls{DOM} root}
+  description={Strictly defined as something that has a \gls{URL} and can return representations of the identified resource in response to \gls{HTTP} requests. If otherwise states, document will refer to \gls{HTML} \gls{web} pages in this thesis. In \gls{JavaScript}, document refers to the \gls{DOM} root}
 }
 \newglossaryentry{layout thrashing}{
   name={layout thrashing},
@@ -186,7 +186,7 @@
 \newacronym{WHATWG}{WHATWG}{Web Hypertext Application Technology Working Group}
 \newacronym{RWD}{RWD}{Responsive Web Design}
 \newacronym{DOM}{DOM}{Document Object Model}
-\newacronym{URI}{URI}{Unique Resource Identifier}
+\newacronym{URL}{URL}{Uniform Resource Locator}
 \newacronym{CPU}{CPU}{Central Processing Unit}
 \newacronym{DARPA}{DARPA}{Defense Advanced Research Projects Agency}
 \newacronym{CERN}{CERN}{Conseil Europeen pour la Recherche Nucleaire}
@@ -696,6 +696,7 @@
         This chapter is mainly based on \normalfont{\cite{browser_architecture,garsiel2011browsers}}.
       \end{metatext}
       \todo[inline]{Have an image about the layout flow somewhere?}
+      \todo[inline,color=green]{Marcos: The reference architecture could be outdated since the source is very old. The XML subsystem is hardly interesting anymore.}
       \noindent
       Browsers are complex applications that consist of many subsystems.
       A reference architecture of \glspl{browser} has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
@@ -730,7 +731,7 @@
         \label{fig:browser_architecture}
       \end{figure}
       It is shown that the \gls{layout engine} is located between the \emph{\gls{browser} engine} system and the network, \gls{JavaScript}, \gls{XML} parsing, and display backend.
-      The \gls{browser} engine acts as a high level interface to the \gls{layout engine}, and is responsible for providing the \gls{layout engine} with \glspl{URI} of content that should be fetched and rendered.
+      The \gls{browser} engine acts as a high level interface to the \gls{layout engine}, and is responsible for providing the \gls{layout engine} with \glspl{URL} of content that should be fetched and rendered.
       Additionally, browser engines usally provide the layout engine with layout and rendering options such as user preferred font size, zoom, etc.
       The main responsibility of the \gls{layout engine} is to render the current state of the fetched \gls{hypertext} \gls{document}.
       Since \glspl{document} may (and often do) change dynamically after parsetime it is important to keep in mind that the job of the \gls{layout engine} is continuous, and is not a one time operation.
@@ -746,7 +747,7 @@
       \Glspl{browser} can typically display multiple pages at the same time (by using tabs, multiple windows or frames) where each page has an instance of the \gls{layout engine}.
       There are four \glspl{layout engine} that the major \glspl{browser} use, as presented in table~\ref{table:layout_engines}.
       Since Blink is a recent \gls{fork} of \gls{WebKit} they have been grouped together as \gls{WebKit}-based \glspl{layout engine}.
-      This results in three distinct \glspl{layout engine} to consider; \gls{WebKit}, Gecko and Trident.
+      This results in three distinct \glspl{layout engine} to consider: \gls{WebKit}, Gecko and Trident.
       Due to Trident being closed source, only the \gls{WebKit}-based \glspl{layout engine} and Gecko will be considered in this chapter. \todo{Only this chapter or the whole thesis?}
 
       \begin{table}[ht]\center
@@ -786,7 +787,7 @@
       \section{Constructing DOM trees}\label{sec:dom-tree}
         \begin{metatext}
           Here a brief explanation of \gls{DOM} trees will be given, and how they are constructed.
-          In order to construct a \gls{DOM} tree, the content need to be parsed which also will be covered briefly.
+          In order to construct a \gls{DOM} tree, the content needs to be parsed which also will be covered briefly.
           This section is mainly based on \normalfont{\cite{w3c_dom,garsiel2011browsers,w3c_css21,w3c_html}}.
         \end{metatext}
 
