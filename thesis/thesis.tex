@@ -803,7 +803,8 @@
         If such script mutates the \gls{DOM}, then the parser will need to evaluate the changes made by the script and update the \gls{DOM} tree.
         External scripts need to be fetched in order to be executed, which halts the parsing unless the script \gls{element} states otherwise.
         It should be noted that although \gls{DOM} nodes do include a \code{style} property, the nodes in the \gls{DOM} tree are not affected by the \gls{CSS} cascade, and the style properties do not represent the final style of the \gls{element}.
-        Instead, for scripts to obtain the final computed style for an \gls{element} a special function needs to be called (\code{getComputedStyle} in \gls{JavaScript}).
+        Instead, for scripts to obtain the final computed style for an \gls{element} a special function needs to be called (e.g. \code{getComputedStyle} in \gls{JavaScript} \cite{w3c_cssdom_getcomputedstyle}).
+        \todo{Should the reference to getComputedStyle really be cited like that?}
         Since externally linked \gls{CSS} \glspl{document} do not directly affect the \gls{DOM} tree they could conceptually be fetched and parsed after the parsing of the \gls{HTML}.
         However, scripts can request the computed style of \gls{DOM} nodes and therefore either the parsing of \gls{HTML} needs to be halted in order to fetch and parse \gls{CSS} when needed, or the scripts accessing style properties of \gls{DOM} nodes need to be halted.
         A common optimization is to use a speculative parser that continues to parse the \gls{HTML} when the main parser has halted (for executing the scripts usually).
@@ -852,7 +853,7 @@
 
         Even though all style properties have been resolved for each node in the \gls{render tree} (through \gls{CSS} cascading), the renderers still do not know about the size and position of the rectangle.
         This is because some properties cannot be resolved by style cascading.
-        Some properties depend on the flow of the \gls{document}, and needs to be computed through a layout.
+        Some properties depend on the flow of the \gls{document}, and need to be computed through a layout.
         The layout process will resolve the final position and size of all renderers.
 
       \section{Style computation}\label{sec:style-computation}
