@@ -329,7 +329,7 @@
       \begin{itemize}
       \item No efforts will be made to solve the problems accompanied with a \gls{native} solution.
       \item No \gls{API} or similar will be designed for a \gls{native} solution.
-      \item User interface design will not be addressed, other than necessary for understanding the problem.
+      \item Graphical design of end-user interfaces will not be addressed, other than necessary for understanding the problem.
       \end{itemize}
     \section{Outline}
       This thesis is divided into four parts. The first part \emph{\ref{part:background}~\nameref{part:background}} presents some history of the \gls{web} platform and describes concepts needed to understand the problem.
@@ -673,6 +673,7 @@
         Many of these frameworks also help with dividing the \gls{HTML} up into modules, creating small packages of style, markup and code.
 
         A big challenge to software development is to be able to write software that is reliable (i.e., should not have bugs) and easy to change.
+        \todo[color=red]{Tomas: And to be finished in time?}
         What keeps developers from producing such software is often complexity, which hinders developers from reasoning about the software.
         The word ``complex'' can be defined as \emph{something consisting of interconnected or intertwined parts}.
         A quote from Rich Hickey:
@@ -689,12 +690,17 @@
         
         With modularity comes positive side effects.
         Loose coupling between modules facilitates integration testing of each module, since it is then possible to test parts of the software in isolation and independent of the system as a whole.
-        Developers can also work on different parts of the software in parallel without being affected by each other, as modules are not allowed to affect each other (other than configurable options or injected strategies).
+        Developers can also work on different parts of the software in parallel without being affected by each other, as modules are not allowed to affect each other (other than by configurable options, injected strategies or directly dependant submodules).
+        \todo[color=red]{Tomas: Maybe one-way dependencies?}
         The very nature of modules not being context-aware enables them to be reused in other projects (or other parts of the same application).
         Reusability is not only important to speed up the development process of new software projects, it also eases managing a large code base.
         A single module that performs a general task is much simpler to manage than multiple modules performing the same task but being written for different contexts.
         When a bug arises, the patch would only need to be applied to one module instead of all similar modules that could possibly be affected.
         Clearly, modular development is highly desired.
+
+        However, since modulas are allowed to be nested (i.e., modules may depend on submodules that may depend on other submodules and so on) and that the logic responsibility is moved from the application to the module, the complexity of managing them is added.
+        \gls{API} changes of a module can break modules that depend on them, and multiple versions of the same module must be maintained because the old versions may be used in parallel to the newer versions.
+        Having a good semantic versioning convention is key to reduce the complexity of managing multiple versions of modules.
   \part{Theory}\label{part:theory}
     \chapter{Layout engines}
       \begin{metatext}
@@ -1120,6 +1126,7 @@ doubleWidths(elements); // ~7 ms
       \todo[inline]{Describe a common use case? The thesis talks about "the common/general use case" a lot, but never really defines what that is.}
 
       Recall from section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} respond to size changes.
+      \todo[color=red]{Tomas: Or that modules can programatically work in many different sizes}
       \todo[color=green]{Marcos: Maybe embellish that bit... "...respond to size change, so that a document may be usable on many screen sizes, resolutions, pixel-densities, and media." or something like that.}
       \Gls{responsive} \gls{web} design implements this by using \gls{media queries}, applying conditional rules with relation to the \gls{viewport} size.
       In section~\ref{sec:modularity} the desire for building modular \gls{web} components was presented.
