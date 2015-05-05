@@ -126,14 +126,6 @@
   name={browser},
   description={Client application for navigating the \gls{WWW} and displaying \gls{web} pages. More formally known as a user agent}
 }
-\newglossaryentry{Java applet}{
-  name={Java applet},
-  description={A Java applet is a small application which is written in Java and delivered to users in the form of bytecode. See \url{www.java.com}}
-}
-\newglossaryentry{Flash}{
-  name={Flash},
-  description={Flash is a multimedia and software platform for producing cross platform interactive animations. See \url{www.flash.com}}
-}
 \newglossaryentry{StatCounter}{
   name={StatCounter},
   description={Collects and aggregates on a sample exceeding 15 billion page views per month collected from across the StatCounter network of more than 3 million websites}
@@ -390,7 +382,7 @@
         The term \gls{DHTML} was being used as an umbrella term for a collection of technologies used together to make pages interactive and animated, where client side scripting played a big role.
         Examples of things that were being done with \gls{DHTML} are; refreshing pages for the user so that new content is loaded, give feedback on user input without involving the server and animating content.
         Plugins also started to exist during this time that enabled \glspl{browser} to handle and execute embedded programs.
-        \emph{\glspl{Java applet}} and \emph{\gls{Flash}} are examples of browser embedded programs requiring browser plugins to execute.
+        \emph{Java applet}\footnote{A Java applet is a small application which is written in Java and delivered to users in the form of bytecode. See \url{www.java.com}} and \emph{Flash}\footnote{Flash is a multimedia and software platform for producing cross platform interactive animations. See \url{www.flash.com}} are examples of browser embedded programs requiring browser plugins to execute.
         In concept, users have to install the plugin runtime in order for the browser to be able to execute the plugin programs, which is undesired since it adds a barrier between users and the content.
         However, plugins enabled developers to access some capabilities that were lacking in browsers (e.g., video playback, programmable graphics, and interactive animations).
         Some \glspl{OS} and \glspl{browser} ships with preinstalled plugins, while others do not support plugins at all.
@@ -633,7 +625,7 @@
         If such script mutates the \gls{DOM}, then the parser will need to evaluate the changes made by the script and update the \gls{DOM} tree.
         External scripts need to be fetched in order to be executed, which halts the parsing unless the script \gls{element} states otherwise.
         It should be noted that although \gls{DOM} nodes do include a \code{style} property, the nodes in the \gls{DOM} tree are not affected by the \gls{CSS} cascade, and the style properties do not represent the final style of the \gls{element}.
-        Instead, for scripts to obtain the final computed style for an \gls{element} a special function needs to be called (e.g. \code{getComputedStyle} in \gls{JavaScript} \cite{w3c_cssdom_getcomputedstyle}).
+        Instead, for scripts to obtain the final computed style for an \gls{element} a special function needs to be called (e.g. \code{getComputedStyle} in \gls{JavaScript}\footnote{See \url{http://dev.w3.org/csswg/cssom/\#dom-window-getcomputedstyleelt-pseudoelt} for details about the function.}).
         \todo{Should the reference to getComputedStyle really be cited like that?}
         Since externally linked \gls{CSS} \glspl{document} do not directly affect the \gls{DOM} tree they could conceptually be fetched and parsed after the parsing of the \gls{HTML}.
         However, scripts can request the computed style of \gls{DOM} nodes and therefore either the parsing of \gls{HTML} needs to be halted in order to fetch and parse \gls{CSS} when needed, or the scripts accessing style properties of \gls{DOM} nodes need to be halted.
