@@ -791,18 +791,18 @@
           This section is mainly based on \normalfont{\cite{w3c_dom,garsiel2011browsers,w3c_css21,w3c_html}}.
         \end{metatext}
 
-        The \gls{DOM} is a convention for representing and interacting with objects in \gls{XML}-based \glspl{document} (such as \gls{HTML}).
+        The \gls{DOM} defines a platform-neutral model for events and node trees, which is used for representing and interacting with \glspl{document}.
         The \gls{DOM} provides an interface for programs (\gls{JavaScript} in the \gls{browser}) to access and mutate the structure, style, and content of \glspl{document}.
-        Elements of the \gls{document} is converted to \gls{DOM} nodes, and therefore the whole \gls{document} is represented as a tree structure of \gls{DOM} nodes which is referred to as the \gls{DOM} tree.
+        Elements of the \gls{document} are converted to \gls{DOM} nodes, and therefore the whole \gls{document} is represented as a tree structure of \gls{DOM} nodes which is referred to as the \gls{DOM} tree.
 
         \Glspl{layout engine} construct \gls{DOM} trees by parsing \gls{HTML} with any included \gls{CSS} and \gls{JavaScript}.
-        Parsing of \gls{HTML} is not an easy task, partly because it is expected (alhough not required) of layout engines to be forgiving of errors, such as handling malformated \gls{HTML}.
+        Parsing of \gls{HTML} is not an easy task, partly because it is expected (although not required) of layout engines to be forgiving of errors, such as handling malformed \gls{HTML}.
         As \gls{CSS} and JavasScript are stricter, their grammar can be expressed in a formal syntax and can therefore be parsed with a context free grammar parser.
         Another big quirk to parsing \gls{HTML} is that it is reentrant that means that the source may change during parsing, see listing~\ref{code:reentrant-html}.
-        Script \glspl{element} are to be executed synchronously when it is occurred by the parser.
+        Script \glspl{element} are to be executed synchronously when encountered by the parser.
         If such script mutates the \gls{DOM}, then the parser will need to evaluate the changes made by the script and update the \gls{DOM} tree.
         External scripts need to be fetched in order to be executed, which halts the parsing unless the script \gls{element} states otherwise.
-        It should be noted that although \gls{DOM} nodes do include a \code{style} property, the nodes in the \gls{DOM} tree are not affected by the \gls{CSS} cascading, and the style properties do not represent the final style of the \gls{element}.
+        It should be noted that although \gls{DOM} nodes do include a \code{style} property, the nodes in the \gls{DOM} tree are not affected by the \gls{CSS} cascade, and the style properties do not represent the final style of the \gls{element}.
         Instead, for scripts to obtain the final computed style for an \gls{element} a special function needs to be called (\code{getComputedStyle} in \gls{JavaScript}).
         Since externally linked \gls{CSS} \glspl{document} do not directly affect the \gls{DOM} tree they could conceptually be fetched and parsed after the parsing of the \gls{HTML}.
         However, scripts can request the computed style of \gls{DOM} nodes and therefore either the parsing of \gls{HTML} needs to be halted in order to fetch and parse \gls{CSS} when needed, or the scripts accessing style properties of \gls{DOM} nodes need to be halted.
