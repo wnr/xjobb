@@ -1010,8 +1010,8 @@
         As long as these requirements are fulfilled, selector matching and style resolving can run in parallel for different \glspl{element}.
         The layout process can also be parallelized, since the layout process has been shown to be sub-tree independent for non-float \glspl{element} \cite{servo_parallel,servo_blog}.
         Siblings of the layout tree can be processed independently of each other (in the general case), and is suitable to parallelize with a work-stealing system.
-        \todo[color=green]{Marcos: Reference to work-stealing system?}
-        \todo{Reference http://supertech.csail.mit.edu/papers/steal.pdf?}
+        \todo[inline,color=green]{Marcos: Reference to work-stealing system?}
+        \todo[inline]{Reference http://supertech.csail.mit.edu/papers/steal.pdf?}
         
         \todo[inline]{Philipp: It would be very interesting to just shortly summarize typical performance gains due to parallelization.}
 
@@ -1088,16 +1088,17 @@ doubleWidths(elements); // ~7 ms
         See figure~\ref{fig:layout-thrashing-example-1-fixed} for a visualization of the execution of the batched example version.
         In the figure, it is clear that the layout engine is able to first execute the JavaScript, and later perform all style and layout computations in a batch.
         The total time spent on style calculations has been reduced to \textasciitilde2 ms, layout to \textasciitilde1.5 ms, and the actual script execution to \textasciitilde3.5 ms.
-        It should be noted that both versions recalculate styles for the same number of elements.
+        It should be noted that both versions recalculate styles for the same number of elements, from now on denoted by $n$.
         Pausing the JavaScript context and switching the layout engine to style computation causes an overhead cost, from now on denoted by the constant $O_{s}$.
-        The style calculation was reduced from \textasciitilde40 ms to \textasciitilde2 ms because the first version calculated the style of each element one at a time and therefore suffered from $nO_{s}$ in overhead, where $n$ is the number of elements.
-        Since the second version enabled the layout engine to calculate the style of all elements in a batch, the overhead was reduced to only $O_{s}$.
+        Let $C_{s}$ denote the time it takes for the layout engine to calculate the style of one element, then the total time needed for style computations in the first version is given by $T(n) = n(O_s + C_s)$.
+        Since the second version enabled the layout engine to calculate the style of all elements in a batch, the total time needed was reduced to $T(n) = nC_s + O_s$.
+        The style calculation was reduced from \textasciitilde40 ms to \textasciitilde2 ms because the second version avoids $n - 1$ ovhead costs.
         However, it should be noted that both versions have time complexity $O(n)$.
         
-        The major part of time reduction is due to the layout being significantly reduced.
-        The reason why the layout was significantly reduced is because the two version do not perform layout on the same amount of elements.
+        The major part of the time reduction is due to the layout time being significantly reduced.
+        The reason why the layout time was significantly reduced is because the two versions do not perform layout on the same amount of elements.
         When an element and its ancestors has been marked as dirty, a layout will need to be performed on the subtree which contains at least all $n$ elements and possibly some ancestor elements.
-        So the minimum number of nodes that will be need to be laid out is given by $n + n_{a}$, where $n_a$ is the number of ancestor elements.
+        So the minimum number of nodes that needs to be laid out is given by $n + n_{a}$, where $n_a$ is the number of ancestor elements.
         Since the first version forces the layout engine to perform a layout in each iteration, the minimum number of elements laid out is given by $n(n + n_a)$.
         Similar to style computation, performing a layout also has an overhead cost $O_{l}$.
         Let $C_{l}$ denote the time it takes for the layout engine to layout one element, then the total time needed for layout in the first version is given by $T(n) = n(O_{l} + C_{l}(n + n_a))$.
@@ -1111,7 +1112,6 @@ doubleWidths(elements); // ~7 ms
           \label{fig:layout-thrashing-example-1-fixed}
         \end{figure}
 
-        \todo[inline]{Have a T(n) function for style computations aswell?}
         \todo[inline]{Analyze the numbers to give some rough numbers on overhead and cost times?}
         \todo[inline]{Explain that $n_a$ is not a parameter to the T function?}
         \todo[inline]{Refer to some section in the appendix for how to read the timeline images?}
