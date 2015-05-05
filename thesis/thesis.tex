@@ -662,7 +662,7 @@
         The ever so popular frameworks \emph{Angular}, \emph{Backbone}, \emph{Ember}, \emph{Web Components}, \emph{Requirejs}, \emph{Browserify}, \emph{Polymer}, \emph{React} and many more all have in common that they embrace coding modular components.
         Many of these frameworks also help with dividing the \gls{HTML} up into modules, creating small packages of style, markup and code.
 
-        A big challenge to software development is to be able to write software that is reliable (i.e. should not have bugs) and easy to change.
+        A big challenge to software development is to be able to write software that is reliable (i.e., should not have bugs) and easy to change.
         What keeps developers from producing such software is often complexity, which hinders developers from reasoning about the software.
         The word ``complex'' can be defined as \emph{something consisting of interconnected or intertwined parts}.
         A quote from Rich Hickey:
@@ -671,7 +671,7 @@
           That's the nature of them being intertwined. So every intertwining is adding this burden, and the burden is kind of combinatorial as to the number of things that we can consider.
           So, fundamentally, this complexity, and by complexity I mean this braiding together of things, is going to limit our ability to understand our systems.
         \end{quote}
-        By separating the software into well defined parts (i.e. modules) that has a single responsibility and ideally performs a single task, complexity can be reduced.
+        By separating the software into well defined parts (i.e., modules) that has a single responsibility and ideally performs a single task, complexity can be reduced.
         Of course, splitting software up into modules alone does not help reducing complexity.
         The modules also need to be self-contained, which means that they work by themselved and do not require the user of the module to write its logic.
         Modules should also be loosely coupled, and may not make any assumptions about the context they will be used in.
@@ -891,7 +891,7 @@
         Inline \gls{CSS} does not cascade since all rules given are automatically matched with the \gls{element} of the style attribute.
         However, inline \gls{CSS} is considered with highest possible specificity when performing the style cascade.
         It is important to note that the styling methods number five and six are conceptually the same, since they both alter the style property of the \gls{DOM} representation of the \gls{element}.
-        The last item method deprecated, and all styles applied this way are weighted as low as possible.
+        Using special style attributes is deprecated, and all styles applied this way are weighted as low as possible.
 
         If the cascade results in no value for an \gls{element} style property, then the property can \emph{inherit} a value or have an initial value defined by the \gls{CSS} \emph{property definition}.
         Property definitions describe how the style properties should behave, see table~\ref{table:css_property_definition} for the format of property definitions.
@@ -925,7 +925,7 @@
 
       \section{The layout process}\label{sec:layout-process}
         \begin{metatext}
-          When the \gls{render tree} has been constructed and the style properties has been resolved for all nodes, it is time to perform the actual layout.
+          When the \gls{render tree} has been constructed, and the style properties have been resolved for all nodes, it is time to perform the actual layout.
           The layout process will decide the final computed style of all \glspl{element}, and needs to be done before rendering.
           This section will describe the layout process, discuss some performance aspects and show examples when layout happens.
           This section is mainly based on \normalfont{\cite{garsiel2011browsers}}.
@@ -985,7 +985,7 @@
         \todo{Write that many cores is preferred over high clock speed? Why?}
         It has been shown that the performance of mobile \glspl{browser} is \gls{CPU} bound contrary to the common belief that they are network bandwidth bound \cite{parallelizing_the_web_browser}.
         This is why many researchers target light devices when trying to parallelize \gls{web} \glspl{browser}.
-        Of course, once the methods has matured and been implemented, desktop layout engines will benefit from parallelization as well.
+        Of course, once the methods have matured and been implemented, desktop layout engines will benefit from parallelization as well.
 
         \gls{CSS} selector matching is a good candidate for parallelization, due to matching nodes to selectors being independent from other selector matches.
         A successful parallelization of selector matching has been achieved with locality-aware task parallelism \cite{parallelizing_the_web_browser}.
@@ -993,7 +993,9 @@
         It is possible to resolve \gls{element} styles in parallel as long as two requirements are fulfilled: the matching task must have finished for the \gls{element} to resolve styles for, and the parent \gls{element} must have resolved all styles (since the \gls{element} might inherit some styles from the parent).
         As long as these requirements are fulfilled, selector matching and style resolving can run in parallel for different \glspl{element}.
         The layout process can also be parallelized, since the layout process has been shown to be sub-tree independent for non-float \glspl{element} \cite{servo_parallel,servo_blog}.
-        Siblings of the layout tree can be processed independently of each other (in the general case), and is suitable to parallelize with a work stealing system.
+        Siblings of the layout tree can be processed independently of each other (in the general case), and is suitable to parallelize with a work-stealing system.
+        \todo[color=green]{Marcos: Reference to work-stealing system?}
+        \todo{Reference http://supertech.csail.mit.edu/papers/steal.pdf?}
         
         \todo[inline]{Philipp: It would be very interesting to just shortly summarize typical performance gains due to parallelization.}
 
@@ -1108,6 +1110,7 @@ doubleWidths(elements); // ~7 ms
       \todo[inline]{Describe a common use case? The thesis talks about "the common/general use case" a lot, but never really defines what that is.}
 
       Recall from section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} respond to size changes.
+      \todo[color=green]{Marcos: Maybe embellish that bit... "...respond to size change, so that a document may be usable on many screen sizes, resolutions, pixel-densities, and media." or something like that.}
       \Gls{responsive} \gls{web} design implements this by using \gls{media queries}, applying conditional rules with relation to the \gls{viewport} size.
       In section~\ref{sec:modularity} the desire for building modular \gls{web} components was presented.
       One positive outcome of building applications in a modular way is that general components become reusable.
@@ -1116,6 +1119,8 @@ doubleWidths(elements); // ~7 ms
       So developers today have two choices: writing modules that are not \gls{responsive} but \gls{self-contained}, or writing modules that are \gls{responsive} but not \gls{self-contained} (leaving the styling to the user).
 
       The solution to this is element queries, which allows conditional rules to be applied based on any criteria for any \gls{element}.
+      \todo[color=green]{Marcos: Maybe say, "One solution to this is element queries". It might turn out that there is some other solution.}
+      \todo{Waiting for response from Marcos regarding this.}
       Figure~\ref{fig:mq-vs-eq} shows the problem with \gls{media queries} and the element query solution.
       The typical use case is to write conditional styles to be applied based on the container \gls{element} size.
       Although the size of the container \gls{element} is typically the most interesting element query with \gls{responsive} \gls{web} design, element queries as a concept does not need to be limited to that.
@@ -1146,6 +1151,8 @@ doubleWidths(elements); // ~7 ms
       \section{Problems}
         \begin{metatext}
           The main reason why element queries have not been implemented \glslink{native}{natively} in \glspl{browser} is because they bring problems and limitations to the \glspl{browser}.
+          \todo[color=green]{Marcos: You would need a citation here. Also, I don't think the above is true. We (browsers) haven't seen that much demand for this until recently... and even still, it's not super high on the list of priorities.}
+          \todo{Waiting for response}
           It is important to understand the problems in order to speculate about a potential \gls{native} \gls{API} design.
           In this section the two major problems will be presented; performance and circularity.
         \end{metatext}
@@ -1160,14 +1167,16 @@ doubleWidths(elements); // ~7 ms
           \end{metatext}
 
           Recall from section~\ref{sec:layout-process} that the rectangle size and position for each \gls{element} is calculated in the layout process, and cannot be determined before an actual layout has happened.
-          This imposes that a layout pass needs to be performed before knowing the \gls{element} sizes.
+          This imposes that a layout pass needs to be performed before knowing the \gls{element}'s sizes.
+          \todo[color=green]{Marcos: sizes -> dimensions}
+          \todo{Waiting for response}
           If element queries are present that rely on the size of \glspl{element}, which is the identified common use case, the following process needs to happen:
           \begin{enumerate}
             \item A layout pass needs to be performed in order to calculate the size of the \glspl{element} targeted by element queries.
             \item The element query conditional rules need to be evaluated against the \glspl{element} to know which rules should be applied (element query selector matching).
             \item If the element query selector matching has resulted in a different matching set than in step 1, the process is repeated (with the new rules applied).
           \end{enumerate}
-          So, an element query selector matching change result in performing another layout, discarding at least a subtree of the previous layout.
+          So, element query selector matching changes result in performing another layout, which discards at least a subtree of the previous layout.
           As already stated, this only occurs when the layout has changed in a way that changes the element query selectors.
           Unfortunately, this means that if there is any matching element query selector at page load, two layout passes will always be performed.
 
@@ -1218,8 +1227,8 @@ doubleWidths(elements); // ~7 ms
           \end{enumerate}
           Clearly, the \gls{browser} will be stuck in an infinite layout cycle pending back and forth between step 2 and 3 (250 pixels and 550 pixels).
           The result of this is of course implementation dependent.
-          One reasonable outcome of such infinite layout loop is that the \gls{layout engine} executes one layout pass and then evaluate the next set of matched selectors and so on, which leads to a functioning page but since a relayout is enforced every update, the performance impact is huge.
-          This example is somewhat similar to writing \code{while(true);} in \gls{JavaScript}, which obviously is a bad idea.
+          One reasonable outcome of such infinite layout loop is that the \gls{layout engine} executes one layout pass and then evaluate the next set of matched selectors and so on, which leads to a functioning page but since a relayout is enforced every update, the performance impact is significant.
+          This example is somewhat similar to writing \code{while(true);} outside the scope of a generator function in JavaScript (i.e., it just locks up the main thread), which obviously is a bad idea.
           However, cyclic rules can also occur in less obvious ways. 
 
           Indirect cyclic rules are somewhat more complex to reason about, than the example given above (which is an example of direct cyclic rules).
@@ -1259,12 +1268,12 @@ doubleWidths(elements); // ~7 ms
   width: 250px;
 }
           \end{lstlisting}
-          What makes this situation more complex than the previous example is that it is less obvious for the devloper to identify that there are cyclic rules.
+          What makes this situation more complex than the previous example is that it is less obvious for the developer to identify that there are cyclic rules.
           First, the problem cannot be found without considering the rule sets of both the module and the \code{\#foo} element.
           Second, the rules of the module elements and the rules of the \code{\#foo} \gls{element} might be separated into different parts of the stylesheet or different stylesheets.
-          Third, the user of the module must be aware of how it styles itself in order to understaind the limitations it imposes.
-          By adding adding one line to the containg element \code{\#foo} a cycle appears in another part of the program (in the module).
-          A \gls{JavaScript} quivalent of this example would perhaps be \code{var bar = true; while(bar);} with the motivation that it is still obvious that it results in an infinite loop but both the loop and the variable needs to be considered.
+          Third, the user of the module must be aware of how it styles itself in order to understand the limitations it imposes.
+          By adding one line to the containg element \code{\#foo} a cycle appears in another part of the program (in the module).
+          A \gls{JavaScript} equivalent of this example would perhaps be \code{var bar = true; while(bar);} with the motivation that it is still obvious that it results in an infinite loop but both the loop and the variable needs to be considered.
           Also, the variable assignment could happen in another part of the program.
 
           The examples given so far have been simple, and can easily be identified as cyclic by reviewing the \gls{CSS} code.
@@ -1299,7 +1308,7 @@ doubleWidths(elements); // ~7 ms
             \item \textbf{The inherited font size of the \gls{element}}
             \item \textbf{The content of the \gls{element}}
           \end{itemize}
-          The factors in bold are of a far worse character than the other ones presented, since they may depend on runtime actions and values.
+          The factors in bold are worst than the other ones presented, since they may depend on runtime actions and values.
           In this example the text is static but it could have been added dynamically.
           Also, the inherited font size value depends on the closest ancestor with a font size property defined.
           Since ancestors can have their font sizes defined in relative units, the dependency tree can go up to the root of the \gls{document}.
@@ -1322,16 +1331,16 @@ doubleWidths(elements); // ~7 ms
           The second approach is to provide element queries as a third-party framework which operates element queries on top of the layout engine (in JavaScript).
           Although not a solution to the native problems, it still provides functioning unrestricted element queries while not hindering parallelization of layout engines.
           However, this approach does not solve the problem of cyclic rules.
-          The different solution approaches either limits element queries in some way or solves only a subproblem, so no perfect solution that keeps element queries unlimited with decent performance and low complexity has been found.
+          The different solution approaches either limits element queries in some way or solves only a subproblem, so no perfect solution that hinders element queries unlimited with decent performance and low complexity has been found.
           The subsection is mainly based on \normalfont{\cite{w3c_eq_mail,ricg_irc_log,ricg_issue_viewport,w3c_css21}}.
         \end{metatext}
 
-        By limiting element queries to special \gls{viewport} container \glspl{element} that can only be queried by child \glspl{element}, much of the problems are resolved.
+        By limiting element queries to special \gls{viewport} container \glspl{element} that can only be queried by child \glspl{element}, many of the problems are resolved.
         This means that a new \gls{HTML} tag would be crafted (perhaps named \code{viewport}) that defines separated \glspl{viewport} in the \gls{document}.
         In order to avoid cyclic rules, the following limitations to the \code{viewport} would be defined:
         \begin{enumerate}
-          \item\label{viewport-rule-1} The size of the \gls{element} may not be dependent on its children. This implies that all \gls{CSS} that causes the \gls{element} to be shrinked to fit the content are invalid.
-          \item\label{viewport-rule-2} The selector may only include the \code{viewport} \gls{element} targeted by element queries as a part of the expression of an selector (not the right-most simple selector).
+          \item\label{viewport-rule-1} The size of the \gls{element} may not be dependent on its children. This implies that all \gls{CSS} that causes the \gls{element} to be shrunken to fit the content are invalid.
+          \item\label{viewport-rule-2} The selector may only include the \code{viewport} \gls{element} targeted by element queries as a part of the expression of a selector (not the right-most simple selector).
           \item\label{viewport-rule-3} Only the nearest \code{viewport} ancestor of the right-most simple selector may be targeted for element queries in selectors.
         \end{enumerate}
         See listing~\ref{code:viewport-selectors} for examples of valid and invalid CSS selectors according to the rules defined above.
@@ -1382,8 +1391,8 @@ viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
         This is a powerful insight, since the general use case would be to write element queries against the width and have the \glspl{element} adapt their heights accordingly (including the \gls{viewport} \gls{element}).
         \todo[inline]{Maybe note seamless iframe in theory works in the same way. But would it be relevant?}
 
-        Another approach to enable element queries for developer is to provide a \gls{third-party} \gls{JavaScript} framework.
-        Since a \gls{JavaScript} framework do no depend on \glspl{layout engine} vendors (other than features in the current langauge specifications) it can therefore designed in any desired way.
+        Another approach to enable element queries for developers is to provide a \gls{third-party} \gls{JavaScript} framework.
+        Since a \gls{JavaScript} framework do not depend on vendors of \glspl{layout engine} (other than features in the current language specifications) it can therefore be designed in any desired way.
         It would be more feasible to have unrestricted element queries in a \gls{JavaScript} framework, than implementing it natively.
         Since the element queries feature would be operated by the framework, \glspl{layout engine} can be parallelized unhindered and independently of how the framework handles the queries.
         Similar, cycle detection and handling can be handled on top of the \gls{layout engine} by the framework.
@@ -1740,7 +1749,7 @@ var myPluginInstance = elq.getPlugin(myPlugin);
 elq.getPlugin("my-plugin") === myPluginInstance; // true
           \end{lstlisting}
 
-          When the desired plugins have been registered to the \abbr{elq} instance, it is time to apply the framework to the target \glspl{element} (i.e. the elements that will be queried for conditional styles).
+          When the desired plugins have been registered to the \abbr{elq} instance, it is time to apply the framework to the target \glspl{element} (i.e., the elements that will be queried for conditional styles).
           This is done with the \code{start} method which requires a collection of \glspl{element} as a parameter.
           When called, it will invoke all \code{start} methods on all registered plugins which gives them the opportunity to initiate the \glspl{element} according to their own mechanisms.
           To satisfy the requirements \ref{itm:natural} and \ref{itm:assumption} the function is agnostic about the \glspl{element} collection --- all objects that are iterable and contains \glspl{element} are accepted.
@@ -1766,7 +1775,7 @@ elq.start(jqueryElementsCollection);
         \subsection{Plugin API}
           The plugin \gls{API} is a superset of the public \gls{API}.
           Plugins have additional direct access to most core subsystems presented in section~\ref{sec:arcithecture}.
-          The plugin \gls{API} access is given to a plugin when it is registered (i.e. when the \abbr{elq} instance invokes the \code{make} function of the plugin definition).
+          The plugin \gls{API} access is given to a plugin when it is registered (i.e., when the \abbr{elq} instance invokes the \code{make} function of the plugin definition).
           Recall from subsection~\ref{sec:public-api} that the \code{make} function of the plugin definition is given two parameters at invokation; \code{elq} and \code{options}.
           The first parameter is a reference to the \abbr{ELQ} instance (to which the plugin was registered) extended with the plugin \gls{API}.
           Direct access is given to the following core subsystems:
@@ -1786,7 +1795,7 @@ elq.start(jqueryElementsCollection);
           To do so, it requires two parameters; the element that the update should be applied to, and the state update itself.
           A third time parameter, that tells when the update was requested, is optional and will default to the time of the method call.
 
-          Instead of having a single \glslink{batch processing}{batch processor} instance shared among all framework entities (i.e. core subsystems and plugins), each entity has to create an own instance.
+          Instead of having a single \glslink{batch processing}{batch processor} instance shared among all framework entities (i.e., core subsystems and plugins), each entity has to create an own instance.
           This to avoid entities interfering with each other while performing \gls{batch processing}.
           For example, some entities might want to force the \glslink{batch processing}{batch} to process at a point where it would be beneficial for other entities to delay the \glslink{batch processing}{batch}.
           The \code{createBatchProcessor} accepts an optional options object parameter and returns a \glslink{batch processing}{batch processor} instance that has two methods; \code{add} and \code{force}.
