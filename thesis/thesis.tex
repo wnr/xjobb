@@ -1423,7 +1423,6 @@
 
       \subsection{Public API}\label{sec:public-api}
         \todo[inline]{Write how to install it. AMD, script, commonjs, etc.}
-        \todo[inline]{Move getPlugin to Plugin API and make use return the plugin instance}
 
         In section~\ref{sec:techincal-goals} it was determined that advanced users must be able to change the subsystems used in the core.
         Therefore no global framework instance will be instantiated automatically on load.
@@ -1440,20 +1439,20 @@
           var customCycleDetector = ...;
           var customReporter = ...;
           var elq2 = new Elq({
-          reporter: customReporter,
+            reporter: customReporter,
             cycleDetector: customCycleDetector
           });
         \end{lstlisting}
 
         The next step after that an instance has been created is to register the plugins to be used by the instance.
-        There are three methods for handling plugins; \code{use}, \code{using} and \code{getPlugin}.
+        There are two methods for handling plugins: \code{use} and \code{using}.
         The \code{use} method registers a plugin to be used by the framework.
         It is responsible for controlling that plugins do not conflict with each other and that plugins are initiated correctly with the framework instance.
         The method requires a \emph{plugin object} and accepts an optional options object parameter.
+        When called, it will create a plugin instance and return it.
         A plugin object acts as a plugin definition and is responsible for describing a plugin and providing a function to create a plugin instance.
         The \code{using} method requires an \emph{plugin identifier} as parameter and tells if the given plugin is being used (has been reigstered) by the instance or not.
         A plugin identifier can either be the plugin object or the name of the plugin.
-        The \code{getPlugin} method requires a plugin identifier and returns the plugin instance being used by the \abbr{elq} instance that matches the plugin identifier.
         See listing~\ref{code:plugin-object} for details about the plugin object and how it is used with the three methods for handling plugins.
 
         \begin{lstlisting}[gobble=10,caption={Plugin object definition and examples of handling plugins.},captionpos=b,label={code:plugin-object}]]
@@ -1480,11 +1479,14 @@
           };
 
           // Tell the elq instance to use myPlugin with default options.
-          elq.use(myPlugin);
+          var myPluginInstance1 = elq.use(myPlugin);
 
           // Tell the elq2 instance to use myPlugin with custom options.
           var options = {...};
-          elq2.use(myPlugin, options);
+          var myPluginInstance2 = elq2.use(myPlugin, options);
+
+          // The plugin instances are not equal since they have been initated to different elq instances.
+          myPluginInstance1 !== myPluginInstance2 // -> true
 
           // Check if the plugin is being used.
           elq.using(myPlugin); // true
@@ -1494,12 +1496,6 @@
 
           // Plugins not being used by the instance returns false.
           elq.using("other-plugin"); // false
-
-          // It is possible to get the plugin instance.
-          var myPluginInstance = elq.getPlugin(myPlugin);
-
-          // Also by name.
-          elq.getPlugin("my-plugin") === myPluginInstance; // true
         \end{lstlisting}
 
         When the desired plugins have been registered to the \abbr{elq} instance, it is time to apply the framework to the target \glspl{element} (i.e., the elements that will be queried for conditional styles).
@@ -1518,7 +1514,6 @@
           var singleElement2 = document.getElementById("...");
           elq.start([singleElement, singleElement2]);
 
-
           // Initiating the framework to multiple elements using
           // third-party libraries (in this case jQuery).
           var jqueryElementsCollection = $("...");
@@ -1526,6 +1521,8 @@
         \end{lstlisting}
 
       \subsection{Plugin API}
+        %The \code{getPlugin} method requires a plugin identifier and returns the plugin instance being used by the \abbr{elq} instance that matches the plugin identifier.
+
         The plugin \gls{API} is a superset of the public \gls{API}.
         Plugins have additional direct access to most core subsystems presented in section~\ref{sec:arcithecture}.
         The plugin \gls{API} access is given to a plugin when it is registered (i.e., when the \abbr{elq} instance invokes the \code{make} function of the plugin definition).
