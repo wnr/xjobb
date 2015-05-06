@@ -1217,7 +1217,7 @@
         /* invalid, violates rule (*@\ref{viewport-rule-2}@*) */
         p viewport:eq(width > 500px) { ... }
 
-        /* invaid, violates rule (*@\ref{viewport-rule-3}@*) */
+        /* invalid, violates rule (*@\ref{viewport-rule-3}@*) */
         viewport:eq(width > 1000) viewport:eq(width > 500px) p { ... }
 
         /* invalid, violates rule (*@\ref{viewport-rule-3}@*) */
@@ -1634,25 +1634,11 @@
               font-size: 15px;
             }
 
-            #target.elq-width-below-300 {
-              font-size: 10px;
-            }
-
-            #target.elq-width-above-300 {
-              color: red;
-            }
-
-            #target.elq-width-above-500 {
-              font-size: 20px;
-            }
-
-            #target.elq-width-above-500 p {
-              padding: 10px;
-            }
-
-            #target.elq-width-below-500 p {
-              padding: 5px;
-            }
+            #target.elq-width-below-300   { font-size: 10px;  }
+            #target.elq-width-above-300   { color: red;       }
+            #target.elq-width-above-500   { font-size: 20px;  }
+            #target.elq-width-above-500 p { padding: 10px;    }
+            #target.elq-width-below-500 p { padding: 5px;     }
           \end{lstlisting}
           In this example it is shown that elements can be conditionally styled depending on their own sizes.
           Additionally, children can be styled by stating the target element size state as the left-most selector.
@@ -1662,11 +1648,67 @@
           \todo[inline]{How about elements that want to write element queries against a child? CSS cant go upwards, but might be supported in the future. See \url{http://dev.w3.org/csswg/selectors-4/\#relational}. This could be supported with an extended version of mirror that doesn't only go upwards.}
           \todo[inline]{Write about HTML compatability with data- prefix and empty attributes.}
           \todo[inline]{Example of how to register the plugin with an elq instance + options?a }
+          \todo[inline]{Change above/below to >=/<=}
         \subsubsection{Mirror}
           This plugin is needed as an addition to the \code{elq-breakpoints} plugin in some cases due to limitations of CSS.
           As of the \gls{CSS3} specification, there is no way to select ancestor elements of an element.
           For instance, \code{p img} is a selector that matches all image elements that are contained by a paragraph.
           However, it is not possible to construct a selector that matches all paragraphs that contains images.
+          The \code{elq-mirror} plugin overcome these limitations by mirroring the breakpoint classes of an \code{elq-breakpoints} element.
+          Suppose that it is desired for an application to style all paragraph elements differently by the size of the nearest element with a \code{container} class.
+          Paragraphs may appear nested in other elements, that may be generated dynamically at run time.
+          Therefore, the structure of the application is not known when writing the style code, so no assumptions can be done about the markup structure.
+          Consider the example markup given in listing~\ref{code:elq-mirror-example} for an example markup structure.
+          It should be noted that the \code{container} elements may be styled in any way (e.g., the widths of the inner container elements could be relative to the outer container element).
+          \begin{lstlisting}[gobble=12,caption={},captionpos=b,label={code:elq-mirror-example}]]
+            <div class="container" elq elq-breakpoints elq-breakpoints-width="300 500">
+              <div>
+                <p>Paragraph 1</p>
+              </div>
+
+              <div class="container" elq elq-breakpoints elq-breakpoints-width="300 500">
+                <p>Paragraph 2</p>
+              </div>
+              <div class="container" elq elq-breakpoints elq-breakpoints-width="300 500">
+                <p>Paragraph 3</p>
+              </div>
+            </div>
+          \end{lstlisting}
+          A naive approach to applying conditional styles for the paragraph elements would be using the selector structure given in listing~\ref{code:elq-mirror-example-cont}.
+          \begin{lstlisting}[gobble=12,caption={},captionpos=b,label={code:elq-mirror-example-cont}]]
+            .container p                      { background-color: red;    }
+            .container.elq-width-above-300 p  { background-color: yellow; }
+            .container.elq-width-above-500 p  { background-color: green;  }
+          \end{lstlisting}
+          The problem with this is that the selectors states that all paragraphs that are children of \emph{any} container should be styled in some way.
+          So if the outer container element is 600 pixels wide and the inner containers are 200 pixels wide, all paragraphs would be colored green.
+          In this particular case, the desired behavior is that the first paragraph is colored green and the two inner paragraphs colored red.
+          By using the \code{elq-mirror} plugin, the correct behavior can be achieved.
+          Elements are initiated to mirror elements by adding attributes in the same way like with the \code{elq-breakpoints} plugin.
+          The mirror elements will then match the \code{elq-breakpoints} classes of the nearest ancestor that has the \code{elq-breakpoints} attribute.
+          % If no such ancestor is found, the document root will be mirrored instead. //TODO: Have this?
+          \begin{lstlisting}[gobble=12,caption={},captionpos=b,label={code:elq-mirror-example-cont-2}]]
+            /* HTML */
+            <div class="container" elq elq-breakpoints elq-breakpoints-width="300 500">
+              <div>
+                <p elq elq-mirror>Paragraph 1</p>
+              </div>
+
+              <div class="container" elq elq-breakpoints elq-breakpoints-width="300 500">
+                <p elq elq-mirror>Paragraph 2</p>
+              </div>
+              <div class="container" elq elq-breakpoints elq-breakpoints-width="300 500">
+                <p elq elq-mirror>Paragraph 3</p>
+              </div>
+            </div>
+
+            /* CSS */
+            .container p                      { background-color: red;    }
+            .container p.elq-width-above-300  { background-color: yellow; }
+            .container p.elq-width-above-500  { background-color: green;  }
+          \end{lstlisting}
+          Notice that the breakpoint classes now are used in conjunction with the paragraph element instead of the container element.
+          Now, the conditional styles will be applied to all paragraphs that are children of containers; with the size criterion being relative to the nearest ancestor container.
 
         \subsubsection{Prolyfill}
 
