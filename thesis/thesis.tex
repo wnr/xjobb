@@ -337,22 +337,22 @@
     \section{Outline}
       \todo[inline]{This is now totally outdated.}
 
-      This thesis is divided into four parts. The first part \emph{\ref{ch:background}~\nameref{ch:background}} presents some history of the \gls{web} platform and describes concepts needed to understand the problem.
-      The background part starts with the history of \glspl{browser} and information about market share between them followed by a brief history of the evolution of \gls{web} development.
-      After that, the \gls{responsive} \gls{web} design concept will be described along with why modularity is important in software development.
-      \todo[inline]{This is now invalid, since much of this has moved to the appendix.}
+      % This thesis is divided into four parts. The first part \emph{\ref{ch:background}~\nameref{ch:background}} presents some history of the \gls{web} platform and describes concepts needed to understand the problem.
+      % The background part starts with the history of \glspl{browser} and information about market share between them followed by a brief history of the evolution of \gls{web} development.
+      % After that, the \gls{responsive} \gls{web} design concept will be described along with why modularity is important in software development.
+      % \todo[inline]{This is now invalid, since much of this has moved to the appendix.}
 
-      The second part \emph{\ref{part:theory}~\nameref{part:theory}} presents theoretizations of the problem.
-      It starts with describing a reference architecture of \glspl{layout engine} and the parts of \glspl{layout engine} that directly affects element queries will be described in detail.
-      Here it will also be presented why element queries impose problems to \glspl{layout engine} on a theoretical level.
-      After that, a full description of element queries as a concept and a more in depth analysis of the problems will be given.
-      Possible solutions to the given problems will also be presented followed by a fictional native \gls{API} description based on probable design decisions.
+      % The second part \emph{\ref{part:theory}~\nameref{part:theory}} presents theoretizations of the problem.
+      % It starts with describing a reference architecture of \glspl{layout engine} and the parts of \glspl{layout engine} that directly affects element queries will be described in detail.
+      % Here it will also be presented why element queries impose problems to \glspl{layout engine} on a theoretical level.
+      % After that, a full description of element queries as a concept and a more in depth analysis of the problems will be given.
+      % Possible solutions to the given problems will also be presented followed by a fictional native \gls{API} description based on probable design decisions.
 
-      The third part \emph{\ref{part:framework}~\nameref{part:framework}} presents the design and implementation of the solution as a \gls{third-party} framework.
-      Here possible approaches to solving the problem will be presented.
-      Other implementations and solutions will be described and analyzed followed by a motivation of the chosen approach for the framework.
-      Identified technical requirements will be given in order to motivate the framework architecture and \gls{API} design.
-      After that, interesting parts of the implementation will be presented.\todo{Maybe flesh this one out as it has been written.}
+      % The third part \emph{\ref{part:framework}~\nameref{part:framework}} presents the design and implementation of the solution as a \gls{third-party} framework.
+      % Here possible approaches to solving the problem will be presented.
+      % Other implementations and solutions will be described and analyzed followed by a motivation of the chosen approach for the framework.
+      % Identified technical requirements will be given in order to motivate the framework architecture and \gls{API} design.
+      % After that, interesting parts of the implementation will be presented.\todo{Maybe flesh this one out as it has been written.}
 
       \todo[inline]{Finish the Outline when the other parts have been written.}
 
@@ -365,17 +365,15 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Web development}
       \begin{metatext}
-        \todo{This meta is now outdated.}
-        As the history of \glspl{browser} has been presented, it is time to understand the evolution of \gls{web} development.
         Browsers are the far most popular tools for accessing content on the \gls{web}, which makes them very important in the modern society.
         In the dawn of the \gls{web}, \glspl{browser} were simply applications that fetched and displayed text with embedded links.
         Today, \glspl{browser} act more like an operating system (on top of the host system) executing complex \gls{web} applications.
         There even exist computers that only run a \gls{browser}, which is sufficient for many users.
-        This chapter will describe the transition from \glspl{browser} rendering simple \glspl{document} to being hosts for complex applications.
+        This section will describe the transition from \glspl{browser} rendering simple \glspl{document} to being hosts for complex applications.
         It will also describe two key evolution points in \gls{web} development --- \gls{responsive} \gls{web} design and modular development.
       \end{metatext}
 
-      \todo{What to write here?}
+      \todo[inline,color=red]{Tomas: Write what will be presented here, who should read it and why.}
       \todo[inline]{Philipp: Here you should provide an overview of the different sections of the chapter. “In section 3.1 we outline… In section 3.2 we…}
       \subsection{From documents to applications}
         \begin{metatext}
@@ -384,7 +382,7 @@
           This section is a summary of \normalfont{\cite{wiki_web_dev,wiki_cgi,wiki_css,wiki_ajax,wiki_html5,book_html5}}.
         \end{metatext}
 
-        As described in section~\ref{sec:www}, \glspl{browser} initially were applications that displayed \gls{hypertext} \glspl{document} with the ability to fetch linked \glspl{document} in an user friendly way.
+        As further described in section~\ref{sec:www} of the appendix, \glspl{browser} were initially applications that displayed \gls{hypertext} \glspl{document} with the ability to fetch linked \glspl{document} in an user friendly way.
         Static content was written in \gls{HTML}, which could include hyperlinks to other \gls{hypertext} \glspl{document} or hypermedia.
         Different stylesheet languages were being developed to enable the possibility of separating content styling with the content.
         In 1996 the \gls{W3C} officially recommended \gls{CSS}, which came to be the preferred way of styling \gls{web} content.
@@ -534,13 +532,14 @@
       \begin{metatext}
         Before diving into the theory of element queries, it is important to understand how \glspl{layout engine} work.
         Only the \gls{layout engine} of the \gls{browser} will be of importance, since element queries do not affect any other \gls{browser} subsystem.
-        This chapter will give a brief explanation of the layout flow that the engines generally perform.
+        This section will give a brief explanation of the layout flow that the engines generally perform.
         It will also cover some optimizations that are done and which parts of the layout process that can be done in parallel.
         The render process will not be described, as it is not relevant for element queries.
-        This chapter is mainly based on \normalfont{\cite{browser_architecture,garsiel2011browsers}}.
+        This section is mainly based on \normalfont{\cite{browser_architecture,garsiel2011browsers}}.
       \end{metatext}
       \todo[inline]{Have an image about the layout flow somewhere?}
       \todo[inline,color=green]{Marcos: The reference architecture could be outdated since the source is very old. The XML subsystem is hardly interesting anymore.}
+      \todo[inline]{Maybe move this content to an own subsection and instead write a text about why this section is here, what the goal is (to understand parallelization and layout thrashing), etc.}
       \noindent
       Browsers are complex applications that consist of many subsystems.
       A reference architecture of \glspl{browser} has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
@@ -1012,10 +1011,10 @@
       \todo{What to write here?}
       \subsection{Performance}
         \begin{metatext}
-          This subsection will present the performance impacts that element queries have on \glspl{layout engine}.
+          This section will present the performance impacts that element queries have on \glspl{layout engine}.
           As shown in section~\ref{sec:parallel} \gls{layout engine} vendors are interested in parallelizing their engines to increase the page performance.
-          Element queries limits the parallelization, which will be the focus of this subsection.
-          This subsection is partly based on \normalfont{\cite{w3c_eq_mail}}.
+          Element queries limits the parallelization, which will be the focus of this section.
+          This section is partly based on \normalfont{\cite{w3c_eq_mail}}.
         \end{metatext}
 
         Recall from section~\ref{sec:layout-process} that the rectangle size and position for each \gls{element} is calculated in the layout process, and cannot be determined before an actual layout has happened.
@@ -1040,7 +1039,7 @@
 
       \subsection{Circularity}\label{sec:cyclic-rules}
         \begin{metatext}
-          This subsection will show how cyclic rules may occur and why it is a problem.
+          This section will show how cyclic rules may occur and why it is a problem.
           It will also be presented why cyclic rules must be detected at runtime.
           Some examples will be given to better understand the complexity of the problem.
         \end{metatext}
@@ -1187,7 +1186,7 @@
         Although not a solution to the native problems, it still provides functioning unrestricted element queries while not hindering parallelization of layout engines.
         However, this approach does not solve the problem of cyclic rules.
         The different solution approaches either limits element queries in some way or solves only a subproblem, so no perfect solution that hinders element queries unlimited with decent performance and low complexity has been found.
-        The subsection is mainly based on \normalfont{\cite{w3c_eq_mail,ricg_irc_log,ricg_issue_viewport,w3c_css21}}.
+        The section is mainly based on \normalfont{\cite{w3c_eq_mail,ricg_irc_log,ricg_issue_viewport,w3c_css21}}.
       \end{metatext}
 
       By limiting element queries to special \gls{viewport} container \glspl{element} that can only be queried by child \glspl{element}, many of the problems are resolved.
@@ -1291,6 +1290,7 @@
   \chapter{State of the Art}\label{ch:state-of-the-art}
     \todo[inline]{Write meta.}
     \todo[inline]{Write about media query CSS approach as an approach?}
+    \todo[inline,color=red]{Tomas: Move this to later part of thesis to start talking about my own work directly?}
 
     There are numerous implementations of third-party element query frameworks. This chapter will list and analyze them.
     Since many of them share the same characteristics, they will be classified and each class will be analyzed as a group.
