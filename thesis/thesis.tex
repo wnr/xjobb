@@ -221,7 +221,6 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Introduction
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{Introduction}
-    \todo[inline]{Container or parent element? Using both now.}
     \todo[inline]{Write about the targeted browser compatibility. Started writing about this but put it on hold in the appendix.}
     \todo[inline,color=red]{Tomas: Show which cite's are used for which parts of the sections better. Could still be done in the metatext by just describing what the cited resource address. Or perhaps just citing the resource again where neccesary in the text.}
     \todo[inline,color=red]{Tomas: Don't think that the intro should be so "selling", write about what "will" be done and hypothesis and such. Write instead what "have" been done, what you have personally done and stuff like that.}
@@ -360,7 +359,7 @@
       \todo{Write that~\ref{sec:parallel} will be needed to understand the problems of element queries?}
       The chapter ends with section~\ref{sec:layout-thrashing} that defines layout thrashing and shows how it can be avoided.
       \todo{Write that~\ref{sec:layout-thrashing} will be extensively referenced from implementation chapter?}
-      Expert readers may want to skip directly to chapter\ref{chp:eq} where element queries is described.
+      Expert readers may want to skip directly to chapter~\ref{chp:eq} where element queries is described.
     \end{metatext}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -530,9 +529,9 @@
       \begin{metatext}
         Before diving into the theory of element queries, it is important to understand how \glspl{layout engine} work.
         Only the \gls{layout engine} of the \gls{browser} will be of importance, since element queries do not affect any other \gls{browser} subsystem.
-        This section will give a brief explanation of the layout process that the engines generally perform.
-        It will also cover some optimizations that are done and which parts of the layout process that can be done in parallel in section~\ref{sec:parallel}.
-        Lastly, layout thrashing will be presented and how it can be avoided in section~\ref{sec:layout-thrashing}.
+        This section will give a brief explanation of the layout process that the engines generally perform, along with some usual optimizations that are performed to speed up the process.
+        In section~\ref{sec:parallel} insight will be given into the current state of the research of parallelizing the layout process.
+        Last, layout thrashing will be presented and how it can be avoided in section~\ref{sec:layout-thrashing}.
         The render process will not be described, as it is not relevant for element queries.
       \end{metatext}
       \todo[inline]{Have an image about the layout flow somewhere?}
@@ -578,7 +577,7 @@
         \end{figure}
         It is shown that the \gls{layout engine} is located between the \emph{\gls{browser} engine} system and the network, \gls{JavaScript}, and display backend.
         The \gls{browser} engine acts as a high level interface to the \gls{layout engine}, and is responsible for providing the \gls{layout engine} with \glspl{URL} of content that should be fetched and rendered.
-        Additionally, browser engines usally provide the layout engine with layout and rendering options such as user preferred font size, zoom, etc.
+        Additionally, browser engines usually provide the layout engine with layout and rendering options such as user preferred font size, zoom, etc.
         The main responsibility of the \gls{layout engine} is to render the current state of the fetched \gls{hypertext} \gls{document}.
         Since \glspl{document} may (and often do) change dynamically after parsetime it is important to keep in mind that the job of the \gls{layout engine} is continuous, and is not a one time operation.
         The parsing of \gls{HTML} is also done by the \gls{layout engine}.
@@ -1655,7 +1654,7 @@
           However, it is not possible to construct a selector that matches all paragraphs that contains images.
           The \code{elq-mirror} plugin overcome these limitations by mirroring the breakpoint classes of an \code{elq-breakpoints} element.
           Suppose that it is desired for an application to style all paragraph elements differently by the size of the nearest element with a \code{container} class.
-          Paragraphs may appear nested in other elements, that may be generated dynamically at run time.
+          Paragraphs may appear nested in other elements, that may be generated dynamically at runtime.
           Therefore, the structure of the application is not known when writing the style code, so no assumptions can be done about the markup structure.
           Consider the example markup given in listing~\ref{code:elq-mirror-example} for an example markup structure.
           It should be noted that the \code{container} elements may be styled in any way (e.g., the widths of the inner container elements could be relative to the outer container element).
@@ -1872,10 +1871,10 @@
     Additionally, teaching \gls{CSS} new tricks implies that it is possible to implement an solution to element queries that does not require any changes to the \gls{HTML}, which can be preferable since all styling then can be written in \gls{CSS} (which is the purpose of \gls{CSS}).
     However, there are numerous flaws to the approaches that requires invalid \gls{CSS}.
     First, it requires a compilation step in order to produce valid \gls{CSS} that layout engines understand.
-    This can either be done at server side or in the browser at run time.
+    This can either be done at server side or in the browser at runtime.
     The advantage of having the compilation step at server side is increased performance since the browser will understand the \gls{CSS} directly.
-    However, having compiled the \gls{CSS} at server side the the layout of the page cannot be changed at run time.
-    By instead having the compilations step at run time, dynamic layouts are possible.
+    However, having compiled the \gls{CSS} at server side the the layout of the page cannot be changed at runtime.
+    By instead having the compilations step at runtime, dynamic layouts are possible.
     The performance impact of having the compilation step at runtime can be significant for the following reasons:
     \begin{itemize}
       \item The received \gls{CSS} cannot be understood by the browser, and therefore all parsing and reasoning about it has to be postponed until the library script executes.
