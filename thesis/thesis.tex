@@ -219,17 +219,10 @@
     \todo[inline]{Container or parent element? Using both now.}
     \todo[inline]{Rename framework to library?}
     \todo[inline]{Write about the targeted browser compatibility. Started writing about this but put it on hold in the appendix.}
-    \todo[inline]{Word says that all "their own" is wrong.}
-    \todo[inline]{Change all wikipedia sources to the real sources}
     \todo[inline]{self-container -> encapsulated perhaps}
-    \todo[inline,color=green]{Marcos: you might want to add some kind of marker for words that are defined (e.g., an underline).}
     \todo[inline,color=red]{Tomas: Show which cite's are used for which parts of the sections better. Could still be done in the metatext by just describing what the cited resource address. Or perhaps just citing the resource again where neccesary in the text.}
     \todo[inline,color=red]{Tomas: Don't think that the intro should be so "selling", write about what "will" be done and hypothesis and such. Write instead what "have" been done, what you have personally done and stuff like that.}
     \todo[inline]{Add note that the thesis is best viewed in color.}
-    \todo[inline]{Write somewhere that it might be an option to not have a resize detection system, but instead let the user manually check the elements when they may have changed.}
-    \todo[inline]{Write about the simple cycle detector.}
-    \todo[inline]{Write about the N layouts, and how it was fixed with the batch processing. Investigate how this behaves for nested elements.}
-    \todo[inline]{Write about the drawbacks (invalid layout at page load, injecting objects is heavy, DOM is mutated.)}
 
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
@@ -312,7 +305,7 @@
       Solving this problem would be a big advancement to \gls{web} development, enabling developers to create truly modular \gls{responsive} components.
       By studying the problem, identifying approaches and providing a \gls{third-party} solution the community can take a step closer to solve the problem \glslink{native}{natively}.
       If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for the \gls{W3C} standardize a solution. \todo{Would like to reformulate this to not being so confident that a standard will definately be developed}
-      \todo{color=red}{Tomas: The hypothesis should be valid or invalid at the time the report is handed in.}
+      \todo[color=red]{Tomas: The hypothesis should be valid or invalid at the time the report is handed in.}
       The outcome of this thesis can also be helpful for the \gls{W3C} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
     \section{Scope}
       The focus of this thesis lays on developing a \gls{third-party} framework that realizes element queries.
@@ -422,7 +415,7 @@
         Using \gls{HTML5} and \gls{CSS3} developers could utilize advanced graphics programming, geolocation, local and session storage, advanced input, offline mode, and much more.
 
         \todo[inline]{Write that traditional applications are threatened by web applications, since the reach and availability of the web is superior to any other distribution platform. Also, no installation is required with web applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
-        \todo[inline,color=red]{Tomas: Maybe write about the difficulties in supporting the standards (that the was/is fragmented in supporting features)}
+        \todo[inline,color=red]{Tomas: Maybe write about the difficulties in supporting the standards (fragmented features)}
       \subsection{Responsive web design}\label{sec:rwd}
         \begin{metatext}
           A few years ago, \gls{web} developers could make assumptions about the screen size of user devices.
@@ -485,7 +478,6 @@
           This section is partly based on \normalfont{\cite{book_modular_programming,book_eloq_js,rich_hickey}}.
         \end{metatext}
 
-        \todo[inline,color=green]{Marcos: The point being that modularization that is not well managed can lead to inconsistency (seen throughout the platform).}
         By creating modules that can be used in any context with well-defined responsibilities and dependencies, developing applications is reduced to the task of simply configuring modules (to some extent) to work together which forms a bigger application.
         It is today possible to write the \gls{web} client logic in a modular way in \gls{JavaScript}.
         The desire of writing modular code can be shown by the popularity of frameworks that helps dividing up the client code into modules.
@@ -644,7 +636,6 @@
         External scripts need to be fetched in order to be executed, which halts the parsing unless the script \gls{element} states otherwise.
         It should be noted that although \gls{DOM} nodes do include a \code{style} property, the nodes in the \gls{DOM} tree are not affected by the \gls{CSS} cascade, and the style properties do not represent the final style of the \gls{element}.
         Instead, for scripts to obtain the final computed style for an \gls{element} a special function needs to be called (e.g. \code{getComputedStyle} in \gls{JavaScript}\footnote{See \url{http://dev.w3.org/csswg/cssom/\#dom-window-getcomputedstyleelt-pseudoelt} for details about the function.}).
-        \todo{Should the reference to getComputedStyle really be cited like that?}
         Since externally linked \gls{CSS} \glspl{document} do not directly affect the \gls{DOM} tree they could conceptually be fetched and parsed after the parsing of the \gls{HTML}.
         However, scripts can request the computed style of \gls{DOM} nodes and therefore either the parsing of \gls{HTML} needs to be halted in order to fetch and parse \gls{CSS} when needed, or the scripts accessing style properties of \gls{DOM} nodes need to be halted.
         A common optimization is to use a speculative parser that continues to parse the \gls{HTML} when the main parser has halted (for executing the scripts usually).
@@ -833,10 +824,7 @@
         It is possible to resolve \gls{element} styles in parallel as long as two requirements are fulfilled: the matching task must have finished for the \gls{element} to resolve styles for, and the parent \gls{element} must have resolved all styles (since the \gls{element} might inherit some styles from the parent).
         As long as these requirements are fulfilled, selector matching and style resolving can run in parallel for different \glspl{element}.
         The layout process can also be parallelized, since the layout process has been shown to be sub-tree independent for non-float \glspl{element} \cite{servo_parallel,servo_blog}.
-        Siblings of the layout tree can be processed independently of each other (in the general case), and is suitable to parallelize with a work-stealing system.
-        \todo[inline,color=green]{Marcos: Reference to work-stealing system?}
-        \todo[inline]{Reference http://supertech.csail.mit.edu/papers/steal.pdf?}
-        
+        Siblings of the layout tree can be processed independently of each other (in the general case), and is suitable to parallelize with a work-stealing algorithm\footnote{See \url{http://supertech.csail.mit.edu/papers/steal.pdf} for more information about work-stealing algorithms.}.
         \todo[inline]{Philipp: It would be very interesting to just shortly summarize typical performance gains due to parallelization.}
 
       \subsection{Layout thrashing and how to avoid it}
@@ -872,7 +860,6 @@
         It is shown in the figure that style computations and layout is performed in each iteration.
         The total time spent on style calculations is \textasciitilde40 ms and layout is \textasciitilde600 ms, which leaves \textasciitilde60 ms for the actual script execution.
 
-        \pagebreak %TODO: Removed this?
         \begin{figure}[h]
           \centering
           \includegraphics[scale=0.5]{images/layout-thrashing-example-1-big}
@@ -938,7 +925,7 @@
 
         \todo[inline]{Analyze the numbers to give some rough numbers on overhead and cost times?}
         \todo[inline]{Explain that $n_a$ is not a parameter to the T function?}
-        \todo[inline]{Refer to some section in the appendix for how to read the timeline images?}
+        \todo[inline]{Refer to some section in the appendix for how to read the timeline images? Philipp said that I should try to explain it very briefly in this section.}
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element queries
@@ -1290,6 +1277,8 @@
       In this chapter, the framework design will be described and a motivation why the framework should be plugin based will be given.
       The subsystems of the framework and their interactions will also be presented.
     \end{metatext}
+
+    \todo[inline]{Write somewhere that it might be an option to not have a resize detection system, but instead let the user manually check the elements when they may have changed.}
 
     First of all, a working name of the framework needs to be established --- the framework will from now on have the working name \abbr{elq}.
     This name serves as a prefix for many of the framework \glspl{API}, and will be frequently used in the report from now on.
@@ -1721,6 +1710,10 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Implementation
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{Implementation}
+    \todo[inline]{Write about the simple cycle detector.}
+    \todo[inline]{Write about the N layouts, and how it was fixed with the batch processing. Investigate how this behaves for nested elements.}
+    \todo[inline]{Write about the drawbacks (invalid layout at page load, injecting objects is heavy, DOM is mutated.)}
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element reesize detection
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
