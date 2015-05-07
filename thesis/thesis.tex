@@ -146,6 +146,10 @@
   name={batch processing},
   description={Refers to when multiple instructions are processed together. Batch processing is desired when there is an overhead associated with preparing the system prior to execution. With batch processing, the system can be prepared once for all instructions instead}
 }
+\newglossaryentry{specificity}{
+  name={specificity},
+  description={Is the means by which \glspl{layout engine} decides which \gls{CSS} rule property values are the most relevant to an element, which is based only on the form of the selector. See \url{http://www.w3.org/TR/CSS2/cascade.html\#specificity} for more information}
+}
 
 \newacronym{W3C}{W3C}{World Wide Web Consortium}
 \newacronym{CSS}{CSS}{Cascading Style Sheets}
@@ -649,10 +653,10 @@
         If such script mutates the \gls{DOM}, then the parser will need to evaluate the changes made by the script and update the \gls{DOM} tree.
         External scripts need to be fetched in order to be executed, which halts the parsing unless the script \gls{element} states otherwise.
         It should be noted that although \gls{DOM} nodes do include a \code{style} property, the nodes in the \gls{DOM} tree are not affected by the \gls{CSS} cascade, and the style properties do not represent the final style of the \gls{element}.
-        Instead, for scripts to obtain the final computed style for an \gls{element} a special function needs to be called (e.g. \code{getComputedStyle} in \gls{JavaScript}\footnote{See \url{http://dev.w3.org/csswg/cssom/\#dom-window-getcomputedstyleelt-pseudoelt} for details about the function.}).
+        Instead, for scripts to obtain the final computed style for an \gls{element} special functions needs to be called (e.g. \code{getComputedStyle} in \gls{JavaScript}\footnote{See \url{http://dev.w3.org/csswg/cssom/\#dom-window-getcomputedstyleelt-pseudoelt} for details about the function.}).
         Since externally linked \gls{CSS} \glspl{document} do not directly affect the \gls{DOM} tree they could conceptually be fetched and parsed after the parsing of the \gls{HTML}.
         However, scripts can request the computed style of \gls{DOM} nodes and therefore either the parsing of \gls{HTML} needs to be halted in order to fetch and parse \gls{CSS} when needed, or the scripts accessing style properties of \gls{DOM} nodes need to be halted.
-        A common optimization is to use a speculative parser that continues to parse the \gls{HTML} when the main parser has halted (for executing the scripts usually).
+        A common optimization is to use a speculative parser that continues to parse the \gls{HTML} when the main parser has halted (for executing scripts usually).
         The speculative parser does not change the \gls{DOM} tree, instead it searches for external resources that can be fetched in parallel while waiting for the main parser to continue.
 
         \begin{lstlisting}[gobble=10,caption={Simple example of reentrant HTML. The layout engine needs to reconstruct the \gls{DOM} tree after executing the JavaScript. The page will not be rendered until all JavaScript has been executed.}, captionpos=b, label={code:reentrant-html}]
@@ -672,8 +676,7 @@
           </html>
         \end{lstlisting}
 
-        \todo[inline]{Philipp: Yes, a picture of the DOM corresponding to some HTML would be good.}
-        \todo[inline]{Figure of how the DOM tree looks like? Maybe example HTML and DOM tree figure.}
+        \todo[inline]{Philipp: A picture of the DOM corresponding to some HTML would be good.}
         \todo[inline]{Write about media type, and how the CSS is calculated if it is in this stage?}
 
       \subsection{Render trees}\label{sec:render-tree}
@@ -684,7 +687,7 @@
         \end{metatext}
 
         A \gls{render tree} is a visual representation of the \gls{document}.
-        In contrast to the \gls{DOM} tree, the \gls{render tree} only contains \glspl{element} that will be rendered.
+        In contrast to the \gls{DOM} tree, the \gls{render tree} only contains \glspl{element} that affects the rendered result in any way.
         The nodes of the \gls{render tree} are called \emph{renderers} (also known as \emph{frames} or \emph{render objects}), as the nodes are responsible for their own and all subnodes layout and rendering.
         In order to know how to render themselves, the final style of each renderer needs to be computed which is done by the \gls{layout engine} while constructing the tree.
         Each renderer represents a rectangle (with a size and position) with a given style.
@@ -692,25 +695,24 @@
         The type can be directly affected by the \code{display} style property.
 
         Typically nodes of the \gls{DOM} tree has a 1:1 relation to nodes of the \gls{render tree}, but the relation can also be smaller or larger.
-        The \gls{render tree} only contains nodes that will affect the rendered result, so nodes that do not affect the layout flow of the \gls{document} and that aren't visible will not be present in the \gls{render tree}.
+        Since the \gls{render tree} only contains nodes that affect the rendered result, nodes that do not affect the layout flow of the \gls{document} and that aren't visible will not be present in the \gls{render tree}.
         For instance, a \gls{DOM} node with the \code{display} property set to \code{none} will have the relation 1:0 (it will not be present in the \gls{render tree} because it is not visible and will not affect the layout flow).
         It should be noted that nodes with the \code{visibility} style property set to \code{hidden} will be present in the \gls{render tree}, although they are not visible, since they still affect the layout flow.
 
-        Even though all style properties have been resolved for each node in the \gls{render tree} (through \gls{CSS} cascading), the renderers still do not know about the size and position of the rectangle.
-        This is because some properties cannot be resolved by style cascading.
-        Some properties depend on the flow of the \gls{document}, and need to be computed through a layout.
+        Even though all style properties have been resolved for each node in the \gls{render tree} (through \gls{CSS} cascading), the renderers still do not know about the size and position of their rectangles.
+        This is because some properties depend on the flow of the \gls{document}, which cannot be be resolved by style cascading and this need to be computed through a layout.
         The layout process will resolve the final position and size of all renderers.
 
       \subsection{Style computation}\label{sec:style-computation}
         \begin{metatext}
-          Both the \gls{render tree} and scripts need to be able to get the final style of an \gls{element}.
-          In order to know the final style of an \gls{element}, the style for each \gls{element} must be resolved.
-          Here a brief explanation of selector matching, style cascading, inheritance and rule set specificity will be given.
+          Both the \gls{render tree} and scripts need to be able to get the final style of \glspl{element}.
+          % In order to know the final style of an \gls{element}, the style for each \gls{element} must be resolved.
+          Here a brief explanation of selector matching, style cascading, inheritance and rule set weighting will be given.
           \gls{CSS} property definitions will also be described.
           This section is mainly based on \normalfont{\cite{garsiel2011browsers,w3c_css21,w3c_css_style_attr}}.
         \end{metatext}
 
-        To trace how the style of an \gls{element} was computed can be a complex task, since there are many parameters to \gls{element} style computations.
+        To trace how the style of an \gls{element} is computed can be a complex task, since there are many parameters to \gls{element} style computations.
         First, styles for an \gls{element} can be defined in several places:
         \begin{enumerate}
           \item In the default styles of the \gls{browser}.
@@ -722,6 +724,7 @@
           \item In special attributes of the \gls{element} such as \code{bgcolor} (deprecated, but possible).
         \end{enumerate}
         This can be grouped into author, user and \gls{browser} styles.
+        \todo{Clarify this.}
         The four first items have in common that they are \emph{cascading} their style rules through \emph{selector matching}, and may define rule sets.
         Selector matching conceptually finds all \glspl{element} in the \gls{DOM} tree that matches a \gls{CSS} selector, to apply style declarations of the rule set.
         The rule sets are weighted so that if a property is assigned values by multiple rule sets the one with highest weight will be applied.
@@ -730,11 +733,11 @@
           \item In case of normal rule declarations, the style weighting relation is: $browser < user < author$.
           \item Important rule declarations have the following relation: $author < user$.
         \end{itemize}
-        The weighting process continues by calculating the \emph{specificity} of all rule set selectors, the higher the specificity the higher the rule set will be weighted. \todo{Explain specificity?}
+        The weighting process continues by calculating the \gls{specificity} of all rule set selectors, the higher the \gls{specificity} the higher the rule set will be weighted.
         This will make rule sets with more specific selectors override rule sets with more general selectors.
-        Finally, if two rule declarations have the same weight, origin and specificity the rule set specified last will win.
+        Finally, if two rule declarations have the same weight, origin and \gls{specificity} the rule set specified last will win.
         Inline \gls{CSS} does not cascade since all rules given are automatically matched with the \gls{element} of the style attribute.
-        However, inline \gls{CSS} is considered with highest possible specificity when performing the style cascade.
+        However, inline \gls{CSS} is considered with highest possible \gls{specificity} when performing the style cascade.
         It is important to note that the styling methods number five and six are conceptually the same, since they both alter the style property of the \gls{DOM} representation of the \gls{element}.
         Using special style attributes is deprecated, and all styles applied this way are weighted as low as possible.
 
