@@ -173,8 +173,7 @@
 \newacronym{NCSA}{NCSA}{National Center for Supercomputing Applications}
 \newacronym{KDE}{KDE}{K Desktop Environment}
 \newacronym{CGI}{CGI}{Common Gateway Interface}
-\newacronym{XML}{XML}{EXtensible Markup Language}
-\newacronym{AJAX}{AJAX}{Asynchronous \gls{JavaScript} and \acrshort{XML}}
+\newacronym{AJAX}{AJAX}{Asynchronous \gls{JavaScript} and \abbr{XML}}
 \newacronym{WHATWG}{WHATWG}{Web Hypertext Application Technology Working Group}
 \newacronym{RWD}{RWD}{Responsive Web Design}
 \newacronym{DOM}{DOM}{Document Object Model}
@@ -357,13 +356,13 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{Background}\label{ch:background}
     \begin{metatext}
-      This chapter aims to present sufficient background to understand and why element queries is a desired feature why it is hard to implement natively in browsers.
-      Section \ref{sec:web-dev} will present a brief history of web development and motivate why responsive web design and modular development are desired techniques in modern web development.
-      Section \ref{sec:layout-engines} describes briefly how layout engines operates, with focus on the layout process, to later present how they can be parallelized in section \ref{sec:parallel}.
-      \todo{Write that \ref{sec:parallel} will be needed to understand the problems of element queries?}
-      The chapter ends with section \ref{sec:layout-thrashing} that defines layout thrashing and shows how it can be avoided.
-      \todo{Write that \ref{sec:layout-thrashing} will be extensively referenced from implementation chapter?}
-      Expert readers may want to skip directly to chapter \ref{chp:eq} where element queries is described.
+      This chapter aims to present sufficient background to understand why element queries is a desired feature and why it is hard to implement natively in browsers.
+      Section~\ref{sec:web-dev} will present a brief history of web development and motivate why responsive web design and modular development are desired concepts in modern web development.
+      Section~\ref{sec:layout-engines} describes briefly how layout engines operates, with focus on the layout process, to later present how they can be parallelized in section~\ref{sec:parallel}.
+      \todo{Write that~\ref{sec:parallel} will be needed to understand the problems of element queries?}
+      The chapter ends with section~\ref{sec:layout-thrashing} that defines layout thrashing and shows how it can be avoided.
+      \todo{Write that~\ref{sec:layout-thrashing} will be extensively referenced from implementation chapter?}
+      Expert readers may want to skip directly to chapter\ref{chp:eq} where element queries is described.
     \end{metatext}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -375,11 +374,11 @@
         In the dawn of the \gls{web}, \glspl{browser} were simply applications that fetched and displayed text with embedded links.
         Today, \glspl{browser} act more like an operating system (on top of the host system) executing complex \gls{web} applications.
         There even exist computers that only run a \gls{browser}, which is sufficient for many users.
-        This section will describe the transition from \glspl{browser} rendering simple \glspl{document} to being hosts for complex applications.
-        It will also describe two key evolution points in \gls{web} development --- \gls{responsive} \gls{web} design and modular development.
+        This section will describe the transition from \glspl{browser} rendering simple \glspl{document} to being hosts for complex applications in section~\ref{sec:doc-to-app}.
+        It will also describe two key evolution points in \gls{web} development --- \gls{responsive} \gls{web} design in section~\ref{sec:rwd} and modular development in section~\ref{sec:modularity}.
       \end{metatext}
 
-      \subsection{From documents to applications}
+      \subsection{From documents to applications}\label{sec:doc-to-app}
         \begin{metatext}
           This section will describe the transition from \glspl{browser} rendering simple \glspl{document} to being hosts for complex applications.
           Since \gls{web} development trends are not easily pinned to exact dates, this section will only present dates as guidance and should not be regarded as exact dates for the events.
@@ -534,100 +533,105 @@
         Before diving into the theory of element queries, it is important to understand how \glspl{layout engine} work.
         Only the \gls{layout engine} of the \gls{browser} will be of importance, since element queries do not affect any other \gls{browser} subsystem.
         This section will give a brief explanation of the layout process that the engines generally perform.
-        It will also cover some optimizations that are done and which parts of the layout process that can be done in parallel.
-        Lastly, layout thrashing will be presented and how it can be avoided.
+        It will also cover some optimizations that are done and which parts of the layout process that can be done in parallel in section~\ref{sec:parallel}.
+        Lastly, layout thrashing will be presented and how it can be avoided in section~\ref{sec:layout-thrashing}.
         The render process will not be described, as it is not relevant for element queries.
-        This section is mainly based on \normalfont{\cite{browser_architecture,garsiel2011browsers}}.
       \end{metatext}
       \todo[inline]{Have an image about the layout flow somewhere?}
       \todo[inline,color=green]{Marcos: The reference architecture could be outdated since the source is very old. The XML subsystem is hardly interesting anymore.}
       \todo[inline]{Maybe move this content to an own subsection and instead write a text about why this section is here, what the goal is (to understand parallelization and layout thrashing), etc.}
-      \noindent
-      Browsers are complex applications that consist of many subsystems.
-      A reference architecture of \glspl{browser} has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
-      \begin{figure}[h]
-        \centering
-        \begin{tikzpicture}[node distance=1cm, auto, transform shape, scale=0.66]  
-        \tiny
-          \tikzset{
-              mynode/.style={rectangle,rounded corners,draw=black, top color=white, bottom color=white,very thin, inner sep=1em, minimum size=3em, text centered},
-              myarrow/.style={->, >=latex', shorten >=1pt, thin},
-              mylabel/.style={text width=3em, text centered}
-          }  
-          \node[mynode, text width=20em] (ui) {User Interface};  
-          \node[mynode, text width=20em, below=0.5cm of ui] (browser-engine) {Browser Engine};
-          \node[mynode, text width=20em, below=0.5cm of browser-engine] (layout-engine) {Layout Engine};
-          \node[below=of layout-engine] (dummy) {};
-          \node[mynode, below=of layout-engine, left=0.1cm of dummy] (javascript) {\gls{JavaScript}};
-          \node[mynode, below=of layout-engine, left=0.1cm and 0.1cm of javascript] (networking) {Networking};  
-          \node[mynode, below=of layout-engine, right=0.1cm of dummy] (xml) {\gls{XML}};
-          \node[mynode, below=of layout-engine, right=0.1cm and 0.1cm of xml] (render-backend) {Render Backend};
+      
+      \subsection{Reference architecture and market shares}
+        \begin{metatext}
+          In this section, a reference architecture of layout engines will be given.
+          In addition, the different major layout engines their market share will be presented.
+          This section is mainly based on \normalfont{\cite{browser_architecture,garsiel2011browsers}}.
+        \end{metatext}
 
-          \draw[myarrow] (ui.south) -- (browser-engine.north);
-          \draw[myarrow] (browser-engine.south) -- (layout-engine.north);
-          \draw[myarrow] (layout-engine.south) -- (networking.north); 
-          \draw[myarrow] (layout-engine.south) -- (javascript.north);
-          \draw[myarrow] (layout-engine.south) -- (xml.north);
-          \draw[myarrow] (layout-engine.south) -- (render-backend.north);
-          \draw[myarrow] (ui.east) -- +(1.5, 0) |- (render-backend.east);
-        \end{tikzpicture} 
-        \medskip
-        \caption{Reference \gls{browser} architecture. The data persistence system, used by the \gls{browser} engine and the user interface, has been omitted.} 
-        \label{fig:browser_architecture}
-      \end{figure}
-      It is shown that the \gls{layout engine} is located between the \emph{\gls{browser} engine} system and the network, \gls{JavaScript}, \gls{XML} parsing, and display backend.
-      The \gls{browser} engine acts as a high level interface to the \gls{layout engine}, and is responsible for providing the \gls{layout engine} with \glspl{URL} of content that should be fetched and rendered.
-      Additionally, browser engines usally provide the layout engine with layout and rendering options such as user preferred font size, zoom, etc.
-      The main responsibility of the \gls{layout engine} is to render the current state of the fetched \gls{hypertext} \gls{document}.
-      Since \glspl{document} may (and often do) change dynamically after parsetime it is important to keep in mind that the job of the \gls{layout engine} is continuous, and is not a one time operation.
-      The parsing of \gls{HTML} is also done by the \gls{layout engine} (and not in the \gls{XML} subsystem) since \gls{HTML} is less strict and reentrant.
-      In short, \glspl{layout engine} perform four distinct tasks:
-      \begin{enumerate}
-        \item Fetch content (typically \gls{HTML}, \gls{CSS} and \gls{JavaScript}) and parse it in order to construct a \gls{DOM} tree. \todo{Explain DOM before this?}
-        \item Construct a \gls{render tree} of the \gls{DOM} tree.
-        \item Layout the \glspl{element} of the \gls{render tree}.
-        \item Render the \glspl{element} of the \gls{render tree}.
-      \end{enumerate}
-      See section~\ref{sec:dom-tree} and section~\ref{sec:render-tree} for a more in depth explanation of \gls{DOM} and \glspl{render tree}.
-      \Glspl{browser} can typically display multiple pages at the same time (by using tabs, multiple windows or frames) where each page has an instance of the \gls{layout engine}.
-      There are four \glspl{layout engine} that the major \glspl{browser} use, as presented in table~\ref{table:layout_engines}.
-      Since Blink is a recent \gls{fork} of \gls{WebKit} they have been grouped together as \gls{WebKit}-based \glspl{layout engine}.
-      This results in three distinct \glspl{layout engine} to consider: \gls{WebKit}, Gecko and Trident.
-      Due to Trident being closed source, only the \gls{WebKit}-based \glspl{layout engine} and Gecko will be considered in this section.
+        Browsers are complex applications that consist of many subsystems.
+        A reference architecture of \glspl{browser} has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
+        \begin{figure}[h]
+          \centering
+          \begin{tikzpicture}[node distance=1cm, auto, transform shape, scale=0.66]  
+          \tiny
+            \tikzset{
+                mynode/.style={rectangle,rounded corners,draw=black, top color=white, bottom color=white,very thin, inner sep=1em, minimum size=3em, text centered},
+                myarrow/.style={->, >=latex', shorten >=1pt, thin},
+                mylabel/.style={text width=3em, text centered}
+            }  
+            \node[mynode, text width=20em] (ui) {User Interface};  
+            \node[mynode, text width=20em, below=0.5cm of ui] (browser-engine) {Browser Engine};
+            \node[mynode, text width=20em, below=0.5cm of browser-engine] (layout-engine) {Layout Engine};
+            % \node[below=of layout-engine] (dummy) {};
+            \node[mynode, text width=8em, below=of layout-engine, below=of layout-engine] (javascript) {\gls{JavaScript}};
+            \node[mynode, text width=8em, below=of layout-engine, left=0.1cm and 0.1cm of javascript] (networking) {Networking};  
+            \node[mynode, text width=8em, below=of layout-engine, right=0.1cm of javascript] (render-backend) {Render Backend};
 
-      \begin{table}[ht]\center
-        \tiny
-        \begin{minipage}[t]{0.38\linewidth}
-          \begin{tabular}[t]{ l l l }
-            \textbf{Engine} & \textbf{Browsers} & \textbf{Share} \\
-            \hline
-            Blink & Chrome, Opera & 44.38\% \\
-            WebKit & Safari & 17.64\% \\
-            Trident & Internet Explorer & 14.96\% \\
-            Gecko & Firefox & 12.83\% \\
-          \end{tabular}
-        \end{minipage}
-        \hspace{0.1cm}
-        \begin{minipage}[t]{0.42\linewidth}
-          \begin{tabular}[t]{ l l l }
-            \textbf{Engine} & \textbf{Browsers} & \textbf{Share} \\
-            \hline
-            WebKit & Safari, Chrome, Opera & 62.02\% \\
-            Trident & Internet Explorer & 14.96\% \\
-            Gecko & Firefox & 12.83\% \\
-          \end{tabular}
-        \end{minipage}
-        \caption{
-          The major \glspl{layout engine} and \glspl{browser} with market shares.
-          The table to the right has grouped together Blink into \gls{WebKit} since it is a recent for of \gls{WebKit}.
-          See section~\ref{sec:layout_engines_market_share} for more information how the market share data was gathered.}
-        \label{table:layout_engines}
-      \end{table}
-      \todo[inline]{Remove decimals of percentages since they are estimated?}
+            \draw[myarrow] (ui.south) -- (browser-engine.north);
+            \draw[myarrow] (browser-engine.south) -- (layout-engine.north);
+            \draw[myarrow] (layout-engine.south) -- (networking.north); 
+            \draw[myarrow] (layout-engine.south) -- (javascript.north);
+            \draw[myarrow] (layout-engine.south) -- (render-backend.north);
+            \draw[myarrow] (ui.east) -- +(2, 0) |- (render-backend.east);
+          \end{tikzpicture} 
+          \medskip
+          \caption{Reference \gls{browser} architecture. The data persistence system, used by the \gls{browser} engine and the user interface, has been omitted.} 
+          \label{fig:browser_architecture}
+        \end{figure}
+        It is shown that the \gls{layout engine} is located between the \emph{\gls{browser} engine} system and the network, \gls{JavaScript}, and display backend.
+        The \gls{browser} engine acts as a high level interface to the \gls{layout engine}, and is responsible for providing the \gls{layout engine} with \glspl{URL} of content that should be fetched and rendered.
+        Additionally, browser engines usally provide the layout engine with layout and rendering options such as user preferred font size, zoom, etc.
+        The main responsibility of the \gls{layout engine} is to render the current state of the fetched \gls{hypertext} \gls{document}.
+        Since \glspl{document} may (and often do) change dynamically after parsetime it is important to keep in mind that the job of the \gls{layout engine} is continuous, and is not a one time operation.
+        The parsing of \gls{HTML} is also done by the \gls{layout engine}.
+        In short, \glspl{layout engine} perform four distinct tasks:
+        \begin{enumerate}
+          \item Fetch content (typically \gls{HTML}, \gls{CSS} and \gls{JavaScript}) and parse it in order to construct a \gls{DOM} tree. \todo{Explain DOM before this?}
+          \item Construct a \gls{render tree} of the \gls{DOM} tree.
+          \item Layout the \glspl{element} of the \gls{render tree}.
+          \item Render the \glspl{element} of the \gls{render tree}.
+        \end{enumerate}
+        See section~\ref{sec:dom-tree} and section~\ref{sec:render-tree} for a more in depth explanation of \gls{DOM} and \glspl{render tree}.
+        \Glspl{browser} can typically display multiple pages at the same time (by using tabs, multiple windows or frames) where each page has an instance of the \gls{layout engine}.
 
-      %The content fetching and parsing is an advanced topic by itself, but is not relevant for element queries since they impose no fundamental changes to process.
-      %Also, rendering the final layout with the render backend is not affected by element queries.
-      %The construction of 
+        There are four \glspl{layout engine} that the major \glspl{browser} use, as presented in table~\ref{table:layout_engines}.
+        Since Blink is a recent \gls{fork} of \gls{WebKit} they have been grouped together as \gls{WebKit}-based \glspl{layout engine}.
+        This results in three distinct \glspl{layout engine} to consider: \gls{WebKit}, Gecko and Trident.
+        Due to Trident being closed source, only the \gls{WebKit}-based \glspl{layout engine} and Gecko will be considered in this section.
+
+        \begin{table}[ht]\center
+          \tiny
+          \begin{minipage}[t]{0.38\linewidth}
+            \begin{tabular}[t]{ l l l }
+              \textbf{Engine} & \textbf{Browsers} & \textbf{Share} \\
+              \hline
+              Blink & Chrome, Opera & 44.38\% \\
+              WebKit & Safari & 17.64\% \\
+              Trident & Internet Explorer & 14.96\% \\
+              Gecko & Firefox & 12.83\% \\
+            \end{tabular}
+          \end{minipage}
+          \hspace{0.1cm}
+          \begin{minipage}[t]{0.42\linewidth}
+            \begin{tabular}[t]{ l l l }
+              \textbf{Engine} & \textbf{Browsers} & \textbf{Share} \\
+              \hline
+              WebKit & Safari, Chrome, Opera & 62.02\% \\
+              Trident & Internet Explorer & 14.96\% \\
+              Gecko & Firefox & 12.83\% \\
+            \end{tabular}
+          \end{minipage}
+          \caption{
+            The major \glspl{layout engine} and \glspl{browser} with market shares.
+            The table to the right has grouped together Blink into \gls{WebKit} since it is a recent for of \gls{WebKit}.
+            See section~\ref{sec:layout_engines_market_share} for more information how the market share data was gathered.}
+          \label{table:layout_engines}
+        \end{table}
+        \todo[inline]{Remove decimals of percentages since they are estimated?}
+
+        %The content fetching and parsing is an advanced topic by itself, but is not relevant for element queries since they impose no fundamental changes to process.
+        %Also, rendering the final layout with the render backend is not affected by element queries.
+        %The construction of 
 
       \subsection{Constructing DOM trees}\label{sec:dom-tree}
         \begin{metatext}
