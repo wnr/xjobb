@@ -739,10 +739,10 @@
         Inline \gls{CSS} does not cascade since all rules given are automatically matched with the \gls{element} of the style attribute.
         However, inline \gls{CSS} is considered with highest possible \gls{specificity} when performing the style cascade.
         It is important to note that the styling methods number five and six are conceptually the same, since they both alter the style property of the \gls{DOM} representation of the \gls{element}.
-        Using special style attributes is deprecated, and all styles applied this way are weighted as low as possible.
+        The last styling method, using special style attributes, is deprecated and all styles applied this way are weighted as low as possible.
 
         If the cascade results in no value for an \gls{element} style property, then the property can \emph{inherit} a value or have an initial value defined by the \gls{CSS} \emph{property definition}.
-        Property definitions describe how the style properties should behave, see table~\ref{table:css_property_definition} for the format of property definitions.
+        Property definitions describe how the style properties should behave; see table~\ref{table:css_property_definition} for the format of property definitions.
         For instance, the \code{width} property definition states that legal values are absolute lengths, percentages or \code{auto} (which will let the \gls{browser} decide).
         The percentages are relative to the containing block.
         The initial value is \code{auto}, the properties applies to all non-replaced inline \glspl{element}, table rows and row groups.
@@ -776,10 +776,11 @@
           When the \gls{render tree} has been constructed, and the style properties have been resolved for all nodes, it is time to perform the actual layout.
           The layout process will decide the final computed style of all \glspl{element}, and needs to be done before rendering.
           This section will describe the layout process, discuss some performance aspects and show examples when layout happens.
+          \todo{Maybe remove the examples bit.}
           This section is mainly based on \normalfont{\cite{garsiel2011browsers}}.
         \end{metatext}
 
-        The layout (also called \emph{reflow}) of \gls{HTML} is flow based, which means that \gls{document} layout can generally be performed top to bottom and left to right in one pass.
+        \gls{HTML} is flow based, which means that a \gls{document} layout (also known as a \emph{reflow}) can generally be performed top to bottom and left to right in one pass.
         This is possible because the geometry of \glspl{element} typically do not depend on the siblings or children\todo{Seems weird to say that flow is not dependent on children, since the height is propagated upwards.}.
         Layout is performed recursively by starting at the root of the tree, let the renderer render itself and all of its children which will render themselves and their children and so on.
         When a layout is performed on the whole \gls{render tree} it is called a \emph{global layout}.
@@ -801,13 +802,10 @@
 
         The widths are calculated by the \code{width} style of the \glspl{element}, relative to the container \gls{element} width.
         Margins and paddings are also taken into account when calculating the widths.
-        When the width of an \gls{element} is calculated, it needs to be controlled against the \code{min-width} and \code{max-width} style properties and make sure that the width is inside the range.
+        When the width of an \gls{element} is calculated, it needs to be controlled against the \code{min-width} and \code{max-width} style properties and make sure that the width is inside the given range.
         If the content of an \gls{element} does not fit with the calculated width (text usually needs to perform line break when the width is too small), the \gls{element} needs to break up the content into multiple renderers in order to expand the height.
-        The renderer that has decided it needs to break the content up into multiple renderers propagates to the parent renderer that it needs to perform the breaking.
+        The renderer that has decided that it needs to break the content up into multiple renderers propagates to the parent renderer that it needs to perform the breaking.
         When the parent renderer has created the renderers needed to fit the content with the given height, layout is performed on the new renderers and then the final height can be calculated and propagated upwards.
-
-        \todo[inline]{Are incremental layout commands really batch processed?}
-
       \subsection{Parallelization}\label{sec:parallel}
         \begin{metatext}
           No longer can performance of an application increase over time without any code changes (as opposed to the times when the \gls{CPU} clock speeds increased rapidly).
@@ -841,7 +839,7 @@
         It is possible to resolve \gls{element} styles in parallel as long as two requirements are fulfilled: the matching task must have finished for the \gls{element} to resolve styles for, and the parent \gls{element} must have resolved all styles (since the \gls{element} might inherit some styles from the parent).
         As long as these requirements are fulfilled, selector matching and style resolving can run in parallel for different \glspl{element}.
         The layout process can also be parallelized, since the layout process has been shown to be sub-tree independent for non-float \glspl{element} \cite{servo_parallel,servo_blog}.
-        Siblings of the layout tree can be processed independently of each other (in the general case), and is suitable to parallelize with a work-stealing algorithm\footnote{See \url{http://supertech.csail.mit.edu/papers/steal.pdf} for more information about work-stealing algorithms.}.
+        Siblings of the layout tree can be processed independently of each other (in the general case), and is suitable to parallelize with a work-stealing algorithm\footnote{See \url{http://supertech.csail.mit.edu/papers/steal.pdf} for more information about work-stealing algorithms.} \cite{meyerovich2010fast}.
         \todo[inline]{Philipp: It would be very interesting to just shortly summarize typical performance gains due to parallelization.}
 
       \subsection{Layout thrashing and how to avoid it}\label{sec:layout-thrashing}
@@ -851,8 +849,8 @@
         \end{metatext}
 
         Recall from section \ref{sec:layout-process} that \glspl{layout engine} store incremental layout commands in a queue in order to \glslink{batch processing}{batch process} layouts.
-        The term \gls{layout thrashing} refers to when the layout queue repeatedly is being flushed by scripts, forcing the \gls{layout engine} to perform multiple independent layouts that could have in theory been \gls{batch processing}{batch processed}.
-        Layouts are \emph{thrashed} since the layout engine usually needs to perform layout on the whole subtree of the affected element for each incremental layout command, hence thrashing the previous most of the work it did for the previous layout command.
+        The term \gls{layout thrashing} refers to when the layout queue repeatedly is being flushed by scripts, forcing the \gls{layout engine} to perform multiple independent layouts that could have in theory been \glslink{batch processing}{batch processed}.
+        Layouts are \emph{thrashed} since the layout engine usually needs to perform layout on the whole subtree of the affected element for each incremental layout command, hence thrashing most of the work it did the previous layout command.
         See listing~\ref{code:thrashing-example} for an example of \gls{JavaScript} code that results in layout thrashing.
         \begin{lstlisting}[gobble=10,caption={Example of layout thrashing. The code reads and double the widths of 1000 \glspl{element} in \textasciitilde700 ms. The \code{parseSize} function is not important to understand the example.}, captionpos=b, label={code:thrashing-example}]
           /* Doubles the width of each element in the elements collection parameter. */
@@ -868,25 +866,25 @@
           doubleWidths(elements); // ~700 ms
         \end{lstlisting}
         For each element given as parameter to the \code{doubleWidths} function, the \code{readWriteWidth} function is called with an element as argument.
-        In that function, the computed style of the element is requested, which will force a style calculation for that element.
+        In that function, the computed style of the element is requested, which will force a style computation for that element.
         If any \gls{DOM} node affecting the element is marked as dirty, a layout will also need to be performed before returning the computed style of the element.
         When the computed style has been acquired, the width of the element is set to a new value, which is a \gls{DOM} mutation that will need to be synchronized with the render tree.
         Therefore, the element and its ancestors will be marked as dirty.
-        The next time \code{getComputedStyle} is called, which happens when processing the next element in the array, a layout will be forced since \gls{DOM} nodes that affects the elements has been marked as dirty.
+        The next time \code{getComputedStyle} is called, which happens when processing the next element in the collection, a layout will be forced since \gls{DOM} nodes that affects the elements has been marked as dirty.
         See figure~\ref{fig:layout-thrashing-example-1} for a visualization of the execution of the \code{doubleWidths} function.
         It is shown in the figure that style computations and layout is performed in each iteration.
-        The total time spent on style calculations is \textasciitilde40 ms and layout is \textasciitilde600 ms, which leaves \textasciitilde60 ms for the actual script execution.
+        The total time spent on style computations is \textasciitilde40 ms and layout is \textasciitilde600 ms, which leaves \textasciitilde60 ms for the actual script execution.
 
         \begin{figure}[h]
           \centering
           \includegraphics[scale=0.5]{images/layout-thrashing-example-1-big}
           \includegraphics[scale=0.5]{images/layout-thrashing-example-1}
-          \caption{Two timeline figures of executing the example code given in listing~\ref{code:thrashing-example}. Both figures show the same timeline, where the top figure shows the while execution and the bottom only shows a small section of the whole execution. Notice that they do not share the same time axis. Here it is clear that layout thrashing occurs, since layout is being done repeatedly throughout the whole execution (each iteration in the loop).}
+          \caption{Two timeline figures of executing the example code given in listing~\ref{code:thrashing-example}. Both figures show the same timeline, where the top figure shows the whole execution and the bottom only shows a small section of the execution. Notice that they do not share the same time axis. Here it is clear that layout thrashing occurs, since layout is being done repeatedly throughout the whole execution (each iteration in the loop).}
           \label{fig:layout-thrashing-example-1}
         \end{figure}
         
-        To avoid layout thrashing, the computed style requests and \gls{DOM} manipulations needs to be performed in batches, as presented in listing~\ref{code:thrashing-example-fixed}.
-        While it is algorithmically inefficient to iterate over the same collection twice --- the batched approach executes roughly 100 times faster than the original version.
+        To avoid layout thrashing, the computed style requests and \gls{DOM} mutations need to be performed in batches, as presented in listing~\ref{code:thrashing-example-fixed}.
+        While it is algorithmically inefficient to iterate over the same collection twice --- the batched approach executes \textasciitilde100 times faster than the original version.
         \begin{lstlisting}[gobble=10,caption={Example of avoiding layout thrashing by batch processing reads and writes to the \gls{DOM}. The code reads and double the widths of 1000 \glspl{element} in \textasciitilde7 ms.}, captionpos=b, label={code:thrashing-example-fixed}]
           /* Doubles the width of each element in the elements collection parameter. */
           function doubleWidths(elements) {
@@ -908,38 +906,40 @@
           var elements = [...];
           doubleWidths(elements); // ~7 ms
         \end{lstlisting}
-        Now, the \code{doubleWidths} function performs two batches that both iterations over the elements collection.
+        Now, the \code{doubleWidths} function performs two batches that both iterates over the elements collection.
         In the first batch, all widths of all elements are acquired and stored in a collection.
         Since no \gls{DOM} mutation occurs in the first batch, the layout engine do not need to perform any layout while retrieving the styles.
         In the second batch, all elements are assigned the new widths based on the widths retrieved in the first batch.
         Since the script does not read the \gls{DOM} in any way during in the second batch, all \gls{DOM} mutations can be queued by the layout engine to be batch processed.
         See figure~\ref{fig:layout-thrashing-example-1-fixed} for a visualization of the execution of the batched example version.
         In the figure, it is clear that the layout engine is able to first execute the JavaScript, and later perform all style and layout computations in a batch.
-        The total time spent on style calculations has been reduced to \textasciitilde2 ms, layout to \textasciitilde1.5 ms, and the actual script execution to \textasciitilde3.5 ms.
+        \begin{figure}[h]
+          \centering
+          \includegraphics[scale=0.5]{images/layout-thrashing-example-1-fixed}
+          \caption{A timeline of executing the example code given in listing~\ref{code:thrashing-example-fixed}. It is clear in the figure that layout thrashing does not occur, since all style computations and layout is performed in a batch after that the example code has finished executing.}
+          \label{fig:layout-thrashing-example-1-fixed}
+        \end{figure}
+
+        The total time spent on style computations has been reduced to \textasciitilde2 ms, layout to \textasciitilde1.5 ms, and the actual script execution to \textasciitilde3.5 ms.
         It should be noted that both versions recalculate styles for the same number of elements, from now on denoted by $n$.
-        Pausing the JavaScript context and switching the layout engine to style computation causes an overhead cost, from now on denoted by the constant $O_{s}$.
+        Pausing the JavaScript context and switching the layout engine to style computation mode causes an overhead cost, from now on denoted by the constant $O_{s}$.
         Let $C_{s}$ denote the time it takes for the layout engine to calculate the style of one element, then the total time needed for style computations in the first version is given by $T(n) = n(O_s + C_s)$.
         Since the second version enabled the layout engine to calculate the style of all elements in a batch, the total time needed was reduced to $T(n) = nC_s + O_s$.
-        The style calculation was reduced from \textasciitilde40 ms to \textasciitilde2 ms because the second version avoids $n - 1$ ovhead costs.
+        The style computation was reduced from \textasciitilde40 ms to \textasciitilde2 ms because the second version avoids $n - 1$ ovhead costs.
         However, it should be noted that both versions have time complexity $O(n)$.
         
         The major part of the time reduction is due to the layout time being significantly reduced.
         The reason why the layout time was significantly reduced is because the two versions do not perform layout on the same amount of elements.
         When an element and its ancestors has been marked as dirty, a layout will need to be performed on the subtree which contains at least all $n$ elements and possibly some ancestor elements.
-        So the minimum number of nodes that needs to be laid out is given by $n + n_{a}$, where $n_a$ is the number of ancestor elements.
+        So the minimum number of nodes that need to be laid out is given by $n + n_{a}$, where $n_a$ is the number of ancestor elements.
         Since the first version forces the layout engine to perform a layout in each iteration, the minimum number of elements laid out is given by $n(n + n_a)$.
         Similar to style computation, performing a layout also has an overhead cost $O_{l}$.
         Let $C_{l}$ denote the time it takes for the layout engine to layout one element, then the total time needed for layout in the first version is given by $T(n) = n(O_{l} + C_{l}(n + n_a))$.
         The second version enables the layout engine to batch process the \gls{DOM} manipulations, and therefore only one layout of the subtree will need to be performed, which results in the minumum number of elements laid out being $n + n_a$.
         The total time needed for layout in the second version is then given by $T(n) = O_{l} + C_{l}(n + n_a)$.
         The first version has time complexity $O(n^2)$ while the second version has time complexity $O(n)$, which is a significant optimization.
-        \begin{figure}[h]
-          \centering
-          \includegraphics[scale=0.5]{images/layout-thrashing-example-1-fixed}
-          \caption{A timeline of executing the example code given in listing~\ref{code:thrashing-example-fixed}. It is clear in the figure that layout thrashing does not occur, since all style computation and layout is performed in a batch after that the example code has finished executing.}
-          \label{fig:layout-thrashing-example-1-fixed}
-        \end{figure}
 
+        \todo[inline]{Explain that the script execution time was probably reduced due to avoiding n-1 context switches between the JS engine and the layout engine?}
         \todo[inline]{Analyze the numbers to give some rough numbers on overhead and cost times?}
         \todo[inline]{Explain that $n_a$ is not a parameter to the T function?}
         \todo[inline]{Refer to some section in the appendix for how to read the timeline images? Philipp said that I should try to explain it very briefly in this section.}
