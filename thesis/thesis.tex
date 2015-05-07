@@ -950,9 +950,7 @@
     The implication of this is that the \gls{HTML} and \gls{JavaScript} can be written in a modular way, but the \gls{CSS} is left for the user of the module (application) to write which somewhat defeats the purpose of writing modules.
     So developers today have two choices: writing modules that are not \gls{responsive} but \gls{self-contained}, or writing modules that are \gls{responsive} but not \gls{self-contained} (leaving the styling to the user).
 
-    The solution to this is element queries, which allows conditional rules to be applied based on any criteria for any \gls{element}.
-    \todo[color=green]{Marcos: Maybe say, "One solution to this is element queries". It might turn out that there is some other solution.}
-    \todo{Waiting for response from Marcos regarding this.}
+    An identified solution to this is element queries, which allows conditional rules to be applied based on any criteria for any \gls{element}.
     Figure~\ref{fig:mq-vs-eq} shows the problem with \gls{media queries} and the element query solution.
     The typical use case is to write conditional styles to be applied based on the container \gls{element} size.
     Although the size of the container \gls{element} is typically the most interesting element query with \gls{responsive} \gls{web} design, element queries as a concept does not need to be limited to that.
@@ -985,14 +983,13 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Problems}
       \begin{metatext}
-        The main reason why element queries have not been implemented \glslink{native}{natively} in \glspl{browser} is because they bring problems and limitations to the \glspl{browser}.
-        \todo[color=green]{Marcos: You would need a citation here. Also, I don't think the above is true. We (browsers) haven't seen that much demand for this until recently... and even still, it's not super high on the list of priorities.}
-        \todo{Waiting for response}
+        One reason that hinders element queries from being implemented natively in browsers is that they bring problems and limitations to layout engines.
+        It is stated on the W3C's www-style mailing list \cite{w3c_eq_mail} by Zbarsky of Mozilla, Atkins of Google and Sprehn of Google that unrestricted element queries is infeasible to implement.
         It is important to understand the problems in order to speculate about a potential \gls{native} \gls{API} design.
-        In this section the two major problems will be presented; performance and circularity.
+        \todo{Rewrite a bit if native API is dropped.}
+        In this section the two major problems will be presented: performance and circularity.
       \end{metatext}
 
-      \todo{What to write here?}
       \subsection{Performance}
         \begin{metatext}
           This section will present the performance impacts that element queries have on \glspl{layout engine}.
