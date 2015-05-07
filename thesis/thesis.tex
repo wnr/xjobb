@@ -1660,7 +1660,7 @@
           Therefore, the structure of the application is not known when writing the style code, so no assumptions can be done about the markup structure.
           Consider the example markup given in listing~\ref{code:elq-mirror-example} for an example markup structure.
           It should be noted that the \code{container} elements may be styled in any way (e.g., the widths of the inner container elements could be relative to the outer container element).
-          \begin{lstlisting}[gobble=12,caption={},captionpos=b,label={code:elq-mirror-example}]]
+          \begin{lstlisting}[gobble=12,caption={Example markup structure where all paragraphs are desired to be conditionally styled by the nearest ancestor container.},captionpos=b,label={code:elq-mirror-example}]
             <div class="container" elq elq-breakpoints elq-breakpoints-width="300 500">
               <div>
                 <p>Paragraph 1</p>
@@ -1675,7 +1675,7 @@
             </div>
           \end{lstlisting}
           A naive approach to applying conditional styles for the paragraph elements would be using the selector structure given in listing~\ref{code:elq-mirror-example-cont}.
-          \begin{lstlisting}[gobble=12,caption={},captionpos=b,label={code:elq-mirror-example-cont}]]
+          \begin{lstlisting}[gobble=12,caption={A naive approach to styling the paragraphs conditionally.},captionpos=b,label={code:elq-mirror-example-cont}]
             .container p                      { background-color: red;    }
             .container.elq-width-above-300 p  { background-color: yellow; }
             .container.elq-width-above-500 p  { background-color: green;  }
@@ -1686,8 +1686,9 @@
           By using the \code{elq-mirror} plugin, the correct behavior can be achieved.
           Elements are initiated to mirror elements by adding attributes in the same way like with the \code{elq-breakpoints} plugin.
           The mirror elements will then match the \code{elq-breakpoints} classes of the nearest ancestor that has the \code{elq-breakpoints} attribute.
+          See listing~\ref{code:elq-mirror-example-cont-2} for how the plugin can be used to achieve the desired behavior of the conditionally styled paragraphs.
           % If no such ancestor is found, the document root will be mirrored instead. //TODO: Have this?
-          \begin{lstlisting}[gobble=12,caption={},captionpos=b,label={code:elq-mirror-example-cont-2}]]
+          \begin{lstlisting}[gobble=12,caption={By using the \code{elq-mirror} plugin to overcome the limitations of CSS, the correct behavior can be achieved of the conditionally styled paragraphs.},captionpos=b,label={code:elq-mirror-example-cont-2}]
             /* HTML */
             <div class="container" elq elq-breakpoints elq-breakpoints-width="300 500">
               <div>
@@ -1707,10 +1708,14 @@
             .container p.elq-width-above-300  { background-color: yellow; }
             .container p.elq-width-above-500  { background-color: green;  }
           \end{lstlisting}
-          Notice that the breakpoint classes now are used in conjunction with the paragraph element instead of the container element.
+          Notice that the breakpoint classes now are used in conjunction with the paragraphs instead of the containers in the CSS selectors.
           Now, the conditional styles will be applied to all paragraphs that are children of containers; with the size criterion being relative to the nearest ancestor container.
 
+          By mirroring an element's breakpoint classes, elements can be styled by criterion of any element (ancestor, sibling, child, etc.).
+          The plugin is at the moment restricted to the nearest ancestor \code{elq-breakpoint} element, but could easily be extended to support more advanced mirror constellations.
+          \todo[inline]{Maybe it should be presented how such API could look like?}
         \subsubsection{Prolyfill}
+          \todo[inline]{Have not been done. Should it? Perhaps remove this as it could be out of scope. Low priority.}
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Implementation
