@@ -58,9 +58,9 @@
 }
 \makeatother
 
-\newglossaryentry{self-contained}{
-  name=self-contained,
-  description={A self-contained module handles its task without any help from the user of the module}
+\newglossaryentry{encapsulated}{
+  name=encapsulated,
+  description={An encapsulated module handles its task without any help from the user of the module}
 }
 \newglossaryentry{web} {
   name=web,
@@ -223,7 +223,6 @@
   \chapter{Introduction}
     \todo[inline]{Container or parent element? Using both now.}
     \todo[inline]{Write about the targeted browser compatibility. Started writing about this but put it on hold in the appendix.}
-    \todo[inline]{self-container -> encapsulated perhaps}
     \todo[inline,color=red]{Tomas: Show which cite's are used for which parts of the sections better. Could still be done in the metatext by just describing what the cited resource address. Or perhaps just citing the resource again where neccesary in the text.}
     \todo[inline,color=red]{Tomas: Don't think that the intro should be so "selling", write about what "will" be done and hypothesis and such. Write instead what "have" been done, what you have personally done and stuff like that.}
     \todo[inline]{Add note that the thesis is best viewed in color.}
@@ -295,9 +294,9 @@
       \todo[inline,color=red]{Tomas: Maybe more general or more specific. If details have to be presented, then the reader has to be able to understand it.}
       Many libraries and techniques are being used in \gls{web} development to keep the code from becoming an entangled mess.
       Creating modules facilitates the development and increases the reusability, as shown in section~\ref{sec:modularity}.
-      Unfortunately, it is currently impossible to create \gls{self-contained} \gls{responsive} modules since conditional styles cannot be applied to \glspl{element} by \gls{element} size criterion.
+      Unfortunately, it is currently impossible to create \gls{encapsulated} \gls{responsive} modules since conditional styles cannot be applied to \glspl{element} by \gls{element} size criterion.
       Without element queries, \gls{responsive} modules force the application to style them properly depending on the \gls{viewport} sizes, which defeats the purpose of modules.
-      Modules should be \gls{self-contained} and may not require the user to perform some of the module logic in order to work.
+      Modules should be \gls{encapsulated} and may not require the user to perform some of the module logic in order to work.
       Another option would be to make modules context-aware so they can style themselves according to the \gls{viewport}, but then they would not be reusable (since they assume a specific context).
       Also, changes to the application layout would then require to rewrite the \gls{media queries} of the modules to take the new layout into account.
       Clearly, no sound option exists for having \gls{responsive} modules.
@@ -506,7 +505,7 @@
         \end{quote}
         By separating the software into well defined parts (i.e., modules) that has a single responsibility and ideally performs a single task, complexity can be reduced.
         Of course, splitting software up into modules alone does not help reducing complexity.
-        The modules also need to be self-contained, which means that they work by themselved and do not require the user of the module to write its logic.
+        The modules also need to be \gls{encapsulated}, which means that they work by themselved and do not require the user of the module to write its logic.
         Modules should also be loosely coupled, and may not make any assumptions about the context they will be used in.
         It is then possible to reason about them and change the functionality locally inside the boundary of a module.
         
@@ -964,7 +963,7 @@
     One positive outcome of building applications in a modular way is that general components become reusable.
     Since the only way of applying conditional rules to \glspl{element} today is by using \gls{media queries}, all \gls{responsive} styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the application layout).
     The implication of this is that the \gls{HTML} and \gls{JavaScript} can be written in a modular way, but the \gls{CSS} is left for the user of the module (application) to write which somewhat defeats the purpose of writing modules.
-    So developers today have two choices: writing modules that are not \gls{responsive} but \gls{self-contained}, or writing modules that are \gls{responsive} but not \gls{self-contained} (leaving the styling to the user).
+    So developers today have two choices: writing modules that are not \gls{responsive} but \gls{encapsulated}, or writing modules that are \gls{responsive} but not \gls{encapsulated} (leaving the styling to the user).
 
     An identified solution to this is element queries, which allows conditional rules to be applied based on any criteria for any \gls{element}.
     Figure~\ref{fig:mq-vs-eq} shows the problem with \gls{media queries} and the element query solution.
