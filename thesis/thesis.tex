@@ -230,6 +230,7 @@
     \todo[inline,color=red]{Tomas: Don't think that the intro should be so "selling", write about what "will" be done and hypothesis and such. Write instead what "have" been done, what you have personally done and stuff like that.}
     \todo[inline]{Add note that the thesis is best viewed in color.}
     \todo[inline]{Write that glossary words will be emph on first appearence?}
+    \todo[inline]{Should the subtitle be criterion instead of criteria?}
 
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
@@ -514,7 +515,7 @@
         
         With modularity comes positive side effects.
         Loose coupling between modules facilitates integration testing of each module, since it is then possible to test parts of the software in isolation and independent of the system as a whole.
-        Developers can also work on different parts of the software in parallel without being affected by each other, as modules are not allowed to affect each other (other than by configurable options, injected strategies or directly dependant submodules).
+        Developers can also work on different parts of the software in parallel without being affected by each other, as modules are not allowed to affect each other (other than by configurable options, injected strategies or directly dependent submodules).
         \todo[color=red]{Tomas: Maybe one-way dependencies?}
         The very nature of modules not being context-aware enables them to be reused in other projects (or other parts of the same application).
         Reusability is not only important to speed up the development process of new software projects, it also eases managing a large code base.
@@ -522,7 +523,7 @@
         When a bug arises, the patch would only need to be applied to one module instead of all similar modules that could possibly be affected.
         Clearly, modular development is highly desired.
 
-        However, since modulas are allowed to be nested (i.e., modules may depend on submodules that may depend on other submodules and so on) and that the logic responsibility is moved from the application to the module, the complexity of managing them is added.
+        However, since modules are allowed to be nested (i.e., modules may depend on submodules that may depend on other submodules and so on) and that the logic responsibility is moved from the application to the module, the complexity of managing them is added.
         \gls{API} changes of a module can break modules that depend on them, and multiple versions of the same module must be maintained because the old versions may be used in parallel to the newer versions.
         Having a good semantic versioning convention is key to reduce the complexity of managing multiple versions of modules.
     
@@ -584,7 +585,7 @@
         Additionally, browser engines usually provide the layout engine with layout and rendering options such as user preferred font size, zoom, etc.
         The main responsibility of the \gls{layout engine} is to render the current state of the fetched \gls{hypertext} \gls{document}.
         Since \glspl{document} may (and often do) change dynamically after parsetime it is important to keep in mind that the job of the \gls{layout engine} is continuous, and is not a one time operation.
-        The parsing of \gls{HTML} is also done by the \gls{layout engine}.
+        The \gls{layout engine} also performs the parsing of \gls{HTML}.
         In short, \glspl{layout engine} perform four distinct tasks:
         \begin{enumerate}
           \item Fetch content (typically \gls{HTML}, \gls{CSS} and \gls{JavaScript}) and parse it in order to construct a \gls{DOM} tree. \todo{Explain DOM before this?}
@@ -652,7 +653,7 @@
         Script \glspl{element} are to be executed synchronously when encountered by the parser.
         If such script mutates the \gls{DOM}, then the parser will need to evaluate the changes made by the script and update the \gls{DOM} tree.
         External scripts need to be fetched in order to be executed, which halts the parsing unless the script \gls{element} states otherwise.
-        It should be noted that although \gls{DOM} nodes do include a \code{style} property, the nodes in the \gls{DOM} tree are not affected by the \gls{CSS} cascade, and the style properties do not represent the final style of the \gls{element}.
+        It should be noted that although \gls{DOM} nodes do include a \code{style} property, the \gls{CSS} cascade does not affect the nodes in the \gls{DOM} tree, and the style properties do not represent the final style of the \gls{element}.
         Instead, for scripts to obtain the final computed style for an \gls{element} special functions needs to be called (e.g. \code{getComputedStyle} in \gls{JavaScript}\footnote{See \url{http://dev.w3.org/csswg/cssom/\#dom-window-getcomputedstyleelt-pseudoelt} for details about the function.}).
         Since externally linked \gls{CSS} \glspl{document} do not directly affect the \gls{DOM} tree they could conceptually be fetched and parsed after the parsing of the \gls{HTML}.
         However, scripts can request the computed style of \gls{DOM} nodes and therefore either the parsing of \gls{HTML} needs to be halted in order to fetch and parse \gls{CSS} when needed, or the scripts accessing style properties of \gls{DOM} nodes need to be halted.
@@ -687,20 +688,20 @@
         \end{metatext}
 
         A \gls{render tree} is a visual representation of the \gls{document}.
-        In contrast to the \gls{DOM} tree, the \gls{render tree} only contains \glspl{element} that affects the rendered result in any way.
+        In contrast to the \gls{DOM} tree, the \gls{render tree} only contains \glspl{element} that affect the rendered result in any way.
         The nodes of the \gls{render tree} are called \emph{renderers} (also known as \emph{frames} or \emph{render objects}), as the nodes are responsible for their own and all subnodes layout and rendering.
         In order to know how to render themselves, the final style of each renderer needs to be computed which is done by the \gls{layout engine} while constructing the tree.
         Each renderer represents a rectangle (with a size and position) with a given style.
         There are different types of renderers, which affect how the renderer rectangle is computed.
         The type can be directly affected by the \code{display} style property.
 
-        Typically nodes of the \gls{DOM} tree has a 1:1 relation to nodes of the \gls{render tree}, but the relation can also be smaller or larger.
+        Typically nodes of the \gls{DOM} tree have a 1:1 relation to nodes of the \gls{render tree}, but the relation can also be smaller or larger.
         Since the \gls{render tree} only contains nodes that affect the rendered result, nodes that do not affect the layout flow of the \gls{document} and that aren't visible will not be present in the \gls{render tree}.
         For instance, a \gls{DOM} node with the \code{display} property set to \code{none} will have the relation 1:0 (it will not be present in the \gls{render tree} because it is not visible and will not affect the layout flow).
         It should be noted that nodes with the \code{visibility} style property set to \code{hidden} will be present in the \gls{render tree}, although they are not visible, since they still affect the layout flow.
 
         Even though all style properties have been resolved for each node in the \gls{render tree} (through \gls{CSS} cascading), the renderers still do not know about the size and position of their rectangles.
-        This is because some properties depend on the flow of the \gls{document}, which cannot be be resolved by style cascading and this need to be computed through a layout.
+        This is because some properties depend on the flow of the \gls{document}, which cannot be resolved by style cascading and this need to be computed through a layout.
         The layout process will resolve the final position and size of all renderers.
 
       \subsection{Style computation}\label{sec:style-computation}
@@ -785,9 +786,9 @@
         To avoid global layouts when a renderer has been changed, a dirty bit system is usually implemented.
         The system marks which renderers in the tree that need a layout, which avoids layout of unaffected \glspl{element}.
         Layouts that only layout the dirty renderers are called \emph{incremental layouts}.
-        \Glspl{layout engine} that uses the dirty bit system usually keeps a queue of incremental layout commands.
+        A \gls{layout engine} that uses the dirty bit system usually keeps a queue of incremental layout commands.
         The scheduler system later triggers a \glslink{batch processing}{batch execution} of the incremental layout commands asynchronously.
-        A global layout is triggered when the \gls{viewport} is resized or when styles that affect the whole \gls{document} are changed (such as \code{font-size}).
+        A global layout is triggered when the \gls{viewport} is resized or when styles that affect the whole \gls{document} is changed (such as \code{font-size}).
         Because the \gls{API} of \code{getComputedStyle} promises resolved values for all style properties, calling the function forces a full layout (flushing the incremental layout commands queue).
         When a renderer performs a layout the following usually happens:
         \begin{enumerate}
@@ -836,7 +837,7 @@
         It has also been shown that selector matching and style resolving (through cascading) can be parallelized \cite{zoomm}.
         It is possible to resolve \gls{element} styles in parallel as long as two requirements are fulfilled: the matching task must have finished for the \gls{element} to resolve styles for, and the parent \gls{element} must have resolved all styles (since the \gls{element} might inherit some styles from the parent).
         As long as these requirements are fulfilled, selector matching and style resolving can run in parallel for different \glspl{element}.
-        The layout process can also be parallelized, since the layout process has been shown to be sub-tree independent for non-float \glspl{element} \cite{servo_parallel,servo_blog}.
+        The layout process can also be parallelized, since the layout process has been shown to be subtree independent for non-float \glspl{element} \cite{servo_parallel,servo_blog}.
         Siblings of the layout tree can be processed independently of each other (in the general case), and is suitable to parallelize with a work-stealing algorithm\footnote{See \url{http://supertech.csail.mit.edu/papers/steal.pdf} for more information about work-stealing algorithms.} \cite{meyerovich2010fast}.
         \todo[inline]{Philipp: It would be very interesting to just shortly summarize typical performance gains due to parallelization.}
 
@@ -847,7 +848,7 @@
         \end{metatext}
 
         Recall from section \ref{sec:layout-process} that \glspl{layout engine} store incremental layout commands in a queue in order to \glslink{batch processing}{batch process} layouts.
-        The term \gls{layout thrashing} refers to when the layout queue repeatedly is being flushed by scripts, forcing the \gls{layout engine} to perform multiple independent layouts that could have in theory been \glslink{batch processing}{batch processed}.
+        The term \gls{layout thrashing} refers to when the layout queue repeatedly is being flushed by scripts; forcing the \gls{layout engine} to perform multiple independent layouts that could have in theory been \glslink{batch processing}{batch processed}.
         Layouts are \emph{thrashed} since the layout engine usually needs to perform layout on the whole subtree of the affected element for each incremental layout command, hence thrashing most of the work it did the previous layout command.
         See listing~\ref{code:thrashing-example} for an example of \gls{JavaScript} code that results in layout thrashing.
         \begin{lstlisting}[gobble=10,caption={Example of layout thrashing. The code reads and double the widths of 1000 \glspl{element} in \textasciitilde700 ms. The \code{parseSize} function is not important to understand the example.}, captionpos=b, label={code:thrashing-example}]
@@ -906,7 +907,7 @@
         \end{lstlisting}
         Now, the \code{doubleWidths} function performs two batches that both iterates over the elements collection.
         In the first batch, all widths of all elements are acquired and stored in a collection.
-        Since no \gls{DOM} mutation occurs in the first batch, the layout engine do not need to perform any layout while retrieving the styles.
+        Since no \gls{DOM} mutation occurs in the first batch, the layout engine does not need to perform any layout while retrieving the styles.
         In the second batch, all elements are assigned the new widths based on the widths retrieved in the first batch.
         Since the script does not read the \gls{DOM} in any way during in the second batch, all \gls{DOM} mutations can be queued by the layout engine to be batch processed.
         See figure~\ref{fig:layout-thrashing-example-1-fixed} for a visualization of the execution of the batched example version.
@@ -923,7 +924,7 @@
         Pausing the JavaScript context and switching the layout engine to style computation mode causes an overhead cost, from now on denoted by the constant $O_{s}$.
         Let $C_{s}$ denote the time it takes for the layout engine to calculate the style of one element, then the total time needed for style computations in the first version is given by $T(n) = n(O_s + C_s)$.
         Since the second version enabled the layout engine to calculate the style of all elements in a batch, the total time needed was reduced to $T(n) = nC_s + O_s$.
-        The style computation was reduced from \textasciitilde40 ms to \textasciitilde2 ms because the second version avoids $n - 1$ ovhead costs.
+        The style computation was reduced from \textasciitilde40 ms to \textasciitilde2 ms because the second version avoids $n - 1$ overhead costs.
         However, it should be noted that both versions have time complexity $O(n)$.
         
         The major part of the time reduction is due to the layout time being significantly reduced.
@@ -933,7 +934,7 @@
         Since the first version forces the layout engine to perform a layout in each iteration, the minimum number of elements laid out is given by $n(n + n_a)$.
         Similar to style computation, performing a layout also has an overhead cost $O_{l}$.
         Let $C_{l}$ denote the time it takes for the layout engine to layout one element, then the total time needed for layout in the first version is given by $T(n) = n(O_{l} + C_{l}(n + n_a))$.
-        The second version enables the layout engine to batch process the \gls{DOM} manipulations, and therefore only one layout of the subtree will need to be performed, which results in the minumum number of elements laid out being $n + n_a$.
+        The second version enables the layout engine to batch process the \gls{DOM} manipulations, and therefore only one layout of the subtree will need to be performed, which results in the minimum number of elements laid out being $n + n_a$.
         The total time needed for layout in the second version is then given by $T(n) = O_{l} + C_{l}(n + n_a)$.
         The first version has time complexity $O(n^2)$ while the second version has time complexity $O(n)$, which is a significant optimization.
 
@@ -1245,7 +1246,7 @@
       \todo[inline]{Maybe note seamless iframe in theory works in the same way. But would it be relevant?}
 
       Another approach to enable element queries for developers is to provide a \gls{third-party} \gls{JavaScript} library.
-      Since a \gls{JavaScript} library do not depend on vendors of \glspl{layout engine} (other than features in the current language specifications) it can therefore be designed in any desired way.
+      Since a \gls{JavaScript} library does not depend on vendors of \glspl{layout engine} (other than features in the current language specifications) it can therefore be designed in any desired way.
       It would be more feasible to have unrestricted element queries in a \gls{JavaScript} library, than implementing it natively.
       Since the element queries feature would be operated by the library, \glspl{layout engine} can be parallelized unhindered and independently of how the library handles the queries.
       Similar, cycle detection and handling can be handled on top of the \gls{layout engine} by the library.
