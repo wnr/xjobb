@@ -208,6 +208,12 @@
     Sammanfattning ska vara här.
   \end{foreignabstract}
   \clearpage
+  \noindent
+  \large
+  The colored rectangles that appear throughout this thesis are comments and feedback (presented as todos), which mean that they are not part of the actual content.
+  It should be noted that all named todo items are not quotations of the persons that it was received from.
+  Instead, all todo items represent my own interpretation of the feedback given to me.
+  \clearpage
   \tableofcontents*
   \listoftodos
   \mainmatter
@@ -409,10 +415,8 @@
         In 2006, the \gls{W3C} acknowledged that \gls{WHATWG} were on the right track, and decided to start working on their own \gls{HTML5} specification based on the \gls{WHATWG} version.
         \gls{HTML5} is an evolutionary improvement process of \gls{HTML}, which means that \glspl{browser} are adding support as parts of the specification is finished.
 
-        A new era of \glspl{API} and features came along with \gls{HTML5}, which truly enabled developers to create rich client side applications.
-        \gls{CSS3} was also recently released which also included many new features.
-        \todo[color=red]{Tomas: Remove recently and add the date instead.}
-        Using \gls{HTML5} and \gls{CSS3} developers could utilize advanced graphics programming, geolocation, local and session storage, advanced input, offline mode, and much more.
+        A new era of \glspl{API} and features came along with \gls{HTML5} and \gls{CSS3}, which truly enabled developers to create rich client side applications.
+        With the new features developers could utilize advanced graphics programming, geolocation, local and session storage, advanced input, offline mode, and much more.
 
         \todo[inline]{Write that traditional applications are threatened by web applications, since the reach and availability of the web is superior to any other distribution platform. Also, no installation is required with web applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
         \todo[inline,color=red]{Tomas: Maybe write about the difficulties in supporting the standards (fragmented features)}
@@ -1000,8 +1004,6 @@
 
         Recall from section~\ref{sec:layout-process} that the rectangle size and position for each \gls{element} is calculated in the layout process, and cannot be determined before an actual layout has happened.
         This imposes that a layout pass needs to be performed before knowing the \gls{element}'s sizes.
-        \todo[color=green]{Marcos: sizes -> dimensions}
-        \todo{Waiting for response}
         If element queries are present that rely on the size of \glspl{element}, which is the identified common use case, the following process needs to happen:
         \begin{enumerate}
           \item A layout pass needs to be performed in order to calculate the size of the \glspl{element} targeted by element queries.
