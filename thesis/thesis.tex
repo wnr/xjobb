@@ -1526,8 +1526,6 @@
         \end{lstlisting}
 
       \subsection{Plugin API}
-        %The \code{getPlugin} method requires a plugin identifier and returns the plugin instance being used by the \abbr{elq} instance that matches the plugin identifier.
-
         The plugin \gls{API} is a superset of the public \gls{API}.
         Plugins have additional direct access to most core subsystems presented in section~\ref{sec:arcithecture}.
         The plugin \gls{API} access is given to a plugin when it is registered (i.e., when the \abbr{elq} instance invokes the \code{make} function of the plugin definition).
@@ -1566,6 +1564,8 @@
         It is possible to override the assignment with an option parameter.
 
         \todo[inline]{Code examples?}
+        %The \code{getPlugin} method requires a plugin identifier and returns the plugin instance being used by the \abbr{elq} instance that matches the plugin identifier.
+        \todo[inline]{Write about getPlugin}
 
         %           \begin{lstlisting}[caption={},captionpos=b,label={code:elq-plugin-api}]]
         % ...
@@ -1650,10 +1650,9 @@
           In the example, all paragraph elements \code{p} will be styled conditionally depending on the target element size state.
 
 
-          \todo[inline]{How about elements that want to write element queries against a child? CSS cant go upwards, but might be supported in the future. See \url{http://dev.w3.org/csswg/selectors-4/\#relational}. This could be supported with an extended version of mirror that doesn't only go upwards.}
           \todo[inline]{Write about HTML compatability with data- prefix and empty attributes.}
-          \todo[inline]{Example of how to register the plugin with an elq instance + options?a }
-          \todo[inline]{Change above/below to >=/<=}
+          \todo[inline]{Example of how to register the plugin with an elq instance + options?}
+          \todo[inline]{Write that above is inclusive and below is exclusive? Why? Option?}
         \subsubsection{Mirror}
           This plugin is needed as an addition to the \code{elq-breakpoints} plugin in some cases due to limitations of CSS.
           As of the \gls{CSS3} specification, there is no way to select ancestor elements of an element.
@@ -1719,6 +1718,8 @@
           By mirroring an element's breakpoint classes, elements can be styled by criterion of any element (ancestor, sibling, child, etc.).
           The plugin is at the moment restricted to the nearest ancestor \code{elq-breakpoint} element, but could easily be extended to support more advanced mirror constellations.
           \todo[inline]{Maybe it should be presented how such API could look like?}
+          \todo[inline]{How about elements that want to write element queries against a child? CSS cant go upwards, but might be supported in the future. See \url{http://dev.w3.org/csswg/selectors-4/\#relational}. This could be supported with an extended version of mirror that doesn't only go upwards.}
+
         \subsubsection{Prolyfill}
           \todo[inline]{Have not been done. Should it? Perhaps remove this as it could be out of scope. Low priority.}
 
