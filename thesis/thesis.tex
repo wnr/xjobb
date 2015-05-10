@@ -1727,24 +1727,26 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Implementation
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{Implementation}
+    \todo[inline]{Perhaps merge this chapter with Library design (and rename it to just The library or something like that?}
     \todo[inline]{Write about the simple cycle detector.}
     \todo[inline]{Write about the N layouts, and how it was fixed with the batch processing. Investigate how this behaves for nested elements.}
     \todo[inline]{Write about the drawbacks (invalid layout at page load, injecting objects is heavy, DOM is mutated.)}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element reesize detection
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element resize detection
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Element resize detection}\label{sec:imp_erd}
       \begin{metatext}
-        In order to be able to perform any element queries, one first needs to be able to detect when \glspl{element} change size.
-        The \gls{element} resize detection system will therefore be the backbone of the library.
+        As described in section~\ref{sec:arcithecture}, \abbr{elq} needs a subsystem that is able to detect when elements change size.
+        As the element resize detection system is a core subsystem of \abbr{elq}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both resiliant and performant approach to detect element size changes.
         This section is mainly based on \normalfont{\cite{backalley}}.
       \end{metatext}
 
-        Unfortunately, there is no standard resize event for arbitrary \glspl{element}.
+        Unfortunately, there is no standardized resize event for arbitrary \glspl{element}.
         Only frames (\glspl{element} that render it's content independently of the container \gls{element}, such as \code{iframe} and \code{object}) support the resize event by standard since they have their own \gls{viewport}.
         Legacy versions of Internet Explorer (version 8 and down, but also some later versions depending on the \gls{document} mode and if the \gls{browser} is in quirks mode) do support the resize event on arbitrary \glspl{element}.
         Since the library needs to support all commonly used \gls{HTML} \glspl{element} a solution to observe resize events of any \gls{element} needs to be found.
+        \todo{The approach cannot listen to all elements. Void elements (I think it is called that) for instance cannot have elements injected. However, many more elements than only the frames elements can be used.}
         Possible solutions are:
         \begin{itemize}
           \item \textbf{Polling}:
