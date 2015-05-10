@@ -1535,14 +1535,16 @@
         \begin{itemize}
           \item \textbf{Reporter}: via the \code{elq.reporter} property that refers to the reporter instance.
           \item \textbf{Cycle detector}: via the \code{elq.cycleDetector} property that refers to the cycle detector instance.
-          \item \textbf{Batch processor}: via the \code{elq.createBatchProcessor} property that refers to a function that creates a \glslink{batch processing}{batch processor} intance.
+          \item \textbf{Batch processor}: via the \code{elq.BatchProcessor} property that refers to a factory function that creates \glslink{batch processing}{batch processor} instances.
           \item \textbf{\abbr{ID} handler}: via the \code{elq.idHandler} property that refers to the \abbr{ID} handler instance. \todo{Include id handler in section \ref{sec:arcithecture}?}
         \end{itemize}
         Direct access is not given to the plugin handler and element resize detector subsystems since their \glspl{API} are already exposed in the public \gls{API}.
+        However, an additional method of the plugin handler system is exposed; the \code{getPlugin} method that returns the registered plugin instance given a plugin identifier parameter.
+        This method is needed to enable interplugin communications.
 
         The reporter has three methods; \code{log}, \code{warn} and \code{error}.
         They are used to report information, warnings and errors respectively.
-        The default reporter is a wrapper around the native \code{console} object, and has therefore the same \gls{API} as it.
+        The default behavior of the reporter is to report to the browser console if present.
 
         The cycle detector has a method \code{isUpdateCyclic} that tells if the desired state update of an element is part of a cycle.
         To do so, it requires two parameters; the element that the update should be applied to, and the state update itself.
@@ -1565,7 +1567,6 @@
 
         \todo[inline]{Code examples?}
         %The \code{getPlugin} method requires a plugin identifier and returns the plugin instance being used by the \abbr{elq} instance that matches the plugin identifier.
-        \todo[inline]{Write about getPlugin}
 
         %           \begin{lstlisting}[caption={},captionpos=b,label={code:elq-plugin-api}]]
         % ...
