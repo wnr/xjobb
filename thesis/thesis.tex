@@ -1743,7 +1743,7 @@
       \begin{metatext}
         As described in section~\ref{sec:arcithecture}, \abbr{elq} needs a subsystem that is able to detect when elements change size.
         As the element resize detection system is a core subsystem of \abbr{elq}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect element size changes.
-        This section is mainly based on \normalfont{\cite{backalley}}.
+        This section is mainly based on \normalfont{\cite{backalley,eq_imp_css-element-queries}}.
       \end{metatext}
         \todo{Explain target element}
 
@@ -1808,9 +1808,8 @@
 
         For solution \ref{itm:erd-approach-frame}, it has been shown by \cite{backalley} that \code{object} is the most suitable frame \gls{element} to be used for this purpose as they have good \gls{browser} compatibility and adequate performance.
         One disadvantage with this solution is that installing \code{object} elements is quite a heavy task.
-        See figure~\ref{fig:erd-original-object} for a graph that shows the performance of the object-based element resize detector provided by \cite{backalley}.
-
-        \begin{figure}[h!]
+        See figure~\ref{fig:erd-original-object} for graphs that show the performance of the object-based element resize detector provided by \cite{backalley}.
+        \begin{figure}[h]
           \tiny
           \begin{center}
             \begin{minipage}{.5\textwidth}
@@ -1825,10 +1824,7 @@
                       y unit=s, % Set the respective units
                       legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                     ]
-                    \addplot
-                    % add a plot from table; you select the columns by using the actual name in
-                    % the .csv file (on top)
-                    table[x=n elements,y=install time,col sep=comma] {./data/erd-object-original.csv};
+                    \addplot+[red, mark options={red}] table[x=n elements,y=install time,col sep=comma] {./data/erd-object-original.csv};
                     \legend{Original object-based solution}
                   \end{axis}
                 \end{tikzpicture}
@@ -1845,7 +1841,7 @@
                     y unit=MB, % Set the respective units
                     legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                   ]
-                  \addplot
+                  \addplot+[red, mark options={red}]
                   % add a plot from table; you select the columns by using the actual name in
                   % the .csv file (on top)
                   table[x=n elements,y=memory,col sep=comma] {./data/erd-object-original.csv};
@@ -1857,13 +1853,113 @@
           \label{fig:erd-original-object}
           \end{center}
         \end{figure}
+        As shown by the graphs, the object solution can be installed with adequate performance as long as the number of elements is low.
+        The solution does not scale well as the number of element increases.
+        The installation time increases linearly with \textasciitilde7 ms and \textasciitilde0.6 MB per element.
 
+        Before the newer object solution was presented, the scroll-based solution \ref{itm:erd-approach-scroll} was described by \cite{backalley}.
+        However as the object solution was discovered, solution \ref{itm:erd-approach-scroll} was rejected in favor of the new solution.
+        Fortunately, a somewhat reworked version of the scroll-based solution is still available \cite{eq_imp_css-element-queries}.
+        \begin{figure}[h]
+          \tiny
+          \begin{center}
+            \begin{minipage}{.5\textwidth}
+              \centering
+                \begin{tikzpicture}
+                  \begin{axis}[
+                      width=\textwidth, % Scale the plot to \linewidth
+                      grid=major, % Display a grid
+                      grid style={dashed,gray!30}, % Set the style
+                      xlabel=X Axis \emph{number of elements}, % Set the labels
+                      ylabel=Y Axis \emph{install time},
+                      y unit=s, % Set the respective units
+                      legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
+                    ]
+                    \addplot+[orange, mark options={orange}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-original.csv};
+                    \addplot+[red, mark options={red}] table[x=n elements,y=install time,col sep=comma] {./data/erd-object-original.csv};
+                    \addlegendentry{Original object-based solution}
+                    \addlegendentry{Scroll-based solution}
+                  \end{axis}
+                \end{tikzpicture}
+            \end{minipage}%
+            \begin{minipage}{.5\textwidth}
+              \centering
+              \begin{tikzpicture}
+                \begin{axis}[
+                    width=\textwidth, % Scale the plot to \linewidth
+                    grid=major, % Display a grid
+                    grid style={dashed,gray!30}, % Set the style
+                    xlabel=X Axis \emph{number of elements}, % Set the labels
+                    ylabel=Y Axis \emph{heap usage},
+                    y unit=MB, % Set the respective units
+                    legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
+                  ]
+                  \addplot+[orange, mark options={orange}] table[x=n elements,y=memory,col sep=comma] {./data/erd-scroll-original.csv};
+                  \addplot+[red, mark options={red}] table[x=n elements,y=memory,col sep=comma] {./data/erd-object-original.csv};
+                  \addlegendentry{Original object-based solution}         
+                  \addlegendentry{Scroll-based solution}
+                \end{axis}
+              \end{tikzpicture}
+            \end{minipage}
+          \caption{}
+          \label{fig:erd-original-object}
+          \end{center}
+        \end{figure}
 
+        \begin{figure}[h]
+          \tiny
+          \begin{center}
+            \begin{minipage}{.5\textwidth}
+              \centering
+                \begin{tikzpicture}
+                  \begin{axis}[
+                      width=\textwidth, % Scale the plot to \linewidth
+                      grid=major, % Display a grid
+                      grid style={dashed,gray!30}, % Set the style
+                      xlabel=X Axis \emph{number of elements}, % Set the labels
+                      ylabel=Y Axis \emph{install time},
+                      y unit=s, % Set the respective units
+                      legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
+                    ]
+                    \addplot+[orange, mark options={orange}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-original.csv};
+                    \addplot+[blue, mark options={blue}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-elq.csv};
+                    \addlegendentry{Scroll-based solution}
+                    \addlegendentry{ELQ scroll-based solution}
+                  \end{axis}
+                \end{tikzpicture}
+            \end{minipage}%
+            \begin{minipage}{.5\textwidth}
+              \centering
+              \begin{tikzpicture}
+                \begin{axis}[
+                    width=\textwidth, % Scale the plot to \linewidth
+                    grid=major, % Display a grid
+                    grid style={dashed,gray!30}, % Set the style
+                    xlabel=X Axis \emph{number of elements}, % Set the labels
+                    ylabel=Y Axis \emph{install time},
+                    y unit=s, % Set the respective units
+                    legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
+                  ]
+                  \addplot+[red, mark options={red}] table[x=n elements,y=install time,col sep=comma] {./data/erd-object-original.csv};
+                  \addplot+[orange, mark options={orange}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-original.csv};
+                  \addplot+[blue, mark options={blue}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-elq.csv};
+
+                  \addlegendentry{Original object-based solution}
+                  \addlegendentry{Scroll-based solution}
+                  \addlegendentry{ELQ scroll-based solution}
+                \end{axis}
+              \end{tikzpicture}
+            \end{minipage}
+          \caption{}
+          \label{fig:erd-original-object}
+          \end{center}
+        \end{figure}
+
+        \todo[inline]{Mention that both the object and scroll solutions were completely rewritten to fit in the ELQ framework?}
+        \todo[inline]{Mention that the scroll solution had severe bugs that were fixed? the display:none or 0 length for instance.}
+
+        \todo[inline]{Tests have shown that my own and backalleys object approaches perform the same. I thought the batch processor would boost it.}
         \todo[inline]{Write that it might be up to the user to decide if solution 1 or 3 is desired? Or is it always better to use 3?}
-      \subsection{Native resize event}
-        \todo[inline]{remove me?}
-      \subsection{Object injection}
-        \todo[inline]{remove me?}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Detecting runtime cycles
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
