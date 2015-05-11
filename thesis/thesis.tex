@@ -18,6 +18,9 @@
 \usepackage{listings}
 \usepackage{tikz}
 \usetikzlibrary{arrows,positioning,fit,calc,decorations.markings}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest} % Allows to place the legend below plot
+\usepgfplotslibrary{units} % Allows to enter the units nicely
 \usepackage{todonotes}
 \usepackage[toc,acronym]{glossaries}
 \makenoidxglossaries
@@ -1754,7 +1757,7 @@
         \begin{enumerate}
           \item\label{itm:erd-approach-polling} \textbf{Polling}:
             To have a script running asynchronously to check all \glspl{element} if they have resized.
-            This can be achieved by using the \gls{JavaScript} \code{setInterval}\footnote{See \url{http://www.w3.org/TR/2011/WD-html5-20110525/timers.html} for more information about \gls{JavaScript} timer functions.} function.
+            This can be achieved by using the \gls{JavaScript} \code{setInterval}\footnote{See \url{http://www.w3.org/html/wg/drafts/html/master/webappapis.html\#timers} for more information about \gls{JavaScript} timer functions.} function.
             Short polling intervals (high frequency) would lead to being able to detect resize changes quicker but having worse performance.
             Longer polling intervals (low frequency) would not be able to detect changes as quickly but increases the performance.
             The longest possible delay between an actual resize event and the polling detecting is given by the polling interval time.
@@ -1803,7 +1806,57 @@
             This way the target \gls{element} can be changed to \code{relative} positioning with the special style properties removed, to obtain the same visual representation as being positioned \code{static}.
         \end{itemize}
 
-        It has been shown by \cite{backalley} that \code{object} is the most suitable frame \gls{element} to use for this purpose, as they have good \gls{browser} compatibility, adequate performance and are easy to work with.
+        For solution \ref{itm:erd-approach-frame}, it has been shown by \cite{backalley} that \code{object} is the most suitable frame \gls{element} to be used for this purpose as they have good \gls{browser} compatibility and adequate performance.
+        One disadvantage with this solution is that installing \code{object} elements is quite a heavy task.
+        See figure~\ref{fig:erd-original-object} for a graph that shows the performance of the object-based element resize detector provided by \cite{backalley}.
+
+        \begin{figure}[h!]
+          \tiny
+          \begin{center}
+            \begin{minipage}{.5\textwidth}
+              \centering
+                \begin{tikzpicture}
+                  \begin{axis}[
+                      width=\textwidth, % Scale the plot to \linewidth
+                      grid=major, % Display a grid
+                      grid style={dashed,gray!30}, % Set the style
+                      xlabel=X Axis \emph{number of elements}, % Set the labels
+                      ylabel=Y Axis \emph{install time},
+                      y unit=s, % Set the respective units
+                      legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
+                    ]
+                    \addplot
+                    % add a plot from table; you select the columns by using the actual name in
+                    % the .csv file (on top)
+                    table[x=n elements,y=install time,col sep=comma] {./data/erd-object-original.csv};
+                    \legend{Original object-based solution}
+                  \end{axis}
+                \end{tikzpicture}
+            \end{minipage}%
+            \begin{minipage}{.5\textwidth}
+              \centering
+              \begin{tikzpicture}
+                \begin{axis}[
+                    width=\textwidth, % Scale the plot to \linewidth
+                    grid=major, % Display a grid
+                    grid style={dashed,gray!30}, % Set the style
+                    xlabel=X Axis \emph{number of elements}, % Set the labels
+                    ylabel=Y Axis \emph{heap usage},
+                    y unit=MB, % Set the respective units
+                    legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
+                  ]
+                  \addplot
+                  % add a plot from table; you select the columns by using the actual name in
+                  % the .csv file (on top)
+                  table[x=n elements,y=memory,col sep=comma] {./data/erd-object-original.csv};
+                  \legend{Original object-based solution}
+                \end{axis}
+              \end{tikzpicture}
+            \end{minipage}
+          \caption{The install performance of the original object-based element resize detection solution provided by \cite{backalley}. The left graph shows the installation time. The right graph shows the heap memory used when all \code{object} elements have been installed.}
+          \label{fig:erd-original-object}
+          \end{center}
+        \end{figure}
 
 
         \todo[inline]{Write that it might be up to the user to decide if solution 1 or 3 is desired? Or is it always better to use 3?}
