@@ -1812,15 +1812,16 @@
         \begin{figure}[h]
           \tiny
           \begin{center}
-            \begin{minipage}{.5\textwidth}
+            \begin{minipage}[t]{.5\textwidth}
+              \vspace{0pt}
               \centering
                 \begin{tikzpicture}
                   \begin{axis}[
                       width=\textwidth, % Scale the plot to \linewidth
                       grid=major, % Display a grid
                       grid style={dashed,gray!30}, % Set the style
-                      xlabel=X Axis \emph{number of elements}, % Set the labels
-                      ylabel=Y Axis \emph{install time},
+                      xlabel=Number of elements, % Set the labels
+                      ylabel=Installation time,
                       y unit=s, % Set the respective units
                       legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                     ]
@@ -1829,15 +1830,16 @@
                   \end{axis}
                 \end{tikzpicture}
             \end{minipage}%
-            \begin{minipage}{.5\textwidth}
+            \begin{minipage}[t]{.5\textwidth}
+              \vspace{0pt}
               \centering
               \begin{tikzpicture}
                 \begin{axis}[
                     width=\textwidth, % Scale the plot to \linewidth
                     grid=major, % Display a grid
                     grid style={dashed,gray!30}, % Set the style
-                    xlabel=X Axis \emph{number of elements}, % Set the labels
-                    ylabel=Y Axis \emph{heap usage},
+                    xlabel=Number of elements, % Set the labels
+                    ylabel=Heap memory usage,
                     y unit=MB, % Set the respective units
                     legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                   ]
@@ -1849,7 +1851,7 @@
                 \end{axis}
               \end{tikzpicture}
             \end{minipage}
-          \caption{The install performance of the original object-based element resize detection solution provided by \cite{backalley}. The left graph shows the installation time. The right graph shows the heap memory used when all \code{object} elements have been installed.}
+          \caption{The installation performance of the original object-based element resize detection solution provided by \cite{backalley}. The left graph shows the installation time. The right graph shows the heap memory used when all \code{object} elements have been installed.}
           \label{fig:erd-original-object}
           \end{center}
         \end{figure}
@@ -1860,83 +1862,93 @@
         Before the newer object solution was presented, the scroll-based solution \ref{itm:erd-approach-scroll} was described by \cite{backalley}.
         However as the object solution was discovered, solution \ref{itm:erd-approach-scroll} was rejected in favor of the new solution.
         Fortunately, a somewhat reworked version of the scroll-based solution is still available \cite{eq_imp_css-element-queries}.
+        See figure~\ref{fig:erd-original-object} for graphs that show how the scroll-based solution performs compared to the object-based solution.
         \begin{figure}[h]
           \tiny
           \begin{center}
-            \begin{minipage}{.5\textwidth}
+            \begin{minipage}[t]{.5\textwidth}
+              \vspace{0pt}
               \centering
                 \begin{tikzpicture}
                   \begin{axis}[
                       width=\textwidth, % Scale the plot to \linewidth
                       grid=major, % Display a grid
                       grid style={dashed,gray!30}, % Set the style
-                      xlabel=X Axis \emph{number of elements}, % Set the labels
-                      ylabel=Y Axis \emph{install time},
+                      xlabel=Number of elements, % Set the labels
+                      ylabel=Installation time,
                       y unit=s, % Set the respective units
                       legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                     ]
                     \addplot+[orange, mark options={orange}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-original.csv};
-                    \addplot+[red, mark options={red}] table[x=n elements,y=install time,col sep=comma] {./data/erd-object-original.csv};
                     \addlegendentry{Original object-based solution}
                     \addlegendentry{Scroll-based solution}
                   \end{axis}
                 \end{tikzpicture}
             \end{minipage}%
-            \begin{minipage}{.5\textwidth}
+            \begin{minipage}[t]{.5\textwidth}
+              \vspace{0pt}
               \centering
               \begin{tikzpicture}
                 \begin{axis}[
                     width=\textwidth, % Scale the plot to \linewidth
                     grid=major, % Display a grid
                     grid style={dashed,gray!30}, % Set the style
-                    xlabel=X Axis \emph{number of elements}, % Set the labels
-                    ylabel=Y Axis \emph{heap usage},
-                    y unit=MB, % Set the respective units
+                    xlabel=Number of elements, % Set the labels
+                    ylabel=Installation time,
+                    y unit=s, % Set the respective units
                     legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                   ]
-                  \addplot+[orange, mark options={orange}] table[x=n elements,y=memory,col sep=comma] {./data/erd-scroll-original.csv};
-                  \addplot+[red, mark options={red}] table[x=n elements,y=memory,col sep=comma] {./data/erd-object-original.csv};
+                  \addplot+[orange, mark options={orange}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-original.csv};
+                  \addplot+[red, mark options={red}] table[x=n elements,y=install time,col sep=comma] {./data/erd-object-original.csv};
                   \addlegendentry{Original object-based solution}         
                   \addlegendentry{Scroll-based solution}
                 \end{axis}
               \end{tikzpicture}
             \end{minipage}
-          \caption{}
-          \label{fig:erd-original-object}
+          \caption{The installation performance of the original scroll-based element resize detection solution provided by \cite{eq_imp_css-element-queries} and originally created by \cite{backalley}. The left graph shows the installation time of the scroll-based solution. The right graph also includes the original object-based solution for reference. The heap memory usage graph has been omitted as the memory usage for the scroll-based solutions are near constant.}
+          \label{fig:erd-original-scroll}
           \end{center}
         \end{figure}
+        It is clear that the scroll-based solution both performs and scales better than the object-based solution.
+        The memory footprint is reduced significantly, which improves the performance further.
 
-        \begin{figure}[h]
+        \begin{figure}[h!]
           \tiny
           \begin{center}
-            \begin{minipage}{.5\textwidth}
+            \begin{minipage}[t]{.5\textwidth}
+              \vspace{0pt}
               \centering
                 \begin{tikzpicture}
                   \begin{axis}[
+                      yticklabel style={
+                              /pgf/number format/fixed,
+                              /pgf/number format/precision=5
+                      },
+                      scaled y ticks=false,
                       width=\textwidth, % Scale the plot to \linewidth
                       grid=major, % Display a grid
                       grid style={dashed,gray!30}, % Set the style
-                      xlabel=X Axis \emph{number of elements}, % Set the labels
-                      ylabel=Y Axis \emph{install time},
+                      xlabel=Number of elements, % Set the labels
+                      ylabel=Installation time,
                       y unit=s, % Set the respective units
                       legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                     ]
-                    \addplot+[orange, mark options={orange}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-original.csv};
                     \addplot+[blue, mark options={blue}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-elq.csv};
                     \addlegendentry{Scroll-based solution}
                     \addlegendentry{ELQ scroll-based solution}
                   \end{axis}
                 \end{tikzpicture}
             \end{minipage}%
-            \begin{minipage}{.5\textwidth}
+            \begin{minipage}[t]{.5\textwidth}
+              \vspace{0pt}
               \centering
               \begin{tikzpicture}
                 \begin{axis}[
                     width=\textwidth, % Scale the plot to \linewidth
                     grid=major, % Display a grid
                     grid style={dashed,gray!30}, % Set the style
-                    xlabel=X Axis \emph{number of elements}, % Set the labels
-                    ylabel=Y Axis \emph{install time},
+                    xlabel=Number of elements, % Set the labels
+                    ylabel=Installation time,
                     y unit=s, % Set the respective units
                     legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                   ]
@@ -1950,13 +1962,45 @@
                 \end{axis}
               \end{tikzpicture}
             \end{minipage}
-          \caption{}
-          \label{fig:erd-original-object}
+          \caption{The installation performance of the optimized \abbr{ELQ} scroll-based element resize detection. The left graph shows the installation time with the original scroll-based solution graph included as reference. The right graph shows all three solutions for comparison. The heap memory usage graph has been omitted as the memory usage for the scroll-based solutions are near constant.}
+          \label{fig:erd-elq-scroll}
           \end{center}
         \end{figure}
 
+        \begin{figure}[h!]
+          \tiny
+          \begin{center}
+            \centering
+            \begin{tikzpicture}
+              \begin{axis}[
+                  width=0.7\textwidth, % Scale the plot to \linewidth
+                  grid=major, % Display a grid
+                  grid style={dashed,gray!30}, % Set the style
+                  xlabel=Number of elements, % Set the labels
+                  ylabel=Installation time,
+                  y unit=s, % Set the respective units
+                  legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
+                ]
+                \addplot+[red, mark options={red}] table[x=n elements,y=install time,col sep=comma] {./data/erd-object-original.csv};
+                \addplot+[orange, mark options={orange}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-original.csv};
+                \addplot+[blue, mark options={blue}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-elq.csv};
+                \addplot[dashed,red,domain=1:1500,samples=100] {5.567042796*10^(-6)*x^2 + 4.680174396*10^(-3)*x + 6.495754669*10^(-3)};
+                \addplot[dashed,orange,domain=1:1500,samples=100] {4.533208873*10^(-6)*x^2 + 6.320377596*10^(-4)*x + 2.289566005*10^(-2)};
+                \addplot[dashed,blue,domain=1:1500,samples=100] {4.071740702*10^(-8)*x^2 + 1.823749404*10^(-4)*x + 1.527042267*10^(-2)};
+                \addlegendentry{Original object-based solution}
+                \addlegendentry{Scroll-based solution}
+                \addlegendentry{ELQ scroll-based solution}
+              \end{axis}
+            \end{tikzpicture}
+          \caption{The installation performance of all three solutions including graph predicitions by polynomial regression.}
+          \label{fig:erd-elq-scroll}
+          \end{center}
+        \end{figure}
+
+        \todo[inline]{Write that object was probably preferred over scroll since scroll have some shortcomings? Which have been fixed by ELQ.}
         \todo[inline]{Mention that both the object and scroll solutions were completely rewritten to fit in the ELQ framework?}
         \todo[inline]{Mention that the scroll solution had severe bugs that were fixed? the display:none or 0 length for instance.}
+        \todo[inline]{Write that measurements have been done in Chrome?}
 
         \todo[inline]{Tests have shown that my own and backalleys object approaches perform the same. I thought the batch processor would boost it.}
         \todo[inline]{Write that it might be up to the user to decide if solution 1 or 3 is desired? Or is it always better to use 3?}
