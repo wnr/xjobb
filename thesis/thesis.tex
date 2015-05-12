@@ -2027,6 +2027,13 @@
       Recall from Section~\ref{sec:plugin-api} that the cycle detection subsystem has a function \code{isUpdateCyclic} that is to tell if the desired update is part of a cycle or not.
       Further, recall from Section~\ref{sec:cyclic-rules} that cycles may depend on multiple factors (e.g., content, browser behavior, \gls{CSS}, \gls{JavaScript}).
       Since a cycle graph can be both spread over different factors and chained; a simplistic approach to detecting cycles has been taken.
+      The idea is to keep track of all style state changes to elements in order to tell if new state changes are cyclic by examining the state history.
+      This approach is simple to implement and quite sufficient for detecting and breaking cycles.
+      It should be noted that all state cycles are not undesired, as some applications might have features that result in elements transitioning between multiple style states (e.g., a menu might be hidden and revealed by user input, which to the cycle detection system seems like the menu element suffers from cyclic rules).
+      This is perhaps the biggest drawback with such simple approach; a more intelligent cycle detection algorithm might be able to distinguish between desired and undesired cycles.
+      To mitigate the false positive detections, two parameters can be tuned by the user of the system: the time parameter $T$ that defines how long the history should be, and the parameter $C$ that defined how many cycles should be allowed per element before flagging it as a cycle to the user.
+      % This approach will only be able to detect cycles as they are about to happen, which might be 
+      
       Recall that the \code{isUpdateCyclic} function requires an element $e$ parameter and state $s$ parameter.
       For each element $e$, an chronologically ordered list of states $L_{states}$ is kept.
       For each call of \code{isUpdateCyclic}, the following cycle detection algorithm is performed:
@@ -2037,11 +2044,11 @@
         \item Iterate $L_{states}$ from beginning to end (starting with the most recent update tuple).
         \begin{enumerate}
           \item\label{itm:cycle-detection-step-loop}
-            If the time $t_i$ (of the current update tuple $u_i$ of $L_{states}$) and $t$ differs more than a predefined constant $T$, then $u_i$ is regarded as too old to consider.
+            If the time $t_i$ (of the current update tuple $u_i$ of $L_{states}$) and $t$ differs more the time parameter $T$, then $u_i$ is regarded as too old to consider.
             Since $L_{states}$ is chronologically ordered all update tuples after $u_i$ must also be too old.
             Therefore, all tuples from (and including) $u_i$ are removed from $L_{states}$. Next step is \ref{itm:cycle-detection-step-prepend-tuple}.
           \item If the state $s_i$ (of the current update tuple $u_i$ of $L_{states}$) and $s$ are equal, then increment the cycle counter $c$.
-          \item If $c$ is greater than a predefined constant $C$, then a cycle has been detected. The function should then \textbf{return true}.
+          \item If $c$ is greater than the parameter $C$, then a cycle has been detected. The function should then \textbf{return true}.
           \item The next update tuple in the list is considered. Next step is \ref{itm:cycle-detection-step-loop}.
         \end{enumerate}
         \item\label{itm:cycle-detection-step-prepend-tuple} Prepend $u$ to $L_{states}$ (i.e., $u$ will be the most recent element in the list).
