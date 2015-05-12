@@ -1531,7 +1531,7 @@
           elq.start(jqueryElementsCollection);
         \end{lstlisting}
 
-      \subsection{Plugin API}
+      \subsection{Plugin API}\label{sec:plugin-api}
         The plugin \gls{API} is a superset of the public \gls{API}.
         Plugins have additional direct access to most core subsystems presented in section~\ref{sec:arcithecture}.
         The plugin \gls{API} access is given to a plugin when it is registered (i.e., when the \abbr{elq} instance invokes the \code{make} function of the plugin definition).
@@ -1812,6 +1812,8 @@
         For solution \ref{itm:erd-approach-frame}, it has been shown by \cite{backalley} that \code{object} is the most suitable frame \gls{element} to be used for this purpose as they have good \gls{browser} compatibility and adequate performance.
         One disadvantage with this solution is that installing \code{object} elements is quite a heavy task.
         See figure~\ref{fig:erd-original-object} for graphs that show the performance of the object-based element resize detector provided by \cite{backalley}.
+        As shown by the graphs, the object solution can be installed with adequate performance as long as the number of elements is low.
+        The solution does not scale well as the number of element increases.
         \begin{figure}[h]
           \tiny
           \begin{center}
@@ -1858,13 +1860,14 @@
           \label{fig:erd-original-object}
           \end{center}
         \end{figure}
-        As shown by the graphs, the object solution can be installed with adequate performance as long as the number of elements is low.
-        The solution does not scale well as the number of element increases.
 
         Before the newer object solution was presented, the scroll-based solution \ref{itm:erd-approach-scroll} was described by \cite{backalley}.
         However as the object solution was discovered, solution \ref{itm:erd-approach-scroll} was rejected in favor of the new solution.
         Fortunately, a somewhat reworked version of the scroll-based solution is still available \cite{eq_imp_css-element-queries}.
-        See figure~\ref{fig:erd-original-object} for graphs that show how the scroll-based solution performs compared to the object-based solution.
+        See figure~\ref{fig:erd-original-scroll} for graphs that show how the scroll-based solution performs compared to the object-based solution.
+        It is clear that the scroll-based solution both performs and scales better than the object-based solution.
+        The memory footprint is reduced significantly, which improves the performance further.
+        The amount of memory used by the scroll-based solution is so low that reliable measurements could not be gathered, as the number of elements was not high enough to affect the memory usage.
         \begin{figure}[h]
           \tiny
           \begin{center}
@@ -1911,9 +1914,16 @@
           \label{fig:erd-original-scroll}
           \end{center}
         \end{figure}
-        It is clear that the scroll-based solution both performs and scales better than the object-based solution.
-        The memory footprint is reduced significantly, which improves the performance further.
 
+        Due to problems such as layout thrashing, bugs and an undesired \gls{API}; the scroll-based solution provided \cite{eq_imp_css-element-queries} was completely rewritten to better fit \abbr{elq}.
+        Layout thrashing was avoided by using the leveled batch processor described in section~\ref{sec:plugin-api}.
+        \todo{Describe the leveled batch processor in detail somewhere?}
+        \todo{Describe how stuff was batch processed in detail?}
+        See figure~\ref{fig:erd-elq-scroll} for graphs that show how the \abbr{elq} scroll-based solution performs compared to the other solutions.
+        As evident in the graph, the optimized \abbr{elq} solution has significantly reduced installation times compared to the other two.
+        The \abbr{elq} solution also scales better, as more clearly shown in figure~\ref{fig:erd-solutions-regressed} that includes polynomial regression graphs for all three solutions.
+        Both scroll-based solutions have the same memory footprint (i.e., too low for reliable measurements).
+        
         \begin{figure}[h!]
           \tiny
           \begin{center}
@@ -1936,7 +1946,6 @@
                       legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                     ]
                     \addplot+[blue, mark options={blue}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-elq.csv};
-                    \addlegendentry{Scroll-based solution}
                     \addlegendentry{ELQ scroll-based solution}
                   \end{axis}
                 \end{tikzpicture}
@@ -1968,14 +1977,13 @@
           \label{fig:erd-elq-scroll}
           \end{center}
         \end{figure}
-
         \begin{figure}[h!]
           \tiny
           \begin{center}
             \centering
             \begin{tikzpicture}
               \begin{axis}[
-                  width=0.7\textwidth, % Scale the plot to \linewidth
+                  width=0.6\textwidth, % Scale the plot to \linewidth
                   grid=major, % Display a grid
                   grid style={dashed,gray!30}, % Set the style
                   xlabel=Number of elements, % Set the labels
@@ -1995,7 +2003,7 @@
               \end{axis}
             \end{tikzpicture}
           \caption{The installation performance of all three solutions including graph predicitions by polynomial regression.}
-          \label{fig:erd-elq-scroll}
+          \label{fig:erd-solutions-regressed}
           \end{center}
         \end{figure}
 
@@ -2006,14 +2014,40 @@
 
         \todo[inline]{Tests have shown that my own and backalleys object approaches perform the same. I thought the batch processor would boost it.}
         \todo[inline]{Write that it might be up to the user to decide if solution 1 or 3 is desired? Or is it always better to use 3?}
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%% Detecting runtime cycles
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        \todo[inline]{Write that object is faster than scroll when it comes to the actual resize events?}
+    % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % %%%%%%%%%%%%%%%%%%%%%%%%%%%% Detecting runtime cycles
+    % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Detecting runtime cycles}\label{sec:imp_cycle_detector}
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%% Avoiding layout thrashing
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Avoiding layout thrashing}\label{sec:imp_batch_processor}
+      \begin{metatext}
+        As described in section~\ref{sec:arcithecture}, \abbr{elq} needs a subsystem that is able to detect cyclic element style state updates, in order to warn about or prevent cyclic rules.
+        As the cycle detection system is a core subsystem of \abbr{elq}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect cyclic updates.
+      \end{metatext}
+
+      Recall from Section~\ref{sec:plugin-api} that the cycle detection subsystem has a function \code{isUpdateCyclic} that is to tell if the desired update is part of a cycle or not.
+      Further, recall from Section~\ref{sec:cyclic-rules} that cycles may depend on multiple factors (e.g., content, browser behavior, \gls{CSS}, \gls{JavaScript}).
+      Since a cycle graph can be both spread over different factors and chained; a simplistic approach to detecting cycles has been taken.
+      Recall that the \code{isUpdateCyclic} function requires an element $e$ parameter and state $s$ parameter.
+      For each element $e$, an chronologically ordered list of states $L_{states}$ is kept.
+      For each call of \code{isUpdateCyclic}, the following cycle detection algorithm is performed:
+      \begin{enumerate}
+        \item Construct $L_{states}$ if needed.
+        \item Constuct an update tuple $u$ that consists of the current time $t$ and the new state $s$.
+        \item Set the cycle counter $c$ to zero.
+        \item Iterate $L_{states}$ from beginning to end (starting with the most recent update tuple).
+        \begin{enumerate}
+          \item\label{itm:cycle-detection-step-loop}
+            If the time $t_i$ (of the current update tuple $u_i$ of $L_{states}$) and $t$ differs more than a predefined constant $T$, then $u_i$ is regarded as too old to consider.
+            Since $L_{states}$ is chronologically ordered all update tuples after $u_i$ must also be too old.
+            Therefore, all tuples from (and including) $u_i$ are removed from $L_{states}$. Next step is \ref{itm:cycle-detection-step-prepend-tuple}.
+          \item If the state $s_i$ (of the current update tuple $u_i$ of $L_{states}$) and $s$ are equal, then increment the cycle counter $c$.
+          \item If $c$ is greater than a predefined constant $C$, then a cycle has been detected. The function should then \textbf{return true}.
+          \item The next update tuple in the list is considered. Next step is \ref{itm:cycle-detection-step-loop}.
+        \end{enumerate}
+        \item\label{itm:cycle-detection-step-prepend-tuple} Prepend $u$ to $L_{states}$ (i.e., $u$ will be the most recent element in the list).
+        \item No cycle has been detected, and therefore the function should \textbf{return false}.
+      \end{enumerate}
+
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% State of the Art
