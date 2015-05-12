@@ -1915,12 +1915,12 @@
           \end{center}
         \end{figure}
 
-        Due to problems such as layout thrashing, bugs and an undesired \gls{API}; the scroll-based solution provided \cite{eq_imp_css-element-queries} was completely rewritten to better fit \abbr{elq}.
+        Due to problems such as layout thrashing, bugs and an undesired \gls{API}; the scroll-based solution provided by \cite{eq_imp_css-element-queries} was completely rewritten to better fit \abbr{elq}.
         Layout thrashing was avoided by using the leveled batch processor described in section~\ref{sec:plugin-api}.
         \todo{Describe the leveled batch processor in detail somewhere?}
         \todo{Describe how stuff was batch processed in detail?}
         See figure~\ref{fig:erd-elq-scroll} for graphs that show how the \abbr{elq} scroll-based solution performs compared to the other solutions.
-        As evident in the graph, the optimized \abbr{elq} solution has significantly reduced installation times compared to the other two.
+        As evident in the figure, the optimized \abbr{elq} solution has significantly reduced installation times compared to the other two.
         The \abbr{elq} solution also scales better, as more clearly shown in figure~\ref{fig:erd-solutions-regressed} that includes polynomial regression graphs for all three solutions.
         Both scroll-based solutions have the same memory footprint (i.e., too low for reliable measurements).
         
@@ -2054,7 +2054,9 @@
         \item\label{itm:cycle-detection-step-prepend-tuple} Prepend $u$ to $L_{states}$ (i.e., $u$ will be the most recent element in the list).
         \item No cycle has been detected, and therefore the function should \textbf{return false}.
       \end{enumerate}
-
+      Since the algorithm neither interacts with the \gls{DOM}, handles any large data structures, or performs any heavy computations it is very fast.
+      It takes \textasciitilde0.02 ms to execute the \code{isUpdateCyclic} function.
+      % See figure~\ref{} for a timeline of the \code{elq-breakpoints} plugin handling a resize event, where it is visually shown how insignificant the impact of the cycle detector system has on the total performance.
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% State of the Art
