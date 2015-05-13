@@ -246,19 +246,19 @@
       \todo[inline]{Philipp wanted this to be more general.}
     \section{Problem statement}\label{sec:problem}
       By using \gls{CSS} \gls{media queries}, developers can specify different style rules for different \gls{viewport} sizes.
-      This is fundamental to creating \gls{responsive} \gls{web} applications, as shown in section~\ref{sec:rwd}.
+      This is fundamental to creating \gls{responsive} \gls{web} applications, as shown in Section~\ref{sec:rwd}.
       If developers want to build modular applications by composing the application by smaller components (\glspl{element}, scripts, styles, etc.) \gls{media queries} are no longer applicable.
       \todo[color=red]{Tomas: The reader could misundestand this as modular design is about putting all scripts with scripts, styles with styles, etc.}
       Modular \gls{responsive} components should be able to react and change style depending on the size that the component has been given by the application, not the \gls{viewport} size. \todo{Do I need to have a reference for this?}
       The problem can be formulated as: \emph{It is not possible to specify conditional style rules for \glspl{element} depending on the size of an element}.
-      See the included document in section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
+      See the included document in Section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
       Participants, which include both paying members and the public, of the main international standards organization for the \gls{web}, the \gls{W3C} are interested in solving the problem and possible solutions are being discussed.
       However, they are still at the initial planning stage \cite{ricg_site} so a solution will not be implemented \glslink{native}{natively} in the near future.
-      Additionally, implementing element queries imposes circularity and performance problems, as shown in chapter~\ref{chp:eq}, which needs to be resolved before writing a standard.
+      Additionally, implementing element queries imposes circularity and performance problems, as shown in Chapter~\ref{chp:eq}, which needs to be resolved before writing a standard.
       While awaiting a \gls{native} solution it is up to the developers to implement this feature as a \gls{third-party} solution.
       \todo[color=red]{Tomas: Maybe not third-party? Third-party refers to something that has not been developer in-house. third-party here should be substituted to the negation of native.}
-      As presented in chapter~\ref{ch:related-work}, efforts have been made to create a robust \gls{third-party} solution, with moderate success.
+      As presented in Chapter~\ref{ch:related-work}, efforts have been made to create a robust \gls{third-party} solution, with moderate success.
       It should be noted that no effort of implementing a native solution have been made.
       Since all current \gls{third-party} solutions have shortcomings, there is still no de facto solution that developers use and the problem remains unsolved.
       % Some problems with implementing element queries \glslink{native}{natively} in \gls{CSS} are:
@@ -304,7 +304,7 @@
     \section{Significance}
       \todo[inline,color=red]{Tomas: Maybe more general or more specific. If details have to be presented, then the reader has to be able to understand it.}
       Many libraries and techniques are being used in \gls{web} development to keep the code from becoming an entangled mess.
-      Creating modules facilitates the development and increases the reusability, as shown in section~\ref{sec:modularity}.
+      Creating modules facilitates the development and increases the reusability, as shown in Section~\ref{sec:modularity}.
       Unfortunately, it is currently impossible to create \gls{encapsulated} \gls{responsive} modules since conditional styles cannot be applied to \glspl{element} by \gls{element} size criterion.
       Without element queries, \gls{responsive} modules force the application to style them properly depending on the \gls{viewport} sizes, which defeats the purpose of modules.
       Modules should be \gls{encapsulated} and may not require the user to perform some of the module logic in order to work.
@@ -313,7 +313,7 @@
       Clearly, no sound option exists for having \gls{responsive} modules.
 
       The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries \cite{eq_article_localised-css,eq_article_backalley,eq_article_mqhack,eq_article_tabatkjr,eq_article_filament,eq_article_tyson,eq_article_neal,eq_article_css-tricks,eq_article_hugo,eq_article_fremycompany,eq_article_discource,eq_article_matt}.
-      As already stated in section~\ref{sec:problem}, \gls{third-party} implementation efforts have been made with moderate success.
+      As already stated in Section~\ref{sec:problem}, \gls{third-party} implementation efforts have been made with moderate success.
       The \gls{W3C} receives requests and questions about it, and the \gls{RICG} have started writing a draft \cite{ricg_draft} about element queries use cases.
 
       Solving this problem would be a big advancement to \gls{web} development, enabling developers to create truly modular \gls{responsive} components.
@@ -367,11 +367,11 @@
     \begin{metatext}
       This chapter aims to present sufficient background to understand why element queries is a desired feature and why it is hard to implement natively in browsers.
       Section~\ref{sec:web-dev} will present a brief history of web development and motivate why responsive web design and modular development are desired concepts in modern web development.
-      Section~\ref{sec:layout-engines} describes briefly how layout engines operates, with focus on the layout process, to later present how they can be parallelized in section~\ref{sec:parallel}.
+      Section~\ref{sec:layout-engines} describes briefly how layout engines operates, with focus on the layout process, to later present how they can be parallelized in Section~\ref{sec:parallel}.
       \todo{Write that~\ref{sec:parallel} will be needed to understand the problems of element queries?}
-      The chapter ends with section~\ref{sec:layout-thrashing} that defines layout thrashing and shows how it can be avoided.
+      The chapter ends with Section~\ref{sec:layout-thrashing} that defines layout thrashing and shows how it can be avoided.
       \todo{Write that~\ref{sec:layout-thrashing} will be extensively referenced from implementation chapter?}
-      Expert readers may want to skip directly to chapter~\ref{chp:eq} where element queries is described.
+      Expert readers may want to skip directly to Chapter~\ref{chp:eq} where element queries is described.
     \end{metatext}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -383,8 +383,8 @@
         In the dawn of the \gls{web}, \glspl{browser} were simply applications that fetched and displayed text with embedded links.
         Today, \glspl{browser} act more like an operating system (on top of the host system) executing complex \gls{web} applications.
         There even exist computers that only run a \gls{browser}, which is sufficient for many users.
-        This section will describe the transition from \glspl{browser} rendering simple \glspl{document} to being hosts for complex applications in section~\ref{sec:doc-to-app}.
-        It will also describe two key evolution points in \gls{web} development --- \gls{responsive} \gls{web} design in section~\ref{sec:rwd} and modular development in section~\ref{sec:modularity}.
+        This section will describe the transition from \glspl{browser} rendering simple \glspl{document} to being hosts for complex applications in Section~\ref{sec:doc-to-app}.
+        It will also describe two key evolution points in \gls{web} development --- \gls{responsive} \gls{web} design in Section~\ref{sec:rwd} and modular development in Section~\ref{sec:modularity}.
       \end{metatext}
 
       \subsection{From documents to applications}\label{sec:doc-to-app}
@@ -394,7 +394,7 @@
           This section is a summary of \normalfont{\cite{wiki_web_dev,wiki_cgi,wiki_css,wiki_ajax,wiki_html5,book_html5}}.
         \end{metatext}
 
-        As further described in section~\ref{sec:www} of the appendix, \glspl{browser} were initially applications that displayed \gls{hypertext} \glspl{document} with the ability to fetch linked \glspl{document} in an user friendly way.
+        As further described in Section~\ref{sec:www} of the appendix, \glspl{browser} were initially applications that displayed \gls{hypertext} \glspl{document} with the ability to fetch linked \glspl{document} in an user friendly way.
         Static content was written in \gls{HTML}, which could include hyperlinks to other \gls{hypertext} \glspl{document} or hypermedia.
         Different stylesheet languages were being developed to enable the possibility of separating content styling with the content.
         In 1996 the \gls{W3C} officially recommended \gls{CSS}, which came to be the preferred way of styling \gls{web} content.
@@ -547,8 +547,8 @@
         Before diving into the theory of element queries, it is important to understand how \glspl{layout engine} work.
         Only the \gls{layout engine} of the \gls{browser} will be of importance, since element queries do not affect any other \gls{browser} subsystem.
         This section will give a brief explanation of the layout process that the engines generally perform, along with some usual optimizations that are performed to speed up the process.
-        In section~\ref{sec:parallel} insight will be given into the current state of the research of parallelizing the layout process.
-        Last, layout thrashing will be presented and how it can be avoided in section~\ref{sec:layout-thrashing}.
+        In Section~\ref{sec:parallel} insight will be given into the current state of the research of parallelizing the layout process.
+        Last, layout thrashing will be presented and how it can be avoided in Section~\ref{sec:layout-thrashing}.
         The render process will not be described, as it is not relevant for element queries.
       \end{metatext}
       \todo[inline]{Have an image about the layout flow somewhere?}
@@ -605,7 +605,7 @@
           \item Layout the \glspl{element} of the \gls{render tree}.
           \item Render the \glspl{element} of the \gls{render tree}.
         \end{enumerate}
-        See section~\ref{sec:dom-tree} and section~\ref{sec:render-tree} for a more in depth explanation of \gls{DOM} and \glspl{render tree}.
+        See Section~\ref{sec:dom-tree} and Section~\ref{sec:render-tree} for a more in depth explanation of \gls{DOM} and \glspl{render tree}.
         \Glspl{browser} can typically display multiple pages at the same time (by using tabs, multiple windows or frames) where each page has an instance of the \gls{layout engine}.
 
         There are four \glspl{layout engine} that the major \glspl{browser} use, as presented in table~\ref{table:layout_engines}.
@@ -639,7 +639,7 @@
           \caption{
             The major \glspl{layout engine} and \glspl{browser} with market shares.
             The table to the right has grouped together Blink into \gls{WebKit} since it is a recent for of \gls{WebKit}.
-            See section~\ref{sec:layout_engines_market_share} for more information how the market share data was gathered.}
+            See Section~\ref{sec:layout_engines_market_share} for more information how the market share data was gathered.}
           \label{table:layout_engines}
         \end{table}
         \todo[inline]{Remove decimals of percentages since they are estimated?}
@@ -779,7 +779,7 @@
           \label{table:css_property_definition}
         \end{table}
 
-        This process will resolve most style properties, but as stated in section~\ref{sec:render-tree} some properties require a layout in order to be resolved.
+        This process will resolve most style properties, but as stated in Section~\ref{sec:render-tree} some properties require a layout in order to be resolved.
 
         \todo[inline]{Explain the syntax of CSS?}
 
@@ -963,8 +963,8 @@
     \begin{metatext}
       Now that a good understanding of \glspl{browser} (especially the \gls{layout engine}), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- a solution to the modular \gls{responsive} \gls{web} design problem.
       This chapter will define element queries, present why they are needed.
-      It will also address some of the issues of implementing element queries being \glslink{native}{natively} in section~\ref{sec:eq-problems}.
-      Further, some possible approaches to overcome the problems will be presented in section~\ref{sec:solutions}.
+      It will also address some of the issues of implementing element queries being \glslink{native}{natively} in Section~\ref{sec:eq-problems}.
+      Further, some possible approaches to overcome the problems will be presented in Section~\ref{sec:solutions}.
       \todo{Instead write that some solutions will be presented?}
     \end{metatext}
 
@@ -972,11 +972,11 @@
 
     \todo[inline]{Make additional sections: "common/general use cases" and "definition" to include the text below?}
 
-    Recall from section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} respond to size changes.
+    Recall from Section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} respond to size changes.
     \todo[color=red]{Tomas: Or that modules can programatically work in many different sizes}
     \todo[color=green]{Marcos: Maybe embellish that bit... "...respond to size change, so that a document may be usable on many screen sizes, resolutions, pixel-densities, and media." or something like that.}
     \Gls{responsive} \gls{web} design implements this by using \gls{media queries}, applying conditional rules with relation to the \gls{viewport} size.
-    In section~\ref{sec:modularity} the desire for building modular \gls{web} components was presented.
+    In Section~\ref{sec:modularity} the desire for building modular \gls{web} components was presented.
     One positive outcome of building applications in a modular way is that general components become reusable.
     Since the only way of applying conditional rules to \glspl{element} today is by using \gls{media queries}, all \gls{responsive} styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the application layout).
     The implication of this is that the \gls{HTML} and \gls{JavaScript} can be written in a modular way, but the \gls{CSS} is left for the user of the module (application) to write which somewhat defeats the purpose of writing modules.
@@ -1025,12 +1025,12 @@
       \subsection{Performance}
         \begin{metatext}
           This section will present the performance impacts that element queries have on \glspl{layout engine}.
-          As shown in section~\ref{sec:parallel} \gls{layout engine} vendors are interested in parallelizing their engines to increase the page performance.
+          As shown in Section~\ref{sec:parallel} \gls{layout engine} vendors are interested in parallelizing their engines to increase the page performance.
           Element queries limits the parallelization, which will be the focus of this section.
           This section is partly based on \normalfont{\cite{w3c_eq_mail}}.
         \end{metatext}
 
-        Recall from section~\ref{sec:layout-process} that the rectangle size and position for each \gls{element} is calculated in the layout process, and cannot be determined before an actual layout has happened.
+        Recall from Section~\ref{sec:layout-process} that the rectangle size and position for each \gls{element} is calculated in the layout process, and cannot be determined before an actual layout has happened.
         This imposes that a layout pass needs to be performed before knowing the \gls{element}'s sizes.
         If element queries are present that rely on the size of \glspl{element}, which is the identified common use case, the following process needs to happen:
         \begin{enumerate}
@@ -1057,7 +1057,7 @@
 
         The most obvious occurrences of cyclic rules are when there are specified conflicting width element queries and width updates for an \gls{element}.
         See listing~\ref{code:cyclic-simple} for the perhaps simplest example of cyclic rules.
-        The syntax of element queries will be presented in section~\ref{sec:native-eq}\todo{Have the explanation before this section? On the other hand this section is needed for the motivation of the syntax of the native API}, and is not important to understand the problem.
+        The syntax of element queries will be presented in Section~\ref{sec:native-eq}\todo{Have the explanation before this section? On the other hand this section is needed for the motivation of the syntax of the native API}, and is not important to understand the problem.
         \begin{lstlisting}[gobble=10,caption={Simple example of cyclic rules with directly conflicting width element queries and updates.}, captionpos=b, label={code:cyclic-simple}]
           #foo {
             width: 250px;
@@ -1277,7 +1277,7 @@
 
       %         \todo[inline]{Review this section. Should it still exist? The content of it is probably invalid.}
 
-      %         As presented in subsection~\ref{sec:solutions}, \gls{viewport} \glspl{element} solve many of the element query problems and are therefore assumed to be a part of a \gls{native} \gls{API}.
+      %         As presented in subSection~\ref{sec:solutions}, \gls{viewport} \glspl{element} solve many of the element query problems and are therefore assumed to be a part of a \gls{native} \gls{API}.
       %         Since it would be favorable to be able to specify multiple conditional rule sets for the element queries (like \gls{media queries}) the \gls{CSS} syntax may be of the form as presented in listing~\ref{code:mq-eq-syntax}.
       %         \begin{lstlisting}[caption={Element queries are assumed to have nested rule sets, like \gls{media queries}},captionpos=b,label={code:mq-eq-syntax}]]
       % /* Media query syntax */
@@ -1311,9 +1311,9 @@
 
     First of all, a working name of the library needs to be established --- the library will from now on have the working name \abbr{elq}.
     This name serves as a prefix for many of the library \glspl{API}, and will be frequently used in the report from now on.
-    The technical goals of \abbr{elq} will be stated in section~\ref{sec:techincal-goals}.
-    In section~\ref{sec:arcithecture} the architecture will be described, and the subsystems of \abbr{elq} will be presented.
-    Last, the \gls{API} will be defined in section~\ref{sec:elq-api}.
+    The technical goals of \abbr{elq} will be stated in Section~\ref{sec:techincal-goals}.
+    In Section~\ref{sec:arcithecture} the architecture will be described, and the subsystems of \abbr{elq} will be presented.
+    Last, the \gls{API} will be defined in Section~\ref{sec:elq-api}.
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Technical goals
@@ -1408,7 +1408,7 @@
           This system is fundamental to plugins fulfilling requirements \ref{itm:req_resize_detect} and \ref{itm:req_big_rewrite} since it enables the library to be aware of when \glspl{element} change sizes, instead of the host application keeping track of when \glspl{element} have changed sizes.
           \todo[inline]{Maybe this shouldn't be a core subsystem? Since this system imposes the biggest performance impact. It might make more sense to have this as a plugin.}
         \item \textbf{Cycle detector:}
-          As shown in section~\ref{sec:cyclic-rules} cyclic rules need to be detected at runtime.
+          As shown in Section~\ref{sec:cyclic-rules} cyclic rules need to be detected at runtime.
           When a plugin wish to update the size state of an \gls{element} (which in turn applies the conditional styles) it can ask this system if the update seems to be part of a cycle.
           If the update seems to be part of a cycle, it is up to the plugin how that should be handled.
           \todo[inline]{Write that this system is more general, and could potentially be used for detecting other cyclic behaviors?}
@@ -1434,7 +1434,7 @@
         After that, all plugins will be described in depth addressing their features, dependencies and \glspl{API}.
       \end{metatext}
 
-      Recall from section~\ref{sec:arcithecture} that the bigger part of the public \gls{API} is provided by plugins.
+      Recall from Section~\ref{sec:arcithecture} that the bigger part of the public \gls{API} is provided by plugins.
       The role of the library is to provide plugins with systems to be used for performing element query tasks, which is done through the plugin \gls{API}.
       Three plugins will be developed; \code{breakpoints}, \code{mirror} and \code{prolyfill}.
       The \code{breakpoints} plugin provides 
@@ -1442,7 +1442,7 @@
       \subsection{Public API}\label{sec:public-api}
         \todo[inline]{Write how to install it. AMD, script, commonjs, etc.}
 
-        In section~\ref{sec:techincal-goals} it was determined that advanced users must be able to change the subsystems used in the core.
+        In Section~\ref{sec:techincal-goals} it was determined that advanced users must be able to change the subsystems used in the core.
         Therefore no global library instance will be instantiated automatically on load.
         Instead, a function \code{Elq} that creates \abbr{elq} instances is provided in order to be able to inject dependencies.
         The function accepts an optional options object parameter, where it is possible to set options and subsystems to be used for the created instance.
@@ -1540,9 +1540,9 @@
 
       \subsection{Plugin API}\label{sec:plugin-api}
         The plugin \gls{API} is a superset of the public \gls{API}.
-        Plugins have additional direct access to most core subsystems presented in section~\ref{sec:arcithecture}.
+        Plugins have additional direct access to most core subsystems presented in Section~\ref{sec:arcithecture}.
         The plugin \gls{API} access is given to a plugin when it is registered (i.e., when the \abbr{elq} instance invokes the \code{make} function of the plugin definition).
-        Recall from subsection~\ref{sec:public-api} that the \code{make} function of the plugin definition is given two parameters at invokation; \code{elq} and \code{options}.
+        Recall from subSection~\ref{sec:public-api} that the \code{make} function of the plugin definition is given two parameters at invokation; \code{elq} and \code{options}.
         The first parameter is a reference to the \abbr{ELQ} instance (to which the plugin was registered) extended with the plugin \gls{API}.
         Direct access is given to the following core subsystems:
         \begin{itemize}
@@ -1568,7 +1568,7 @@
         For example, some entities might want to force the \glslink{batch processing}{batch} to process at a point where it would be beneficial for other entities to delay the \glslink{batch processing}{batch}.
         The \code{createBatchProcessor} accepts an optional options object parameter and returns a \glslink{batch processing}{batch processor} instance that has two methods; \code{add} and \code{force}.
         The \code{add} method requires a function parameter that will be called when the \glslink{batch processing}{batch} is processed.
-        Since the \glslink{batch processing}{batch processor} is leveled, as motivated in section~\ref{}, the method also accepts an optional parameter that defines at which level the given function should be processed.
+        Since the \glslink{batch processing}{batch processor} is leveled, as motivated in Section~\ref{}, the method also accepts an optional parameter that defines at which level the given function should be processed.
         The \code{force} method commence the processing of the \glslink{batch processing}{batch}, which can happen synchronously or asynchronously a the optional parameter.
         Two important options to the \code{createBatchProcessor} are the \code{async} and \code{auto} options.
         If the \code{async} option is enabled, the \glslink{batch processing}{batch} will be processed asynchronously as soon as possible after that the \code{force} method has been invoked.
@@ -1751,7 +1751,7 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Element resize detection}\label{sec:imp_erd}
       \begin{metatext}
-        As described in section~\ref{sec:arcithecture}, \abbr{elq} needs a subsystem that is able to detect when elements change size.
+        As described in Section~\ref{sec:arcithecture}, \abbr{elq} needs a subsystem that is able to detect when elements change size.
         As the element resize detection system is a core subsystem of \abbr{elq}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect element size changes.
         All measurements in this section have been with the Chrome browser, unless stated otherwise.
         This section is mainly based on \normalfont{\cite{backalley,eq_imp_css-element-queries}}.
@@ -1787,7 +1787,7 @@
         \end{enumerate}
         Solution \ref{itm:erd-approach-polling} is appealing because it does not mutate the \gls{DOM}, supports all elements (including void elements), and it provides excellent \gls{browser} compatibility since it does not rely on special \gls{element} behaviors or similar.
         However, in order to prevent the \gls{responsive} \glspl{element} lagging behind the size changes of the user interface, the polls need to be performed quite frequently.
-        Recall from section~\ref{sec:layout-process} that \glspl{layout engine} typically have a layout queue in order to perform layout in \glslink{batch processing}{batches} for increased performance.
+        Recall from Section~\ref{sec:layout-process} that \glspl{layout engine} typically have a layout queue in order to perform layout in \glslink{batch processing}{batches} for increased performance.
         Each poll would force the layout queue to be flushed since the computed style of \glspl{element} needs to be retrieved in order to know if \glspl{element} have resized or not.
         Also, since the polling is performed all the time, the overall page performance will be decreased even if the page is idle which is undesired especially for devices running on battery.
         \todo{Should make quick test to see how much CPU it uses when polling frequently}
@@ -1926,7 +1926,7 @@
         \end{figure}
 
         Due to problems such as layout thrashing, bugs and an undesired \gls{API}; the scroll-based solution provided by \cite{eq_imp_css-element-queries} was completely rewritten to better fit \abbr{elq}.
-        Layout thrashing was avoided by using the leveled batch processor described in section~\ref{sec:plugin-api}.
+        Layout thrashing was avoided by using the leveled batch processor described in Section~\ref{sec:plugin-api}.
         \todo{Describe the leveled batch processor in detail somewhere?}
         \todo{Describe how stuff was batch processed in detail?}
         See figure~\ref{fig:erd-elq-scroll} for graphs that show how the \abbr{elq} scroll-based solution performs compared to the other solutions.
@@ -2058,7 +2058,7 @@
     % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Detecting runtime cycles}\label{sec:imp_cycle_detector}
       \begin{metatext}
-        As described in section~\ref{sec:arcithecture}, \abbr{elq} needs a subsystem that is able to detect cyclic element style state updates, in order to warn about or prevent cyclic rules.
+        As described in Section~\ref{sec:arcithecture}, \abbr{elq} needs a subsystem that is able to detect cyclic element style state updates, in order to warn about or prevent cyclic rules.
         As the cycle detection system is a core subsystem of \abbr{elq}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect cyclic updates.
       \end{metatext}
 
