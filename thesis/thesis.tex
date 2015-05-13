@@ -524,6 +524,7 @@
         Loose coupling between modules facilitates integration testing of each module, since it is then possible to test parts of the software in isolation and independent of the system as a whole.
         Developers can also work on different parts of the software in parallel without being affected by each other, as modules are not allowed to affect each other (other than by configurable options, injected strategies or directly dependent submodules).
         \todo[color=red]{Tomas: Maybe one-way dependencies?}
+        
         The very nature of modules not being context-aware enables them to be reused in other projects (or other parts of the same application).
         Reusability is not only important to speed up the development process of new software projects, it also eases managing a large code base.
         A single module that performs a general task is much simpler to manage than multiple modules performing the same task but being written for different contexts.
@@ -531,8 +532,9 @@
         Clearly, modular development is highly desired.
 
         However, since modules are allowed to be nested (i.e., modules may depend on submodules that may depend on other submodules and so on) and that the logic responsibility is moved from the application to the module, the complexity of managing them is added.
-        \gls{API} changes of a module can break modules that depend on them, and multiple versions of the same module must be maintained because the old versions may be used in parallel to the newer versions.
-        Having a good semantic versioning convention is key to reduce the complexity of managing multiple versions of modules.
+        \todo{Philipp: check language of "the complexity of managing them is added"}
+        \gls{API} changes of a module can break modules that depend on them, and multiple versions of the same module must be maintained because old versions may be used in parallel to newer versions.
+        Having a good semantic versioning convention is key to reducing the complexity of managing multiple versions of modules.
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Layout engines
