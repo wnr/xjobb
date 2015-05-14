@@ -154,6 +154,10 @@
   name={specificity},
   description={Is the means by which \glspl{layout engine} decides which \gls{CSS} rule property values are the most relevant to an element, which is based only on the form of the selector. See \url{http://www.w3.org/TR/CSS2/cascade.html\#specificity} for more information}
 }
+\newglossaryentry{ELQ}{
+  name={ELQ},
+  description={The name of the third-party JavaScript element queries library that is the main result of this thesis. See Chapter~\ref{chp:library}}
+}
 
 \newacronym{W3C}{W3C}{World Wide Web Consortium}
 \newacronym{CSS}{CSS}{Cascading Style Sheets}
@@ -235,9 +239,7 @@
     \todo[inline]{Add note that the thesis is best viewed in color.}
     \todo[inline]{Write that glossary words will be emph on first appearence?}
     \todo[inline]{Should the subtitle be criterion instead of criteria?}
-    \todo[inline]{Philipp: I would change the meta text font style to be the same as the regular text. There's no need to typeset this introductory text differently.}
-    \todo[inline]{Philipp: You can add more information about why it's interesting to the reader (meta text). Suggestion: turn each of the sentences starting with "Section 2.1" and "Section 2.2" into paragraphs.}
-    \todo[inline]{Philipp: Yes, "see Section 3.1" is the right way to do it (normally, one capitalizes "Section"). When referring to subsections and subsubsections, I would also call them "Section", indeed, because their number already says what kind of subsection it is.}
+    \todo[inline]{Change all "recent", "now" and such to dates instead.}
 
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
@@ -1274,21 +1276,19 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% The element queries library
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{The element queries library}\label{chp:library}
-    \begin{metatext}
-      Before starting the actual implementation, it is important to have an overall design to follow.
-      In this chapter, the library design will be described and a motivation why the library should be plugin based will be given.
-      The subsystems of the library and their interactions will also be presented.
-    \end{metatext}
+    First of all, a working name of the library needs to be established --- the library will from now on have the working name \gls{ELQ}.
+    This name serves as a prefix for many of the library \glspl{API}, and will be frequently used in this thesis from now on.
+    The technical goals of \gls{ELQ} will be stated in Section~\ref{sec:techincal-goals}.
+    In Section~\ref{sec:arcithecture} the architecture will be described, and the subsystems of \gls{ELQ} will be presented.
+    Last, the \gls{API} will be defined in Section~\ref{sec:elq-api}.
+    Before starting the actual implementation, it is important to have an overall design to follow.
+    In this chapter, the library design will be described and a motivation why the library should be plugin based will be given.
+    The subsystems of the library and their interactions will also be presented.
+
 
     \todo[inline]{Better title?}
     \todo[inline]{Rewrite meta when it is decided how this chapter should be structured.}
     \todo[inline]{Write somewhere that it might be an option to not have a resize detection system, but instead let the user manually check the elements when they may have changed.}
-
-    First of all, a working name of the library needs to be established --- the library will from now on have the working name \abbr{elq}.
-    This name serves as a prefix for many of the library \glspl{API}, and will be frequently used in the report from now on.
-    The technical goals of \abbr{elq} will be stated in Section~\ref{sec:techincal-goals}.
-    In Section~\ref{sec:arcithecture} the architecture will be described, and the subsystems of \abbr{elq} will be presented.
-    Last, the \gls{API} will be defined in Section~\ref{sec:elq-api}.
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Technical goals
@@ -1419,12 +1419,12 @@
 
         In Section~\ref{sec:techincal-goals} it was determined that advanced users must be able to change the subsystems used in the core.
         Therefore no global library instance will be instantiated automatically on load.
-        Instead, a function \code{Elq} that creates \abbr{elq} instances is provided in order to be able to inject dependencies.
+        Instead, a function \code{Elq} that creates \gls{ELQ} instances is provided in order to be able to inject dependencies.
         The function accepts an optional options object parameter, where it is possible to set options and subsystems to be used for the created instance.
         If no options are given, default options will be used.
         See listing~\ref{code:elq-ctor} of example usages of the \code{Elq} function.
-        The function returns an object containing the core public \gls{API} methods of the \abbr{elq} instance.
-        \begin{lstlisting}[gobble=10,caption={Example usages of the \code{Elq} function that creates \abbr{elq} instances.},captionpos=b,label={code:elq-ctor}]]
+        The function returns an object containing the core public \gls{API} methods of the \gls{ELQ} instance.
+        \begin{lstlisting}[gobble=10,caption={Example usages of the \code{Elq} function that creates \gls{ELQ} instances.},captionpos=b,label={code:elq-ctor}]]
           //Default options being used.
           var elq = new Elq();
 
@@ -1491,7 +1491,7 @@
           elq.using("other-plugin"); // false
         \end{lstlisting}
 
-        When the desired plugins have been registered to the \abbr{elq} instance, it is time to apply the library to the target \glspl{element} (i.e., the elements that will be queried for conditional styles).
+        When the desired plugins have been registered to the \gls{ELQ} instance, it is time to apply the library to the target \glspl{element} (i.e., the elements that will be queried for conditional styles).
         This is done with the \code{start} method which requires a collection of \glspl{element} as a parameter.
         When called, it will invoke all \code{start} methods on all registered plugins which gives them the opportunity to initiate the \glspl{element} according to their own mechanisms.
         To satisfy the requirements \ref{itm:natural} and \ref{itm:assumption} the function is agnostic about the \glspl{element} collection --- all objects that are iterable and contains \glspl{element} are accepted.
@@ -1516,9 +1516,9 @@
       \subsection{Plugin API}\label{sec:plugin-api}
         The plugin \gls{API} is a superset of the public \gls{API}.
         Plugins have additional direct access to most core subsystems presented in Section~\ref{sec:arcithecture}.
-        The plugin \gls{API} access is given to a plugin when it is registered (i.e., when the \abbr{elq} instance invokes the \code{make} function of the plugin definition).
+        The plugin \gls{API} access is given to a plugin when it is registered (i.e., when the \gls{ELQ} instance invokes the \code{make} function of the plugin definition).
         Recall from subSection~\ref{sec:public-api} that the \code{make} function of the plugin definition is given two parameters at invokation; \code{elq} and \code{options}.
-        The first parameter is a reference to the \abbr{ELQ} instance (to which the plugin was registered) extended with the plugin \gls{API}.
+        The first parameter is a reference to the \gls{ELQ} instance (to which the plugin was registered) extended with the plugin \gls{API}.
         Direct access is given to the following core subsystems:
         \begin{itemize}
           \item \textbf{Reporter}: via the \code{elq.reporter} property that refers to the reporter instance.
@@ -1554,7 +1554,7 @@
         It is possible to override the assignment with an option parameter.
 
         \todo[inline]{Code examples?}
-        %The \code{getPlugin} method requires a plugin identifier and returns the plugin instance being used by the \abbr{elq} instance that matches the plugin identifier.
+        %The \code{getPlugin} method requires a plugin identifier and returns the plugin instance being used by the \gls{ELQ} instance that matches the plugin identifier.
 
         %           \begin{lstlisting}[caption={},captionpos=b,label={code:elq-plugin-api}]]
         % ...
@@ -1575,13 +1575,13 @@
       \subsection{Plugins}
         \begin{metatext}
           So far, only prerequisites for third-party element queries has been presented.
-          Now, it is time to describe the systems and \glspl{API} that will actually realize element queries as \abbr{elq} plugins.
+          Now, it is time to describe the systems and \glspl{API} that will actually realize element queries as \gls{ELQ} plugins.
           It should be noted that the plugins presented here is the suggested solution to element queries according to the research of this thesis.
           They are designed for good performance, good compatibility, and ease of use.
-          For extreme requirements or corner cases, custom \abbr{elq} plugins might be preferred.
+          For extreme requirements or corner cases, custom \gls{ELQ} plugins might be preferred.
         \end{metatext}
 
-        \abbr{elq} plugins may use custom element attributes to define rules and plugin options.
+        \Gls{ELQ} plugins may use custom element attributes to define rules and plugin options.
         The \gls{HTML} standard supports custom attributes prefixed with \code{data-}.
         Modern browsers usually permits to discard the \code{data-} prefix for custom attributes.
         For visual reasons, custom attributes will be written in the shortest possible way in this thesis (without the \code{data-} prefix).
@@ -1589,7 +1589,7 @@
 
         \subsubsection{Breakpoints}
           This is the plugin that observes element resizes and updates their size states according to predefined breakpoints.
-          The name of the plugin is \code{elq-breakpoints} and it does not have any dependencies (other than the element resize detector of the \abbr{elq} core).
+          The name of the plugin is \code{elq-breakpoints} and it does not have any dependencies (other than the element resize detector of the \gls{ELQ} core).
           The main idea of the plugin is to apply classes to target elements that reflects in which size state they are.
           Each element defines breakpoints to which the plugin will update the size state.
           The breakpoints of an element are defined by custom element attributes.
@@ -1599,7 +1599,7 @@
             ...
             </div>
           \end{lstlisting}
-          The \code{elq} attribute states that it is an \abbr{elq} element, and the \code{elq-breakpoints} attribute states that the element should be handled by the plugin.
+          The \code{elq} attribute states that it is an \gls{ELQ} element, and the \code{elq-breakpoints} attribute states that the element should be handled by the plugin.
           The \code{elq-breakpoints\-width="300 500"} tells the plugin that the element should have two width breakpoints at 300 and 500 pixels.
           Height breakpoints are defined in the same way with the \code{elq-breakpoints-height} attribute.
           The possible size states of the element would then be (in pixels):
@@ -1724,8 +1724,8 @@
       %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element resize detection
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       \subsection{Element resize detection}\label{sec:imp_erd}
-        As described in Section~\ref{sec:arcithecture}, \abbr{elq} needs a subsystem that is able to detect when elements change size.
-        As the element resize detection system is a core subsystem of \abbr{elq}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect element size changes.
+        As described in Section~\ref{sec:arcithecture}, \gls{ELQ} needs a subsystem that is able to detect when elements change size.
+        As the element resize detection system is a core subsystem of \gls{ELQ}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect element size changes.
         Both Section~\ref{sec:layout-process} and Section~\ref{sec:layout-thrashing} are recommended to read in order to understand the optimizations described in this section.
 
         Unfortunately, there is no standardized resize event for arbitrary \glspl{element} \cite{w3c_dom2_events}.
@@ -1803,7 +1803,7 @@
           \item                                       The algorithm waits for the \code{load} event handler to be called by the layout engine.
           \item                                       When the handler is called, an event handler is attached to the object element document that listens to the \code{resize} event.
         \end{enumerate}
-        In the rewriting of the code given by \cite{backalley} to better suite \abbr{elq}, efforts was made to optimize the solution as the original code suffers from layout thrashing.
+        In the rewriting of the code given by \cite{backalley} to better suite \gls{ELQ}, efforts was made to optimize the solution as the original code suffers from layout thrashing.
         Step \ref{itm:erd-algo-original-object-1} and \ref{itm:erd-algo-original-object-3} could theoretically be executed in different batches to avoid layout thrashing.
         Unfortunately, creating the object element in step \ref{itm:erd-algo-original-object-4} forces a full layout, which makes the batch processing optimization negligible.
         Since the creation of the object elements forms the significant time consumption, no further optmization was performed.
@@ -1853,8 +1853,8 @@
       % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       \subsection{Detecting runtime cycles}\label{sec:imp_cycle_detector}
         \begin{metatext}
-          As described in Section~\ref{sec:arcithecture}, \abbr{elq} needs a subsystem that is able to detect cyclic element style state updates, in order to warn about or prevent cyclic rules.
-          As the cycle detection system is a core subsystem of \abbr{elq}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect cyclic updates.
+          As described in Section~\ref{sec:arcithecture}, \gls{ELQ} needs a subsystem that is able to detect cyclic element style state updates, in order to warn about or prevent cyclic rules.
+          As the cycle detection system is a core subsystem of \gls{ELQ}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect cyclic updates.
         \end{metatext}
 
         Recall from Section~\ref{sec:plugin-api} that the cycle detection subsystem has a function \code{isUpdateCyclic} that is to tell if the desired update is part of a cycle or not.
@@ -1905,12 +1905,13 @@
     \section{Performance}
       \todo[inline]{Write that as ELQ is plugin-based, it makes sense to measure the core subsystems by themselves and the plugins enabling element queries in different setups.}
       \todo[inline]{Have to measure how elq-breakpoints handles large amount of elements. It might suffor from layout thrashing since might read/write the DOM at invalid stages of the erd subsystem.}
+      \todo[inline]{Actually since elq-breakpoints is batch-processed, no layout thrashing occurs. However, two disjunct layouts are performed (one for the erd system and one for the plugin) which could theoretically be merged.}
       \todo[inline]{Philipp: If possible, show graphs for other browsers than Chrome.}
       \subsection{Element resize detection}\label{sec:eval-perf-erd}
         \todo[inline]{This whole section is just copy-pasted. Rewrite!}
-        See figure~\ref{fig:erd-elq-scroll} for graphs that show how the \abbr{elq} scroll-based solution performs compared to the other solutions.
-        As evident in the figure, the optimized \abbr{elq} solution has significantly reduced installation times compared to the other two.
-        The \abbr{elq} solution also scales better, as more clearly shown in figure~\ref{fig:erd-solutions-regressed} that includes polynomial regression graphs for all three solutions.
+        See figure~\ref{fig:erd-elq-scroll} for graphs that show how the \gls{ELQ} scroll-based solution performs compared to the other solutions.
+        As evident in the figure, the optimized \gls{ELQ} solution has significantly reduced installation times compared to the other two.
+        The \gls{ELQ} solution also scales better, as more clearly shown in figure~\ref{fig:erd-solutions-regressed} that includes polynomial regression graphs for all three solutions.
         Both scroll-based solutions have the same memory footprint (i.e., too low for reliable measurements).
 
         One disadvantage with this solution is that installing \code{object} elements is quite a heavy task.
@@ -2016,13 +2017,13 @@
           \end{center}
         \end{figure}
 
-        Due to problems such as layout thrashing, bugs and an undesired \gls{API}; the scroll-based solution provided by \cite{eq_imp_css-element-queries} was completely rewritten to better fit \abbr{elq}.
+        Due to problems such as layout thrashing, bugs and an undesired \gls{API}; the scroll-based solution provided by \cite{eq_imp_css-element-queries} was completely rewritten to better fit \gls{ELQ}.
         Layout thrashing was avoided by using the leveled batch processor described in Section~\ref{sec:plugin-api}.
         \todo{Describe the leveled batch processor in detail somewhere?}
         \todo{Describe how stuff was batch processed in detail?}
-        See figure~\ref{fig:erd-elq-scroll} for graphs that show how the \abbr{elq} scroll-based solution performs compared to the other solutions.
-        As evident in the figure, the optimized \abbr{elq} solution has significantly reduced installation times compared to the other two.
-        The \abbr{elq} solution also scales better, as more clearly shown in figure~\ref{fig:erd-solutions-regressed} that includes polynomial regression graphs for all three solutions.
+        See figure~\ref{fig:erd-elq-scroll} for graphs that show how the \gls{ELQ} scroll-based solution performs compared to the other solutions.
+        As evident in the figure, the optimized \gls{ELQ} solution has significantly reduced installation times compared to the other two.
+        The \gls{ELQ} solution also scales better, as more clearly shown in figure~\ref{fig:erd-solutions-regressed} that includes polynomial regression graphs for all three solutions.
         Both scroll-based solutions have the same memory footprint (i.e., too low for reliable measurements).
         
         \begin{figure}[h!]
@@ -2074,7 +2075,7 @@
                 \end{axis}
               \end{tikzpicture}
             \end{minipage}
-          \caption{The installation performance of the optimized \abbr{ELQ} scroll-based element resize detection. The left graph shows the installation time with the original scroll-based solution graph included as reference. The right graph shows all three solutions for comparison. The heap memory usage graph has been omitted as the memory usage for the scroll-based solutions are near constant.}
+          \caption{The installation performance of the optimized \gls{ELQ} scroll-based element resize detection. The left graph shows the installation time with the original scroll-based solution graph included as reference. The right graph shows all three solutions for comparison. The heap memory usage graph has been omitted as the memory usage for the scroll-based solutions are near constant.}
           \label{fig:erd-elq-scroll}
           \end{center}
         \end{figure}
@@ -2108,7 +2109,7 @@
           \end{center}
         \end{figure}
 
-        As shown, great performance can be achieved with the optimized \abbr{elq} scroll-based solution in Chrome.
+        As shown, great performance can be achieved with the optimized \gls{ELQ} scroll-based solution in Chrome.
         Unfortunately, there is no silver bullet to observing element resize events; as the other layout engines behave differently.
         See table~\ref{table:erd-layout-engines} for performance numbers of different layout engines.
         The scroll-based solution is preferred for the Blink layout engine, as the installation time is 2000 \% better than the object-based solution while the resize detection performance is the same for both solutions.
