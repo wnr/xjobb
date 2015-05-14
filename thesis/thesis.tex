@@ -1275,30 +1275,31 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% The element queries library
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \chapter{The element queries library}\label{chp:library}
+  \chapter{ELQ --- The element queries library}\label{chp:library}
     First of all, a working name of the library needs to be established --- the library will from now on have the working name \gls{ELQ}.
     This name serves as a prefix for many of the library \glspl{API}, and will be frequently used in this thesis from now on.
-    The technical goals of \gls{ELQ} will be stated in Section~\ref{sec:techincal-goals}.
-    In Section~\ref{sec:arcithecture} the architecture will be described, and the subsystems of \gls{ELQ} will be presented.
-    Last, the \gls{API} will be defined in Section~\ref{sec:elq-api}.
-    Before starting the actual implementation, it is important to have an overall design to follow.
-    In this chapter, the library design will be described and a motivation why the library should be plugin based will be given.
-    The subsystems of the library and their interactions will also be presented.
+    
+    Section~\ref{sec:techincal-goals} states the identified technical goals of \gls{ELQ}.
+    This section is the key motivation to why the library should be plugin based.
 
+    Section~\ref{sec:arcithecture} presents the overall architecture of \gls{ELQ}, and key subsystems are described.
+    This section also motivates why it is important to develop a library that enables advanced users to alter or remove subsystems of the core.
+
+    Section~\ref{sec:elq-api} defines the \gls{API} of the core library and all of the existing plugins.
+    It is in this section where it is shown exactly how users can alter subsystems of the core.
+    In addition, it is shown how limitiations of \gls{CSS} are overcome by creating a plugin.
+
+    Section~\ref{sec:library-imp-details} presents details about key implementation design decisions and algorithms.
+    This section will also describe optimizations that has been done.
 
     \todo[inline]{Better title?}
-    \todo[inline]{Rewrite meta when it is decided how this chapter should be structured.}
     \todo[inline]{Write somewhere that it might be an option to not have a resize detection system, but instead let the user manually check the elements when they may have changed.}
+    \todo[inline]{Write a little intro to this meta like "Now that sufficient knowledge about eq and blabla ....?"}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Technical goals
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Technical goals}\label{sec:techincal-goals}
-      \begin{metatext}
-        Before presenting the overall design of the library, the technical goals will be stated.
-        It will be shown that the goals and use cases can vary from case to case, which will be the main argument to why the library should be plugin based.
-      \end{metatext}
-
       Expectations and requirements of element queries vary greatly by use cases.
       As usual in software development, tradeoffs need to be made.
       Some projects value simplicity and ease of use, while other projects demand advanced features and high performance.
@@ -1343,11 +1344,6 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Architecture
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Architecture}\label{sec:arcithecture}
-      \begin{metatext}
-        As it has been shown that a plugin based library is suitable, it is time to present the overall architecture of the library.
-        The roles of each subsystem of the core library will also be explained.
-      \end{metatext}
-
       \todo[inline]{Here the style state of the element is talked about. Maybe this should have been mentioned before? Perhaps in the chapter text?}
 
       To decide if a subsystem of the solution should be in the library core or a plugin is a difficult task.
@@ -1403,12 +1399,6 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% API design
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{API design}\label{sec:elq-api}
-      \begin{metatext}
-        This section will describe the \gls{API} of the library.
-        First, the public \gls{API} of the core will be presented, followed by the plugin \gls{API}.
-        After that, all plugins will be described in depth addressing their features, dependencies and \glspl{API}.
-      \end{metatext}
-
       Recall from Section~\ref{sec:arcithecture} that the bigger part of the public \gls{API} is provided by plugins.
       The role of the library is to provide plugins with systems to be used for performing element query tasks, which is done through the plugin \gls{API}.
       Three plugins will be developed; \code{breakpoints}, \code{mirror} and \code{prolyfill}.
@@ -1573,13 +1563,10 @@
         %           \end{lstlisting}
 
       \subsection{Plugins}
-        \begin{metatext}
-          So far, only prerequisites for third-party element queries has been presented.
-          Now, it is time to describe the systems and \glspl{API} that will actually realize element queries as \gls{ELQ} plugins.
-          It should be noted that the plugins presented here is the suggested solution to element queries according to the research of this thesis.
-          They are designed for good performance, good compatibility, and ease of use.
-          For extreme requirements or corner cases, custom \gls{ELQ} plugins might be preferred.
-        \end{metatext}
+        Now, it is time to describe the systems and \glspl{API} that will actually realize element queries as \gls{ELQ} plugins.
+        It should be noted that the plugins presented here is the suggested solution to element queries according to the research of this thesis.
+        They are designed for good performance, good compatibility, and ease of use.
+        For extreme requirements or corner cases, custom \gls{ELQ} plugins might be preferred.
 
         \Gls{ELQ} plugins may use custom element attributes to define rules and plugin options.
         The \gls{HTML} standard supports custom attributes prefixed with \code{data-}.
@@ -1715,7 +1702,7 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Implementation
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Interesting implementation details}
+    \section{Interesting implementation details}\label{sec:library-imp-details}
       \todo[inline]{Maybe find a better name for this section?}
       \todo[inline]{Write about the N layouts, and how it was fixed with the batch processing. Investigate how this behaves for nested elements.}
       \todo[inline]{Write about the drawbacks (invalid layout at page load, injecting objects is heavy, DOM is mutated.)}
@@ -1852,10 +1839,8 @@
       % %%%%%%%%%%%%%%%%%%%%%%%%%%%% Detecting runtime cycles
       % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       \subsection{Detecting runtime cycles}\label{sec:imp_cycle_detector}
-        \begin{metatext}
-          As described in Section~\ref{sec:arcithecture}, \gls{ELQ} needs a subsystem that is able to detect cyclic element style state updates, in order to warn about or prevent cyclic rules.
-          As the cycle detection system is a core subsystem of \gls{ELQ}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect cyclic updates.
-        \end{metatext}
+        As described in Section~\ref{sec:arcithecture}, \gls{ELQ} needs a subsystem that is able to detect cyclic element style state updates, in order to warn about or prevent cyclic rules.
+        As the cycle detection system is a core subsystem of \gls{ELQ}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect cyclic updates.
 
         Recall from Section~\ref{sec:plugin-api} that the cycle detection subsystem has a function \code{isUpdateCyclic} that is to tell if the desired update is part of a cycle or not.
         Further, recall from Section~\ref{sec:cyclic-rules} that cycles may depend on multiple factors (e.g., content, browser behavior, \gls{CSS}, \gls{JavaScript}).
