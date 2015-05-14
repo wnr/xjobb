@@ -1271,15 +1271,17 @@
       Also, without the \gls{layout engine} aware of the element queries it could be hard to avoid multiple relayouts.
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%% Library design
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%% The element queries library
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \chapter{Library design}\label{chp:library}
+  \chapter{The element queries library}\label{chp:library}
     \begin{metatext}
       Before starting the actual implementation, it is important to have an overall design to follow.
       In this chapter, the library design will be described and a motivation why the library should be plugin based will be given.
       The subsystems of the library and their interactions will also be presented.
     \end{metatext}
 
+    \todo[inline]{Better title?}
+    \todo[inline]{Rewrite meta when it is decided how this chapter should be structured.}
     \todo[inline]{Write somewhere that it might be an option to not have a resize detection system, but instead let the user manually check the elements when they may have changed.}
 
     First of all, a working name of the library needs to be established --- the library will from now on have the working name \abbr{elq}.
@@ -1640,6 +1642,7 @@
           \todo[inline]{Write about HTML compatability with data- prefix and empty attributes.}
           \todo[inline]{Example of how to register the plugin with an elq instance + options?}
           \todo[inline]{Write that above is inclusive and below is exclusive? Why? Option?}
+          \todo[inline]{Write about the interplugin API methods that mirror uses?}
         \subsubsection{Mirror}
           This plugin is needed as an addition to the \code{elq-breakpoints} plugin in some cases due to limitations of CSS.
           As of the \gls{CSS3} specification, there is no way to select ancestor elements of an element.
@@ -1709,34 +1712,28 @@
 
         \subsubsection{Prolyfill}
           \todo[inline]{Have not been done. Should it? Perhaps remove this as it could be out of scope. Low priority.}
-
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%% Implementation
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \chapter{Implementation}
-    \todo[inline]{Perhaps merge this chapter with Library design (and rename it to just The library or something like that?}
-    \todo[inline]{Write about the simple cycle detector.}
-    \todo[inline]{Write about the N layouts, and how it was fixed with the batch processing. Investigate how this behaves for nested elements.}
-    \todo[inline]{Write about the drawbacks (invalid layout at page load, injecting objects is heavy, DOM is mutated.)}
-
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element resize detection
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%% Implementation
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Element resize detection}\label{sec:imp_erd}
-      \begin{metatext}
+    \section{Interesting implementation details}
+      \todo[inline]{Maybe find a better name for this section?}
+      \todo[inline]{Write about the N layouts, and how it was fixed with the batch processing. Investigate how this behaves for nested elements.}
+      \todo[inline]{Write about the drawbacks (invalid layout at page load, injecting objects is heavy, DOM is mutated.)}
+
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element resize detection
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      \subsection{Element resize detection}\label{sec:imp_erd}
         As described in Section~\ref{sec:arcithecture}, \abbr{elq} needs a subsystem that is able to detect when elements change size.
         As the element resize detection system is a core subsystem of \abbr{elq}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect element size changes.
-        All measurements in this section have been with the Chrome browser, unless stated otherwise.
-        This section is mainly based on \normalfont{\cite{backalley,eq_imp_css-element-queries}}.
-      \end{metatext}
-        \todo{Explain target element}
+        Both Section~\ref{sec:layout-process} and Section~\ref{sec:layout-thrashing} are recommended to read in order to understand the optimizations described in this section.
 
-        Unfortunately, there is no standardized resize event for arbitrary \glspl{element}.
-        Only frames (\glspl{element} that render it's content independently of the container \gls{element}, such as \code{iframe} and \code{object}) support the resize event by standard since they have their own \gls{viewport}.
-        Legacy versions of Internet Explorer (version 8 and down, but also some later versions depending on the \gls{document} mode and if the \gls{browser} is in quirks mode) do support the resize event on arbitrary \glspl{element}.
-        Since the library needs to support commonly used \gls{HTML} \glspl{element}, a solution to observe resize events of any \gls{element} is desired.
+        Unfortunately, there is no standardized resize event for arbitrary \glspl{element} \cite{w3c_dom2_events}.
+        Only \glspl{document} emit resize events and therefore resize events can only be observed for frame elements (since a frame element has an own independent document).
+        Legacy versions of Internet Explorer (version 8 and down, but also some later versions depending on the quirks and \gls{document} mode) do support the resize event on arbitrary \glspl{element}.
+        Since the library needs to support commonly used \gls{HTML} \glspl{element}, a solution to observe resize events of any \gls{element} in modern browsers is desired.
         According to the common use case, a valid limitation is to only support element resize detection for non-void elements (i.e., elements that can contain content).
-        \todo{Write more about void elements, that they can easily be wrapped with other elements to achieve the desired element query effect?}
+        \todo{Write more about void elements, that they can easily be wrapped with other elements to achieve the desired element query effect? Maybe this can be the main motivation instead of the "common use case"?}
         Possible solutions are:
         \begin{enumerate}
           \item\label{itm:erd-approach-polling} \textbf{Polling}:
@@ -1746,17 +1743,17 @@
             Longer polling intervals (low frequency) would not be able to detect changes as quickly but increases the performance.
             The longest possible delay between an actual resize event and the polling detecting is given by the polling interval time.
             This approach is the most robust, as it supports all elements (including void elements) and provides excellent browser compatibility.
-          \item\label{itm:erd-approach-frame} \textbf{Injecting frames}:
-            Since frame \glspl{element} are the only ones that support resize events \glslink{native}{natively}, the idea is to inject frame \glspl{element} as children to the target \glspl{element}..
-            By styling the frame so that it depends on the target \gls{element} and set the size to be 100 percent, the frame will always be the same size as the target element.
-            Then a resize event handler can be attached to the frame that emits a resize event for every target \gls{element} resize.
-            So in order to observe resize events of an element, a frame \gls{element} is injected and observed instead.
           \item\label{itm:erd-approach-scroll} \textbf{Injecting overflowing \glspl{element}}:
             Similar to the frames approach, an \gls{element} is injected to the target element that emit events, which can be observed in JavaScript, when the target element is resized.
-            Multiple overflowing elements are configured, and injcected as children, so that they emit scroll events\footnote{See \url{http://www.w3.org/TR/DOM-Level-3-Events/\#event-type-scroll} for more information about the scroll event.} when the target element resize.
+            Multiple overflowing elements are configured, and injected as children, so that they emit scroll events\footnote{See \url{http://www.w3.org/TR/DOM-Level-3-Events/\#event-type-scroll} for more information about the scroll event.} when the target element resize.
             For detecting when the target \gls{element} shrinks, two \glspl{element} are needed; one for handling the scrollbars and one for triggering them.
             Similarly, for detecting when the target \gls{element} expands, two \gls{element} are needed in the same way.
             A container \gls{element} is injected, to contain the four \glspl{element} and make sure that they match the size of the target element.
+          \item\label{itm:erd-approach-frame} \textbf{Injecting frames}:
+            Since frame \glspl{element} are the only ones that support resize events \glslink{native}{natively}, the idea is to inject frame \glspl{element} as children to the target \glspl{element}.
+            By styling the frame so that it depends on the target \gls{element} and set the size to be 100 percent, the frame will always be the same size as the target element.
+            Then a resize event handler can be attached to the frame that emits a resize event for every target \gls{element} resize.
+            So in order to observe resize events of an element, a frame \gls{element} is injected and observed instead.
         \end{enumerate}
         Solution \ref{itm:erd-approach-polling} is appealing because it does not mutate the \gls{DOM}, supports all elements (including void elements), and it provides excellent \gls{browser} compatibility since it does not rely on special \gls{element} behaviors or similar.
         However, in order to prevent the \gls{responsive} \glspl{element} lagging behind the size changes of the user interface, the polls need to be performed quite frequently.
@@ -1765,7 +1762,12 @@
         Also, since the polling is performed all the time, the overall page performance will be decreased even if the page is idle which is undesired especially for devices running on battery.
         \todo{Should make quick test to see how much CPU it uses when polling frequently}
 
-        Solution \ref{itm:erd-approach-frame} and \ref{itm:erd-approach-scroll} have similar characteristics.
+        Solution \ref{itm:erd-approach-frame} and \ref{itm:erd-approach-scroll} have similar characteristics and were both presented by \cite{backalley}.
+        Solution \ref{itm:erd-approach-scroll} was presented first, but was rejected in favor of solution \ref{itm:erd-approach-frame} as it was discovered.
+        Fortunately, a somewhat reworked version of the scroll-based solution is still available \cite{eq_imp_css-element-queries}.
+        For solution \ref{itm:erd-approach-frame}, it has been shown by \cite{backalley} that \code{object} is the most suitable frame \gls{element} to be used for this purpose as they have good \gls{browser} compatibility and adequate performance.
+        The \ref{itm:erd-approach-scroll} solution have issues when a side of the target element is set to zero, and with the target element getting removed from the render tree (e.g., by using setting the \code{display} style property to \code{none}).
+        It is probably due to these issues that it was rejected.
         Both solutions mutate the \gls{DOM} and relies on special \gls{element} behavior, but they offer many advantages over polling.
         Since they are event based, layout engines only need to perform extra work when installing the solution to the target \glspl{element} and when the target \glspl{element} actually resize.
         Event based resize detection also implies minimal delay between the actual resize event and the detection.
@@ -1790,7 +1792,126 @@
             This way the target \gls{element} can be changed to \code{relative} positioning with the special style properties removed, to obtain the same visual representation as being positioned \code{static}.
         \end{itemize}
 
-        For solution \ref{itm:erd-approach-frame}, it has been shown by \cite{backalley} that \code{object} is the most suitable frame \gls{element} to be used for this purpose as they have good \gls{browser} compatibility and adequate performance.
+        Solution \ref{itm:erd-approach-frame} has excellent performance when it comes to detecting resize events.
+        However, installing many \code{object} elements is quite a heavy task for browsers and consume lots of memory as presented in Section~\ref{sec:eval-perf-erd}.
+        This is the main algorithm that is performed when an element $e$ is to be observed for resize events:
+        \begin{enumerate}
+          \item\label{itm:erd-algo-original-object-1} Get the computed style for $e$.
+          \item                                       If the element is positioned (i.e., \code{position} is not \code{static}) next step is \ref{itm:erd-algo-original-object-4}.
+          \item\label{itm:erd-algo-original-object-3} Set the position of $e$ to be \code{relative}. Here additional checks can be performed to warn the developer about unwanted side effects of this.
+          \item\label{itm:erd-algo-original-object-4} Create an object element and attach an event handler for the \code{load} event. When the object element has been styled and configured properly, it is injected into $e$.
+          \item                                       The algorithm waits for the \code{load} event handler to be called by the layout engine.
+          \item                                       When the handler is called, an event handler is attached to the object element document that listens to the \code{resize} event.
+        \end{enumerate}
+        In the rewriting of the code given by \cite{backalley} to better suite \abbr{elq}, efforts was made to optimize the solution as the original code suffers from layout thrashing.
+        Step \ref{itm:erd-algo-original-object-1} and \ref{itm:erd-algo-original-object-3} could theoretically be executed in different batches to avoid layout thrashing.
+        Unfortunately, creating the object element in step \ref{itm:erd-algo-original-object-4} forces a full layout, which makes the batch processing optimization negligible.
+        Since the creation of the object elements forms the significant time consumption, no further optmization was performed.
+
+        As solution \ref{itm:erd-approach-scroll} only involves \code{div} elements, it offers room for optimizations.
+        The algorithm is conceptually similar to the algorithm of solution \ref{itm:erd-approach-frame}.
+        This is the main algorithm that is performed when an element $e$ is to be observed for resize events:
+        \begin{enumerate}
+          \item\label{itm:erd-algo-original-scroll-1} Get the computed style for $e$.
+          \item\label{itm:erd-algo-original-scroll-2} If the element is positioned (i.e., \code{position} is not \code{static}) next step is \ref{itm:erd-algo-original-scroll-4}.
+          \item\label{itm:erd-algo-original-scroll-3} Set the position of $e$ to be \code{relative}. Here additional checks can be performed to warn the developer about unwanted side effects of this.
+          \item\label{itm:erd-algo-original-scroll-4} Create all elements (four elements needed: two for detecting when $e$ shrinks, and two for detecting when $e$ expands) and attach event handlers for the \code{scroll} event of the elements.
+                                                      When the elements have been styled and configured properly, they are injected into a container element which in turn is injected into $e$.
+          \item\label{itm:erd-algo-original-scroll-5} The current size of $e$ is stored and the scrollbars of the injected elements are positioned correctly.
+          \item\label{itm:erd-algo-original-scroll-6} The algorithm waits for the \code{scroll} event handlers to be called by the layout engine (they are called since the previous step repositioned the scrollbars).
+          \item\label{itm:erd-algo-original-scroll-7} When both handlers have been called, the installation is finished and observers can be notified on resize events of $e$ when \code{scroll} events occur.
+        \end{enumerate}
+        Due to problems such as layout thrashing, bugs and an undesired \gls{API}, the implementation provided by \cite{eq_imp_css-element-queries} was completely rewritten.
+        Layout thrashing can be avoided by using the leveled batch processor described in Section~\ref{sec:plugin-api}.
+        The batch processed version performs the algorithm steps in the following levels:
+        \begin{enumerate}
+          \item\label{itm:erd-algo-scroll-level-1}
+            \textbf{The read level:}
+            Step \ref{itm:erd-algo-original-scroll-1} is performed to obtain all necessary information about $e$.
+            The information is stored in a shared state so that all other steps can obtain the information without reading the \gls{DOM}.
+          \item\label{itm:erd-algo-scroll-level-2}
+            \textbf{The mutation level:}
+            Steps \ref{itm:erd-algo-original-scroll-2}, \ref{itm:erd-algo-original-scroll-3} and \ref{itm:erd-algo-original-scroll-4} are performed, which mutates the \gls{DOM}.
+            All mutations performed in this level can be queued by the layout engine.
+          \item\label{itm:erd-algo-scroll-level-3}
+            \textbf{The forced layout level:}
+            \todo{Grammar?}
+            Step \ref{itm:erd-algo-original-scroll-5} is performed, which forces the layout engine to perform a layout.
+        \end{enumerate}
+        Since mutation of scrollbars are not queued by layout engines, they need to be performed after that all queueable mutations have been executed.
+        Therefore, step \ref{itm:erd-algo-original-scroll-5} is performed in level~\ref{itm:erd-algo-scroll-level-3} as the last step.
+        Step \ref{itm:erd-algo-original-scroll-6} and \ref{itm:erd-algo-original-scroll-6} are initiated by the layout engine asynchronously.
+        Since they do interact with the \gls{DOM}, they do not need to batch processed.
+        The solution was successfuly optimized, and performs excellent on most browsers as shown in Section~\ref{sec:eval-perf-erd}.
+
+        \todo{Describe the leveled batch processor in detail somewhere?}
+
+        \todo[inline]{Write how the bugs were fixed in the scroll approach?}
+
+      % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      % %%%%%%%%%%%%%%%%%%%%%%%%%%%% Detecting runtime cycles
+      % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      \subsection{Detecting runtime cycles}\label{sec:imp_cycle_detector}
+        \begin{metatext}
+          As described in Section~\ref{sec:arcithecture}, \abbr{elq} needs a subsystem that is able to detect cyclic element style state updates, in order to warn about or prevent cyclic rules.
+          As the cycle detection system is a core subsystem of \abbr{elq}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect cyclic updates.
+        \end{metatext}
+
+        Recall from Section~\ref{sec:plugin-api} that the cycle detection subsystem has a function \code{isUpdateCyclic} that is to tell if the desired update is part of a cycle or not.
+        Further, recall from Section~\ref{sec:cyclic-rules} that cycles may depend on multiple factors (e.g., content, browser behavior, \gls{CSS}, \gls{JavaScript}).
+        Since a cycle graph can be both spread over different factors and chained; a simplistic approach to detecting cycles has been taken.
+        The idea is to keep track of all style state changes to elements in order to tell if new state changes are cyclic by examining the state history.
+        This approach is simple to implement and quite sufficient for detecting and breaking cycles.
+        It should be noted that all state cycles are not undesired, as some applications might have features that result in elements transitioning between multiple style states (e.g., a menu might be hidden and revealed by user input, which to the cycle detection system seems like the menu element suffers from cyclic rules).
+        This is perhaps the biggest drawback with such simple approach; a more intelligent cycle detection algorithm might be able to distinguish between desired and undesired cycles.
+        To mitigate the false positive detections, two parameters can be tuned by the user of the system: the time parameter $T$ that defines how long the history should be, and the parameter $C$ that defined how many cycles should be allowed per element before flagging it as a cycle to the user.
+        % This approach will only be able to detect cycles as they are about to happen, which might be 
+        
+        Recall that the \code{isUpdateCyclic} function requires an element $e$ parameter and state $s$ parameter.
+        For each element $e$, an chronologically ordered list of states $L_{states}$ is kept.
+        For each call of \code{isUpdateCyclic}, the following cycle detection algorithm is performed:
+        \begin{enumerate}
+          \item Construct $L_{states}$ if needed.
+          \item Constuct an update tuple $u$ that consists of the current time $t$ and the new state $s$.
+          \item Set the cycle counter $c$ to zero.
+          \item Iterate $L_{states}$ from beginning to end (starting with the most recent update tuple).
+          \begin{enumerate}
+            \item\label{itm:cycle-detection-step-loop}
+              If the time $t_i$ (of the current update tuple $u_i$ of $L_{states}$) and $t$ differs more the time parameter $T$, then $u_i$ is regarded as too old to consider.
+              Since $L_{states}$ is chronologically ordered all update tuples after $u_i$ must also be too old.
+              Therefore, all tuples from (and including) $u_i$ are removed from $L_{states}$. Next step is \ref{itm:cycle-detection-step-prepend-tuple}.
+            \item If the state $s_i$ (of the current update tuple $u_i$ of $L_{states}$) and $s$ are equal, then increment the cycle counter $c$.
+            \item If $c$ is greater than the parameter $C$, then a cycle has been detected. The function should then \textbf{return true}.
+            \item The next update tuple in the list is considered. Next step is \ref{itm:cycle-detection-step-loop}.
+          \end{enumerate}
+          \item\label{itm:cycle-detection-step-prepend-tuple} Prepend $u$ to $L_{states}$ (i.e., $u$ will be the most recent element in the list).
+          \item No cycle has been detected, and therefore the function should \textbf{return false}.
+        \end{enumerate}
+        Since the algorithm neither interacts with the \gls{DOM}, handles any large data structures, or performs any heavy computations it is very fast.
+        It takes \textasciitilde0.02 ms to execute the \code{isUpdateCyclic} function.
+        % See figure~\ref{} for a timeline of the \code{elq-breakpoints} plugin handling a resize event, where it is visually shown how insignificant the impact of the cycle detector system has on the total performance.
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%% Empirical Evaluation
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \chapter{Empirical Evaluation}
+    \todo[inline]{Philipp: Measurements and graphs should go here.}
+    \todo[inline]{Philipp: If possible, show graphs for other browsers than Chrome.}
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%% Bootstrap
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Bootstrap}
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%% Performance
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Performance}
+      \subsection{Element resize detection}\label{sec:eval-perf-erd}
+        \todo[inline]{This whole section is just copy-pasted. Rewrite!}
+        See figure~\ref{fig:erd-elq-scroll} for graphs that show how the \abbr{elq} scroll-based solution performs compared to the other solutions.
+        As evident in the figure, the optimized \abbr{elq} solution has significantly reduced installation times compared to the other two.
+        The \abbr{elq} solution also scales better, as more clearly shown in figure~\ref{fig:erd-solutions-regressed} that includes polynomial regression graphs for all three solutions.
+        Both scroll-based solutions have the same memory footprint (i.e., too low for reliable measurements).
+
         One disadvantage with this solution is that installing \code{object} elements is quite a heavy task.
         See figure~\ref{fig:erd-original-object} for graphs that show the performance of the object-based element resize detector provided by \cite{backalley}.
         As shown by the graphs, the object solution can be installed with adequate performance as long as the number of elements is low.
@@ -1842,11 +1963,7 @@
           \end{center}
         \end{figure}
 
-        Before the newer object solution was presented, the scroll-based solution \ref{itm:erd-approach-scroll} was described by \cite{backalley}.
-        As the object solution was discovered, the scroll-based solution \ref{itm:erd-approach-scroll} was rejected in favor of the new solution.
-        Fortunately, a somewhat reworked version of the scroll-based solution is still available \cite{eq_imp_css-element-queries}.
-        The scroll-based solution have issues when a side of the target element is set to zero, and with the target element getting removed from the render tree (e.g., by using setting the \code{display} style property to \code{none}).
-        It is probably due to these issues that the scroll-based solution was rejected in favor of the object-based solution.
+        
         See figure~\ref{fig:erd-original-scroll} for graphs that show how the scroll-based solution performs compared to the object-based solution.
         It is clear that the scroll-based solution both performs and scales better than the object-based solution.
         The memory footprint is reduced significantly, which improves the performance further.
@@ -2000,7 +2117,7 @@
         In WebKit, the scroll-based solution detects resize events in 800 ms while the object-based solution detects them in 25 ms (3200 \% faster).
         Unfortunately, installation of the object-based solution is 300 \% slower than the scroll-based solution.
         Since a delay of 800 ms when detecting resize events is undesired in most use cases, the object-based solution is preferred is Safari.
-        \todo{Write that the scroll-based solution probably has a bug that makes it perform so bad? In only perfoms bad when expanding the element, not shrinking it... This however seem to be a bug with Safari, not the implementation.}
+        \todo[inline]{Write that the scroll-based solution probably has a bug that makes it perform so bad? In only perfoms bad when expanding the element, not shrinking it... This however seem to be a bug with Safari, not the implementation.}
 
         \begin{table}[ht]\center
           \tiny
@@ -2016,73 +2133,10 @@
           \label{table:erd-layout-engines}
         \end{table}
 
-        \todo[inline]{Write that object was probably preferred over scroll since scroll have some shortcomings? Which have been fixed by ELQ.}
-        \todo[inline]{Mention that both the object and scroll solutions were completely rewritten to fit in the ELQ framework?}
-        \todo[inline]{Mention that the scroll solution had severe bugs that were fixed? the display:none or 0 length for instance.}
         \todo[inline]{Write that measurements have been done in Chrome?}
-
-        \todo[inline]{Tests have shown that my own and backalleys object approaches perform the same. I thought the batch processor would boost it.}
         \todo[inline]{Write that it might be up to the user to decide if solution 1 or 3 is desired? Or is it always better to use 3?}
         \todo[inline]{Write that object is faster than scroll when it comes to the actual resize events?}
         \todo[inline]{Present perf statistics of other browsers? Firefox still seems to favor the scroll solution (but less performant) while Safari semms to favors the object solution.}
-
-    % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % %%%%%%%%%%%%%%%%%%%%%%%%%%%% Detecting runtime cycles
-    % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Detecting runtime cycles}\label{sec:imp_cycle_detector}
-      \begin{metatext}
-        As described in Section~\ref{sec:arcithecture}, \abbr{elq} needs a subsystem that is able to detect cyclic element style state updates, in order to warn about or prevent cyclic rules.
-        As the cycle detection system is a core subsystem of \abbr{elq}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect cyclic updates.
-      \end{metatext}
-
-      Recall from Section~\ref{sec:plugin-api} that the cycle detection subsystem has a function \code{isUpdateCyclic} that is to tell if the desired update is part of a cycle or not.
-      Further, recall from Section~\ref{sec:cyclic-rules} that cycles may depend on multiple factors (e.g., content, browser behavior, \gls{CSS}, \gls{JavaScript}).
-      Since a cycle graph can be both spread over different factors and chained; a simplistic approach to detecting cycles has been taken.
-      The idea is to keep track of all style state changes to elements in order to tell if new state changes are cyclic by examining the state history.
-      This approach is simple to implement and quite sufficient for detecting and breaking cycles.
-      It should be noted that all state cycles are not undesired, as some applications might have features that result in elements transitioning between multiple style states (e.g., a menu might be hidden and revealed by user input, which to the cycle detection system seems like the menu element suffers from cyclic rules).
-      This is perhaps the biggest drawback with such simple approach; a more intelligent cycle detection algorithm might be able to distinguish between desired and undesired cycles.
-      To mitigate the false positive detections, two parameters can be tuned by the user of the system: the time parameter $T$ that defines how long the history should be, and the parameter $C$ that defined how many cycles should be allowed per element before flagging it as a cycle to the user.
-      % This approach will only be able to detect cycles as they are about to happen, which might be 
-      
-      Recall that the \code{isUpdateCyclic} function requires an element $e$ parameter and state $s$ parameter.
-      For each element $e$, an chronologically ordered list of states $L_{states}$ is kept.
-      For each call of \code{isUpdateCyclic}, the following cycle detection algorithm is performed:
-      \begin{enumerate}
-        \item Construct $L_{states}$ if needed.
-        \item Constuct an update tuple $u$ that consists of the current time $t$ and the new state $s$.
-        \item Set the cycle counter $c$ to zero.
-        \item Iterate $L_{states}$ from beginning to end (starting with the most recent update tuple).
-        \begin{enumerate}
-          \item\label{itm:cycle-detection-step-loop}
-            If the time $t_i$ (of the current update tuple $u_i$ of $L_{states}$) and $t$ differs more the time parameter $T$, then $u_i$ is regarded as too old to consider.
-            Since $L_{states}$ is chronologically ordered all update tuples after $u_i$ must also be too old.
-            Therefore, all tuples from (and including) $u_i$ are removed from $L_{states}$. Next step is \ref{itm:cycle-detection-step-prepend-tuple}.
-          \item If the state $s_i$ (of the current update tuple $u_i$ of $L_{states}$) and $s$ are equal, then increment the cycle counter $c$.
-          \item If $c$ is greater than the parameter $C$, then a cycle has been detected. The function should then \textbf{return true}.
-          \item The next update tuple in the list is considered. Next step is \ref{itm:cycle-detection-step-loop}.
-        \end{enumerate}
-        \item\label{itm:cycle-detection-step-prepend-tuple} Prepend $u$ to $L_{states}$ (i.e., $u$ will be the most recent element in the list).
-        \item No cycle has been detected, and therefore the function should \textbf{return false}.
-      \end{enumerate}
-      Since the algorithm neither interacts with the \gls{DOM}, handles any large data structures, or performs any heavy computations it is very fast.
-      It takes \textasciitilde0.02 ms to execute the \code{isUpdateCyclic} function.
-      % See figure~\ref{} for a timeline of the \code{elq-breakpoints} plugin handling a resize event, where it is visually shown how insignificant the impact of the cycle detector system has on the total performance.
-
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%% Empirical Evaluation
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \chapter{Empirical Evaluation}
-    \todo[inline]{Philipp: Measurements and graphs should go here.}
-    \todo[inline]{Philipp: If possible, show graphs for other browsers than Chrome.}
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%% Bootstrap
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Bootstrap}
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%% Performance
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Performance}
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Related work
