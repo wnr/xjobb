@@ -1709,6 +1709,12 @@
       \todo[inline]{Write about the drawbacks (invalid layout at page load, injecting objects is heavy, DOM is mutated.)}
 
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%% Batch processor
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      \subsection{Batch processor}
+        \todo[inline]{Write me?}
+
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element resize detection
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       \subsection{Element resize detection}\label{sec:imp_erd}
@@ -1875,35 +1881,52 @@
         \end{enumerate}
         Since the algorithm neither interacts with the \gls{DOM}, handles any large data structures, or performs any heavy computations it is very fast.
         It takes \textasciitilde0.02 ms to execute the \code{isUpdateCyclic} function.
+        \todo{Should this measurement be given in eval? But then eval will be really small?}
         % See figure~\ref{} for a timeline of the \code{elq-breakpoints} plugin handling a resize event, where it is visually shown how insignificant the impact of the cycle detector system has on the total performance.
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Empirical Evaluation
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{Empirical Evaluation}
+    This chapter presents the empirical evaluation that has been done of the \gls{ELQ} library.
+
+    Section~\ref{sec:eval-bootstrap} evaluates the \glspl{API} by a case study that rewrites the popular Bootstrap framework to use element queries.
+    Bootstrap uses media queries heavily to provide responsive components and \gls{CSS} classes that is often desired to use in web applications.
+    By using element queries instead instead, the components and classes become encapsulated and can be used in responsive modules.
+
+    Sectin~\ref{sec:eval-performance} evaluates the performance by measuring the \gls{ELQ} in different configurations.
+    Key subsystems are also evaluated independently so that they can be compared to similar subsystems of related work.
+
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Bootstrap
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Bootstrap}
+    \section{Bootstrap}\label{sec:eval-bootstrap}
+
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Performance
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Performance}
+    \section{Performance}\label{sec:eval-performance}
+      The following tests were performed on a computer with a 2.7 GHz processor and 16GB of primary memory\footnote{The serial number of the computer is C02N4G9TG3QD and the vendor is Apple Inc. CPU: 2.5 GHz Intel Core i7. Memory: 16 GB 1600 MHz DDR3. GPU: Intel Iris Pro 1536 MB. Storage Disk: 500 GB SSD.}.
+      The library has been tested in the following browsers: Chrome 42.0.2311.152, FireFox 37.0.1 and Safari 8.0.6.
+      Measurements and graphs show evaluations performed in Chrome unless stated otherwise.
+
       \todo[inline]{Write that as ELQ is plugin-based, it makes sense to measure the core subsystems by themselves and the plugins enabling element queries in different setups.}
       \todo[inline]{Have to measure how elq-breakpoints handles large amount of elements. It might suffor from layout thrashing since might read/write the DOM at invalid stages of the erd subsystem.}
       \todo[inline]{Actually since elq-breakpoints is batch-processed, no layout thrashing occurs. However, two disjunct layouts are performed (one for the erd system and one for the plugin) which could theoretically be merged.}
       \todo[inline]{Philipp: If possible, show graphs for other browsers than Chrome.}
       \subsection{Element resize detection}\label{sec:eval-perf-erd}
-        \todo[inline]{This whole section is just copy-pasted. Rewrite!}
-        See figure~\ref{fig:erd-elq-scroll} for graphs that show how the \gls{ELQ} scroll-based solution performs compared to the other solutions.
-        As evident in the figure, the optimized \gls{ELQ} solution has significantly reduced installation times compared to the other two.
-        The \gls{ELQ} solution also scales better, as more clearly shown in figure~\ref{fig:erd-solutions-regressed} that includes polynomial regression graphs for all three solutions.
-        Both scroll-based solutions have the same memory footprint (i.e., too low for reliable measurements).
+        This section evaluates the performance of the object-based and scroll-based solutions described in Section~\ref{sec:imp_erd}.
+        The optimized \gls{ELQ} version of the scroll-based solution will also be evaluated.
 
-        One disadvantage with this solution is that installing \code{object} elements is quite a heavy task.
-        See figure~\ref{fig:erd-original-object} for graphs that show the performance of the object-based element resize detector provided by \cite{backalley}.
-        As shown by the graphs, the object solution can be installed with adequate performance as long as the number of elements is low.
+        \todo{Feels natural to tell here which implementations use which solutions...}
+        The object-based solution performs well when detecting resize events.
+        However, installing \code{object} elements is quite a heavy task.
+        See figure~\ref{fig:erd-original-object} for graphs that show the performance of the object-based solution.
+        As shown by the graphs, the installation can be performed with adeqaute performance as long as the number of elements is low.
         The solution does not scale well as the number of element increases.
+        \todo{Maybe be less pessimistic as Safari might have to use the object solution?}
         \begin{figure}[h]
           \tiny
           \begin{center}
@@ -1946,16 +1969,21 @@
                 \end{axis}
               \end{tikzpicture}
             \end{minipage}
-          \caption{The installation performance of the original object-based element resize detection solution provided by \cite{backalley}. The left graph shows the installation time. The right graph shows the heap memory used when all \code{object} elements have been installed.}
+          \caption{The installation performance of the object-based solution. The left graph shows the installation time. The right graph shows the heap memory used when all \code{object} elements have been installed.}
           \label{fig:erd-original-object}
           \end{center}
         \end{figure}
 
-        
-        See figure~\ref{fig:erd-original-scroll} for graphs that show how the scroll-based solution performs compared to the object-based solution.
-        It is clear that the scroll-based solution both performs and scales better than the object-based solution.
-        The memory footprint is reduced significantly, which improves the performance further.
-        The amount of memory used by the scroll-based solution is so low that reliable measurements could not be gathered, as the number of elements was not high enough to affect the memory usage.
+        % See figure~\ref{fig:erd-elq-scroll} for graphs that show how the \gls{ELQ} scroll-based solution performs compared to the other solutions.
+        % As evident in the figure, the optimized \gls{ELQ} solution has significantly reduced installation times compared to the other two.
+        % The \gls{ELQ} solution also scales better, as more clearly shown in figure~\ref{fig:erd-solutions-regressed} that includes polynomial regression graphs for all three solutions.
+        % Both scroll-based solutions have the same memory footprint (i.e., too low for reliable measurements).
+
+        The object-based solution performs well when detecting resize events.
+        As no \code{object} elements are injected the memory footprint is reduced significantly, which improves the installation performance.
+        See figure~\ref{fig:erd-original-scroll} for graphs that show how the both solutions perform compared to each other.
+        It is clear that the scroll-based solution both performs and scales better than the object-based solution during installation.        
+        The amount of memory used by the scroll-based solution is so low that reliable measurements could not be gathered, as the number of elements was not high enough to affect the memory usage noticeably.
         \begin{figure}[h]
           \tiny
           \begin{center}
@@ -2003,15 +2031,12 @@
           \end{center}
         \end{figure}
 
-        Due to problems such as layout thrashing, bugs and an undesired \gls{API}; the scroll-based solution provided by \cite{eq_imp_css-element-queries} was completely rewritten to better fit \gls{ELQ}.
-        Layout thrashing was avoided by using the leveled batch processor described in Section~\ref{sec:plugin-api}.
-        \todo{Describe the leveled batch processor in detail somewhere?}
-        \todo{Describe how stuff was batch processed in detail?}
-        See figure~\ref{fig:erd-elq-scroll} for graphs that show how the \gls{ELQ} scroll-based solution performs compared to the other solutions.
+        Recall that the scroll-based solution was rewritten and optimized; which is referred to as the \gls{ELQ} version of the scroll-based solution.
+        By avoiding layout thrashing, the installation performance was imporoved significantly.
+        See figure~\ref{fig:erd-elq-scroll} for graphs that show how the it performs compared to the other solutions.
         As evident in the figure, the optimized \gls{ELQ} solution has significantly reduced installation times compared to the other two.
         The \gls{ELQ} solution also scales better, as more clearly shown in figure~\ref{fig:erd-solutions-regressed} that includes polynomial regression graphs for all three solutions.
         Both scroll-based solutions have the same memory footprint (i.e., too low for reliable measurements).
-        
         \begin{figure}[h!]
           \tiny
           \begin{center}
@@ -2096,17 +2121,16 @@
         \end{figure}
 
         As shown, great performance can be achieved with the optimized \gls{ELQ} scroll-based solution in Chrome.
-        Unfortunately, there is no silver bullet to observing element resize events; as the other layout engines behave differently.
-        See table~\ref{table:erd-layout-engines} for performance numbers of different layout engines.
-        The scroll-based solution is preferred for the Blink layout engine, as the installation time is 2000 \% better than the object-based solution while the resize detection performance is the same for both solutions.
-        In Gecko, the object-based solution detects resize events 200 \% faster than the scroll-based solution (still, 100 ms for detecting resize events is acceptable).
-        However, the installation time needed for the object-based solution is 550 \% of the time needed for the scroll-based solution.
-        The scroll-based solution is therefore probably desired in Gecko.
-        In WebKit, the scroll-based solution detects resize events in 800 ms while the object-based solution detects them in 25 ms (3200 \% faster).
-        Unfortunately, installation of the object-based solution is 300 \% slower than the scroll-based solution.
+        Unfortunately, there is no silver bullet to observing element resize events; as the other browsers behave differently.
+        See table~\ref{table:erd-layout-engines} for performance numbers of different browsers.
+        The scroll-based solution is preferred for Chrome, as the installation is 2000 \% faster than the object-based solution while the resize detection performance is the same for both solutions.
+        In FireFox, the object-based solution detects resize events 200 \% faster than the scroll-based solution (still, 100 ms for detecting resize events is acceptable).
+        However, the installation time needed for the object-based solution is 550 \% of the time needed for the \gls{ELQ} scroll-based solution.
+        The scroll-based solution is therefore probably desired in FireFox for the general use case.
+        In Safari, the \gls{ELQ} scroll-based solution detects resize events in 800 ms while the object-based solution detects them in 25 ms (3200 \% faster).
+        Unfortunately, installation of the object-based solution is 300 \% slower than the \gls{ELQ} scroll-based solution.
         Since a delay of 800 ms when detecting resize events is undesired in most use cases, the object-based solution is preferred is Safari.
-        \todo[inline]{Write that the scroll-based solution probably has a bug that makes it perform so bad? In only perfoms bad when expanding the element, not shrinking it... This however seem to be a bug with Safari, not the implementation.}
-
+        \todo{Write that the scroll-based solution probably has a bug that makes it perform so bad? In only perfoms bad when expanding the element, not shrinking it... This however seem to be a bug with Safari, not the implementation.}
         \begin{table}[ht]\center
           \tiny
           \begin{tabular}[t]{ l l l l l l l }
@@ -2121,11 +2145,9 @@
           \label{table:erd-layout-engines}
         \end{table}
 
-        \todo[inline]{Write that measurements have been done in Chrome?}
-        \todo[inline]{Write that it might be up to the user to decide if solution 1 or 3 is desired? Or is it always better to use 3?}
-        \todo[inline]{Write that object is faster than scroll when it comes to the actual resize events?}
         \todo[inline]{Present perf statistics of other browsers? Firefox still seems to favor the scroll solution (but less performant) while Safari semms to favors the object solution.}
-
+        \todo[inline]{Show graph for resize detection also.}
+        \todo[inline]{Graphs for FireFox, IE and Safari?}
       \subsection{Cycle detection system}
 
 
