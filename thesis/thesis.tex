@@ -1284,8 +1284,8 @@
       In theory it should mean that if no child query the height of the viewport for instance, then the height of the viewport may depend on its children.
       This is a powerful insight, since the general use case would be to write element queries against the width and have the \glspl{element} adapt their heights accordingly (including the viewport \gls{element}).
       \todo{General use case according to who?}
-      \todo[inline]{Maybe note seamless iframe in theory works in the same way. But would it be relevant?}
 
+      \paragraph{JavaScript library}
       Another approach to enable element queries is to provide a \gls{third-party} \gls{JavaScript} library.
       Since a \gls{JavaScript} library does not depend on vendors of \glspl{layout engine} (other than features in the current language specifications) it can therefore be designed in any desired way.
       It would be more feasible to have unrestricted element queries in a \gls{JavaScript} library, than implementing it natively.
@@ -1293,6 +1293,9 @@
       Similar, cycle detection and handling can be handled on top of the \gls{layout engine} by the library.
       However, without the \gls{layout engine} being aware of the element queries it could be hard to avoid multiple layouts.
       Although an implementation in \gls{JavaScript} will most probably be less performant than a \gls{native} implementation, it can still be beneficial to have such feature implemented as a \gls{third-party} library to avoid complex and restricting code in \glspl{layout engine}.
+
+      \todo[inline]{Maybe note seamless iframe in theory works in the same way. But would it be relevant?}
+
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% The element queries library
@@ -1785,7 +1788,8 @@
         Also, since the polling is performed all the time, the overall page performance will be decreased even if the page is idle which is undesired especially for devices running on battery.
         \todo{Should make quick test to see how much CPU it uses when polling frequently}
 
-        Solution \ref{itm:erd-approach-frame} and \ref{itm:erd-approach-scroll} have similar characteristics and were both presented by \cite{backalley}.
+        \paragraph{Injection solutions}
+        Solution \ref{itm:erd-approach-scroll} and \ref{itm:erd-approach-frame} have similar characteristics and were both presented by \cite{backalley}.
         Solution \ref{itm:erd-approach-scroll} was presented first, but was rejected in favor of solution \ref{itm:erd-approach-frame} as it was discovered.
         Fortunately, a somewhat reworked version of the scroll-based solution is still available \cite{eq_imp_css-element-queries}.
         For solution \ref{itm:erd-approach-frame}, it has been shown by \cite{backalley} that \code{object} is the most suitable frame \gls{element} to be used for this purpose as they have good \gls{browser} compatibility and adequate performance.
@@ -1815,6 +1819,7 @@
             This way the target \gls{element} can be changed to \code{relative} positioning with the special style properties removed, to obtain the same visual representation as being positioned \code{static}.
         \end{itemize}
 
+        \paragraph{The object-based solution}
         Solution \ref{itm:erd-approach-frame} has excellent performance when it comes to detecting resize events.
         However, installing many \code{object} elements is quite a heavy task for browsers and consume lots of memory as presented in Section~\ref{sec:eval-perf-erd}.
         This is the main algorithm that is performed when an element $e$ is to be observed for resize events:
@@ -1831,6 +1836,7 @@
         Unfortunately, creating the object element in step \ref{itm:erd-algo-original-object-4} forces a full layout, which makes the batch processing optimization negligible.
         Since the creation of the object elements forms the significant time consumption, no further optmization was performed.
 
+        \paragraph{The scroll-based solution}
         As solution \ref{itm:erd-approach-scroll} only involves \code{div} elements, it offers room for optimizations.
         The algorithm is conceptually similar to the algorithm of solution \ref{itm:erd-approach-frame}.
         This is the main algorithm that is performed when an element $e$ is to be observed for resize events:
@@ -1972,6 +1978,7 @@
       Since container elements may be nested they will be both \code{elq-mirror} and \code{elq-breakpoints} elemenets.
       Recall from section~\ref{sec:plugin-mirror} that the responsive elements must be \code{elq-mirror} elements in order to not limit the usage of the classes (i.e., limit how the elements are structured) and to enable nesting.
 
+      \paragraph{Altering the LESS code}
       Bootstrap uses three width numbers for all responsive breakpoints: 768, 970 and 1170 pixels.
       Since the Bootstrap \gls{CSS} is generated by the preprocessor LESS\footnote{See \url{http://lesscss.org/} for more information about LESS and its syntax.}, they are defined as constants as presented in listing~\ref{code:bootstrap-less-breakpoints}.
       \begin{lstlisting}[gobble=8,label={code:bootstrap-less-breakpoints},caption={},captionpos=b]]
@@ -2026,6 +2033,7 @@
       In fact, only \textasciitilde50 lines out of \textasciitilde8500 lines of Bootstrap LESS code needed to be changed.
       Most changes were of the character shown in listing~\ref{code:bootstrap-less-breakpoints-usage}, which basically replaces the media query syntax with the \gls{ELQ} element queries syntax.
 
+      \paragraph{Adding the \gls{ELQ} library}
       The rewritten Bootstrap version depends on \gls{ELQ} including two plugins (i.e., \code{elq-breakpoints} and \code{elq-mirror}) and must therefore be included.
       \gls{ELQ} and the plugins could be bunclded with the javascript of Bootstrap, but it was decided to keep them separated (as Bootstrap's other dependency, jQuery, is as well).
       Since it is beneficial to keep the original Bootstrap \gls{API}, all \gls{ELQ} element attributes needed are added with \gls{JavaScript}.
@@ -2075,6 +2083,7 @@
         init(elq);
       \end{lstlisting}
 
+      \paragraph{The result}
       The rewriting of the LESS code, the addition of the \gls{ELQ} library and the initating JavaScript is all that is required to make the double column documentation page behave as expected.
       Figure~\ref{fig:eval-bootstrap-mq-eq-header}, \ref{fig:eval-bootstrap-mq-eq-matrix} and \ref{fig:eval-bootstrap-mq-eq-grid} show examples of the double column documentation page empowered by the \gls{ELQ} version of Bootstrap, with the original Bootstrap version as a reference that shows how the page would look like without element queries.
       As shown in the figures, the double column documentation page using the original Bootstrap styles the two columns as if they both had the whole viewport width available.
@@ -2159,7 +2168,6 @@
         This section evaluates the performance of the object-based and scroll-based solutions described in Section~\ref{sec:imp_erd}.
         The optimized \gls{ELQ} version of the scroll-based solution will also be evaluated.
 
-        \todo{Feels natural to tell here which implementations use which solutions...}
         The object-based solution performs well when detecting resize events.
         However, installing \code{object} elements is quite a heavy task.
         See figure~\ref{fig:erd-original-object} for graphs that show the performance of the object-based solution.
@@ -2218,7 +2226,7 @@
         % The \gls{ELQ} solution also scales better, as more clearly shown in figure~\ref{fig:erd-solutions-regressed} that includes polynomial regression graphs for all three solutions.
         % Both scroll-based solutions have the same memory footprint (i.e., too low for reliable measurements).
 
-        The object-based solution performs well when detecting resize events.
+        The scroll-based solution also performs well when detecting resize events.
         As no \code{object} elements are injected the memory footprint is reduced significantly, which improves the installation performance.
         See figure~\ref{fig:erd-original-scroll} for graphs that show how the both solutions perform compared to each other.
         It is clear that the scroll-based solution both performs and scales better than the object-based solution during installation.        
@@ -2359,6 +2367,7 @@
           \end{center}
         \end{figure}
 
+        \paragraph{FireFox and Safari}
         As shown, great performance can be achieved with the optimized \gls{ELQ} scroll-based solution in Chrome.
         Unfortunately, there is no silver bullet to observing element resize events; as the other browsers behave differently.
         See table~\ref{table:erd-layout-engines} for performance numbers of different browsers.
