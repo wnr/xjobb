@@ -474,7 +474,7 @@
         Clearly, a better approach was needed.
 
         With the release of \gls{CSS3} \gls{media queries} new possibilities opened up.
-        Media queries enabled developers to write conditional style rules by media properties such as the \gls{viewport} size.
+        Media queries enabled developers to write conditional style declarations by media properties such as the \gls{viewport} size.
         See listing~\ref{code:mq-example} for an example of how \gls{media queries} can be used to style \glspl{element} differently with relation to the viewport size.
         This can be used to tailor a site for a specific medium or \gls{viewport} size at runtime.
         \gls{RWD} refers to the approach of having a single site being \gls{responsive} to different media properties (mainly the \gls{viewport} size) at runtime to improve the user experience.
@@ -541,6 +541,7 @@
         Having a good semantic versioning convention is key to reducing the complexity of managing multiple versions of modules.
 
         \todo[inline]{Philipp: I would add: Ways in which modularity is broken, and why modular development is still an issue today (otherwise, this thesis wouldnt be needed).}
+        \todo[inline]{Define some terminology. Write that the "user" of a module is not the end-user. The thesis uses the word "user" of a module quite often, need to define what that is exactly.}
       \subsection{The problem of responsive modules}\label{sec:rwd-modular-problem}
         \todo[inline]{The content of this section needs to be rewritten as it has been just copy-pasted from different parts of the thesis.}
 
@@ -552,18 +553,18 @@
         Recall from Section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} respond to size changes.
         \todo[color=red]{Tomas: Or that modules can programatically work in many different sizes}
         \todo[color=green]{Marcos: Maybe embellish that bit... "...respond to size change, so that a document may be usable on many screen sizes, resolutions, pixel-densities, and media." or something like that.}
-        \Gls{responsive} \gls{web} design implements this by using \gls{media queries}, applying conditional rules with relation to the \gls{viewport} size.
+        \Gls{responsive} \gls{web} design implements this by using \gls{media queries}, applying conditional style declarations with relation to the \gls{viewport} size.
         In Section~\ref{sec:modularity} the desire for building modular \gls{web} components was presented.
         One positive outcome of building applications in a modular way is that general components become reusable.
-        Since the only way of applying conditional rules to \glspl{element} today is by using \gls{media queries}, all \gls{responsive} styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the application layout).
+        Since the only way of applying conditional style declarations to \glspl{element} today is by using \gls{media queries}, all \gls{responsive} styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the application layout).
         The implication of this is that the \gls{HTML} and \gls{JavaScript} can be written in a modular way, but the \gls{CSS} is left for the user of the module (application) to write which somewhat defeats the purpose of writing modules.
         So developers today have two choices: writing modules that are not \gls{responsive} but \gls{encapsulated}, or writing modules that are \gls{responsive} but not \gls{encapsulated} (leaving the styling to the user).
 
-        An identified solution to this is element queries, which allows conditional rules to be applied based on any criteria for any \gls{element}.
+        An identified solution to this is element queries, which allows conditional styles to be applied based on any criteria for any \gls{element}.
         Figure~\ref{fig:mq-vs-eq} shows the problem with \gls{media queries} and the element query solution.
         The typical use case is to write conditional styles to be applied based on the container \gls{element} size.
         Although the size of the container \gls{element} is typically the most interesting element query with \gls{responsive} \gls{web} design, element queries as a concept does not need to be limited to that.
-        It is also possible to apply conditional rules by any \gls{element} display property, color, text alignment, and so on.
+        It is also possible to apply conditional styles by any \gls{element} display property, color, text alignment, and so on.
         Theoretically it should be possible to query any style property of an \gls{element}, but the focus will be the \code{width} and \code{height} properties since they are the most interesting in \gls{responsive} \gls{web} design.
 
         \begin{figure}
@@ -1009,6 +1010,9 @@
       It should be noted that the target is the entity that is evaluated against the query, and not the entity that has conditionally styles applied.
       For instance, it is not possible to conditionally style the target of media queries, since \gls{CSS} is incapable of altering the device.
       For element queries, the target entity is sometimes referred to as the \emph{target element}.
+      \gls{CSS} style declarations that are applied conditionally using either element queries or media queries are sometimes referred to as \emph{conditional style declarations} or shortened \emph{conditional styles}.
+      When the layout engine evaluates a media or element query to determine whether the selectors matches or not is called \emph{query selector matching}.
+      \todo[inline]{Write about breakpoints.}
 
       As already stated, element queries is not yet standardized and the exact behavior and syntax is still undefined.
       In this thesis, the pseudo syntax of element queries is defined as a pseudo-class named \code{eq}.
@@ -1037,42 +1041,39 @@
 
       \todo[inline]{Should it really also be discussed in detail how element queries solve the problem?}
       \todo[inline]{If a better example is found to be used in \ref{sec:rwd-modular-problem}, the same example can be used here and shown how element queries make it behave as expected}.
+      \todo[inline]{Describe common use case. Just really simply that w3c is assuming size eq's and that RICG thinks that width will be the most common. RWD uses almost only width, and etc.}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Problems
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Problems}\label{sec:eq-problems}
       One issue that hinders element queries from being implemented natively in browsers is that they bring problems and limitations to layout engines.
-      It is stated on the W3C's www-style mailing list \cite{w3c_eq_mail} by Zbarsky of Mozilla, Atkins of Google and Sprehn of Google that unrestricted element queries is infeasible to implement.
+      It is stated on the W3C's www-style mailing list \cite{w3c_eq_mail} by Zbarsky of Mozilla, Atkins of Google and Sprehn of Google that element queries is infeasible to implement without restricting it.
       In this section the two major problems will be presented: performance and circularity.
 
       \subsection{Performance}
-        Recall from Section~\ref{sec:layout-process} that the rectangle size and position for each \gls{element} is calculated in the layout process, and cannot be determined before an actual layout has happened.
-        This imposes that a layout pass needs to be performed before knowing the \gls{element}'s sizes \cite{w3c_eq_mail}.
-        If element queries are present that rely on the size of \glspl{element}, which is the identified common use case, the following process needs to happen:
+        Recall from Section~\ref{sec:render-tree} that the size and position for each \gls{element} is calculated in the layout process, and cannot be determined before an actual layout has happened.
+        This imposes that a layout pass needs to be performed before resolving the \gls{element}'s sizes.
+        If element queries are present that rely on the size of \glspl{element}, the following process needs to happen:
         \begin{enumerate}
           \item A layout pass needs to be performed in order to calculate the size of the \glspl{element} targeted by element queries.
-          \item The element query conditional rules need to be evaluated against the \glspl{element} to know which rules should be applied (element query selector matching).
-          \item If the element query selector matching has resulted in a different matching set than in step 1, the process is repeated (with the new rules applied).
+          \item The element query conditional style declarations need to be evaluated against the \glspl{element} to know which rules should be applied (element query selector matching).
+          \item If the element query selector matching results in a different matching set than in step 1, the process is repeated (with the new rules applied).
         \end{enumerate}
-        So, element query selector matching changes result in performing another layout, which discards at least a subtree of the previous layout.
-        As already stated, this only occurs when the layout has changed in a way that changes the element query selectors.
+        So, element query selector match changes result in performing another layout that discards at least a subtree of the previous layout \cite{w3c_eq_mail}.
+        As already stated, this only occurs when the layout has changed in a way that changes the matches of element query selectors.
         Unfortunately, this means that if there is any matching element query selector at page load, two layout passes will always be performed.
-
-        Further, it is common for internal \glspl{API} in \glspl{layout engine} to request updated \gls{element} styles that do not require layout to resolve (non-layout properties such as \code{color} and \code{font-family}) \cite{w3c_eq_mail}.
-        Since a layout of the element query selector target is required in order to resolve the correct \gls{element} style, such internal \glspl{API} requires a layout in order to obtain the correct \gls{element} style (even for non-layout related properties).
-        Also, \glspl{layout engine} would not be able to layout subtrees in parallel since an \gls{element} in one subtree might affect an \gls{element} in another subtree.
+        Also, it is common for internal \glspl{API} in \glspl{layout engine} to request updated \gls{element} styles that do not require layout to resolve (non-layout properties such as \code{color} and \code{font-family}) \cite{w3c_eq_mail}.
+        Since a layout of the element query selector target is required in order to resolve the correct \gls{element} style, such internal \glspl{API} would force a layout in order to obtain the correct \gls{element} style (even for non-layout related properties).
 
         As shown in Section~\ref{sec:parallel} \gls{layout engine} vendors are interested in parallelizing their engines to increase the page performance.
-        Element queries limits the parallelization, 
+        Element queries limits the parallelization, as \glspl{layout engine} would not be able to layout subtrees in parallel since an \gls{element} in one subtree might affect an \gls{element} in another subtree through element queries).
         \todo[inline]{Finish this.}
 
       \subsection{Circularity}\label{sec:cyclic-rules}
-        This section will explain and give examples of cyclic rules, and therefore makes heavy use of the element queries pseudo-syntax defined in Section~\ref{sec:eq-definitions}.
-
-        The most obvious occurrences of cyclic rules are when there are specified conflicting width element queries and width updates for an \gls{element}.
+        The most obvious occurrences of cyclic rules are when there are conflicting element queries with width criterion and width style declarations for an \gls{element}.
         See listing~\ref{code:cyclic-simple} for the perhaps simplest example of cyclic rules.
-        \begin{lstlisting}[gobble=10,caption={Simple example of cyclic rules with directly conflicting width element queries and updates.}, captionpos=b, label={code:cyclic-simple}]
+        \begin{lstlisting}[gobble=10,caption={Simple example of cyclic rules with directly conflicting width element queries criterion and declarations. Recall the element queries psuedo syntax defined in Section~\ref{sec:eq-definitions}.}, captionpos=b, label={code:cyclic-simple}]
           #foo {
             width: 250px;
           }
@@ -1087,30 +1088,29 @@
             width: 250px;
           }
         \end{lstlisting}
-        The following happens to the \gls{element}:
+        The result of this is of course implementation dependent, but a probable outcome of such code is the following infinite process:
         \begin{enumerate}
           \item 
             The initial width of the \code{\#foo} \gls{element} is set to 250 pixels.
-            After a layout, the \code{\#foo:eq(width < 300px)} matches and therefore next step will be 2.
+            After a layout, the \code{\#foo:eq(width < 300px)} matches and therefore next step will be~2.
           \item 
             The width of the \gls{element} is under 300 pixels, so the selector \code{\#foo:eq(width < 300px)} matches.
             Note that the \code{\#foo:eq(width > 500px)} does not match, since the width is under 500 pixels.
             Since the matched selector is more specific than the \code{\#foo} selector, the new width of the \gls{element} is 550 pixels.
-            Next step will be 3.
+            Next step will be~3.
           \item 
             The width of the \gls{element} is above 500 pixels, so the selector \code{\#foo:eq(width > 500px)} matches.
             Note that the \code{\#foo:eq(width < 300px)} does not match, since the width is above 300 pixels.
             Since the matched selector is more specific than the \code{\#foo} selector, the new width of the \gls{element} is 250 pixels.
-            Next step will be 2.
+            Next step will be~2.
         \end{enumerate}
         Clearly, the \gls{browser} will be stuck in an infinite layout cycle pending back and forth between step 2 and 3 (250 pixels and 550 pixels).
-        The result of this is of course implementation dependent.
-        One reasonable outcome of such infinite layout loop is that the \gls{layout engine} executes one layout pass and then evaluate the next set of matched selectors and so on, which leads to a functioning page but since a relayout is enforced every update, the performance impact is significant.
+        One reasonable outcome of such infinite layout loop is that the \gls{layout engine} executes one layout pass and then evaluate the next set of matched selectors and so on, which leads to a functioning page but since a layout is enforced every frame, the performance impact would be significant.
         This example is somewhat similar to writing \code{while(true);} outside the scope of a generator function in JavaScript (i.e., it just locks up the main thread), which obviously is a bad idea.
         However, cyclic rules can also occur in less obvious ways.
 
-        Indirect cyclic rules are somewhat more complex to reason about, than the example given above (which is an example of direct cyclic rules).
-        For instance, if the \code{\#foo} \gls{element} matches the width of a child \gls{element}, and the child changes width depending on the parent width, a cycle might occur.
+        Indirect cyclic rules are somewhat more complex to reason about than direct cyclic rules such as the example given in listing~\ref{code:cyclic-simple}.
+        For instance, if an \gls{element} matches the width of a child \gls{element}, and the child changes width depending on the parent width, a cycle might occur.
         Consider the code in listing~\ref{code:cyclic-2}.
         \begin{lstlisting}[gobble=10,caption={Example of indirect cyclic rules. Here the user (\code{\#foo}) of the module (\code{\#module}) creates cyclic rules indirectly by specifying that it should match the width of the module.}, captionpos=b, label={code:cyclic-2}]
           /* HTML */
@@ -1145,38 +1145,40 @@
             width: 250px;
           }
         \end{lstlisting}
-        What makes this situation more complex than the previous example is that it is less obvious for the developer to identify that there are cyclic rules.
+        What makes this situation more complex than the previous example is that it is less obvious for developers to identify that there are cyclic rules.
         First, the problem cannot be found without considering the rule sets of both the module and the \code{\#foo} element.
         Second, the rules of the module elements and the rules of the \code{\#foo} \gls{element} might be separated into different parts of the stylesheet or different stylesheets.
         Third, the user of the module must be aware of how it styles itself in order to understand the limitations it imposes.
-        By adding one line to the containg element \code{\#foo} a cycle appears in another part of the program (in the module).
-        A \gls{JavaScript} equivalent of this example would perhaps be \code{var bar = true; while(bar);} with the motivation that it is still obvious that it results in an infinite loop but both the loop and the variable needs to be considered.
-        Also, the variable assignment could happen in another part of the program.
+        By adding one line to the containing element \code{\#foo} a cycle appears in another part of the application (in the module).
+        A \gls{JavaScript} equivalent of this example would perhaps be \code{var bar = true; while(bar);} with the motivation that it is still obvious that it results in an infinite loop but both the loop and the variable both need to be considered.
+        Also, the variable assignment could happen in another part of the code.
 
         The examples given so far have been simple, and can easily be identified as cyclic by reviewing the \gls{CSS} code.
-        It would also be possible for the browser (or any other program) to detect the cycles at parsetime.
-        However, cycles can occur in a complexer way that cannot be detected at parsetime.
+        It would also be possible to detect the cycles by performing a static analysis of the code.
+        Such analysis could be done by browsers during parse time in order to warn about or handle the cycles.
+        However, cycles can occur in a complexer way that cannot be detected by static analysis.
         Consider the code in listing~\ref{code:cyclic-3}.
-        \begin{lstlisting}[gobble=10,caption={Example of cyclic rules that cannot be detected at parsetime.}, captionpos=b, label={code:cyclic-3}]
+        \begin{lstlisting}[gobble=10,caption={Example of cyclic rules that cannot be detected by static analysis.}, captionpos=b, label={code:cyclic-3}]
           /* HTML */
           <span id="foo">
             When in doubt, mumble.
           </span>
 
+          /* CSS */
           #foo:eq(width < 300px) {
             /* This rule applies only when the width of #foo is < 300px. */
             font-size: 2em;
           }
         \end{lstlisting}
-        In this example, it is impossible to deduce if the rules are cyclic at parsetime.
-        It could perhaps guess that it could result in a cycle in some cases but that is also the point of the example --- it is only cyclic in some scenarios.
-        The size of the \code{\#foo} element will depend on the content of it (i.e, the text).
+        In this example, it is impossible to deduce if the rules are cyclic by static analysis.
+        A static analysis could perhaps identify that the code could potentially result in a cycle in some cases but that is also the point of the example --- it is only cyclic in some scenarios.
+        The size of the \code{\#foo} element depends on the content of it (i.e, the text).
         The width of the text depends on the font size, which is inherited.
         So the width of the \code{\#foo} \gls{element} is dependent on the inherited font size.
         When the \code{\#foo} \gls{element} is below 300 pixels wide, the font size of the element is increased to \code{2em} (which is a unit that is relative to the inherited value).
-        If a \code{2em} font size results in a computed font size big enough to make the \gls{element} wider than 300 pixels, the \code{\#foo:eq(width < 300px)} selector will not match and therefore the element will no longer have font size \code{2em}.
-        Since the element width is decreased below 300 pixels when the font size of \code{2em} no longer is applied, the selector will match again --- the rules are cyclic.
-        However, in another scenario the inherited font size might not be big enough to make the \code{\#foo} element wider than 300 pixels which would not result in a cycle.
+        If a \code{2em} font size results in a computed font size big enough to make the \gls{element} wider than 300 pixels, the \code{\#foo:eq(width < 300px)} does not match and therefore the element has no longer font size \code{2em}.
+        Since the element width is decreased below 300 pixels when the font size of \code{2em} no longer is applied, the selector matches again and therefore the rules are cyclic.
+        However, in another scenario the inherited font size might not be big enough to make the \code{\#foo} element wider than 300 pixels and therefore the rules are not cycle.
         The factors that creates the cycle are the following:
         \begin{itemize}
           \item The display type of the \gls{element}
@@ -1189,9 +1191,9 @@
         In this example the text is static but it could have been added dynamically.
         Also, the inherited font size value depends on the closest ancestor with a font size property defined.
         Since ancestors can have their font sizes defined in relative units, the dependency tree can go up to the root of the \gls{document}.
-        Further, if no ancestor defines an absolute value for the font size it is up to the \gls{browser} to default to a size, which is impossible to reason about at parsetime.
+        Further, if no ancestor defines an absolute value for the font size it is up to the \gls{browser} to default to a size, which is not known by a static analyser.
         This implies that there is no way of telling if the cycle appears or not without actually running the code.
-        Also, the cycle may appear in different \glspl{browser} and settings, which makes the cycle even harder to detect.
+        It also implies that the cycle may appear in different \glspl{browser} and settings, which makes the cycle even harder to detect.
 
         \todo[inline]{Try to descibe a scenario where a cycle appears, that is actually a valid use case?}
         \todo[inline]{Perhaps refer to Tab's blog that states that it is often that valid use-cases are found after they have been stated useless.}
@@ -1217,18 +1219,17 @@
         % The different solution approaches either limits element queries in some way or solves only a subproblem, so no perfect solution that hinders element queries unlimited with decent performance and low complexity has been found.
         % The section is mainly based on \normalfont{\cite{w3c_eq_mail,ricg_irc_log,ricg_issue_viewport,w3c_css21}}.
 
-      \todo[inline,color=green]{Marcos: Should rewrite this to not be exclusive to a viewport element. Could also be an attribute.}
-
-      By limiting element queries to special \gls{viewport} container \glspl{element} that can only be queried by child \glspl{element}, many of the problems are resolved \cite{w3c_eq_mail,ricg_irc_log,ricg_issue_viewport}.
-      This means that a new \gls{HTML} tag would be crafted (perhaps named \code{viewport}) that defines separated \glspl{viewport} in the \gls{document}.
-      In order to avoid cyclic rules, the following limitations to the \code{viewport} would be defined:
+      By limiting element queries to a special separated viewport container \glspl{element} (i.e., a sub-viewport of the document) that can only be queried by child \glspl{element}, many of the problems are resolved \cite{w3c_eq_mail,ricg_irc_log,ricg_issue_viewport}.
+      This can be done by either adding a new \gls{HTML} element or attribute.
+      For the sake of simplicity, a \gls{HTML} element named \code{viewport} will be used to define such sub-viewports in all examples throughout this section.
+      In order to avoid cyclic rules, the following limitations to the viewport element is defined:
       \begin{enumerate}
-        \item\label{viewport-rule-1} The size of the \gls{element} may not be dependent on its children. This implies that all \gls{CSS} that causes the \gls{element} to be shrunken to fit the content are invalid.
-        \item\label{viewport-rule-2} The selector may only include the \code{viewport} \gls{element} targeted by element queries as a part of the expression of a selector (not the right-most simple selector).
-        \item\label{viewport-rule-3} Only the nearest \code{viewport} ancestor of the right-most simple selector may be targeted for element queries in selectors.
+        \item\label{viewport-rule-1} The size of the viewport element may not be dependent on its children. This implies that all \gls{CSS} that causes a viewport \gls{element} to be shrunken to fit its content are invalid.
+        \item\label{viewport-rule-2} The selector may only include the viewport \gls{element} targeted by element queries as a part of the expression of a selector (not the right-most simple selector).
+        \item\label{viewport-rule-3} Only the nearest viewport element ancestor of the right-most simple selector may be targeted by element queries in selectors.
       \end{enumerate}
       See listing~\ref{code:viewport-selectors} for examples of valid and invalid CSS selectors according to the rules defined above.
-      \begin{lstlisting}[gobble=8,caption={Examples of valid and invalid selectors with the imaginary \code{viewport} element.}, captionpos=b, label={code:viewport-selectors}]
+      \begin{lstlisting}[gobble=8,caption={Examples of valid and invalid selectors with the viewport element.}, captionpos=b, label={code:viewport-selectors}]
         /* HTML */
         <viewport id="outer">
           <viewport id="inner">
@@ -1255,75 +1256,80 @@
 
         /* invalid, violates rule (*@\ref{viewport-rule-3}@*) */
         #outer:eq(width > 500px) #foo { ... }
-      \end{lstlisting}        
-      This approach has been discussed at the \gls{W3C} and the initial draft of the \gls{RICG} assumes that this is a prerequisite to a \gls{native} implementation \cite{w3c_eq_mail,ricg_irc_log}.
+      \end{lstlisting}
+      This approach has been discussed by the \gls{W3C} and the initial draft of the \gls{RICG} assumes that this is a prerequisite to a \gls{native} implementation \cite{w3c_eq_mail,ricg_irc_log}.
       \todo{Reference the initial draft?}
-      The reason that a new \gls{HTML} tag is proposed instead of a new \gls{CSS} property that defines the behavior is because the \gls{layout engine} in the latter case needs to resolve the styles for all \glspl{element} in order to know which are \gls{viewport} \glspl{element}.
-      With a new \gls{HTML} tag, the \gls{layout engine} can know after it has parsed the \gls{HTML} which \glspl{element} are supposed to be treated at separate viewports.
+      The reason that the \gls{HTML} declaration of element viewport behavior is proposed instead of a new \gls{CSS} property that defines the behavior is because the \gls{layout engine} in the latter case needs to resolve the styles for all \glspl{element} in order to resolve the viewport \glspl{element}.
+      With the viewport behavior declared in \gls{HTML}, the \gls{layout engine} knows after it has parsed the \gls{HTML} which \glspl{element} are to be treated at separate sub-viewports.
       This way, parallelizing the selector matching and style computation is possible (as opposed to if the style for each element needs to be resolved in order to know the \code{viewport} \glspl{element}) \cite{w3c_eq_mail}.
       Also, the internal \glspl{API} that request non-layout information for the \glspl{element} using element queries only need to make sure that the containing \gls{viewport} \gls{element} has been laid out before resolving the styles.
       The layout can be done in one pass as long as the \gls{viewport} \glspl{element} are laid out before their children.
-      Since the queries may only be targeting the nearest \gls{viewport} \gls{element} ancestor, each \gls{viewport} subtree can be laid out in parallel.
-      However, it is still inconvenient that the \gls{layout engine} would need to evaluate all element query selectors in the middle of a layout pass (after the that the \gls{viewport} \glspl{element} has been laid out) in order to resolve the styles for the \gls{viewport} children.
+      Since the element queries may only target the nearest \gls{viewport} \gls{element} ancestor, each \gls{viewport} subtree can be laid out in parallel.
+      However, it is still inconvenient that the \gls{layout engine} needs to evaluate all element query selectors in the middle of a layout pass (after that the \gls{viewport} \glspl{element} has been laid out) in order to resolve the styles for the \gls{viewport} children.
 
-      Obviously, this limits element queries a lot.
-      The fact that the size of the \gls{viewport} \gls{element} cannot depend on the children (like normal block \glspl{element} do \cite{w3c_css21}), limits the usability.
-      The \code{viewport} \gls{element} would behave much like the \code{iframe} \gls{element} layout-wise.
-      It should be noted that \code{iframe} \glspl{element} are not suitable as an alternative to the proposed \code{viewport} \gls{element}, since \code{iframe} elements are much more limited by nature (creates a new \gls{document} and script context) \cite{w3c_css21}.
+      Obviously, this approach limits element queries a lot.
+      The fact that the size of the \gls{viewport} \gls{element} cannot depend on its children (like normal block \glspl{element} do \cite{w3c_css21}), limits the usability.
+      Viewport \glspl{element} would behave much like the \code{iframe} \gls{element} layout-wise.
+      It should be noted that \code{iframe} \glspl{element} are not suitable as an alternative to the proposed \code{viewport} \gls{element}, since \code{iframe} elements are much more limited by nature (they create a new \gls{document} and script context) \cite{w3c_css21}.
       \todo{Write about the seamless mode of iframes?}
-      The idea is that the \gls{viewport} cannot be queried for properties that the children may affect (such as the width and height style properties).
+      Recall that the idea is that a viewport element cannot be queried for properties that its children may affect (such as the width and height style properties).
       In order to allow the children to query the properties, they cannot be affected by the children.
-      In theory it should mean that if no child query for instance the height of the \gls{viewport}, then the \gls{viewport} may depend on the children for it's height.
-      This is a powerful insight, since the general use case would be to write element queries against the width and have the \glspl{element} adapt their heights accordingly (including the \gls{viewport} \gls{element}).
+      In theory it should mean that if no child query the height of the viewport for instance, then the height of the viewport may depend on its children.
+      This is a powerful insight, since the general use case would be to write element queries against the width and have the \glspl{element} adapt their heights accordingly (including the viewport \gls{element}).
       \todo{General use case according to who?}
       \todo[inline]{Maybe note seamless iframe in theory works in the same way. But would it be relevant?}
 
-      Another approach to enable element queries for developers is to provide a \gls{third-party} \gls{JavaScript} library.
+      Another approach to enable element queries is to provide a \gls{third-party} \gls{JavaScript} library.
       Since a \gls{JavaScript} library does not depend on vendors of \glspl{layout engine} (other than features in the current language specifications) it can therefore be designed in any desired way.
       It would be more feasible to have unrestricted element queries in a \gls{JavaScript} library, than implementing it natively.
       Since the element queries feature would be operated by the library, \glspl{layout engine} can be parallelized unhindered and independently of how the library handles the queries.
       Similar, cycle detection and handling can be handled on top of the \gls{layout engine} by the library.
-      Although an implementation in \gls{JavaScript} will be slower than a \gls{native} implementation, it can still be beneficial to have such feature implemented as a \gls{third-party} library to avoid complex and restricting code in \glspl{layout engine}.
-      Also, without the \gls{layout engine} aware of the element queries it could be hard to avoid multiple relayouts.
+      However, without the \gls{layout engine} being aware of the element queries it could be hard to avoid multiple layouts.
+      Although an implementation in \gls{JavaScript} will most probably be less performant than a \gls{native} implementation, it can still be beneficial to have such feature implemented as a \gls{third-party} library to avoid complex and restricting code in \glspl{layout engine}.
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% The element queries library
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{ELQ --- The element queries library}\label{chp:library}
+    Now that sufficient knowledge about element queries and layout engines has been acquired it is time to present the actual realization of the solution to responsive modules --- the JavaScript element queries library.
     First of all, a working name of the library needs to be established --- the library will from now on have the working name \gls{ELQ}.
     This name serves as a prefix for many of the library \glspl{API}, and will be frequently used in this thesis from now on.
     
     Section~\ref{sec:techincal-goals} states the identified technical goals of \gls{ELQ}.
-    This section is the key motivation to why the library should be plugin based.
+    This section is motivation that the library be plugin based.
+    It should be noted that some of the goals presented in the section are to be fulfilled by future work.
+    \todo{Can I write like this?}
 
     Section~\ref{sec:arcithecture} presents the overall architecture of \gls{ELQ}, and key subsystems are described.
     This section also motivates why it is important to develop a library that enables advanced users to alter or remove subsystems of the core.
 
     Section~\ref{sec:elq-api} defines the \gls{API} of the core library and all of the existing plugins.
-    It is in this section where it is shown exactly how users can alter subsystems of the core.
-    In addition, it is shown how limitiations of \gls{CSS} are overcome by creating a plugin.
+    This section presents the main outcome of this thesis, as it shows how exactly element queries are realized by the library plugins.
+    It is also in this section where it is shown how users can alter subsystems of the core.
+    In addition, it is described how limitiations of \gls{CSS} are overcome by library plugins.
 
     Section~\ref{sec:library-imp-details} presents details about key implementation design decisions and algorithms.
     This section will also describe optimizations that has been done.
 
-    \todo[inline]{Better title?}
     \todo[inline]{Write somewhere that it might be an option to not have a resize detection system, but instead let the user manually check the elements when they may have changed.}
-    \todo[inline]{Write a little intro to this meta like "Now that sufficient knowledge about eq and blabla ....?"}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Technical goals
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Technical goals}\label{sec:techincal-goals}
       Expectations and requirements of element queries vary greatly by use cases.
+      \todo{Source?}
       As usual in software development, tradeoffs need to be made.
       Some projects value simplicity and ease of use, while other projects demand advanced features and high performance.
-      The requirements can be grouped into four categories; features, ease of use, performance and compatibility.
-      Identified possible requirements of the library are the following:
+      The requirements can be grouped into four categories: features, ease of use, performance and compatibility.
+      Identified requirements of the library are the following:
       \begin{enumerate}
         \item \textbf{Features}
           \begin{enumerate}
-            \item\label{itm:req_resize_detect} The library needs to augment \gls{native} element queries in the sense that styles are applied automatically on \gls{element} resizes.
+            \item\label{itm:req_resize_detect} The library needs to augment \gls{native} element queries in the sense that styles are applied automatically when \glspl{element} change size.
             \item The features should be flexible and not limited to only the common use cases.
+            \item It should be possible to handle element query breakpoints with JavaScript.
+            \item It should be possible to specify conditional \gls{CSS} styles to be applied on different element query breakpoints.
           \end{enumerate}
         \item \textbf{Ease of use}
           \begin{enumerate}
@@ -1344,15 +1350,16 @@
             \item\label{itm:req_prolyfill} The library must act as a prolyfill\footnote{A polyfill is something that provides a functionality that is expected to be provided \glslink{native}{natively} by \glspl{browser}. Polyfills usually fixes some standard functionality for \glspl{browser} that do not yet support it. A prolyfill is a polyfill for something that will probably become a standard.} for \gls{native} element queries.
           \end{enumerate}
       \end{enumerate}
-      It would be possible to create a library that conforms to all of the requirements but added features, automation and compatibility most probably would decrease the performance and load time.
+      It would be possible to create a library that conforms to all of the requirements but added features, automation, and compatibility most probably would decrease the performance and load time.
       In the same way, too many advanced features may decrease the ease of use and simplicity of the \gls{API}.
-      Some feature may also restrict the compatibility.
+      Some features may also restrict the compatibility.
       Trying to conform to all of the requirements and trying to find a balance would result in a worse solution than a library tailored for specific requirements.
-      By providing a good library foundation and plugins for different use cases it is up to developers to choose the right plugins for each project.
-      This way, developers are composing their own custom tailored solution for their specific use cases.
+      Plugin based libraries solves this problem by providing plugins so that developers can compose their own custom tailored solutions for their specific use cases.
+      By providing a good library foundation and plugins it is up to developers to choose the right plugins for each project.
       In addition, by letting the plugins satisfy the requirements it is easy to extend the library with new plugins when new requirements arise.
       For instance, the requirement~\ref{itm:req_prolyfill} is beneficial to satisfy with a plugin since the \gls{API} for \gls{native} element queries can only be guessed at this point of time, which will probably lead to frequent changes to the plugin.
       By separating it from the core library (and the other plugins), only developers that really desire the prolyfill behavior must handle the rapid \gls{API} changes.
+      Additionally, features may have incompatible \glspl{API} that would result in a bloated library \gls{API} (since it would need to expose both \glspl{API}) if they were not divided into plugins.
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Architecture
@@ -1950,7 +1957,7 @@
       In order to make Bootstrap behave as desired in any layouts the responsive parts of the framework was modified to use element queries instead of media queries by using \gls{ELQ}.
       Two Bootstrap classes have been chosen to be treated as a viewports (that will be \code{elq-breakpoint} elements): \code{container} and \code{container-fluid}.
       Both classes are used in Bootstrap to define new parts of a page (e.g., a grid is required to have a container ancestor).
-      They are also nestable, which makes them suitable to be used as sub viewports.
+      They are also nestable, which makes them suitable to be used as sub-viewports.
       \todo{Not happy with calling containers for viewports. should come up with something better.}
       The \code{container} class centers content with fixed widths by different viewport sizes, and the \code{container-fluid} uses the full available width.
       The idea is to have all responsive classes conditionally styled with element queries by the size of the nearest ancestor container element.
@@ -2512,7 +2519,7 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{Discussion and Conclusions}
     \section{Future work}
-      \todo[inline]{Should this be here?}
+      \todo[inline]{Fulfill all technical goals.}
       \todo[inline]{Prolyfill?}
       \todo[inline]{Save all elq element class states in localStorage so that on page reload they can be read in order to apply the right classes to all elq elements to avoid flash of invalid layout.}
       \todo[inline]{Evaluate CSS selectors on elq elements before injecting elements so that warnings or errors can be produced on selectors that conflict with the injected elements.}
