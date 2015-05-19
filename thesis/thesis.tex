@@ -1847,6 +1847,8 @@
 
         \todo[inline]{Write how the bugs were fixed in the scroll approach?}
         \todo[inline]{Write about the MutationObserver approach? Need to know the problems with the approach in order to write about GSS. Perhaps there are no problems, and it really is what should be used for ELQ.}
+        \todo[inline]{Write about the flow-based approach.}
+        \todo[inline]{It is stated in Related work that original scroll and flow based approaches have limitations and bugs. Describe them here.}
 
       % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       % %%%%%%%%%%%%%%%%%%%%%%%%%%%% Detecting runtime cycles
@@ -2467,8 +2469,8 @@
     Approaches \cite{eq_imp_localised-css,eq_imp_selector_queries} uses polling to detect element size changes, and are therefore support arbitrary element resize detection.
     However, as presented in Section~\ref{sec:imp_erd}, polling is undesired.
     \todo{Write why again?}
-    Approach \cite{eq_imp_gss} is special and will be discussed further in Section~\ref{}.
-    It evaluates all elements on \gls{DOM} mutations, which in a sense is an automatic full detection of arbitrary element resizes.
+    Approach \cite{eq_imp_gss} evaluates all elements on \gls{DOM} mutations, which in a sense is an automatic full detection of arbitrary element resizes.
+    The downside to observing \gls{DOM} mutations is that not all events that affects layout are observed, see Section~\ref{sec:imp_erd} for more information.
     The three remaining approaches uses three different injection solutions, as described in Section~\ref{sec:imp_erd}, to detect element resize events; \cite{eq_imp_element-queries} uses the object-based solution, \cite{eq_imp_prollyfill-min-width} uses the flow-based solution, and \cite{eq_imp_css-element-queries} uses the scroll-based solution.
     According to the evaluation in Section~\ref{sec:eval-performance}, all three approaches are less performant than the element resize detection system used in \gls{ELQ}.
     Also, recall from Section~\ref{sec:imp_erd} that the flow-based and scroll-based solutions both have limitations and bugs.
