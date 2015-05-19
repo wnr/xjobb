@@ -1004,6 +1004,7 @@
       The main difference is the type of criterion that can be used; in media queries device and media criterion is used, while in element criterion is used in element queries.
       It can somewhat simplified be described as that media queries target the document root and up (i.e., the viewport, browser, OS, device, input tools, etc.) while element queries target the document content (i.e., elements of the document).
 
+      \paragraph{Terminology}
       The entity that is evaluated against a query is called the \emph{target} of the query.
       For media queries, the target is usually the device or viewport.
       For element queries, the target is usually an element.
@@ -1012,11 +1013,17 @@
       For element queries, the target entity is sometimes referred to as the \emph{target element}.
       \gls{CSS} style declarations that are applied conditionally using either element queries or media queries are sometimes referred to as \emph{conditional style declarations} or shortened \emph{conditional styles}.
       When the layout engine evaluates a media or element query to determine whether the selectors matches or not is called \emph{query selector matching}.
-      \todo[inline]{Write about breakpoints.}
+      The expressions that defines when different conditional style declarations should be applied are called \emph{breakpoints}.
+      For instance, the media query \code{@media (max-width: 500px)} selector defines one breakpoint; that the element should be styled differently depending on if it is wider than 500 pixels or not.
+      There can be multiple breakpoints defined for both media and element queries.
+      Element queries also defines an element \emph{style state}, which is in which state the target element of an element query is in (often relative to the breakpoints).
+      For instance, if an element query targets an element \code{\#foo} with a width breakpoint of 500 pixels (similar to the media query example), then the target element \code{\#foo} would have two style states: narrower or wider than 500 pixels.
+      The number of style states for an element of a given style property is $n + 1$ where $n$ is the number of breakpoints for that style property.
 
+      \paragraph{Pseudo-syntax}
       As already stated, element queries is not yet standardized and the exact behavior and syntax is still undefined.
-      In this thesis, the pseudo syntax of element queries is defined as a pseudo-class named \code{eq}.
-      Recalll from the \gls{CSS} selectors level 3 specification \cite{w3c_css_selectors} that pseudo-classes permits selection based on extended element information, and is often described as performing selection by the \emph{state} of the element.
+      In this thesis, the pseudo-syntax of element queries is defined as a pseudo-class named \code{eq}.
+      Recall from the \gls{CSS} selectors level 3 specification \cite{w3c_css_selectors} that pseudo-classes permits selection based on extended element information, and is often described as performing selection by the state of the element.
       The \code{eq} pseudo-class takes expressions as input, that will be evaluated against the target element, as shown in the examples given in listing~\ref{code:eq-psuedo-syntax-examples}.
       \begin{lstlisting}[gobble=8,caption={Examples of the psuedo element queries syntax.}, captionpos=b, label={code:eq-psuedo-syntax-examples}]
         /* Matches all a elements that are wider than 500 pixels. */
