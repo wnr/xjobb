@@ -585,8 +585,6 @@
           \label{fig:mq-vs-eq}
         \end{figure}
 
-        \todo[inline]{Write about the pseudo-syntax that will be used as example from now on?}
-    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Layout engines
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -820,10 +818,8 @@
         \todo[inline]{Explain the syntax of CSS?}
 
       \subsection{The layout process}\label{sec:layout-process}
-        When the \gls{render tree} has been constructed, and the style properties have been resolved for all nodes, it is time to perform the actual layout.
+        When the \gls{render tree} has been constructed, and the style properties have been resolved for all nodes, it is time to perform the actual layout \cite{garsiel2011browsers}.
         The layout process will decide the final computed style of all \glspl{element}, and needs to be done before rendering.
-        This section is mainly based on \normalfont{\cite{garsiel2011browsers}}.
-
         \gls{HTML} is flow based, which means that a \gls{document} layout (also known as a \emph{reflow}) can generally be performed top to bottom and left to right in one pass.
         This is possible because the geometry of \glspl{element} typically do not depend on the siblings or children\todo{Seems weird to say that flow is not dependent on children, since the height is propagated upwards.}.
         Layout is performed recursively by starting at the root of the tree, let the renderer render itself and all of its children which will render themselves and their children and so on.
@@ -986,47 +982,61 @@
   \chapter{Element queries}\label{chp:eq}
     Now that a good understanding of \glspl{browser} (especially the \gls{layout engine}), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- a solution to the modular \gls{responsive} \gls{web} design problem as presented in Section~\ref{sec:rwd-modular-problem}.
     
-    Section~\ref{sec:eq-definitions} defines element queries, and shows how they can be used to solve the problem.
+    Section~\ref{sec:eq-definitions} defines element queries, and shows how they can be used to solve the problem.\todo{Should it really be shown how element queries solve the problem?}
     Since no syntax have been defined yet for element queries, a pseudo-syntax is presented in this section to be used throughout this thesis.
+    Some element queries terminology is also described, which will be extensively used throughout this thesis.
 
     Section~\ref{sec:eq-problems} presents some of the issues of implementing element queries \glslink{native}{natively} in layout engines.
     
-    Section~\ref{sec:eq-approaches} gives insight into some of the design approaches of element queries discussed by W3C to overcome the problems.
+    Section~\ref{sec:eq-approaches} gives insight into some of the design approaches to element queries, as discussed by the W3C, to overcome some of the problems.
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Definitions and Usages
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Definitions and Usages}\label{sec:eq-definitions}
-      
-      % Is this suitable here to explain the pseudo-syntax?
-      %         \begin{metatext}
-      %           In this section a possible \gls{native} element query \gls{API} will be presented.
-      %           This is based on the current information and approaches of the \gls{W3C} and the \gls{RICG}, and should therefore be regarded as a guideline of the shape of a potential standardized \gls{API}.
-      %           \todo{Is guideline the right word? Seems a bit too confident. Also, cite here the sources of the information this section is based on?}
-      %         \end{metatext}
+      \todo[inline]{Might want to change title to Def and syntax, instead of usage.}
+      \noindent
+      Element queries is the solution to the problem of responsive modules as described in Section~\ref{sec:rwd-modular-problem}, since it allows modules to conditionally style themselves.
+      \todo{Might wanna expand on this.}
 
-      %         \todo[inline]{Review this section. Should it still exist? The content of it is probably invalid.}
+      Media queries and element queries are similar in the sense that they both enables developers to define conditional style rules that are applied by specified criterion \cite{w3c_css_mq}.
+      The main difference is the type of criterion that can be used; in media queries device and media criterion is used, while in element criterion is used in element queries.
+      It can somewhat simplified be described as that media queries target the document root and up (i.e., the viewport, browser, OS, device, input tools, etc.) while element queries target the document content (i.e., elements of the document).
 
-      %         As presented in subSection~\ref{sec:eq-approaches}, \gls{viewport} \glspl{element} solve many of the element query problems and are therefore assumed to be a part of a \gls{native} \gls{API}.
-      %         Since it would be favorable to be able to specify multiple conditional rule sets for the element queries (like \gls{media queries}) the \gls{CSS} syntax may be of the form as presented in listing~\ref{code:mq-eq-syntax}.
-      %         \begin{lstlisting}[caption={Element queries are assumed to have nested rule sets, like \gls{media queries}},captionpos=b,label={code:mq-eq-syntax}]]
-      % /* Media query syntax */
-      % @media ... {
-      %   p {
-      %     color: red;
-      %   }
-      % }
+      The entity that is evaluated against a query is called the \emph{target} of the query.
+      For media queries, the target is usually the device or viewport.
+      For element queries, the target is usually an element.
+      It should be noted that the target is the entity that is evaluated against the query, and not the entity that has conditionally styles applied.
+      For instance, it is not possible to conditionally style the target of media queries, since \gls{CSS} is incapable of altering the device.
+      For element queries, the target entity is sometimes referred to as the \emph{target element}.
 
-      % /* Element query syntax */
-      % ... {
-      %   p {
-      %     color: red;
-      %   }
-      % }
-      %         \end{lstlisting}
+      As already stated, element queries is not yet standardized and the exact behavior and syntax is still undefined.
+      In this thesis, the pseudo syntax of element queries is defined as a pseudo-class named \code{eq}.
+      Recalll from the \gls{CSS} selectors level 3 specification \cite{w3c_css_selectors} that pseudo-classes permits selection based on extended element information, and is often described as performing selection by the \emph{state} of the element.
+      The \code{eq} pseudo-class takes expressions as input, that will be evaluated against the target element, as shown in the examples given in listing~\ref{code:eq-psuedo-syntax-examples}.
+      \begin{lstlisting}[gobble=8,caption={Examples of the psuedo element queries syntax.}, captionpos=b, label={code:eq-psuedo-syntax-examples}]
+        /* Matches all a elements that are wider than 500 pixels. */
+        a:eq(width > 500px) {
+          color: yellow;
+        }
 
-      %         \todo{Continue this if possible?}
+        /* Matches any a element that is a child of a p element 
+           with the "foo" class that is narrower than 300 pixels. */
+        p.foo:eq(width < 300px) a {
+          color: red;
+        }
 
+        /* Matches any p element with the "foo" class that is wider 
+           than or equal to 300 pixels that is a child of an a element. */
+        a p.foo:eq(width >= 300px) {
+          color: blue;
+        }
+
+        a:hover:eq()
+      \end{lstlisting}
+
+      \todo[inline]{Should it really also be discussed in detail how element queries solve the problem?}
+      \todo[inline]{If a better example is found to be used in \ref{sec:rwd-modular-problem}, the same example can be used here and shown how element queries make it behave as expected}.
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Problems
@@ -2433,6 +2443,8 @@
     % \cite{eq_imp_css-element-queries}   Valid syntax.   Automatic. Dynamic. Parses CSS.
     % \cite{eq_imp_prollyfill-min-width}  Invalid syntax. Automatic. Dynamic. Parses CSS.
     % \cite{eq_imp_gss}
+
+    \todo{Did I miss this one? \url{https://github.com/jonathantneal/hitch-element-queries}}
     
     The approaches \cite{eq_imp_magichtml,eq_imp_eqcss,eq_imp_prollyfill-min-width,eq_imp_localised-css,eq_imp_gss} have in common that they require developers to write cunstom (invalid) \gls{CSS}.
     Since they no longer conform to the \gls{CSS} specification, new features can be supported through the custom \gls{CSS} syntax.
