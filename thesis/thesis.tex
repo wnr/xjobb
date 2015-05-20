@@ -39,6 +39,7 @@
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand\abbr[2][]{\uppercase{#2}\ifthenelse{\equal{#1}{}}%
                      {}{#1}}
+\newcommand{\problemformulation}{\emph{It is not possible to specify conditional style rules for \glspl{element} depending on the size of an element}}
 
 \newenvironment{metatext}{%
   \textbf{$\hookrightarrow$}
@@ -256,7 +257,7 @@
       If developers want to build modular applications by composing the application by smaller components (\glspl{element}, scripts, styles, etc.) \gls{media queries} are no longer applicable.
       \todo[color=red]{Tomas: The reader could misundestand this as modular design is about putting all scripts with scripts, styles with styles, etc.}
       Modular \gls{responsive} components should be able to react and change style depending on the size that the component has been given by the application, not the \gls{viewport} size. \todo{Do I need to have a reference for this?}
-      The problem can be formulated as: \emph{It is not possible to specify conditional style rules for \glspl{element} depending on the size of an element}.
+      The problem can be formulated as: \problemformulation.
       See the included document in Section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
       Participants, which include both paying members and the public, of the main international standards organization for the \gls{web}, the \gls{W3C} are interested in solving the problem and possible solutions are being discussed.
@@ -1337,28 +1338,28 @@
       \begin{enumerate}
         \item \textbf{Features}
           \begin{enumerate}
-            \item\label{itm:req_resize_detect} The library needs to augment \gls{native} element queries in the sense that styles are applied automatically when \glspl{element} change size.
-            \item The features should be flexible and not limited to only the common use cases.
-            \item It should be possible to handle element query breakpoints with JavaScript.
-            \item It should be possible to specify conditional \gls{CSS} styles to be applied on different element query breakpoints.
+            \item\label{itm:req_resize_detect}    The library needs to augment \gls{native} element queries in the sense that styles are applied automatically when \glspl{element} change size.
+            \item                                 The features should be flexible and not limited to only the common use cases.
+            \item\label{itm:req_bp_js}            It should be possible to handle element query breakpoints with JavaScript.
+            \item\label{itm:req_conditional_css}  It should be possible to specify conditional \gls{CSS} styles to be applied on different element query breakpoints.
           \end{enumerate}
         \item \textbf{Ease of use}
           \begin{enumerate}
-            \item\label{itm:req_big_rewrite} Developers should not need to perform big rewrites of their modules or applications in order to use the library.
-            \item\label{itm:natural} The \glspl{API} need to feel natural and should not seem alien to \gls{web} developers.
-            \item The library should help identifying cyclic rules and prevent them from causing infinite layouts.
+            \item\label{itm:req_big_rewrite}      Developers should not need to perform big rewrites of their modules or applications in order to use the library.
+            \item\label{itm:natural}              The \glspl{API} need to feel natural and should not seem alien to \gls{web} developers.
+            \item\label{itm:req_cyclic_rules}     The library should help identifying cyclic rules and prevent them from causing infinite layouts.
           \end{enumerate}
         \item \textbf{Performance}
           \begin{enumerate}
-            \item The library needs to have adequate performance to empower large applications running on light devices.
-            \item The library load time needs to be kept low.
+            \item\label{itm:req_performance}      The library needs to have adequate performance to empower large applications running on light devices.
+            \item                                 The library load time needs to be kept low.
           \end{enumerate}
         \item \textbf{Compatibility}
           \begin{enumerate}
-            \item Older \glspl{browser} must be supported.
-            \item The library may not require invalid \gls{CSS}, \gls{HTML} or \gls{JavaScript}.
-            \item\label{itm:assumption} Dependencies and assumptions about the host application (including the development environment) should be kept low.
-            \item\label{itm:req_prolyfill} The library must act as a prolyfill\footnote{A polyfill is something that provides a functionality that is expected to be provided \glslink{native}{natively} by \glspl{browser}. Polyfills usually fixes some standard functionality for \glspl{browser} that do not yet support it. A prolyfill is a polyfill for something that will probably become a standard.} for \gls{native} element queries.
+            \item                                 Older \glspl{browser} must be supported.
+            \item\label{itm:req_valid_syntax}     The library may not require invalid \gls{CSS}, \gls{HTML} or \gls{JavaScript}.
+            \item\label{itm:assumption}           Dependencies and assumptions about the host application (including the development environment) should be kept low.
+            \item\label{itm:req_prolyfill}        The library must act as a prolyfill\footnote{A polyfill is something that provides a functionality that is expected to be provided \glslink{native}{natively} by \glspl{browser}. Polyfills usually fixes some standard functionality for \glspl{browser} that do not yet support it. A prolyfill is a polyfill for something that will probably become a standard.} for \gls{native} element queries.
           \end{enumerate}
       \end{enumerate}
       It would be possible to create a library that conforms to all of the requirements but added features, automation, and compatibility most probably would decrease the performance and load time.
@@ -2533,6 +2534,83 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Discussion and Conclusions
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{Discussion and Conclusions}
+    \todo[inline]{Write intro.}
+
+    Recall the problem formulation from Section~\ref{sec:problem}: \problemformulation.
+    The problem was shown in Section~\ref{sec:eq} to be solved by element queries.
+    Therefore, the goal of this thesis was to develop a third-party JavaScript library that enables developers to use element queries.
+    Since no syntax or standard has been specified by the \gls{W3C} yet for element queries, the syntax and usage can be formed in any way as long as it solves the problem of conditionally styling elements by element criterion.
+    Since the implementation of the \gls{ELQ} library (that enables element queries) was successful, the thesis goal can be considered fulfilled.
+
+    The problem of responsive modules have been described, and the solution has been presented to be element queries.
+    The theory of element queries and the current research state has been shown in Section~\ref{}.
+
+
+    All technical goals of \gls{ELQ} have not been fulfilled.
+    However, the technical goals that are important for the general element queries use case have been fulfilled.
+
+
+    The library that enables developers to 
+
+    \paragraph{Conclusion}
+    Element queries has been identified as a solution to problem of having responsive modules.
+    Native unrestricted element queries limits layout engines and therefore imposes problems to implementors.
+    A draft
+    With element queries comes 
+
+    \section{Element queries}
+    
+
+    \section{ELQ}
+    It has been identified that requirements and usages of element queries vary from case to case, and it is therefore beneficial to provide a plugin-based library so that developers can tailor their custom solutions by choosing which plugins to use.
+    Different parts of the library have also been shown to have different development rates, which also is an argument in favor to having the library plugin-based.
+    Two plugins were developed that enables adequately advanced features for the general use case that satisfies goals \ref{itm:req_conditional_css} and \ref{itm:req_bp_js}.
+    The \code{elq-breakpoints} plugin is the actual entity that directly enables element queries and defines the \gls{API} to be used.
+    A key restriction was made to the \gls{API} in order to satisfy goal \ref{itm:req_valid_syntax}, \ref{itm:natural}, \ref{itm:req_big_rewrite} and \ref{itm:assumption}: it must conform to the current web standard, and must therefore not require invalid syntax.
+    This way preprocessors, validators, tools and editors can be embraced and used in tandem with the library instead of shutting them out.
+    This design decision has proved to be very valuable when performing the altering of Bootstrap in Section~\ref{}.
+    If the plugin would require invalid syntax it would not be as easy to alter the Boostrap LESS files.
+    \todo{LESS gls?}
+    Further, a lot of performance and compatibility issues have been avoided by not having to parse any \gls{CSS} at runtime.
+    Since Bootstrap was successufully altered to use element queries in \textasciitilde50 changed LESS lines and a few lines added JavaScript, the technical goals \ref{itm:req_big_rewrite} and \ref{itm:assumption} are considered to be fulfilled.
+    In order to satisfy goal \ref{itm:req_cyclic_rules} a simple runtime cycle detection subsystem was implemented.
+    It is guaranteed to detect cycles, as long as plugins registers element style state changes to the subsystem.
+    \todo{Write that a drawback is that there might be wanted cyclic behavior? This have not been adressed.}
+    
+    \paragraph{Element resize decetion}
+    The perhaps most difficult goals to achieve was \ref{itm:req_resize_detect} and \ref{itm:req_performance} that requires the library to be both automatic (i.e., it should evaluate element queries on element resize events) and performant.
+    Detecting element resize events in a performant way has been shown to be problematic since there is no standardized way of doing that.
+    All related work do not conform to both goals, as they either do not observe element resize events or does so in a non performant way.
+    A heavily optimized solution to detecting element resize events has been developed in order to enable \gls{ELQ} to support both goals.
+    It is of course ambiguous if the solution is performant enough to conform to goal \ref{itm:req_performance}, as the optimized solution still impacts the performance in some browsers (e.g., FireFox and Safari).
+    At least, the solution performs significantly better than the existing solutions as used by related work.
+    Such good performance was achieved by batch processing all \gls{DOM} interaction, by using the leveled batch processor subsystem that has been developed to be used by \gls{ELQ}.
+    Both the element resize event detection system and the leveled batch processor was decided to be released as two independent open source projects\footnote{See \url{https://github.com/wnr/element-resize-detector} for the element resize event detector and \url{https://github.com/wnr/batch-processor} for the leveled batch processor.}, since they are general enough to be used in other projects than \gls{ELQ}.
+
+    \paragraph{Drawbacks}
+    Unfortunately, all JavaScript element queries libraries have inherent drawbacks.
+    The perhaps most imminent drawback is that element queries have not been evaluated when layout engines render it for the first time, as layout engines usually renders a speculative state of the page before before all content has been downloaded and parsed (e.g., external scripts).
+    Browsers behaves a bit different regarding the speculative rendering, but at least Chrome, FireFox and Safari generally renders the page before all external scripts have been executed.
+    A naive solution to this could be to embed all external scripts inline with the \gls{HTML}, which would keep the layout engine to perform the speculative rendering since no external scripts are not be fetched.
+    However, layout engines may halt the parsing and evaluation of script tags in order to perform the speculative renderig.
+    One way to guarentee that the element queries are evaluated before the first page render, the script needs to be placed in the document head.
+    However, evaluating element queries synchronously in the head of a document is impossible, since the layout engine have yet to parse and cosntruct a \gls{DOM} of the document.
+    Further, element queries requires the layout engine to perform a layout in order to be able to get the final size of an element.
+    When performing a layout, render engines surely usually take the opportunity to render the new state of the page.
+    So, a flash of invalid styles at page load is inevitable (and is also the case with all related work that evaluates element queries at runtime).
+    For instance, the \gls{ELQ} Bootstrap example documentation page would on load be rendered as it should be on small screens, since the small layout is the default that it falls back to if no queries match.
+    If such flash could be avoided by rendering a white rectangle over the viewport and remove it until the page has been rendered correctly.
+
+    Another drawback that all element queries libraries that do not parse \gls{CSS} have in common is that the breakpoints of elements are defined in either \gls{JavaScript} or \gls{HTML}.
+    It is desired to define the breakpoints in \gls{CSS}, since they are style related, as with case with media queries.
+    Due to both performance and compatibility problems, parsing of \gls{CSS} at runtime is not done by \gls{ELQ}.
+    It was decided that the negative outcomes of doing that outweights the positive.
+    One compatibility issue is that browsers generally do not support scripts to access external style sheets served from another domain unless specified by both the server and client.
+    Since \gls{ELQ} is plugin-based a plugin could easily be crafted that adds such functionality.
+
+
+
+
     \section{Future work}
       \todo[inline]{Fulfill all technical goals.}
       \todo[inline]{Prolyfill?}
@@ -2540,6 +2618,12 @@
       \todo[inline]{Evaluate CSS selectors on elq elements before injecting elements so that warnings or errors can be produced on selectors that conflict with the injected elements.}
       \todo[inline]{For static layouts it would be beneficial to produce media queries for the breakpoints (at server side if possible or at client side)}
       \todo[inline]{Write that ELQ really is embracing tools such as CSS preprocessors as shown in the bootstrap case study?}
+      \todo[inline]{elq-breakpoints performs an extra layout that could be incorporated into the erd system if really really optimized.}
+      \todo[inline]{Investigate use cases and decide if there are things that can not be solved with ELQ, and in that case add such features.}
+      \todo[inline]{Investigate in how the erd system can be further optimized. Maybe DOM MutationObservers, fix layout thrashing in Safari + FireFox, etc.}
+      \todo[inline]{Research if statically generated MQ can be used for static pages.}
+      \todo[inline]{Let mirror target an arbitrary element}
+      \todo[inline]{Instead of having independent batch processors it might be better to have a global batch processor that has phases (read, mutate, force) that every system can add functions to --- in order to avoid intersystem layout thrashing.}
 
   \printbibliography
   \clearpage
