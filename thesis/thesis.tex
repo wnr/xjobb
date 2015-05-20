@@ -245,6 +245,7 @@
     \todo[inline]{Write that glossary words will be emph on first appearence?}
     \todo[inline]{Should the subtitle be criterion instead of criteria?}
     \todo[inline]{Change all "recent", "now" and such to dates instead.}
+    \todo[inline]{Invoke vs call? Seems to be same word, should settle with one of them.}
 
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
@@ -1359,7 +1360,7 @@
             \item                                 Older \glspl{browser} must be supported.
             \item\label{itm:req_valid_syntax}     The library may not require invalid \gls{CSS}, \gls{HTML} or \gls{JavaScript}.
             \item\label{itm:assumption}           Dependencies and assumptions about the host application (including the development environment) should be kept low.
-            \item\label{itm:req_prolyfill}        The library must act as a prolyfill\footnote{A polyfill is something that provides a functionality that is expected to be provided \glslink{native}{natively} by \glspl{browser}. Polyfills usually fixes some standard functionality for \glspl{browser} that do not yet support it. A prolyfill is a polyfill for something that will probably become a standard.} for \gls{native} element queries.
+            \item\label{itm:req_prolyfill}        The library must act as a prolyfill\footnote{A polyfill is something that provides a functionality that is expected to be provided \glslink{native}{natively} by \glspl{browser}. Polyfills usually fixes some standard functionality for \glspl{browser} that do not yet support it. A prolyfill is a polyfill for something that will probably become a standard.} for \gls{native} element queries.\todo{Find and Cite source? Can't find it any more...}
           \end{enumerate}
       \end{enumerate}
       It would be possible to create a library that conforms to all of the requirements but added features, automation, and compatibility most probably would decrease the performance and load time.
@@ -1380,22 +1381,27 @@
       To decide if a subsystem of the solution should be in the library core or a plugin is a difficult task.
       A balance needs to be found between ease of use, performance and extendability.
       All subsystems of the core need to provide a fundamental functionality to the library and also need to be general enough to be used by plugins in different ways.
-      If a plugin needs to write a custom version of a subsystem in the core in order to work, the subsystem should perhaps not be part of the core.
+      If a plugin needs to write a custom version of a subsystem in the core in order to work, the subsystem is just an extra payload to be loaded (one needs keep it mind that the number of bytes counts on the web as the code is transferred over network).
       Each subsystem added to the core will impact the performance negatively (by slower load time in the best case) for all users, so they must impose a real value to existing and future plugins.
       The subsystems of the core always have the risk of being redundant, unnecessary and in other ways unwanted for some use cases.
       Therefore it is important that it is possible for developers to either remove them or change them.
-      This way the more advanced users can choose which subsystems to alter, keeping the library easy to use for the common use cases.
+      This way the more advanced users can choose which subsystems to alter, keeping the library easy to use for the common use case.
+      \todo{Write about common use case?}
 
       \input{p3-elq-architecture}
+      \todo{Change picture so that batch processor comes before the erd system}
 
       Figure~\ref{fig:elq_architecture} shows the overall architecture of the library.
       The core consists of fundamental and general subsystems that are utilized by plugins.
-      Developers should never be programming against the core directly, and it can therefore only be accessed by plugins through the hidden plugin \gls{API}.
-      The library provides a small public \gls{API} which is mainly used to invoke and handle plugins.
-      The plugins form the bigger part of the public \gls{API} in the sense that they decide which features exist and how they work.
+      Developers should generally never be programming against the core directly, and it can therefore only be accessed by plugins through a hidden plugin \gls{API} (with the exception of few core methods that are part of the public \gls{API}).
+      The role of the library is to provide plugins with subsystems to be used for performing element query tasks, which is done through the plugin \gls{API}.
+      \todo{Does this sentence fit here?}
+      The library provides a small public \gls{API} which is mainly used to handle and invoke plugins.
+      The plugins form the bigger part of the public \gls{API} in the sense that they decide the features that exist and how they work.
       It should be noted that plugins may provide \glspl{API} through the library by registering methods, or by specifying custom syntax (such as markup or \gls{CSS}) which is beyond the control of the core.
+      \todo{It is right now not possible to register methods on ELQ. Maybe it should be.}
       Plugins may also have interplugin \glspl{API} and dependencies, which also is beyond the control of the core.
-      The core is supposed to have a slow development phase, with few changes and good backwards compatability.
+      The core is supposed to have a slow development rate, with few breaking changes to provide good backward compatability.
       Plugins may be developed in a high rate, with frequent changes to support new features.
       Subsystems that are part of the core are the following:
       \begin{itemize}
@@ -1405,71 +1411,73 @@
           Other options such as throwing exception on errors or warnings could also be set at a global library level.
           Also, the library can make sure that all reports are standardized and can provide extra information such as the name and version of the plugin along with its report.
           To avoid code duplication, it also beneficial to have a centralized report system so plugins do not need to perform the same compatibility checks (such as checking if the \gls{browser} actually supports console reporting).
+        \item \textbf{Batch processor:}
+          To avoid \gls{layout thrashing} as described in Section~\ref{sec:layout-thrashing}, it is important to read and mutate the \gls{DOM} in separate \glslink{batch processing}{batches}.
+          This subsystem provides an interface for plugins to store functions to later be executed in \glslink{batch processing}{batches}.
+          It supports executing batches asynchronously and also provides an interface for dividing batches up in levels that are executed in order.
+          This subsystem is described further in Section~\ref{sec:imp_batch_processor}.
         \item \textbf{Element resize detector:}
-          Provides an interface for observing \gls{element} resize events.
-          This system is fundamental to plugins fulfilling requirements \ref{itm:req_resize_detect} and \ref{itm:req_big_rewrite} since it enables the library to be aware of when \glspl{element} change sizes, instead of the host application keeping track of when \glspl{element} have changed sizes.
+          Provides an interface for observing \gls{element} resize events, which is fundamental to plugins fulfilling requirements \ref{itm:req_resize_detect} and \ref{itm:req_big_rewrite}.
+          It enables the library to observe \glspl{element} resize events, instead of the application keeping track of when \glspl{element} are resized.
+          This subsystem is described further in Section~\ref{sec:imp_erd}.
           \todo[inline]{Maybe this shouldn't be a core subsystem? Since this system imposes the biggest performance impact. It might make more sense to have this as a plugin.}
         \item \textbf{Cycle detector:}
+          Responsible for detecting cycles and warn about them.
           As shown in Section~\ref{sec:cyclic-rules} cyclic rules need to be detected at runtime.
           When a plugin wish to update the size state of an \gls{element} (which in turn applies the conditional styles) it can ask this system if the update seems to be part of a cycle.
           If the update seems to be part of a cycle, it is up to the plugin how that should be handled.
+          This subsystem is described further in Section~\ref{sec:imp_cycle_detector}.
           \todo[inline]{Write that this system is more general, and could potentially be used for detecting other cyclic behaviors?}
-        \item \textbf{Batch processor:}
-          To avoid \gls{layout thrashing}, it is important to read and mutate the \gls{DOM} in separate \glslink{batch processing}{batches}.
-          This subsystem provides an interface for plugins to store functions to later be executed in a \glslink{batch processing}{batch}.
-          To avoid \gls{layout thrashing} by other scripts it can beneficial to asynchronously postpone the \glslink{batch processing}{batch} until the next layout cycle of the \gls{browser}, which is also handled by the subsystem.
         \item \textbf{Plugin handler:}
           Of course, having plugins requires a subsystem for handling them.
-          This system provides the interface for developers to add plugins to the library.
+          This system provides an interface for developers to register plugins to the library.
           The system is also responsible for retrieving the plugins, and invoking them on different library events.
       \end{itemize}
       Some of the subsystems may be partially accessible through the public \gls{API} such as the plugin handler and the \gls{element} resize detector.
-      It should be noted that the presented core subsystems are not the only things that the library consists of, but the presented systems are the major ones.
+      It should be noted that some subsystems have been intentionally left out due to being too small or insignificant to understand the overall architecture of the library.
+
    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% API design
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{API design}\label{sec:elq-api}
-      Recall from Section~\ref{sec:arcithecture} that the bigger part of the public \gls{API} is provided by plugins.
-      The role of the library is to provide plugins with systems to be used for performing element query tasks, which is done through the plugin \gls{API}.
-      Three plugins will be developed; \code{breakpoints}, \code{mirror} and \code{prolyfill}.
-      The \code{breakpoints} plugin provides 
-
       \subsection{Public API}\label{sec:public-api}
-        \todo[inline]{Write how to install it. AMD, script, commonjs, etc.}
-
-        In Section~\ref{sec:techincal-goals} it was determined that advanced users must be able to change the subsystems used in the core.
-        Therefore no global library instance will be instantiated automatically on load.
-        Instead, a function \code{Elq} that creates \gls{ELQ} instances is provided in order to be able to inject dependencies.
+        As already stated, the bigger part of the public \gls{API} is provided by plugins.
+        In Section~\ref{sec:techincal-goals} it was determined that advanced users must be able to change the subsystems of the core.
+        Therefore no global library instance is instantiated automatically on page load.
+        Instead, a factory function \code{Elq} that creates \gls{ELQ} instances is provided in order to be able to inject dependencies.
         The function accepts an optional options object parameter, where it is possible to set options and subsystems to be used for the created instance.
         If no options are given, default options will be used.
         See listing~\ref{code:elq-ctor} of example usages of the \code{Elq} function.
         The function returns an object containing the core public \gls{API} methods of the \gls{ELQ} instance.
-        \begin{lstlisting}[gobble=10,caption={Example usages of the \code{Elq} function that creates \gls{ELQ} instances.},captionpos=b,label={code:elq-ctor}]]
+        \todo{Write about bare builds, so that the unused default subsystems are not being loaded?}
+        \begin{lstlisting}[gobble=10,caption={Example usages of the \code{Elq} factory function that creates \gls{ELQ} instances.},captionpos=b,label={code:elq-ctor}]]
           //Default options being used.
-          var elq = new Elq();
+          var elq = Elq();
 
           //A custom reporter and cycle detector being used.
           var customCycleDetector = ...;
           var customReporter = ...;
-          var elq2 = new Elq({
+          var elq2 = Elq({
             reporter: customReporter,
             cycleDetector: customCycleDetector
           });
         \end{lstlisting}
 
-        The next step after that an instance has been created is to register the plugins to be used by the instance.
+        The next step after creating an instance is to register the plugins to be used by the instance.
         There are two methods for handling plugins: \code{use} and \code{using}.
-        The \code{use} method registers a plugin to be used by the library.
-        It is responsible for controlling that plugins do not conflict with each other and that plugins are initiated correctly with the library instance.
-        The method requires a \emph{plugin object} and accepts an optional options object parameter.
-        When called, it will create a plugin instance and return it.
-        A plugin object acts as a plugin definition and is responsible for describing a plugin and providing a function to create a plugin instance.
-        The \code{using} method requires an \emph{plugin identifier} as parameter and tells if the given plugin is being used (has been reigstered) by the instance or not.
-        A plugin identifier can either be the plugin object or the name of the plugin.
-        See listing~\ref{code:plugin-object} for details about the plugin object and how it is used with the three methods for handling plugins.
+        The \code{use} method registers a plugin to be used by the library instance.
+        It is responsible for controlling that plugins do not conflict with each other and that plugins are initiated correctly with the plugin \gls{API} of the library instance.
+        The method requires a \emph{plugin definition object} (or shortened \emph{plugin definition}) parameter, and also accepts an optional options object parameter.
+        A plugin definition is responsible for describing a plugin and providing a factory function \code{make} that creates a plugin instance.
+        It also exposes methods that are called by \gls{ELQ} in order to retrieve the plugin name, version and compatibility.
+        When \code{use} is called, it creates a plugin instance by invoking the \code{make} factory function and returns the created instance so that the user may store the reference to the plugin instance.
+        The \code{using} method requires a \emph{plugin identifier} parameter and tells if the given plugin is being used (i.e., has been registered) by the instance or not.
+        The plugin identifier of a plugin is either the plugin definition or the name of the plugin.
+        See listing~\ref{code:plugin-object} for an example plugin definition and how it is used with the two methods for handling plugins.
 
-        \begin{lstlisting}[gobble=10,caption={Plugin object definition and examples of handling plugins.},captionpos=b,label={code:plugin-object}]]
+        \begin{lstlisting}[gobble=10,caption={Example plugin definition and examples of handling plugins.},captionpos=b,label={code:plugin-object}]]
+          // An example plugin definition.
           var myPlugin = {
             getName: function() {
               // Returns the name of the plugin, which has to be 
@@ -1486,6 +1494,9 @@
               return true;
             },
             make: function(elq, options) {
+              // The elq parameter is the plugin API of the ELQ instance,
+              // and is not the same object returned by the Elq factory function.
+
               // Returns a plugin instance. It is optional to use
               // the elq instance or options object in the initiation process.
               return {...};
@@ -1501,7 +1512,7 @@
 
           // The plugin instances are not equal since they 
           // have been initated to different elq instances.
-          myPluginInstance1 !== myPluginInstance2 // -> true
+          myPluginInstance1 !== myPluginInstance2 // true
 
           // Check if the plugin is being used.
           elq.using(myPlugin); // true
@@ -1513,12 +1524,13 @@
           elq.using("other-plugin"); // false
         \end{lstlisting}
 
-        When the desired plugins have been registered to the \gls{ELQ} instance, it is time to apply the library to the target \glspl{element} (i.e., the elements that will be queried for conditional styles).
+        When the desired plugins have been registered to the \gls{ELQ} instance, it is time to initialize the library to the target \glspl{element}.
         This is done with the \code{start} method which requires a collection of \glspl{element} as a parameter.
         When called, it will invoke all \code{start} methods on all registered plugins which gives them the opportunity to initiate the \glspl{element} according to their own mechanisms.
         To satisfy the requirements \ref{itm:natural} and \ref{itm:assumption} the function is agnostic about the \glspl{element} collection --- all objects that are iterable and contains \glspl{element} are accepted.
         It is also possible to provide a single \gls{element} without a collection.
-        The effect of invoking the \code{start} method on an element multiple times is defined by the plugins.
+        The effect of calling the \code{start} method on an element multiple times is defined by the plugins.
+        \todo{Rename start?}
         See listing~\ref{code:elq-start} for example usages of the \code{start} method.
         \begin{lstlisting}[gobble=10,caption={Example usages of the \code{start} method. The method only requires an iterable collection, so it is library agnostic.},captionpos=b,label={code:elq-start}]]
           // Initiating the library to a single element.
@@ -1533,7 +1545,14 @@
           // third-party libraries (in this case jQuery).
           var jqueryElementsCollection = $("...");
           elq.start(jqueryElementsCollection);
+
+          // Native API's are also supported.
+          var nativeElementsCollection = document.querySelectorAll("...");
+          elq.start(nativeElementsCollection);
         \end{lstlisting}
+
+        \todo[inline]{The current elq.use syntax disallows chaining. Should think about how to register multiple plugins at the same time.}
+        \todo[inline]{Describe the listenTo method?}
 
       \subsection{Plugin API}\label{sec:plugin-api}
         The plugin \gls{API} is a superset of the public \gls{API}.
@@ -1593,6 +1612,7 @@
         % }
         % ...
         %           \end{lstlisting}
+        \todo[inline]{Write how to install it. AMD, script, commonjs, etc.}
 
       \subsection{Plugins}
         Now, it is time to describe the systems and \glspl{API} that will actually realize element queries as \gls{ELQ} plugins.
@@ -1743,7 +1763,9 @@
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %%%%%%%%%%%%%%%%%%%%%%%%%%%% Batch processor
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      \subsection{Batch processor}
+      \subsection{Batch processor}\label{sec:imp_batch_processor}
+        % To avoid \gls{layout thrashing} by other scripts it can beneficial to asynchronously postpone the \glslink{batch processing}{batch} until the next layout cycle of the \gls{browser}, which is also handled by the subsystem.
+
         \todo[inline]{Write me?}
 
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2559,7 +2581,7 @@
     With element queries comes 
 
     \section{Element queries}
-    
+
 
     \section{ELQ}
     It has been identified that requirements and usages of element queries vary from case to case, and it is therefore beneficial to provide a plugin-based library so that developers can tailor their custom solutions by choosing which plugins to use.

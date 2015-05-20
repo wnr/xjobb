@@ -79,7 +79,7 @@
   \draw[o] (mirror.east) -- ($ (mirror.east) + (0.5,0) $);
   \draw[o] (prolyfill.east) -- ($ (prolyfill.east) + (0.5,0) $);
   \draw[myarrow, <->] ($ (breakpoints.east) + (0.8,0) $) to[out=-45, in=45] ($ (prolyfill.east) + (0.8,0) $);
-  \node[mylabel, rotate=-90, text width=10em] (interpluginapilabel) at ($ (mirror.east) + (1.5,0) $) {Interplugin \textsc{api}};
+  \node[mylabel, rotate=-90, text width=10em] (interpluginapilabel) at ($ (mirror.east) + (1.5,0) $) {Interplugin \gls{API}};
   \node[apibox, fit={($ (breakpoints.east) + (0.3,0.5) $) ($ (prolyfill.east) + (0.3,-0.5) $) (interpluginapilabel)}] (interpluginapi) {};
 
   % Public API
@@ -90,14 +90,14 @@
   \draw[o] let \p1=(pubapibottom), \p2=(plugins.south) in ($ (plugins.south) + (0,0) $) -| ($ (\x2,\y1) + (0,0) $);
   \draw[o] let \p1=(pubapibottom), \p2=(plugins.south) in ($ (plugins.south) + (0.5,0) $) -| ($ (\x2,\y1) + (0.5,0) $);
   \draw[o] let \p1=(pubapibottom), \p2=(plugins.south) in ($ (plugins.south) + (-0.5,0) $) -| ($ (\x2,\y1) + (-0.5,0) $);
-  \node[mylabel, right=4em of pubapibottom, text width=5em] (pubapilabel) {Public \textsc{api}};
+  \node[mylabel, right=4em of pubapibottom, text width=5em] (pubapilabel) {Public \gls{API}};
   \path let \p1=(pubapibottom), \p2=(plugins.south) in node (pubapiright) at ($ (\x2,\y1) + (0.5,0) $) {};
   \node (pubapileft) at ($ (pubapibottom) + (-0.5,0) $) {};
   \node[apibox, fit={(pubapibottom) (pubapilabel) ($ (pubapileft) + (-0.5,0) $) ($ (pubapiright) + (0.5,0) $)}] (publicapi) {};
 
   % Plugin API
   \path let \p1=(middledummy.south), \p2=(core.east) in coordinate (pluginapi) at (\x1, \y2);
-  \node[mylabel, below=3em of pluginapi, text width=5em] (pluginapilabel) {Plugin \textsc{api}};
+  \node[mylabel, below=3em of pluginapi, text width=5em] (pluginapilabel) {Plugin \gls{API}};
   \draw[o] ($ (core.east) + (0,0) $) -- ($ (pluginapi) + (-0.2,0) $);
   \draw[o] ($ (core.east) + (0,0.5) $) -- ($ (pluginapi) + (-0.2,0.5) $);
   \draw[o] ($ (core.east) + (0,-0.5) $) -- ($ (pluginapi) + (-0.2,-0.5) $);
@@ -109,9 +109,9 @@
 \medskip
 \caption{
   The overall library architecture, which shows how the library is divided into two parts; the core and plugins. 
-  The core is only accesible through the plugin \textsc{api}, and is not a part of the public \textsc{api}.
-  Plugins may have interplugin \textsc{api}'s and dependencies.
-  The bigger part of the public \textsc{api}'s is defined by the plugins.
+  The core is generally only accesible through the plugin \gls{API}, and is not a part of the public \gls{API}.
+  Plugins may have interplugin \glspl{API} and dependencies.
+  The bigger part of the public \gls{API} is defined by the plugins.
 }
 \label{fig:elq_architecture}
 \end{figure}
