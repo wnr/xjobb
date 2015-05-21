@@ -2576,7 +2576,19 @@
     With element queries comes 
 
     \section{Element queries}
+    As the number of combinations of screen sizes, input capabilities, etc., increases it is important to write responsive applications so that it can adapt to all user devices.
+    As web applications are transitioning from being server generated to entirely living on the client, it is important to write modular components for various positive effects.
+    It has been shown that element queries solves the problem of responsive modules, and is therefore an important missing feature of the web as a platform.
 
+    Unrestricted element queries imposes limitations to layout engines, and are therefore infeasible to implement.
+    Possible approaches to overcome most limitations are being discussed by participants of the W3C.
+    One approach is to define a new element behavior (either as a new element or attribute) so that it acts as an individual viewport that can be targeted by element queries in order to style children of the element.
+    Restrictions would be applied to the viewport element so that the layout of the element do not depend on conditionally styled child style properties.
+
+    Unfortunately, there are inherent problems to element queries that seem hard to overcome.
+    First, in order to evaluate selectors that contain element queries matches a layout needs to be performed (since the position and size of the target element can only be retrived by performing a layout).
+    Then, the layout engine might has to perform another layout since new styles could have been applied due to selectors including element queries matching.
+    \todo{Are there more inherent issues?}
 
     \section{ELQ}
     It has been identified that requirements and usages of element queries vary from case to case, and it is therefore beneficial to provide a plugin-based library so that developers can tailor their custom solutions by choosing which plugins to use.
