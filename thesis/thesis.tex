@@ -597,16 +597,19 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Layout engines}\label{sec:layout-engines}
       In order to understand how element queries affects the \glspl{layout engine}, it is important to understand how \glspl{layout engine} operates.
+      \todo{Also in order to understand how to optimize the library tasks.}
       Only the \gls{layout engine} of the \gls{browser} will be of importance, since element queries do not affect any other \gls{browser} subsystem.
       This section will give a brief explanation of the layout process that the engines generally perform, along with some usual optimizations that are performed to speed up the process.
       The render process will not be described, as it is not relevant for element queries.
 
       Section~\ref{sec:layout-engine-reference} to Section~\ref{sec:layout-process} describes briefly how layout engines operates and also presents key layout engine concepts.
       The role of the layout engine and a reference architecture for browsers is also presented, along with the market shares of the major layout engines.
+      \todo{Write that the layout queue is described, which will be important to understand for the optimizations done in the library.}
+
+      Section~\ref{sec:layout-thrashing} defines layout thrashing will presents how it can be avoided.
 
       Section~\ref{sec:parallel} gives insight into the current state of the research of parallelizing the layout process.
-      
-      Section~\ref{sec:layout-thrashing} defines layout thrashing will presents how it can be avoided.
+
       \todo[inline]{Have an image about the layout flow somewhere?}
       \todo[inline,color=green]{Marcos: The reference architecture could be outdated since the source is very old. The XML subsystem is hardly interesting anymore.}
       \todo[inline]{Maybe move this content to an own subsection and instead write a text about why this section is here, what the goal is (to understand parallelization and layout thrashing), etc.}
@@ -853,40 +856,10 @@
         If the content of an \gls{element} does not fit with the calculated width (text usually needs to perform line break when the width is too small), the \gls{element} needs to break up the content into multiple renderers in order to expand the height.
         The renderer that has decided that it needs to break the content up into multiple renderers propagates to the parent renderer that it needs to perform the breaking.
         When the parent renderer has created the renderers needed to fit the content with the given height, layout is performed on the new renderers and then the final height can be calculated and propagated upwards.
-      \subsection{Parallelization}\label{sec:parallel}
-        No longer can performance of an application increase over time without any code changes (as opposed to the times when the \gls{CPU} clock speeds increased rapidly) \cite{parallelizing_the_web_browser}.
-        Now, applications need to utilize the multiple cores of the \gls{CPU} instead of relying on high clock speed.
-        Parallelization is something \gls{layout engine} vendors are interested in, and research is being done about utilizing multiple cores to increase the performance of the engines.
-        In this section a small summary will be given about the current research front, and how the parallelization of layout engines can be approached.
-        \todo{Check so that the section actually does what the meta says}
-
-        As \gls{web} applications grow bigger and more demanding, \glspl{browser} continuously need to improve the performance on all levels \cite{parallelizing_the_web_browser}.
-        Fetching resources over the network is the only thing that is done in parallel today.
-        The rest of the \gls{browser} system is designed and optimized to run sequentially \cite{zoomm}.
-        On computers, \glspl{browser} usually achieve parallelism by running each page context in parallel (each tab and window of the \gls{browser} runs in a separate process) \cite{fan2011optimizing,zoomm}.
-        This approach is appealing because it utilizes the cores of the machine by still having all subsystems run sequentially for each page, while improving the overall performance of the \gls{browser}.
-        However, this approach is not enough as the page performance is not improved if only one page is present.
-        For the \gls{web} to be a true competitor to heavy native applications\todo{Reformulate to not use the word native.}, the page performance needs to be increased (not only the overall \gls{browser} performance).
-        It is then important to be able to dedicate multiple cores to one page instead of having all the pages present using their own core (perhaps all non-visible pages can share one core while the main visible page can have access to multiple cores if needed).
-        Also, with the number of mobile devices browsing the \gls{web} increasing rapidly it is important to be able to achieve good parallelism \cite{meyerovich2010fast,parallelizing_the_web_browser}.
-        Light devices such as small laptops, mobile phones and tablets share a common goal --- they want to reduce power consumption while increasing the performance.
-        This can be achieved with multicore processors that run at lower clock speeds.
-        \todo{Write that many cores is preferred over high clock speed? Why?}
-        It has been shown that the performance of mobile \glspl{browser} is \gls{CPU} bound contrary to the common belief that they are network bandwidth bound \cite{parallelizing_the_web_browser,meyerovich2010fast}.
-        This is why many researchers target light devices when trying to parallelize \gls{web} \glspl{browser}.
-        Of course, once the methods have matured and been implemented, desktop layout engines will benefit from parallelization as well.
-
-        \gls{CSS} selector matching is a good candidate for parallelization, due to matching nodes to selectors being independent from other selector matches.
-        A successful parallelization of selector matching has been achieved with locality-aware task parallelism \cite{parallelizing_the_web_browser}.
-        It has also been shown that selector matching and style resolving (through cascading) can be parallelized \cite{zoomm}.
-        It is possible to resolve \gls{element} styles in parallel as long as two requirements are fulfilled: the matching task must have finished for the \gls{element} to resolve styles for, and the parent \gls{element} must have resolved all styles (since the \gls{element} might inherit some styles from the parent).
-        As long as these requirements are fulfilled, selector matching and style resolving can run in parallel for different \glspl{element}.
-        The layout process can also be parallelized, since the layout process has been shown to be subtree independent for non-float \glspl{element} \cite{servo_parallel,servo_blog}.
-        Siblings of the layout tree can be processed independently of each other (in the general case), and is suitable to parallelize with a work-stealing algorithm\footnote{See \url{http://supertech.csail.mit.edu/papers/steal.pdf} for more information about work-stealing algorithms.} \cite{meyerovich2010fast}.
-        \todo[inline]{Philipp: It would be very interesting to just shortly summarize typical performance gains due to parallelization.}
-
+      
       \subsection{Layout thrashing and how to avoid it}\label{sec:layout-thrashing}
         Recall from section \ref{sec:layout-process} that \glspl{layout engine} store incremental layout commands in a queue in order to \glslink{batch processing}{batch process} layouts.
+        \todo{Perhaps remove this, as the reader is supped to just have read it.}
         The term \gls{layout thrashing} refers to when the layout queue repeatedly is being flushed by scripts; forcing the \gls{layout engine} to perform multiple independent layouts that could have in theory been \glslink{batch processing}{batch processed}.
         Layouts are \emph{thrashed} since the layout engine usually needs to perform layout on the whole subtree of the affected element for each incremental layout command, hence thrashing most of the work it did the previous layout command.
         See listing~\ref{code:thrashing-example} for an example of \gls{JavaScript} code that results in layout thrashing.
@@ -982,6 +955,39 @@
         \todo[inline]{Explain that $n_a$ is not a parameter to the T function?}
         \todo[inline]{Refer to some section in the appendix for how to read the timeline images? Philipp said that I should try to explain it very briefly in this section.}
         \todo[inline]{Sources?}
+
+      \subsection{Parallelization}\label{sec:parallel}
+        No longer can performance of an application increase over time without any code changes (as opposed to the times when the \gls{CPU} clock speeds increased rapidly) \cite{parallelizing_the_web_browser}.
+        Now, applications need to utilize the multiple cores of the \gls{CPU} instead of relying on high clock speed.
+        Parallelization is something \gls{layout engine} vendors are interested in, and research is being done about utilizing multiple cores to increase the performance of the engines.
+        In this section a small summary will be given about the current research front, and how the parallelization of layout engines can be approached.
+        \todo{Check so that the section actually does what the meta says}
+
+        As \gls{web} applications grow bigger and more demanding, \glspl{browser} continuously need to improve the performance on all levels \cite{parallelizing_the_web_browser}.
+        Fetching resources over the network is the only thing that is done in parallel today.
+        The rest of the \gls{browser} system is designed and optimized to run sequentially \cite{zoomm}.
+        On computers, \glspl{browser} usually achieve parallelism by running each page context in parallel (each tab and window of the \gls{browser} runs in a separate process) \cite{fan2011optimizing,zoomm}.
+        This approach is appealing because it utilizes the cores of the machine by still having all subsystems run sequentially for each page, while improving the overall performance of the \gls{browser}.
+        However, this approach is not enough as the page performance is not improved if only one page is present.
+        For the \gls{web} to be a true competitor to heavy native applications\todo{Reformulate to not use the word native.}, the page performance needs to be increased (not only the overall \gls{browser} performance).
+        It is then important to be able to dedicate multiple cores to one page instead of having all the pages present using their own core (perhaps all non-visible pages can share one core while the main visible page can have access to multiple cores if needed).
+        Also, with the number of mobile devices browsing the \gls{web} increasing rapidly it is important to be able to achieve good parallelism \cite{meyerovich2010fast,parallelizing_the_web_browser}.
+        Light devices such as small laptops, mobile phones and tablets share a common goal --- they want to reduce power consumption while increasing the performance.
+        This can be achieved with multicore processors that run at lower clock speeds.
+        \todo{Write that many cores is preferred over high clock speed? Why?}
+        It has been shown that the performance of mobile \glspl{browser} is \gls{CPU} bound contrary to the common belief that they are network bandwidth bound \cite{parallelizing_the_web_browser,meyerovich2010fast}.
+        This is why many researchers target light devices when trying to parallelize \gls{web} \glspl{browser}.
+        Of course, once the methods have matured and been implemented, desktop layout engines will benefit from parallelization as well.
+
+        \gls{CSS} selector matching is a good candidate for parallelization, due to matching nodes to selectors being independent from other selector matches.
+        A successful parallelization of selector matching has been achieved with locality-aware task parallelism \cite{parallelizing_the_web_browser}.
+        It has also been shown that selector matching and style resolving (through cascading) can be parallelized \cite{zoomm}.
+        It is possible to resolve \gls{element} styles in parallel as long as two requirements are fulfilled: the matching task must have finished for the \gls{element} to resolve styles for, and the parent \gls{element} must have resolved all styles (since the \gls{element} might inherit some styles from the parent).
+        As long as these requirements are fulfilled, selector matching and style resolving can run in parallel for different \glspl{element}.
+        The layout process can also be parallelized, since the layout process has been shown to be subtree independent for non-float \glspl{element} \cite{servo_parallel,servo_blog}.
+        Siblings of the layout tree can be processed independently of each other (in the general case), and is suitable to parallelize with a work-stealing algorithm\footnote{See \url{http://supertech.csail.mit.edu/papers/steal.pdf} for more information about work-stealing algorithms.} \cite{meyerovich2010fast}.
+        \todo[inline]{Philipp: It would be very interesting to just shortly summarize typical performance gains due to parallelization.}
+
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element queries
