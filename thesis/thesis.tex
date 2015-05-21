@@ -1480,8 +1480,9 @@
         It is responsible for controlling that plugins do not conflict with each other and that plugins are initiated correctly with the plugin \gls{API} of the library instance.
         The method requires a \emph{plugin definition object} (or shortened \emph{plugin definition}) parameter, and also accepts an optional options object parameter.
         A plugin definition is responsible for describing a plugin and providing a factory function \code{make} that creates a plugin instance.
-        It also exposes methods that are called by \gls{ELQ} in order to retrieve the plugin name, version and compatibility.
-        When \code{use} is called, it creates a plugin instance by invoking the \code{make} factory function and returns the created instance so that the user may store the reference to the plugin instance.
+        The function requires an \code{elq} parameter which is the \gls{ELQ} instance extended with the plugin \gls{API}, and accepts an optional \code{options} object parameter.
+        Plugin definitions also expose methods that are called by \gls{ELQ} in order to retrieve the name, version and compatibility of a plugin.
+        When \code{use} is called, it creates a plugin instance by invoking the \code{make} factory function (with the \code{use} options parameter as argument to \code{make}) and returns the created instance so that the user may store the reference to the plugin instance.
         The \code{using} method requires a \emph{plugin identifier} parameter and tells if the given plugin is being used (i.e., has been registered) by the instance or not.
         The plugin identifier of a plugin is either the plugin definition or the name of the plugin.
         See listing~\ref{code:plugin-object} for an example plugin definition and how it is used with the two methods for handling plugins.
@@ -1567,89 +1568,68 @@
       \subsection{Plugin API}\label{sec:plugin-api}
         The plugin \gls{API} is a superset of the public \gls{API}.
         Plugins have additional direct access to most core subsystems presented in Section~\ref{sec:arcithecture}.
-        The plugin \gls{API} access is given to a plugin when it is registered (i.e., when the \gls{ELQ} instance invokes the \code{make} function of the plugin definition).
-        Recall from subSection~\ref{sec:public-api} that the \code{make} function of the plugin definition is given two parameters at invokation; \code{elq} and \code{options}.
-        The first parameter is a reference to the \gls{ELQ} instance (to which the plugin was registered) extended with the plugin \gls{API}.
+        Recall that access to the plugin \gls{API} is given to a plugin when it is registered (i.e., when the \gls{ELQ} instance invokes the \code{make} function of the plugin definition).
+        Since the plugin handler and element resize detector subsystems are exposed through to public \glspl{API} they can not be directly accessed through the plugin \gls{API}.
+        However, an additional method \code{getPlugin} of the plugin handler system is exposed that returns the registered plugin instance given a plugin identifier parameter.
+        This method is facilitates interplugin communications.
         Direct access is given to the following core subsystems:
         \begin{itemize}
-          \item \textbf{Reporter}: via the \code{elq.reporter} property that refers to the reporter instance.
-          \item \textbf{Cycle detector}: via the \code{elq.cycleDetector} property that refers to the cycle detector instance.
-          \item \textbf{Batch processor}: via the \code{elq.BatchProcessor} property that refers to a factory function that creates \glslink{batch processing}{batch processor} instances.
-          \item \textbf{\abbr{ID} handler}: via the \code{elq.idHandler} property that refers to the \abbr{ID} handler instance. \todo{Include id handler in section \ref{sec:arcithecture}?}
+          \item 
+            \textbf{Reporter}: via the \code{elq.reporter} property that refers to the reporter instance.
+            The reporter has three methods: \code{log}, \code{warn} and \code{error} that are used to report information, warnings and errors respectively.
+            The default behavior of the reporter is to report to the browser console\footnote{See \url{https://developer.mozilla.org/en-US/docs/Web/API/Console} for more information.} if possible.
+          \item
+            \textbf{Cycle detector}: via the \code{elq.cycleDetector} property that refers to the cycle detector instance.
+            The cycle detector has a method \code{isUpdateCyclic} that tells if the desired state update of an element seems to be part of a cycle.
+            To do so, it requires two parameters; the taret element and the state update itself.
+            A third update time parameter, which defines when the update was requested, is optional and will default to the time of the method call.
+          \item 
+            \textbf{Batch processor}: via the \code{elq.BatchProcessor} property that refers to a factory function that creates \glslink{batch processing}{batch processor} instances.
+            Instead of having a single \glslink{batch processing}{batch processor} instance shared among all library entities (i.e., core subsystems and plugins), each entity has to create an own instance.
+            This to avoid entities interfering with each other while processing \glslink{batch processing}{batches}.
+            For example, some entities might want to force the \glslink{batch processing}{batch} to be processed at a point where it would be beneficial for other entities to delay the processing.
+            The \code{createBatchProcessor} accepts an optional options object parameter and returns a \glslink{batch processing}{batch processor} instance
+            Two important options to the \code{createBatchProcessor} are the \code{async} and \code{auto} options.
+            If the \code{async} option is enabled, the \glslink{batch processing}{batch} will be processed asynchronously as soon as possible after that the \code{force} method has been invoked.
+            If the \code{auto} option is enabled, the batch will automatically be processed as soon as possible asynchronously (this implies that \code{async} has to be enabled).
+            The batch processor instance has two methods: \code{add} and \code{force}.
+            The \code{add} method requires a function parameter that will be called when the \glslink{batch processing}{batch} is processed, and accepts an optional level parameter that defines at which level the given functon should be processed.
+            The \code{force} method commence the processing of the \glslink{batch processing}{batch}, which can happen synchronously or asynchronously defined by an optional parameter.
+            \todo{Move some of this text to the own batch processor section in implementation details.}
+          \item
+            \textbf{\abbr{ID} handler}: via the \code{elq.idHandler} property that refers to the \abbr{ID} handler instance. \todo{Include id handler in section \ref{sec:arcithecture}?}
+            The \abbr{ID} handler has a method \code{get} that returns the \abbr{ID} of the required element parameter.
+            If the element does not have any \abbr{ID} one will be assigned to the element.
+            It is possible to override the assignment with an option parameter.
         \end{itemize}
-        Direct access is not given to the plugin handler and element resize detector subsystems since their \glspl{API} are already exposed in the public \gls{API}.
-        However, an additional method of the plugin handler system is exposed; the \code{getPlugin} method that returns the registered plugin instance given a plugin identifier parameter.
-        This method is needed to enable interplugin communications.
-
-        The reporter has three methods; \code{log}, \code{warn} and \code{error}.
-        They are used to report information, warnings and errors respectively.
-        The default behavior of the reporter is to report to the browser console if present.
-
-        The cycle detector has a method \code{isUpdateCyclic} that tells if the desired state update of an element is part of a cycle.
-        To do so, it requires two parameters; the element that the update should be applied to, and the state update itself.
-        A third time parameter, that tells when the update was requested, is optional and will default to the time of the method call.
-
-        Instead of having a single \glslink{batch processing}{batch processor} instance shared among all library entities (i.e., core subsystems and plugins), each entity has to create an own instance.
-        This to avoid entities interfering with each other while performing \gls{batch processing}.
-        For example, some entities might want to force the \glslink{batch processing}{batch} to process at a point where it would be beneficial for other entities to delay the \glslink{batch processing}{batch}.
-        The \code{createBatchProcessor} accepts an optional options object parameter and returns a \glslink{batch processing}{batch processor} instance that has two methods; \code{add} and \code{force}.
-        The \code{add} method requires a function parameter that will be called when the \glslink{batch processing}{batch} is processed.
-        Since the \glslink{batch processing}{batch processor} is leveled, as motivated in Section~\ref{}, the method also accepts an optional parameter that defines at which level the given function should be processed.
-        The \code{force} method commence the processing of the \glslink{batch processing}{batch}, which can happen synchronously or asynchronously a the optional parameter.
-        Two important options to the \code{createBatchProcessor} are the \code{async} and \code{auto} options.
-        If the \code{async} option is enabled, the \glslink{batch processing}{batch} will be processed asynchronously as soon as possible after that the \code{force} method has been invoked.
-        If the \code{auto} option is enabled, \code{force} will be invoked when the first function of the \glslink{batch processing}{batch} has been added (this implies that \code{async} has to be enabled).
-
-        The \abbr{ID} handler has one method \code{get} that returns the \abbr{ID} of the required element parameter.
-        If the element does not have any \abbr{ID} one will be assigned to the element.
-        It is possible to override the assignment with an option parameter.
-
-        \todo[inline]{Code examples?}
-        %The \code{getPlugin} method requires a plugin identifier and returns the plugin instance being used by the \gls{ELQ} instance that matches the plugin identifier.
-
-        %           \begin{lstlisting}[caption={},captionpos=b,label={code:elq-plugin-api}]]
-        % ...
-        % // The make function of a plugin definition object.
-        % make: function(elq, options) {
-        %   // Possible to access the reporter subsystem, which has the same API as the console object.
-        %   elq.reporter.log("same", "API", "as", "console");
-
-        %   return {
-        %     start: function(elements) {
-
-        %     }
-        %   };
-        % }
-        % ...
-        %           \end{lstlisting}
-        \todo[inline]{Write how to install it. AMD, script, commonjs, etc.}
-
       \subsection{Plugins}
-        Now, it is time to describe the systems and \glspl{API} that will actually realize element queries as \gls{ELQ} plugins.
+        Now, it is time to describe the systems and \glspl{API} that actually realizes element queries as \gls{ELQ} plugins.
         It should be noted that the plugins presented here is the suggested solution to element queries according to the research of this thesis.
-        They are designed for good performance, good compatibility, and ease of use.
+        They are designed for adequate performance, good compatibility, and ease of use.
         For extreme requirements or corner cases, custom \gls{ELQ} plugins might be preferred.
 
-        \Gls{ELQ} plugins may use custom element attributes to define rules and plugin options.
+        \Gls{ELQ} plugins may use custom element attributes as part of their \glspl{API}.
         The \gls{HTML} standard supports custom attributes prefixed with \code{data-}.
         Modern browsers usually permits to discard the \code{data-} prefix for custom attributes.
         For visual reasons, custom attributes will be written in the shortest possible way in this thesis (without the \code{data-} prefix).
-        It should be noted that although not written in the examples, the library and all plugins support all combinations of custom attribute declarations so if desired, the library is able to conform to the \gls{HTML} standard.
+        It should be noted that although not written in the examples the library and all plugins support both ways of defining custom elememt attributes, so it is able to conform to the \gls{HTML} standard.
+        \todo[inline]{Need to implement this in ELQ.}
+        \todo[inline]{Maybe it should be generally explained that the attribute design of both plugins follow the same design. Explain options at element level, plugin level, etc.}
 
         \subsubsection{Breakpoints}\label{sec:plugin-breakpoints}
-          This is the plugin that observes element resizes and updates their size states according to predefined breakpoints.
+          This plugin observes element resize events and updates the elements size states according to defined breakpoints.
           The name of the plugin is \code{elq-breakpoints} and it does not have any dependencies (other than the element resize detector of the \gls{ELQ} core).
-          The main idea of the plugin is to apply classes to target elements that reflects in which size state they are.
-          Each element defines breakpoints to which the plugin will update the size state.
-          The breakpoints of an element are defined by custom element attributes.
-          See listing~\ref{code:elq-breakpoints-example} for an example of breakpoints definitions.
-          \begin{lstlisting}[gobble=12,caption={Example an \gls{HTML} element that uses the \code{elq-breakpoints} plugin.},captionpos=b,label={code:elq-breakpoints-example}]]
+          The main idea of the plugin is to apply classes to target elements that reflects the size states of the elements.
+          Style states of an element is defined by breakpoints by custom element attributes.
+          See listing~\ref{code:elq-breakpoints-example} for an example of breakpoints definition attributes.
+          \begin{lstlisting}[gobble=12,caption={Example of an element that has two width breakpoints (300 and 500 pixels) defined by using the \code{elq-breakpoints} plugin.},captionpos=b,label={code:elq-breakpoints-example}]]
             <div id="target" elq elq-breakpoints elq-breakpoints-width="300 500">
             ...
             </div>
           \end{lstlisting}
+          \todo{Shorten syntax?}
           The \code{elq} attribute states that it is an \gls{ELQ} element, and the \code{elq-breakpoints} attribute states that the element should be handled by the plugin.
-          The \code{elq-breakpoints\-width="300 500"} tells the plugin that the element should have two width breakpoints at 300 and 500 pixels.
+          The \code{elq-breakpoints\-width="300 500"} defines that the element should have width breakpoints at 300 and 500 pixels.
           Height breakpoints are defined in the same way with the \code{elq-breakpoints-height} attribute.
           The possible size states of the element would then be (in pixels):
           \begin{itemize}
@@ -1657,13 +1637,17 @@
             \item $300 <= width < 500$
             \item $500 <= width$
           \end{itemize}
-          The plugin will append classes to the element that reflects the size state of the element.
-          For each breakpoint, one class will be present that tells if the size is above or below the breakpoint.
-          The number of size states of an element in a dimension is given by $n_{ss}(n_b) = n_b + 1$, where $n_b$ is the number of breakpoints in that dimension.
-          The number of breakpoint classes of an element in a dimension is given by $n_{bc}(n_{b}) = 2n_b$.
+          \todo{Explain that low is inclusive, and why.}
+          The plugin appends classes to the element that reflects the size state of the element.
+          For each breakpoint, one class is present that tells if the size is above or below the breakpoint.
+          \todo{Remember that above is inclusive. Maybe this should be an option?}
+          Recall from Section~\ref{sec:eq-definitions} that the number of size states of an element in a dimension is given by $n_{ss}(n_b) = n_b + 1$, where $n_b$ is the number of breakpoints in that dimension.
+          Since the style state can be either above or below each breakpoint, the number of breakpoint classes of an element in a dimension is given by $n_{bc}(n_{b}) = 2n_b$.
           The number of breakpoint classes active at the same time for an element in a dimension is given by $n_{abc}(n_{b}) = n_{b}$.
-          The format of the classes are \code{elq-[dimension]-[above|below]-[breakpoint]}.
-          For example, if the example element is below 300 pixels wide, it will have the following two classes present:
+          The format of the classes is: \\*\code{elq-[width|height]-[above|below]-[breakpoint][postfix]}.
+          \todo{Format this better.}
+          It is possible to define a postfix to be applied to all breakpoint classes by the \code{postfix} option either at element level (i.e., by adding \code{postfix} as the attribute value of \code{elq-breakpoints}) or as a plugin instance option when registering the plugin with the \code{use} method of \gls{ELQ}.
+          For example, if the width of the element described in listing~\ref{code:elq-breakpoints-example} is narrower than 300 pixels, it will have the following two classes present:
           \begin{itemize}
             \item \code{elq-width-below-300}
             \item \code{elq-width-below-500}
@@ -1692,6 +1676,7 @@
           \todo[inline]{Example of how to register the plugin with an elq instance + options?}
           \todo[inline]{Write that above is inclusive and below is exclusive? Why? Option?}
           \todo[inline]{Write about the interplugin API methods that mirror uses?}
+          \todo[inline]{Write about noclasses option.}
         \subsubsection{Mirror}\label{sec:plugin-mirror}
           This plugin is needed as an addition to the \code{elq-breakpoints} plugin in some cases due to limitations of CSS.
           As of the \gls{CSS3} specification, there is no way to select ancestor elements of an element.
