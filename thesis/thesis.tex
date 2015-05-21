@@ -1350,7 +1350,7 @@
         \item \textbf{Features}
           \begin{enumerate}
             \item\label{itm:req_resize_detect}    The library needs to augment \gls{native} element queries in the sense that styles are applied automatically when \glspl{element} change size.
-            \item                                 The features should be flexible and not limited to only the common use cases.
+            \item\label{itm:req_flexible}         The features should be flexible and not limited to only the common use cases.
             \item\label{itm:req_bp_js}            It should be possible to handle element query breakpoints with JavaScript.
             \item\label{itm:req_conditional_css}  It should be possible to specify conditional \gls{CSS} styles to be applied on different element query breakpoints.
           \end{enumerate}
@@ -2551,29 +2551,23 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Discussion and Conclusions
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{Discussion and Conclusions}
-    \todo[inline]{Write intro.}
-
     Recall the problem formulation from Section~\ref{sec:problem}: \problemformulation.
-    The problem was shown in Section~\ref{sec:eq} to be solved by element queries.
+    The problem was shown in Section~\ref{chp:eq} to be solved by element queries.
     Therefore, the goal of this thesis was to develop a third-party JavaScript library that enables developers to use element queries.
     Since no syntax or standard has been specified by the \gls{W3C} yet for element queries, the syntax and usage can be formed in any way as long as it solves the problem of conditionally styling elements by element criterion.
     Since the implementation of the \gls{ELQ} library (that enables element queries) was successful, the thesis goal can be considered fulfilled.
 
-    The problem of responsive modules have been described, and the solution has been presented to be element queries.
-    The theory of element queries and the current research state has been shown in Section~\ref{}.
+    % The problem of responsive modules have been described, and the solution has been presented to be element queries.
+    % The theory of element queries and the current research state has been shown in Section~\ref{}.
 
 
-    All technical goals of \gls{ELQ} have not been fulfilled.
-    However, the technical goals that are important for the general element queries use case have been fulfilled.
+    % All technical goals of \gls{ELQ} have not been fulfilled.
+    % However, the technical goals that are important for the general element queries use case have been fulfilled.
 
 
-    The library that enables developers to 
+    % The library that enables developers to 
 
-    \paragraph{Conclusion}
-    Element queries has been identified as a solution to problem of having responsive modules.
-    Native unrestricted element queries limits layout engines and therefore imposes problems to implementors.
-    A draft
-    With element queries comes 
+    \todo[inline]{Write intro better intro?}
 
     \section{Element queries}
     As the number of combinations of screen sizes, input capabilities, etc., increases it is important to write responsive applications so that it can adapt to all user devices.
@@ -2636,22 +2630,47 @@
     One compatibility issue is that browsers generally do not support scripts to access external style sheets served from another domain unless specified by both the server and client.
     Since \gls{ELQ} is plugin-based a plugin could easily be crafted that adds such functionality.
 
-
-
+    \todo[inline]{Write that ELQ really is embracing tools such as CSS preprocessors as shown in the bootstrap case study?}
 
     \section{Future work}
-      \todo[inline]{Fulfill all technical goals.}
-      \todo[inline]{Prolyfill?}
-      \todo[inline]{Save all elq element class states in localStorage so that on page reload they can be read in order to apply the right classes to all elq elements to avoid flash of invalid layout.}
-      \todo[inline]{Evaluate CSS selectors on elq elements before injecting elements so that warnings or errors can be produced on selectors that conflict with the injected elements.}
-      \todo[inline]{For static layouts it would be beneficial to produce media queries for the breakpoints (at server side if possible or at client side)}
-      \todo[inline]{Write that ELQ really is embracing tools such as CSS preprocessors as shown in the bootstrap case study?}
-      \todo[inline]{elq-breakpoints performs an extra layout that could be incorporated into the erd system if really really optimized.}
-      \todo[inline]{Investigate use cases and decide if there are things that can not be solved with ELQ, and in that case add such features.}
+      It would be beneficial to further investigate possible use cases in order to evaluate if the current plugins are sufficient.
+      Perhaps new plugins would need to be developed, or existing \glspl{API} extended.
+      This is needed in order to be sure that goal~\ref{itm:req_flexible} truly is satisfied.
+
+      In order to allow more advanced element query constellations, the mirror element could could be exteneded to target an arbitrary element (instead of just the nearest \code{elq-breakpoints} ancestor element).
+      This way, it would be possibel to write element queries against children, siblings, etc.
+      This would also be a key feature in order to further satisfy goal~\ref{itm:req_flexible}.
+
+      To satisfy goal~\ref{itm:req_prolyfill} an element queries prolyfill plugin could be created that would parse custom at runtime \gls{CSS} to simulate native element queries.
+      It would then use an imaginary syntax of element queries, which could only be guessed at this point of time.
+      Before any advancements have been made by the RICG regarding the syntax, the pseudo syntax presented in Section is probably a good start.
+      \todo{Say in 3.1 that the pseudosyntax is heavily inspired by Tab's syntax?}
+
+      More research can be done in regarding static pages wish to use element queries, since the main focus of this thesis has been dynamic pages.
+      It is highly possible that the best approach to static pages is to parse custom \gls{CSS} at server side in order to generate static media queries.
+      Media queries are at the moment the most performant way of applying conditional styles by viewport size, which possibly is the only factor to static page layout.
+      However, it is uncertain if the viewport size is the only layout factor to static pages as browser and end-used styles might affect pages in a way that would imply that a layout change is desired without affecting the viewport size.
+
+      As of now, different subsystems of \gls{ELQ} are forced to create their own batch processors, which is favorable in some cases.
+      However, it can also be favorable to have a shared instance batch processor in order to avoid unnecessary layouts between subsystems.
+      For instance, the element resize detection subsystem and the \code{elq-breakpoints} plugin both uses a batch processor to avoid layout thrashing.
+      However, since they process their batches independent of each other, the element resize detection subsystem forces a layout before the plugin batch processor is invoked.
+      This means that two layouts are performed, when in theory only one is needed.
+      This could in theory be solved by sharing a batch processor between them so that both executes read, write and force operations in sync with each other.
+
+      It would be possible to prevent the flash of invalid layout during page reloads, by saving all element styles states to a persistan local browser storage.
+      When the page reloads, a script can be executed that reads the element styles states of the local storage and applies the breakpoint classes to all elements before the first layout.
+      This way, all elements would have the right classes before a layout is performed by the layout engine and thus resulting in an instant valid page layout.
+      However, this still would not avoid the first invalid layout when the page is loaded for the first time.
+
+      Event thought there are several issues with runtime parsing of CSS, it is probably beneficial in some cases.
+      Recall from Section~\ref{sec:imp_erd} that CSS selectors may unintentionally style the injected elements of the element resize detection subsystem.
+      By parsing CSS it would be possible to warn developers of such selectors.
+      The feature could be valuable in the development phase of applications, but should probably be disabled in production due to performance reasons.
+      Users that value true separation of style and \gls{HTML} could also benefit from parsing CSS, as the breakpoint of all elements then could be deduced by considering the element queries in the CSS.
+
       \todo[inline]{Investigate in how the erd system can be further optimized. Maybe DOM MutationObservers, fix layout thrashing in Safari + FireFox, etc.}
-      \todo[inline]{Research if statically generated MQ can be used for static pages.}
-      \todo[inline]{Let mirror target an arbitrary element}
-      \todo[inline]{Instead of having independent batch processors it might be better to have a global batch processor that has phases (read, mutate, force) that every system can add functions to --- in order to avoid intersystem layout thrashing.}
+      \todo[inline]{Fulfill all technical goals. Which ones?}
 
   \printbibliography
   \clearpage
