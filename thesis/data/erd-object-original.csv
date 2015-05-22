@@ -1,4 +1,4 @@
-n elements,install time,memory
+n elements,injection time,memory
 1,0.005,8
 100,0.550,55
 200,1.200,110

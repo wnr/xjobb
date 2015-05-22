@@ -1023,6 +1023,7 @@
       It should be noted that the target is the entity that is evaluated against the query, and not the entity that has conditionally styles applied.
       For instance, it is not possible to conditionally style the target of media queries, since \gls{CSS} is incapable of altering the device.
       For element queries, the target entity is sometimes referred to as the \emph{target element}.
+      In the case of element queries, the target element may also be the element that has conditionally styles applied (but is generally not).
       \gls{CSS} style declarations that are applied conditionally using either element queries or media queries are sometimes referred to as \emph{conditional style declarations} or shortened \emph{conditional styles}.
       When the layout engine evaluates a media or element query to determine whether the selectors matches or not is called \emph{query selector matching}.
       The expressions that defines when different conditional style declarations should be applied are called \emph{breakpoints}.
@@ -1652,10 +1653,10 @@
             \item \code{elq-width-below-300}
             \item \code{elq-width-below-500}
           \end{itemize}
-
-          Breakpoint classes are utilized for applying conditional styles for elements based on the size state of the target element.
-          See listing~\ref{code:elq-breakpoints-style} for conditional styles of the target element and it's children.
-          \begin{lstlisting}[gobble=12,caption={Example of conditional styles using the \code{elq-breakpoints} plugin classes},captionpos=b,label={code:elq-breakpoints-style}]]
+          \todo{Motivate this design.}
+          The breakpoint classes are used for applying conditional styles for elements based on the size state of the target element.
+          See listing~\ref{code:elq-breakpoints-style} for an example of conditional styling the the \code{\#target} element and its children as presented in listing~\ref{code:elq-breakpoints-example}.
+          \begin{lstlisting}[gobble=12,caption={Example of conditional styles using the \code{elq-breakpoints} plugin classes.},captionpos=b,label={code:elq-breakpoints-style}]]
             #target {
               color: black;
               font-size: 15px;
@@ -1667,28 +1668,26 @@
             #target.elq-width-above-500 p { padding: 10px;    }
             #target.elq-width-below-500 p { padding: 5px;     }
           \end{lstlisting}
-          In this example it is shown that elements can be conditionally styled depending on their own sizes.
-          Additionally, children can be styled by stating the target element size state as the left-most selector.
-          In the example, all paragraph elements \code{p} will be styled conditionally depending on the target element size state.
+          In this example it is shown that an element can be conditionally styled by their own size.
+          Additionally, children can be conditionally styled by adding the child simple selector to the right of the simple selector containing the element breakpoint classes.
+          For instance, in the example all paragraph elements \code{p} will be styled conditionally by the target element size state.
 
-
-          \todo[inline]{Write about HTML compatability with data- prefix and empty attributes.}
           \todo[inline]{Example of how to register the plugin with an elq instance + options?}
           \todo[inline]{Write that above is inclusive and below is exclusive? Why? Option?}
           \todo[inline]{Write about the interplugin API methods that mirror uses?}
           \todo[inline]{Write about noclasses option.}
         \subsubsection{Mirror}\label{sec:plugin-mirror}
-          This plugin is needed as an addition to the \code{elq-breakpoints} plugin in some cases due to limitations of CSS.
-          As of the \gls{CSS3} specification, there is no way to select ancestor elements of an element.
-          For instance, \code{p img} is a selector that matches all image elements that are contained by a paragraph.
-          However, it is not possible to construct a selector that matches all paragraphs that contains images.
-          The \code{elq-mirror} plugin overcome these limitations by mirroring the breakpoint classes of an \code{elq-breakpoints} element.
+          % As of the \gls{CSS3} specification, there is no way to select ancestor elements of an element.
+          % For instance, \code{p img} is a selector that matches all image elements that are contained by a paragraph.
+          % However, it is not possible to construct a selector that matches all paragraphs that contains images.
+
+          This plugin complements the \code{elq-breakpoints} plugin and is needed in some cases due to limitations of CSS.
           Suppose that it is desired for an application to style all paragraph elements differently by the size of the nearest element with a \code{container} class.
           Paragraphs may appear nested in other elements, that may be generated dynamically at runtime.
-          Therefore, the structure of the application is not known when writing the style code, so no assumptions can be done about the markup structure.
-          Consider the example markup given in listing~\ref{code:elq-mirror-example} for an example markup structure.
+          Therefore, the structure of the application is not known when writing the \gls{CSS}, so no assumptions can be done about the markup structure.
+          Consider the example markup given in listing~\ref{code:elq-mirror-example} for an example \gls{HTML} structure.
           It should be noted that the \code{container} elements may be styled in any way (e.g., the widths of the inner container elements could be relative to the outer container element).
-          \begin{lstlisting}[gobble=12,caption={Example markup structure where all paragraphs are desired to be conditionally styled by the nearest ancestor container.},captionpos=b,label={code:elq-mirror-example}]
+          \begin{lstlisting}[gobble=12,caption={Example \gls{HTML} structure where all paragraphs are desired to be conditionally styled by the nearest ancestor container.},captionpos=b,label={code:elq-mirror-example}]
             <div class="container" elq elq-breakpoints elq-breakpoints-width="300 500">
               <div>
                 <p>Paragraph 1</p>
@@ -1702,18 +1701,20 @@
               </div>
             </div>
           \end{lstlisting}
-          A naive approach to applying conditional styles for the paragraph elements would be using the selector structure given in listing~\ref{code:elq-mirror-example-cont}.
-          \begin{lstlisting}[gobble=12,caption={A naive approach to styling the paragraphs conditionally.},captionpos=b,label={code:elq-mirror-example-cont}]
+          A naive approach to conditionally style the paragraph elements is using the selector structure given in listing~\ref{code:elq-mirror-example-cont}.
+          \begin{lstlisting}[gobble=12,caption={A naive approach to conditionally style the paragraph elements by the size of the nearest ancestor container element.},captionpos=b,label={code:elq-mirror-example-cont}]
             .container p                      { background-color: red;    }
             .container.elq-width-above-300 p  { background-color: yellow; }
             .container.elq-width-above-500 p  { background-color: green;  }
           \end{lstlisting}
           The problem with this is that the selectors states that all paragraphs that are children of \emph{any} container should be styled in some way.
-          So if the outer container element is 600 pixels wide and the inner containers are 200 pixels wide, all paragraphs would be colored green.
-          In this particular case, the desired behavior is that the first paragraph is colored green and the two inner paragraphs colored red.
-          By using the \code{elq-mirror} plugin, the correct behavior can be achieved.
-          Elements are initiated to mirror elements by adding attributes in the same way like with the \code{elq-breakpoints} plugin.
-          The mirror elements will then match the \code{elq-breakpoints} classes of the nearest ancestor that has the \code{elq-breakpoints} attribute.
+          So if the outer container element is 600 pixels wide and the inner containers are 200 pixels wide, all paragraphs would be colored green because they have an ancestor container that is wider than 500 pixels (i.e., the outer container).
+          The desired behavior is that the first paragraph is colored green and the two inner paragraphs colored red, since the widths of the inner containers are narrower than 300 pixels.
+          As of the \gls{CSS} selectors level 3 specification, there it is not possible to select the nearest ancestor of an element \cite{w3c_css_selectors}.
+          
+          The \code{elq-mirror} plugin overcome these limitations by mirroring the breakpoint classes of an \code{elq-breakpoints} element and thus the correct behavior can be achieved.
+          Elements are initialized to mirror such elements by adding attributes in the same way like with the \code{elq-breakpoints} plugin.
+          The mirror elements will then match the breakpoint classes of the nearest ancestor that has the \code{elq-breakpoints} attribute.
           See listing~\ref{code:elq-mirror-example-cont-2} for how the plugin can be used to achieve the desired behavior of the conditionally styled paragraphs.
           % If no such ancestor is found, the document root will be mirrored instead. //TODO: Have this?
           \begin{lstlisting}[gobble=12,caption={By using the \code{elq-mirror} plugin to overcome the limitations of CSS, the correct behavior can be achieved of the conditionally styled paragraphs.},captionpos=b,label={code:elq-mirror-example-cont-2}]
@@ -1736,136 +1737,131 @@
             .container p.elq-width-above-300  { background-color: yellow; }
             .container p.elq-width-above-500  { background-color: green;  }
           \end{lstlisting}
-          Notice that the breakpoint classes now are used in conjunction with the paragraphs instead of the containers in the CSS selectors.
-          Now, the conditional styles will be applied to all paragraphs that are children of containers; with the size criterion being relative to the nearest ancestor container.
+          Notice that the breakpoint classes now are used in conjunction with the paragraph simple selector instead of the container in the CSS selectors.
+          This way, the conditional styles behave as expected since all paragraphs are by the nearest (instead of any) container element.
 
-          By mirroring an element's breakpoint classes, elements can be styled by criterion of any element (ancestor, sibling, child, etc.).
+          By mirroring element breakpoint classes, elements can be styled by criterion of any element (ancestor, sibling, child, etc.).
           The plugin is at the moment restricted to the nearest ancestor \code{elq-breakpoint} element, but could easily be extended to support more advanced mirror constellations.
-          \todo[inline]{Maybe it should be presented how such API could look like?}
-          \todo[inline]{How about elements that want to write element queries against a child? CSS cant go upwards, but might be supported in the future. See \url{http://dev.w3.org/csswg/selectors-4/\#relational}. This could be supported with an extended version of mirror that doesn't only go upwards.}
-
         \subsubsection{Prolyfill}
           \todo[inline]{Have not been done. Should it? Perhaps remove this as it could be out of scope. Low priority.}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Implementation
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Interesting implementation details}\label{sec:library-imp-details}
-      \todo[inline]{Maybe find a better name for this section?}
-      \todo[inline]{Write about the N layouts, and how it was fixed with the batch processing. Investigate how this behaves for nested elements.}
-      \todo[inline]{Write about the drawbacks (invalid layout at page load, injecting objects is heavy, DOM is mutated.)}
-      \todo[inline]{Have a look at under/over-flow approach: \url{https://github.com/FremyCompany/prollyfill-min-width/blob/master/polyfill-min-width.js} and \url{http://www.backalleycoder.com/2013/03/14/oft-overlooked-overflow-and-underflow-events/}. Might be something for Safari. Could be nice to at least know how it performs/behaves.}
-
+    \section{Details of subsystems}\label{sec:library-imp-details}
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %%%%%%%%%%%%%%%%%%%%%%%%%%%% Batch processor
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       \subsection{Batch processor}\label{sec:imp_batch_processor}
         % To avoid \gls{layout thrashing} by other scripts it can beneficial to asynchronously postpone the \glslink{batch processing}{batch} until the next layout cycle of the \gls{browser}, which is also handled by the subsystem.
 
+
         \todo[inline]{Write me?}
+        Both Section~\ref{sec:layout-process} and Section~\ref{sec:layout-thrashing} are recommended to read in order to understand the optimizations described in this section.
 
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element resize detection
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       \subsection{Element resize detection}\label{sec:imp_erd}
-        As described in Section~\ref{sec:arcithecture}, \gls{ELQ} needs a subsystem that is able to detect when elements change size.
-        As the element resize detection system is a core subsystem of \gls{ELQ}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect element size changes.
-        Both Section~\ref{sec:layout-process} and Section~\ref{sec:layout-thrashing} are recommended to read in order to understand the optimizations described in this section.
+        As described in Section~\ref{sec:arcithecture}, \gls{ELQ} needs a subsystem that is able to detect resize events of elements.
+        As the element resize detection system is a core subsystem of \gls{ELQ}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect element resize events.
 
         Unfortunately, there is no standardized resize event for arbitrary \glspl{element} \cite{w3c_dom2_events}.
-        Only \glspl{document} emit resize events and therefore resize events can only be observed for frame elements (since a frame element has an own independent document).
+        Only \glspl{document} emit resize events and therefore resize events can only be observed for frame elements (since a frame element has its own document).
         Legacy versions of Internet Explorer (version 8 and down, but also some later versions depending on the quirks and \gls{document} mode) do support the resize event on arbitrary \glspl{element}.
-        Since the library needs to support commonly used \gls{HTML} \glspl{element}, a solution to observe resize events of any \gls{element} in modern browsers is desired.
-        According to the common use case, a valid limitation is to only support element resize detection for non-void elements (i.e., elements that can contain content).
-        \todo{Write more about void elements, that they can easily be wrapped with other elements to achieve the desired element query effect? Maybe this can be the main motivation instead of the "common use case"?}
-        Possible solutions are:
+        According to the general use case, a valid limitation is to only support element resize detection for non-void elements (i.e., elements that can contain content).
+        \todo{General use case where?}
+        This limitation is important since most approaches depend on injecting elements into the target elemenet.
+        It is a reasonable limitation since void elements can easily be wrapped with a non-void element without affecting the page visually.
+        Possible solutions to detect element resize events on modern browsers are:
         \begin{enumerate}
-          \item\label{itm:erd-approach-polling} \textbf{Polling}:
+          \item\label{itm:erd-approach-polling}
+            \textbf{Polling}:
             To have a script running asynchronously to check all \glspl{element} if they have resized.
             This can be achieved by using the \gls{JavaScript} \code{setInterval}\footnote{See \url{http://www.w3.org/html/wg/drafts/html/master/webappapis.html\#timers} for more information about \gls{JavaScript} timer functions.} function.
             Short polling intervals (high frequency) would lead to being able to detect resize changes quicker but having worse performance.
             Longer polling intervals (low frequency) would not be able to detect changes as quickly but increases the performance.
-            The longest possible delay between an actual resize event and the polling detecting is given by the polling interval time.
+            The longest delay between an actual resize event and the detection is given by the polling interval time.
             This approach is the most robust, as it supports all elements (including void elements) and provides excellent browser compatibility.
-          \item\label{itm:erd-approach-scroll} \textbf{Injecting overflowing \glspl{element}}:
-            Similar to the frames approach, an \gls{element} is injected to the target element that emit events, which can be observed in JavaScript, when the target element is resized.
-            Multiple overflowing elements are configured, and injected as children, so that they emit scroll events\footnote{See \url{http://www.w3.org/TR/DOM-Level-3-Events/\#event-type-scroll} for more information about the scroll event.} when the target element resize.
-            For detecting when the target \gls{element} shrinks, two \glspl{element} are needed; one for handling the scrollbars and one for triggering them.
-            Similarly, for detecting when the target \gls{element} expands, two \gls{element} are needed in the same way.
-            A container \gls{element} is injected, to contain the four \glspl{element} and make sure that they match the size of the target element.
-          \item\label{itm:erd-approach-frame} \textbf{Injecting frames}:
-            Since frame \glspl{element} are the only ones that support resize events \glslink{native}{natively}, the idea is to inject frame \glspl{element} as children to the target \glspl{element}.
-            By styling the frame so that it depends on the target \gls{element} and set the size to be 100 percent, the frame will always be the same size as the target element.
-            Then a resize event handler can be attached to the frame that emits a resize event for every target \gls{element} resize.
-            So in order to observe resize events of an element, a frame \gls{element} is injected and observed instead.
+          \item\label{itm:erd-approach-object}
+            \textbf{Object-based solution}:
+            Since frame \glspl{element} are the only ones that support resize events \glslink{native}{natively}, the idea is to inject a frame \gls{element} as a child to the target \gls{element} that is observed instead.
+            It has been shown by \cite{backalley} that \code{object} is the most suitable frame \gls{element} to be used for this purpose as they have good \gls{browser} compatibility and adequate performance.
+            By styling the \code{object} element so that it depends on the target \gls{element} and set the size to be 100 percent, the \code{object} will always be the same size as the target element.
+            Then a resize event handler is attached to the \code{object} that emits a \code{resize} event\footnote{See \url{http://www.w3.org/TR/DOM-Level-3-Events/\#event-type-resize} for more information about the resize event.} for every target \gls{element} resize.
+          \item\label{itm:erd-approach-scroll}
+            \textbf{Scroll-based solution}:
+            This solution injects an \gls{element} to the target element that emit events, which can be observed in JavaScript, when the target element is resized.
+            The idea is to inject multiple overflowing elements configured so that they emit \code{scroll} events\footnote{See \url{http://www.w3.org/TR/DOM-Level-3-Events/\#event-type-scroll} for more information about the \code{scroll} event.} when the target element is resized.
+            For detecting when the target \gls{element} shrinks, two \glspl{element} are needed; one for handling the scrollbars and one for causing them to scroll.
+            Similarly, for detecting when the target \gls{element} expands, two \glspl{element} are needed in the same way.
+            A container \gls{element} is injected that contains the four \glspl{element} and make sure that they match the size of the target element.
         \end{enumerate}
-        Solution \ref{itm:erd-approach-polling} is appealing because it does not mutate the \gls{DOM}, supports all elements (including void elements), and it provides excellent \gls{browser} compatibility since it does not rely on special \gls{element} behaviors or similar.
-        However, in order to prevent the \gls{responsive} \glspl{element} lagging behind the size changes of the user interface, the polls need to be performed quite frequently.
+        Solution \ref{itm:erd-approach-polling} is appealing because it does not mutate the \gls{DOM}, supports all elements (including void elements), and it provides excellent \gls{browser} compatibility since it does not rely on special \gls{element} behavior or similar.
+        However, in order to prevent the \gls{responsive} \glspl{element} lagging behind the size changes of the user interface, polling needs to be performed quite frequently.
         Recall from Section~\ref{sec:layout-process} that \glspl{layout engine} typically have a layout queue in order to perform layout in \glslink{batch processing}{batches} for increased performance.
         Each poll would force the layout queue to be flushed since the computed style of \glspl{element} needs to be retrieved in order to know if \glspl{element} have resized or not.
-        Also, since the polling is performed all the time, the overall page performance will be decreased even if the page is idle which is undesired especially for devices running on battery.
+        Since the polling is performed all the time the overall page performance is decreased even if the page is idle, which is undesired especially for devices running on battery.
         \todo{Should make quick test to see how much CPU it uses when polling frequently}
 
         \paragraph{Injection solutions}
-        Solution \ref{itm:erd-approach-scroll} and \ref{itm:erd-approach-frame} have similar characteristics and were both presented by \cite{backalley}.
-        Solution \ref{itm:erd-approach-scroll} was presented first, but was rejected in favor of solution \ref{itm:erd-approach-frame} as it was discovered.
-        Fortunately, a somewhat reworked version of the scroll-based solution is still available \cite{eq_imp_css-element-queries}.
-        For solution \ref{itm:erd-approach-frame}, it has been shown by \cite{backalley} that \code{object} is the most suitable frame \gls{element} to be used for this purpose as they have good \gls{browser} compatibility and adequate performance.
-        The \ref{itm:erd-approach-scroll} solution have issues when a side of the target element is set to zero, and with the target element getting removed from the render tree (e.g., by using setting the \code{display} style property to \code{none}).
+        The object-based and scroll-based solutions have similar characteristics and have both been presented by \cite{backalley}.
+        The scroll-based solution was presented first, but was rejected in favor of solution the object-based solution as it was discovered.
+        Fortunately, a somewhat reworked version of the scroll-based solution is still provided by \cite{eq_imp_css-element-queries}.        
+        However, it has issues with handling target elements with sides that are zero in length and also with the target element getting removed from the render tree (e.g., by setting the \code{display} style property to \code{none}).
         It is probably due to these issues that it was rejected.
+
         Both solutions mutate the \gls{DOM} and relies on special \gls{element} behavior, but they offer many advantages over polling.
-        Since they are event based, layout engines only need to perform extra work when installing the solution to the target \glspl{element} and when the target \glspl{element} actually resize.
+        Since they are event based, layout engines only need to perform extra work when injecting the solution to the target \glspl{element} and when the target \glspl{element} actually resize.
         Event based resize detection also implies minimal delay between the actual resize event and the detection.
-        By positioning the injected elements \code{absolute} with width and height set to \code{100\%}, the injected \glspl{element} do not affect the visual representation of the \gls{document}.
-        However, injecting elements into the target \glspl{element} has some implications:
+        By positioning the injected elements \code{absolute} with widths and heights set to \code{100\%}, the injected \glspl{element} do not affect the visual representation of the \gls{document}.
+        However, injecting elements into target \glspl{element} has some implications:
         \begin{itemize}
           \item \textbf{\gls{CSS} selectors may break}:
             Since target \glspl{element} get an extra child, \gls{CSS} selectors may behave differently.
-            For instance, the selector \code{\#target *} selector also matches the injected \glspl{element} which may result in the injected element being styled in a way that it will be visible or in other ways interfere with the original user interface.
-            Especially solution \ref{itm:erd-approach-scroll} is sensitive to unintentional styles being applied, as the injected elements are finely styled and tuned in order to behave as desired.
-            Additionally, selectors such as \code{:first-child} and \code{:last-child} will behave differently since the target element have an additional child injected.
+            For instance, the selector \code{\#target~*} selector also matches the injected \glspl{element}, which may result in them being styled in a way that it will be visible or in other way alter the page visually.
+            Especially the scroll-based solution is sensitive to unintentional styles being applied, as the injected elements are finely styled and tuned in order to behave as desired.
+            Additionally, selectors such as \code{:first-child} and \code{:last-child} may not behave as expected as the target element has an extra child.
           \item \textbf{\gls{JavaScript} may break}:
-            Similar to with the \gls{CSS} selectors, \gls{JavaScript} \gls{DOM} selectors may break.
-            The first node (or last) of the target \gls{element} may not be what developers expect it to be, since an \gls{element} has been injected.
+            Similar to with \gls{CSS} selectors, \gls{JavaScript} \gls{DOM} selectors may break.
+            The first node (or last) of the target \gls{element} may not be what developers expect it to be as the target element has an extra child.
             Also, code that alter the content of \glspl{element} (such as \code{element.InnerHTML = ...}) may undesirably remove the injected \gls{element} of the target element.
           \item \textbf{The target \gls{element} must be positioned}:
             \todo{Recall from where? This have not been described.}
             Recall that absolute positioned \glspl{element} are moved up to the first non-static positioned ancestor.
-            Since the injected element must be a child of the target \gls{element} (and not moved upwards in the layout tree), the target \gls{element} cannot be positioned \code{static} that is the default positioning for many \glspl{element}.
-            Fortunately, \glspl{element} positioned \code{relative} behave exactly like \code{static}, given that the \glspl{element} do not have any styles applicable to relative elements (such as \code{top} or \code{bottom}).
-            Since the style properties that depend on the \gls{element} being \code{relative} positioned do not affect the \gls{element} if it is \code{static} positioned, the properties can be removed or regarded as developer errors.
-            This way the target \gls{element} can be changed to \code{relative} positioning with the special style properties removed, to obtain the same visual representation as being positioned \code{static}.
+            Since the injected element must be a child of the target \gls{element} (and not moved upwards in the layout tree), the target \gls{element} cannot be positioned \code{static} (i.e., the default positioning for many \glspl{element}).
+            Fortunately, \glspl{element} positioned \code{relative} behave exactly like \code{static}, given they do not have any styles applicable to relative elements (such as \code{top} or \code{bottom}).
+            Since the style properties that depend on the \gls{element} being \code{relative} positioned do not affect the \gls{element} if it is positioned \code{static}, the properties can be removed or regarded as developer errors.
+            This way target \glspl{element} can be positioned \code{relative} with the special style properties removed, to obtain the same visual representation as being positioned \code{static}.
         \end{itemize}
 
         \paragraph{The object-based solution}
-        Solution \ref{itm:erd-approach-frame} has excellent performance when it comes to detecting resize events.
-        However, installing many \code{object} elements is quite a heavy task for browsers and consume lots of memory as presented in Section~\ref{sec:eval-perf-erd}.
-        This is the main algorithm that is performed when an element $e$ is to be observed for resize events:
+        For detecting resize events it performs excellent, but injecting many \code{object} elements is quite a heavy task for browsers and it consumes a significant amount of memory as later presented in Section~\ref{sec:eval-perf-erd}.
+        The main algorithm that is performed when an element $e$ is to be observed for resize events is the following:
         \begin{enumerate}
-          \item\label{itm:erd-algo-original-object-1} Get the computed style for $e$.
+          \item\label{itm:erd-algo-original-object-1} Get the computed style of $e$.
           \item                                       If the element is positioned (i.e., \code{position} is not \code{static}) next step is \ref{itm:erd-algo-original-object-4}.
-          \item\label{itm:erd-algo-original-object-3} Set the position of $e$ to be \code{relative}. Here additional checks can be performed to warn the developer about unwanted side effects of this.
-          \item\label{itm:erd-algo-original-object-4} Create an object element and attach an event handler for the \code{load} event. When the object element has been styled and configured properly, it is injected into $e$.
-          \item                                       The algorithm waits for the \code{load} event handler to be called by the layout engine.
-          \item                                       When the handler is called, an event handler is attached to the object element document that listens to the \code{resize} event.
+          \item\label{itm:erd-algo-original-object-3} Set the position of $e$ to be \code{relative}. Here additional checks can be performed to warn the developer about unwanted side effects of doing doing this.
+          \item\label{itm:erd-algo-original-object-4} Create an \code{object} element and attach an event handler for the \code{load} event\footnote{See \url{http://www.w3.org/TR/DOM-Level-3-Events/\#event-type-load} for more information about the load event.}. When the element has been styled and configured properly, it is injected into $e$.
+          \item                                       The algorithm waits for the \code{load} event handler to be called by the layout engine. When the handler is called, a \code{resize} event handler is attached to the document of the \code{object} element.
         \end{enumerate}
         In the rewriting of the code given by \cite{backalley} to better suite \gls{ELQ}, efforts was made to optimize the solution as the original code suffers from layout thrashing.
         Step \ref{itm:erd-algo-original-object-1} and \ref{itm:erd-algo-original-object-3} could theoretically be executed in different batches to avoid layout thrashing.
-        Unfortunately, creating the object element in step \ref{itm:erd-algo-original-object-4} forces a full layout, which makes the batch processing optimization negligible.
-        Since the creation of the object elements forms the significant time consumption, no further optmization was performed.
+        Unfortunately, each \code{object} element creation in step \ref{itm:erd-algo-original-object-4} forces a full layout, which makes the batch processing optimization negligible.
+        Since the creation of \code{object} elements forms the significant time consumption, no further optimization attempts were performed.
 
         \paragraph{The scroll-based solution}
-        As solution \ref{itm:erd-approach-scroll} only involves \code{div} elements, it offers room for optimizations.
-        The algorithm is conceptually similar to the algorithm of solution \ref{itm:erd-approach-frame}.
-        This is the main algorithm that is performed when an element $e$ is to be observed for resize events:
+        As this solution only injects \code{div} elements, it offers greater opportunities for optimizations.
+        The algorithm is conceptually similar to the algorithm of the object-based solution.
+        The main algorithm that is performed when an element $e$ is to be observed for resize events is the following:
         \begin{enumerate}
-          \item\label{itm:erd-algo-original-scroll-1} Get the computed style for $e$.
+          \item\label{itm:erd-algo-original-scroll-1} Get the computed style of $e$.
           \item\label{itm:erd-algo-original-scroll-2} If the element is positioned (i.e., \code{position} is not \code{static}) next step is \ref{itm:erd-algo-original-scroll-4}.
-          \item\label{itm:erd-algo-original-scroll-3} Set the position of $e$ to be \code{relative}. Here additional checks can be performed to warn the developer about unwanted side effects of this.
-          \item\label{itm:erd-algo-original-scroll-4} Create all elements (four elements needed: two for detecting when $e$ shrinks, and two for detecting when $e$ expands) and attach event handlers for the \code{scroll} event of the elements.
-                                                      When the elements have been styled and configured properly, they are injected into a container element which in turn is injected into $e$.
+          \item\label{itm:erd-algo-original-scroll-3} Set the position of $e$ to be \code{relative}. Here additional checks can be performed to warn the developer about unwanted side effects of doing this.
+          \item\label{itm:erd-algo-original-scroll-4} Create the four elements needed (two for detecting when $e$ shrinks, and two for detecting when $e$ expands) and attach event handlers for the \code{scroll} event of the elements.
+                                                      When the elements have been styled and configured properly, they are added as children to an additional container element that is injected into $e$.
           \item\label{itm:erd-algo-original-scroll-5} The current size of $e$ is stored and the scrollbars of the injected elements are positioned correctly.
           \item\label{itm:erd-algo-original-scroll-6} The algorithm waits for the \code{scroll} event handlers to be called by the layout engine (they are called since the previous step repositioned the scrollbars).
-          \item\label{itm:erd-algo-original-scroll-7} When both handlers have been called, the installation is finished and observers can be notified on resize events of $e$ when \code{scroll} events occur.
+          \item\label{itm:erd-algo-original-scroll-7} When both handlers have been called, the injection is finished and observers can be notified on resize events of $e$ when \code{scroll} events occur.
         \end{enumerate}
         Due to problems such as layout thrashing, bugs and an undesired \gls{API}, the implementation provided by \cite{eq_imp_css-element-queries} was completely rewritten.
         Layout thrashing can be avoided by using the leveled batch processor described in Section~\ref{sec:plugin-api}.
@@ -1896,6 +1892,8 @@
         \todo[inline]{Write about the MutationObserver approach? Need to know the problems with the approach in order to write about GSS. Perhaps there are no problems, and it really is what should be used for ELQ.}
         \todo[inline]{Write about the flow-based approach.}
         \todo[inline]{It is stated in Related work that original scroll and flow based approaches have limitations and bugs. Describe them here.}
+        \todo[inline]{Have a look at under/over-flow approach: \url{https://github.com/FremyCompany/prollyfill-min-width/blob/master/polyfill-min-width.js} and \url{http://www.backalleycoder.com/2013/03/14/oft-overlooked-overflow-and-underflow-events/}. Might be something for Safari. Could be nice to at least know how it performs/behaves.}
+        \todo[inline]{Write that for IE the native resize listener is used.}
 
       % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       % %%%%%%%%%%%%%%%%%%%%%%%%%%%% Detecting runtime cycles
@@ -2186,9 +2184,9 @@
         The optimized \gls{ELQ} version of the scroll-based solution will also be evaluated.
 
         The object-based solution performs well when detecting resize events.
-        However, installing \code{object} elements is quite a heavy task.
+        However, injecting \code{object} elements is quite a heavy task.
         See figure~\ref{fig:erd-original-object} for graphs that show the performance of the object-based solution.
-        As shown by the graphs, the installation can be performed with adeqaute performance as long as the number of elements is low.
+        As shown by the graphs, the injection can be performed with adeqaute performance as long as the number of elements is low.
         The solution does not scale well as the number of element increases.
         \todo{Maybe be less pessimistic as Safari might have to use the object solution?}
         \begin{figure}[h]
@@ -2203,11 +2201,11 @@
                       grid=major, % Display a grid
                       grid style={dashed,gray!30}, % Set the style
                       xlabel=Number of elements, % Set the labels
-                      ylabel=Installation time,
+                      ylabel=Injection time,
                       y unit=s, % Set the respective units
                       legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                     ]
-                    \addplot+[red, mark options={red}] table[x=n elements,y=install time,col sep=comma] {./data/erd-object-original.csv};
+                    \addplot+[red, mark options={red}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-object-original.csv};
                     \legend{Original object-based solution}
                   \end{axis}
                 \end{tikzpicture}
@@ -2233,7 +2231,7 @@
                 \end{axis}
               \end{tikzpicture}
             \end{minipage}
-          \caption{The installation performance of the object-based solution. The left graph shows the installation time. The right graph shows the heap memory used when all \code{object} elements have been installed.}
+          \caption{The injection performance of the object-based solution. The left graph shows the injection time. The right graph shows the heap memory used when all \code{object} elements have been injected.}
           \label{fig:erd-original-object}
           \end{center}
         \end{figure}
@@ -2244,9 +2242,9 @@
         % Both scroll-based solutions have the same memory footprint (i.e., too low for reliable measurements).
 
         The scroll-based solution also performs well when detecting resize events.
-        As no \code{object} elements are injected the memory footprint is reduced significantly, which improves the installation performance.
+        As no \code{object} elements are injected the memory footprint is reduced significantly, which improves the injection performance.
         See figure~\ref{fig:erd-original-scroll} for graphs that show how the both solutions perform compared to each other.
-        It is clear that the scroll-based solution both performs and scales better than the object-based solution during installation.        
+        It is clear that the scroll-based solution both performs and scales better than the object-based solution during injection.        
         The amount of memory used by the scroll-based solution is so low that reliable measurements could not be gathered, as the number of elements was not high enough to affect the memory usage noticeably.
         \begin{figure}[h]
           \tiny
@@ -2260,11 +2258,11 @@
                       grid=major, % Display a grid
                       grid style={dashed,gray!30}, % Set the style
                       xlabel=Number of elements, % Set the labels
-                      ylabel=Installation time,
+                      ylabel=Injection time,
                       y unit=s, % Set the respective units
                       legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                     ]
-                    \addplot+[orange, mark options={orange}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-original.csv};
+                    \addplot+[orange, mark options={orange}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-original.csv};
                     \addlegendentry{Original object-based solution}
                     \addlegendentry{Scroll-based solution}
                   \end{axis}
@@ -2279,26 +2277,26 @@
                     grid=major, % Display a grid
                     grid style={dashed,gray!30}, % Set the style
                     xlabel=Number of elements, % Set the labels
-                    ylabel=Installation time,
+                    ylabel=Injection time,
                     y unit=s, % Set the respective units
                     legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                   ]
-                  \addplot+[orange, mark options={orange}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-original.csv};
-                  \addplot+[red, mark options={red}] table[x=n elements,y=install time,col sep=comma] {./data/erd-object-original.csv};
+                  \addplot+[orange, mark options={orange}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-original.csv};
+                  \addplot+[red, mark options={red}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-object-original.csv};
                   \addlegendentry{Original object-based solution}         
                   \addlegendentry{Scroll-based solution}
                 \end{axis}
               \end{tikzpicture}
             \end{minipage}
-          \caption{The installation performance of the original scroll-based element resize detection solution provided by \cite{eq_imp_css-element-queries} and originally created by \cite{backalley}. The left graph shows the installation time of the scroll-based solution. The right graph also includes the original object-based solution for reference. The heap memory usage graph has been omitted as the memory usage for the scroll-based solutions are near constant.}
+          \caption{The injection performance of the original scroll-based element resize detection solution provided by \cite{eq_imp_css-element-queries} and originally created by \cite{backalley}. The left graph shows the injection time of the scroll-based solution. The right graph also includes the original object-based solution for reference. The heap memory usage graph has been omitted as the memory usage for the scroll-based solutions are near constant.}
           \label{fig:erd-original-scroll}
           \end{center}
         \end{figure}
 
         Recall that the scroll-based solution was rewritten and optimized; which is referred to as the \gls{ELQ} version of the scroll-based solution.
-        By avoiding layout thrashing, the installation performance was imporoved significantly.
+        By avoiding layout thrashing, the injection performance was imporoved significantly.
         See figure~\ref{fig:erd-elq-scroll} for graphs that show how the it performs compared to the other solutions.
-        As evident in the figure, the optimized \gls{ELQ} solution has significantly reduced installation times compared to the other two.
+        As evident in the figure, the optimized \gls{ELQ} solution has significantly reduced injection times compared to the other two.
         The \gls{ELQ} solution also scales better, as more clearly shown in figure~\ref{fig:erd-solutions-regressed} that includes polynomial regression graphs for all three solutions.
         Both scroll-based solutions have the same memory footprint (i.e., too low for reliable measurements).
         \begin{figure}[h!]
@@ -2318,11 +2316,11 @@
                       grid=major, % Display a grid
                       grid style={dashed,gray!30}, % Set the style
                       xlabel=Number of elements, % Set the labels
-                      ylabel=Installation time,
+                      ylabel=Injection time,
                       y unit=s, % Set the respective units
                       legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                     ]
-                    \addplot+[blue, mark options={blue}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-elq.csv};
+                    \addplot+[blue, mark options={blue}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-elq.csv};
                     \addlegendentry{ELQ scroll-based solution}
                   \end{axis}
                 \end{tikzpicture}
@@ -2336,13 +2334,13 @@
                     grid=major, % Display a grid
                     grid style={dashed,gray!30}, % Set the style
                     xlabel=Number of elements, % Set the labels
-                    ylabel=Installation time,
+                    ylabel=Injection time,
                     y unit=s, % Set the respective units
                     legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                   ]
-                  \addplot+[red, mark options={red}] table[x=n elements,y=install time,col sep=comma] {./data/erd-object-original.csv};
-                  \addplot+[orange, mark options={orange}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-original.csv};
-                  \addplot+[blue, mark options={blue}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-elq.csv};
+                  \addplot+[red, mark options={red}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-object-original.csv};
+                  \addplot+[orange, mark options={orange}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-original.csv};
+                  \addplot+[blue, mark options={blue}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-elq.csv};
 
                   \addlegendentry{Original object-based solution}
                   \addlegendentry{Scroll-based solution}
@@ -2350,7 +2348,7 @@
                 \end{axis}
               \end{tikzpicture}
             \end{minipage}
-          \caption{The installation performance of the optimized \gls{ELQ} scroll-based element resize detection. The left graph shows the installation time with the original scroll-based solution graph included as reference. The right graph shows all three solutions for comparison. The heap memory usage graph has been omitted as the memory usage for the scroll-based solutions are near constant.}
+          \caption{The injection performance of the optimized \gls{ELQ} scroll-based element resize detection. The left graph shows the injection time with the original scroll-based solution graph included as reference. The right graph shows all three solutions for comparison. The heap memory usage graph has been omitted as the memory usage for the scroll-based solutions are near constant.}
           \label{fig:erd-elq-scroll}
           \end{center}
         \end{figure}
@@ -2364,13 +2362,13 @@
                   grid=major, % Display a grid
                   grid style={dashed,gray!30}, % Set the style
                   xlabel=Number of elements, % Set the labels
-                  ylabel=Installation time,
+                  ylabel=Injection time,
                   y unit=s, % Set the respective units
                   legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                 ]
-                \addplot+[red, mark options={red}] table[x=n elements,y=install time,col sep=comma] {./data/erd-object-original.csv};
-                \addplot+[orange, mark options={orange}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-original.csv};
-                \addplot+[blue, mark options={blue}] table[x=n elements,y=install time,col sep=comma] {./data/erd-scroll-elq.csv};
+                \addplot+[red, mark options={red}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-object-original.csv};
+                \addplot+[orange, mark options={orange}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-original.csv};
+                \addplot+[blue, mark options={blue}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-elq.csv};
                 \addplot[dashed,red,domain=1:1500,samples=100] {5.567042796*10^(-6)*x^2 + 4.680174396*10^(-3)*x + 6.495754669*10^(-3)};
                 \addplot[dashed,orange,domain=1:1500,samples=100] {4.533208873*10^(-6)*x^2 + 6.320377596*10^(-4)*x + 2.289566005*10^(-2)};
                 \addplot[dashed,blue,domain=1:1500,samples=100] {4.071740702*10^(-8)*x^2 + 1.823749404*10^(-4)*x + 1.527042267*10^(-2)};
@@ -2379,7 +2377,7 @@
                 \addlegendentry{ELQ scroll-based solution}
               \end{axis}
             \end{tikzpicture}
-          \caption{The installation performance of all three solutions including graph predicitions by polynomial regression.}
+          \caption{The injection performance of all three solutions including graph predicitions by polynomial regression.}
           \label{fig:erd-solutions-regressed}
           \end{center}
         \end{figure}
@@ -2388,18 +2386,18 @@
         As shown, great performance can be achieved with the optimized \gls{ELQ} scroll-based solution in Chrome.
         Unfortunately, there is no silver bullet to observing element resize events; as the other browsers behave differently.
         See table~\ref{table:erd-layout-engines} for performance numbers of different browsers.
-        The scroll-based solution is preferred for Chrome, as the installation is 2000 \% faster than the object-based solution while the resize detection performance is the same for both solutions.
+        The scroll-based solution is preferred for Chrome, as the injection is 2000 \% faster than the object-based solution while the resize detection performance is the same for both solutions.
         In FireFox, the object-based solution detects resize events 200 \% faster than the scroll-based solution (still, 100 ms for detecting resize events is acceptable).
-        However, the installation time needed for the object-based solution is 550 \% of the time needed for the \gls{ELQ} scroll-based solution.
+        However, the injection time needed for the object-based solution is 550 \% of the time needed for the \gls{ELQ} scroll-based solution.
         The scroll-based solution is therefore probably desired in FireFox for the general use case.
         In Safari, the \gls{ELQ} scroll-based solution detects resize events in 800 ms while the object-based solution detects them in 25 ms (3200 \% faster).
-        Unfortunately, installation of the object-based solution is 300 \% slower than the \gls{ELQ} scroll-based solution.
+        Unfortunately, injection of the object-based solution is 300 \% slower than the \gls{ELQ} scroll-based solution.
         Since a delay of 800 ms when detecting resize events is undesired in most use cases, the object-based solution is preferred is Safari.
         \todo{Write that the scroll-based solution probably has a bug that makes it perform so bad? In only perfoms bad when expanding the element, not shrinking it... This however seem to be a bug with Safari, not the implementation.}
         \begin{table}[ht]\center
           \tiny
           \begin{tabular}[t]{ l l l l l l l }
-            \multirow{2}{*}{Layout engine} & \multicolumn{2}{c}{Installation} & \multicolumn{2}{c}{Resize detection} \\
+            \multirow{2}{*}{Layout engine} & \multicolumn{2}{c}{Injection} & \multicolumn{2}{c}{Resize detection} \\
             & scroll & object & scroll & object \\
             \hline
             Blink   & \textbf{30 ms}   & 600 ms    & 30 ms   & 30 ms           \\
