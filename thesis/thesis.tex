@@ -551,24 +551,34 @@
         \todo[inline]{Philipp: I would add: Ways in which modularity is broken, and why modular development is still an issue today (otherwise, this thesis wouldnt be needed).}
         \todo[inline]{Define some terminology. Write that the "user" of a module is not the end-user. The thesis uses the word "user" of a module quite often, need to define what that is exactly.}
       \subsection{The problem of responsive modules}\label{sec:rwd-modular-problem}
-        Recall from Section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} respond to size changes.
-        \todo[color=red]{Tomas: Or that modules can programatically work in many different sizes}
-        \todo[color=green]{Marcos: Maybe embellish that bit... "...respond to size change, so that a document may be usable on many screen sizes, resolutions, pixel-densities, and media." or something like that.}
-        \Gls{responsive} \gls{web} design implements this by using \gls{media queries}, applying conditional style declarations with relation to the \gls{viewport} size.
+        Recall from Section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} respond to size changes, so that a document may be usable on many screen sizes, resolutions, pixel-densities, and media.
         In Section~\ref{sec:modularity} the desire for building modular \gls{web} components was presented.
-        One positive outcome of building applications in a modular way is that general components become reusable.
-        Since the only way of applying conditional style declarations to \glspl{element} today is by using \gls{media queries}, all \gls{responsive} styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the application layout).
-        The implication of this is that the \gls{HTML} and \gls{JavaScript} can be written in a modular way, but the \gls{CSS} is left for the user of the module (application) to write which somewhat defeats the purpose of writing modules.
-        So developers today have two choices: writing modules that are not \gls{responsive} but \gls{encapsulated}, or writing modules that are \gls{responsive} but not \gls{encapsulated} (leaving the styling to the user).
+        One positive outcome of building applications in a modular way is that general components become reusable and complexity is reduced.
+        Therefore, it is desired to extend the responsive web design concept to also let modules respond to size changes so that a module may be usable in many layouts.
+        Since the only way of conditionally style \glspl{element} is by using \gls{media queries}, all \gls{responsive} styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the application layout).
+        The implication of this is that the \gls{HTML} and \gls{JavaScript} can be written in a modular, way but the \gls{CSS} is left for the user of the module to write which somewhat defeats the purpose of writing modules.
+        So developers today have two choices: writing modules that are not \gls{responsive} and \gls{encapsulated}, or writing modules that are \gls{responsive} and not \gls{encapsulated} (leaving the styling to the user).        
+        \paragraph{Example}
+        Suppose that an encapsulated responsive module is to be developed.
+        The module should be colored red when its width is narrow and blue when its width is wide.
+        Further, suppose that media queries are used to conditionally style the module according to the defined behavior.
+        As an example, four module instances with different widths are used by a page.
+        See figure~\ref{fig:problem-eq} for the desired behavior of the module instances on the example page.
+        \begin{figure}[ht]
+          \centering
+          \begin{minipage}{.5\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{images/eq-big}
+          \end{minipage}%
+          \caption{The desired behavior is that the small module instances should be colored red since their widths are narrow, and the big instance should be blue since its width is wide.}
+          \label{fig:problem-eq}
+        \end{figure}
 
-        An identified solution to this is element queries, which allows conditional styles to be applied based on any criteria for any \gls{element}.
-        Figure~\ref{fig:mq-vs-eq} shows the problem with \gls{media queries} and the element query solution.
-        The typical use case is to write conditional styles to be applied based on the container \gls{element} size.
-        Although the size of the container \gls{element} is typically the most interesting element query with \gls{responsive} \gls{web} design, element queries as a concept does not need to be limited to that.
-        It is also possible to apply conditional styles by any \gls{element} display property, color, text alignment, and so on.
-        Theoretically it should be possible to query any style property of an \gls{element}, but the focus will be the \code{width} and \code{height} properties since they are the most interesting in \gls{responsive} \gls{web} design.
-
-        \begin{figure}
+        Unfortunately, media queries can not be used to achieve this behavior (with the module still being encapsulated).
+        See figure~\ref{fig:problem-mq} for the actual behavior of the example page.
+        As evident in the figure, the page is broken since either all instances are colored blue or red.
+        This is due to media queries only targeting the viewport, and not the actual width given to the instances.
+        \begin{figure}[ht]
           \centering
           \begin{minipage}{.5\textwidth}
             \centering
@@ -576,20 +586,25 @@
           \end{minipage}%
           \begin{minipage}{.5\textwidth}
             \centering
-            \includegraphics[width=\linewidth]{images/eq-big}
+            \includegraphics[width=\linewidth]{images/mq-small}
           \end{minipage}
           \caption{
-            The problem of \gls{media queries} and the element query solution.
-            Both images shows four instances of a module in different sizes.
-            The module is \gls{responsive}, so when it is small it should change color to red and change the inner text a bit.
-            The left version is built with \gls{media queries}; hence all module instances stay blue even though some are small (only a smaller \gls{viewport} will trigger the modules to change style).
-            The right version is built with element queries, hence the modules display differently depending on the given size that each module has, which is the desired behavior.}
-          \label{fig:mq-vs-eq}
+            The module instances of the page do not behave as desired because they are conditionally styled by the viewport width, which does not reflect the individual width of the instances.
+            All instances are always either colored blue or red, depending on the viewport width.
+            In the left figure, the viewport is wide and therefore all instances are colored blue.
+            In the right figue, the viewport is narrow and therefore all instances are colored red.
+          }
+          \label{fig:problem-mq}
         \end{figure}
 
+        \paragraph{The solution}
+        \Gls{responsive} modules should be able to react and change style by the size of their own sizes, not the \gls{viewport} size.
+        An identified solution to this is element queries, which allows conditional styles to be applied based by \gls{element} criterion.
+        The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries \cite{eq_article_localised-css,eq_article_backalley,eq_article_mqhack,eq_article_tabatkjr,eq_article_filament,eq_article_tyson,eq_article_neal,eq_article_css-tricks,eq_article_hugo,eq_article_fremycompany,eq_article_discource,eq_article_matt}.
+        As stated in Section~\ref{sec:problem}, \gls{third-party} implementation efforts have been made with moderate success.
+        The \gls{W3C} receives requests and questions about it, and the \gls{RICG} have started writing a draft \cite{ricg_draft} about element queries use cases.
+        \todo{Should this really be here? Taken from the intro... Maybe it should stay there.}
 
-      \todo[inline]{The content of this section needs to be rewritten as it has been just copy-pasted from different parts of the thesis.}
-      \todo[inline]{Present the problem that element queries solves. I think this is scattered a bit in the introduction and in the eq chapter. Try to gather it all here.}
       \todo[inline]{Describe general use case here or in 3.1?}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Layout engines
