@@ -549,13 +549,6 @@
         \todo[inline]{Philipp: I would add: Ways in which modularity is broken, and why modular development is still an issue today (otherwise, this thesis wouldnt be needed).}
         \todo[inline]{Define some terminology. Write that the "user" of a module is not the end-user. The thesis uses the word "user" of a module quite often, need to define what that is exactly.}
       \subsection{The problem of responsive modules}\label{sec:rwd-modular-problem}
-        \todo[inline]{The content of this section needs to be rewritten as it has been just copy-pasted from different parts of the thesis.}
-
-        \todo[inline]{Present the problem that element queries solves. I think this is scattered a bit in the introduction and in the eq chapter. Try to gather it all here.}
-        \todo[inline]{Describe a common use case? The thesis talks about "the common/general use case" a lot, but never really defines what that is.}
-
-        \todo[inline]{Make additional sections: "common/general use cases" and "definition" to include the text below?}
-
         Recall from Section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} respond to size changes.
         \todo[color=red]{Tomas: Or that modules can programatically work in many different sizes}
         \todo[color=green]{Marcos: Maybe embellish that bit... "...respond to size change, so that a document may be usable on many screen sizes, resolutions, pixel-densities, and media." or something like that.}
@@ -592,6 +585,10 @@
           \label{fig:mq-vs-eq}
         \end{figure}
 
+
+      \todo[inline]{The content of this section needs to be rewritten as it has been just copy-pasted from different parts of the thesis.}
+      \todo[inline]{Present the problem that element queries solves. I think this is scattered a bit in the introduction and in the eq chapter. Try to gather it all here.}
+      \todo[inline]{Describe general use case here or in 3.1?}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Layout engines
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1060,8 +1057,8 @@
       \end{lstlisting}
 
       \todo[inline]{Should it really also be discussed in detail how element queries solve the problem?}
-      \todo[inline]{If a better example is found to be used in \ref{sec:rwd-modular-problem}, the same example can be used here and shown how element queries make it behave as expected}.
-      \todo[inline]{Describe common use case. Just really simply that w3c is assuming size eq's and that RICG thinks that width will be the most common. RWD uses almost only width, and etc.}
+      \todo[inline]{If a better example is found to be used in \ref{sec:rwd-modular-problem}, the same example can be used here and shown how element queries make it behave as expected.}
+      \todo[inline]{Describe common use case. Just really simply that w3c is assuming size eq's and that RICG thinks that width will be the most common. RWD uses almost only width, and etc. Could also point out that Bootstrap (which is the de facto resposnive framework) uses width breakpoints, etc.}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Problems
@@ -1860,12 +1857,12 @@
           \item\label{itm:erd-algo-original-scroll-4} Create the four elements needed (two for detecting when $e$ shrinks, and two for detecting when $e$ expands) and attach event handlers for the \code{scroll} event of the elements.
                                                       When the elements have been styled and configured properly, they are added as children to an additional container element that is injected into $e$.
           \item\label{itm:erd-algo-original-scroll-5} The current size of $e$ is stored and the scrollbars of the injected elements are positioned correctly.
-          \item\label{itm:erd-algo-original-scroll-6} The algorithm waits for the \code{scroll} event handlers to be called by the layout engine (they are called since the previous step repositioned the scrollbars).
-          \item\label{itm:erd-algo-original-scroll-7} When both handlers have been called, the injection is finished and observers can be notified on resize events of $e$ when \code{scroll} events occur.
+          \item\label{itm:erd-algo-original-scroll-6} The algorithm waits for the \code{scroll} event handlers to be called asynchronously by the layout engine (they are called since the previous step repositioned the scrollbars).
+                                                      When both handlers have been called, the injection is finished and observers can be notified on resize events of $e$ when \code{scroll} events occur.
         \end{enumerate}
         Due to problems such as layout thrashing, bugs and an undesired \gls{API}, the implementation provided by \cite{eq_imp_css-element-queries} was completely rewritten.
-        Layout thrashing can be avoided by using the leveled batch processor described in Section~\ref{sec:plugin-api}.
-        The batch processed version performs the algorithm steps in the following levels:
+        Layout thrashing can be avoided by using the leveled batch processor described in Section~\ref{sec:imp_batch_processor}.
+        The rewritten version (from now on referred to as the \gls{ELQ} scroll-based solution) is performs the algorithm steps in the following levels using the batch processor:
         \begin{enumerate}
           \item\label{itm:erd-algo-scroll-level-1}
             \textbf{The read level:}
@@ -1880,13 +1877,13 @@
             \todo{Grammar?}
             Step \ref{itm:erd-algo-original-scroll-5} is performed, which forces the layout engine to perform a layout.
         \end{enumerate}
-        Since mutation of scrollbars are not queued by layout engines, they need to be performed after that all queueable mutations have been executed.
+        Since repositioning a scrollbar forces a layout, such operations need to be performed after that all other queueable operations have been executed.
         Therefore, step \ref{itm:erd-algo-original-scroll-5} is performed in level~\ref{itm:erd-algo-scroll-level-3} as the last step.
-        Step \ref{itm:erd-algo-original-scroll-6} and \ref{itm:erd-algo-original-scroll-6} are initiated by the layout engine asynchronously.
-        Since they do interact with the \gls{DOM}, they do not need to batch processed.
-        The solution was successfuly optimized, and performs excellent on most browsers as shown in Section~\ref{sec:eval-perf-erd}.
-
-        \todo{Describe the leveled batch processor in detail somewhere?}
+        Layout engines can theoretically queue the scrollbar repositioning operations too as they do not affect the layout of each other.
+        The Blink layout engine is able to do so, which results in exceptional performance as shown in Section~\ref{sec:eval-perf-erd}.
+        Gecko and WebKit does not yet do so and therefore each iteration in step~\ref{itm:erd-algo-original-scroll-5} forces a layout.
+        However, it is still beneifical to batch process the algorithm for such layout engines since only pure layouts need to be performed (instead of having to recompute styles and synchronize the \gls{DOM} and render trees before each layout).        
+        As step~\ref{itm:erd-algo-original-scroll-6} is performed by the layout engine asynchronously and does not interact with the \gls{DOM}, it does not need to be batch processed.
 
         \todo[inline]{Write how the bugs were fixed in the scroll approach?}
         \todo[inline]{Write about the MutationObserver approach? Need to know the problems with the approach in order to write about GSS. Perhaps there are no problems, and it really is what should be used for ELQ.}
@@ -1899,22 +1896,23 @@
       % %%%%%%%%%%%%%%%%%%%%%%%%%%%% Detecting runtime cycles
       % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       \subsection{Detecting runtime cycles}\label{sec:imp_cycle_detector}
-        As described in Section~\ref{sec:arcithecture}, \gls{ELQ} needs a subsystem that is able to detect cyclic element style state updates, in order to warn about or prevent cyclic rules.
+        As described in Section~\ref{sec:arcithecture}, \gls{ELQ} needs a subsystem that is able to detect cyclic element style state updates, in order to warn about or handle cyclic rules.
         As the cycle detection system is a core subsystem of \gls{ELQ}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect cyclic updates.
 
-        Recall from Section~\ref{sec:plugin-api} that the cycle detection subsystem has a function \code{isUpdateCyclic} that is to tell if the desired update is part of a cycle or not.
-        Further, recall from Section~\ref{sec:cyclic-rules} that cycles may depend on multiple factors (e.g., content, browser behavior, \gls{CSS}, \gls{JavaScript}).
-        Since a cycle graph can be both spread over different factors and chained; a simplistic approach to detecting cycles has been taken.
+        Recall from Section~\ref{sec:plugin-api} that the cycle detection subsystem has a function \code{isUpdateCyclic} that tells if the desired update seems to be part of a style cycle or not.
+        Further, recall from Section~\ref{sec:cyclic-rules} that factors of a cycle may be multiple (e.g., content, browser behavior, \gls{CSS}, \gls{JavaScript}).
+        Due to cycle graphs being non-trivial a simplistic approach to detecting cycles has been taken.
         The idea is to keep track of all style state changes to elements in order to tell if new state changes are cyclic by examining the state history.
-        This approach is simple to implement and quite sufficient for detecting and breaking cycles.
+        This approach is simple to implement and quite sufficient for detecting cycles.
+
         It should be noted that all state cycles are not undesired, as some applications might have features that result in elements transitioning between multiple style states (e.g., a menu might be hidden and revealed by user input, which to the cycle detection system seems like the menu element suffers from cyclic rules).
         This is perhaps the biggest drawback with such simple approach; a more intelligent cycle detection algorithm might be able to distinguish between desired and undesired cycles.
-        To mitigate the false positive detections, two parameters can be tuned by the user of the system: the time parameter $T$ that defines how long the history should be, and the parameter $C$ that defined how many cycles should be allowed per element before flagging it as a cycle to the user.
+        To mitigate the false positive detections, two parameters can be tuned by the user of the system: the time parameter $T$ that defines how long the history should be in time, and the parameter $C$ that defined how many cycles should be allowed per element before flagging it as a cycle to the user.
         % This approach will only be able to detect cycles as they are about to happen, which might be 
         
         Recall that the \code{isUpdateCyclic} function requires an element $e$ parameter and state $s$ parameter.
-        For each element $e$, an chronologically ordered list of states $L_{states}$ is kept.
-        For each call of \code{isUpdateCyclic}, the following cycle detection algorithm is performed:
+        For each element $e$, a chronologically ordered list of states $L_{states}$ is kept.
+        For each call to the function, the following cycle detection algorithm is performed:
         \begin{enumerate}
           \item Construct $L_{states}$ if needed.
           \item Constuct an update tuple $u$ that consists of the current time $t$ and the new state $s$.
@@ -1922,9 +1920,11 @@
           \item Iterate $L_{states}$ from beginning to end (starting with the most recent update tuple).
           \begin{enumerate}
             \item\label{itm:cycle-detection-step-loop}
-              If the time $t_i$ (of the current update tuple $u_i$ of $L_{states}$) and $t$ differs more the time parameter $T$, then $u_i$ is regarded as too old to consider.
-              Since $L_{states}$ is chronologically ordered all update tuples after $u_i$ must also be too old.
-              Therefore, all tuples from (and including) $u_i$ are removed from $L_{states}$. Next step is \ref{itm:cycle-detection-step-prepend-tuple}.
+              If the time $t_i$ (of the current update tuple $u_i$ of $L_{states}$) and $t$ differs more than the time parameter $T$, then $u_i$ is regarded as too old to consider.
+              Since $L_{states}$ is chronologically ordered all update tuples after $u_i$ must then also be too old.
+              Therefore, all tuples from (and including) $u_i$ are removed from $L_{states}$.
+              Next step is \ref{itm:cycle-detection-step-prepend-tuple}.
+              Of course, removal is not performed unless $u_i$ is too old.
             \item If the state $s_i$ (of the current update tuple $u_i$ of $L_{states}$) and $s$ are equal, then increment the cycle counter $c$.
             \item If $c$ is greater than the parameter $C$, then a cycle has been detected. The function should then \textbf{return true}.
             \item The next update tuple in the list is considered. Next step is \ref{itm:cycle-detection-step-loop}.
@@ -1932,10 +1932,6 @@
           \item\label{itm:cycle-detection-step-prepend-tuple} Prepend $u$ to $L_{states}$ (i.e., $u$ will be the most recent element in the list).
           \item No cycle has been detected, and therefore the function should \textbf{return false}.
         \end{enumerate}
-        Since the algorithm neither interacts with the \gls{DOM}, handles any large data structures, or performs any heavy computations it is very fast.
-        It takes \textasciitilde0.02 ms to execute the \code{isUpdateCyclic} function.
-        \todo{Should this measurement be given in eval? But then eval will be really small?}
-        % See figure~\ref{} for a timeline of the \code{elq-breakpoints} plugin handling a resize event, where it is visually shown how insignificant the impact of the cycle detector system has on the total performance.
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Empirical Evaluation
@@ -1944,24 +1940,23 @@
     This chapter presents the empirical evaluation that has been done of the \gls{ELQ} library.
     \todo{Write that the techincal goals states of ELQ will be evaluated?}
 
-    Section~\ref{sec:eval-bootstrap} evaluates the \glspl{API} by a case study that rewrites the popular \gls{Bootstrap} framework to use element queries.
-    \gls{Bootstrap} 3.3.2 uses media queries heavily to provide responsive components and \gls{CSS} classes that is often desired to use in web applications.
-    By using element queries instead instead, the components and classes become encapsulated and can be used in responsive modules.
+    Section~\ref{sec:eval-bootstrap} evaluates the \glspl{API} by a case study that alters the popular \gls{Bootstrap} framework to use element queries.
+    \gls{Bootstrap} 3.3.2 uses media queries to provide responsive \gls{CSS} classes that often are desired to use in web applications.
+    By using element queries instead, the classes become encapsulated and can be used in responsive modules.
 
-    Sectin~\ref{sec:eval-performance} evaluates the performance by measuring the \gls{ELQ} in different configurations.
+    Section~\ref{sec:eval-performance} evaluates the performance by measuring \gls{ELQ} in different configurations.
     Key subsystems are also evaluated independently so that they can be compared to similar subsystems of related work.
-
-    \todo[inline]{Include evaluation about the cycle detector?}
-
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Bootstrap
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Bootstrap}\label{sec:eval-bootstrap}
-      The responsive parts of Bootstrap 3.3.2 (the grid, containers, responsive utility classes, forms, etc.) are built with media queries, and therefore they only behave as desired when the Bootstrap elements can use the full width of the viewport (no height breakpoints are being used).
+    \section{ELQ Bootstrap}\label{sec:eval-bootstrap}
+      The responsive parts of Bootstrap 3.3.2 (the grid, containers, responsive utility classes, forms, etc.) are built with media queries, and therefore only behave as desired when the Bootstrap elements can use the full width of the viewport.
+      It should be noted that no height breakpoints are being used by Bootstrap (as identified by the general use case).
+      \todo{Remove the identified by the general use case thing? Should write about the general use case somewhere.}
       This implies that modules that uses any responsive Bootstrap classes inherently only behave as desired when the module can use the full width of the viewport, which means that such modules are not encapsulated and therefore many of the benefits of modules disappear.
-      Such modules forces applications to use them in a specific layout.
-      As an example, the Bootstrap \gls{CSS} documentation page was rewritten to instead offer a two-column documentation.
+      Such modules force applications to use them in a specific layout.
+      As an example, the Bootstrap \gls{CSS} documentation page was altered to instead offer a two-column documentation.
       The two-column page presents two instances of the original \gls{CSS} documentation.
       It is shown in figure~\ref{fig:eval-bootstrap-mq-broken} that the original version of Bootstrap (that uses media queries) cannot adapt to such layout changes.
       \begin{figure}[htbp]
@@ -1975,12 +1970,13 @@
           \includegraphics[width=\linewidth]{images/bootstrap-mq-header-big}
         \end{minipage}
         \caption{
-          The responsive classes of Bootstrap cannot adapt to layout changes as shown with the two-column \gls{CSS} documentation example. 
+          The responsive classes of Bootstrap cannot adapt to layout changes as shown with the two-column \gls{CSS} documentation example.
           Both documentation instances uses media queries, which undesireably styles both columns as if they fill the whole viewport width.
           Since the columns only fill the half viewport width and are styles as they both fill the whole viewport width, the page appears broken, as shown in the left figure.
           The example will only behave as desired if the viewport width is large enough so that the width of each column is bigger than the largest media query breakpoint, as shown in the right figure.}
         \label{fig:eval-bootstrap-mq-broken}
       \end{figure}
+      \todo{The right image should maybe show how it should look instead.}
 
       In order to make Bootstrap behave as desired in any layouts the responsive parts of the framework was modified to use element queries instead of media queries by using \gls{ELQ}.
       Two Bootstrap classes have been chosen to be treated as a viewports (that will be \code{elq-breakpoint} elements): \code{container} and \code{container-fluid}.
@@ -2174,6 +2170,13 @@
       The library has been tested in the following browsers: Chrome 42.0.2311.152, FireFox 37.0.1 and Safari 8.0.6.
       Measurements and graphs show evaluations performed in Chrome unless stated otherwise.
 
+      % Have this here?
+      % Since the algorithm neither interacts with the \gls{DOM}, handles any large data structures, or performs any heavy computations it is very fast.
+      % It takes \textasciitilde0.02 ms to execute the \code{isUpdateCyclic} function.
+      % \todo{Should this measurement be given in eval? But then eval will be really small?}
+      % See figure~\ref{} for a timeline of the \code{elq-breakpoints} plugin handling a resize event, where it is visually shown how insignificant the impact of the cycle detector system has on the total performance.
+
+      \todo[inline]{Include evaluation about the cycle detector?}
       \todo[inline]{Write about the new "noclasses" option, and maybe flesh out the interplugin API section?}
       \todo[inline]{Write that as ELQ is plugin-based, it makes sense to measure the core subsystems by themselves and the plugins enabling element queries in different setups.}
       \todo[inline]{Have to measure how elq-breakpoints handles large amount of elements. It might suffor from layout thrashing since might read/write the DOM at invalid stages of the erd subsystem.}
@@ -2669,6 +2672,7 @@
 
       \todo[inline]{Investigate in how the erd system can be further optimized. Maybe DOM MutationObservers, fix layout thrashing in Safari + FireFox, etc.}
       \todo[inline]{Fulfill all technical goals. Which ones?}
+      \todo[inline]{ERD could automatically use the best solution based on the layout engine.}
 
   \printbibliography
   \clearpage
