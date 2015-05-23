@@ -250,6 +250,7 @@
     \todo[inline]{Should the subtitle be criterion instead of criteria?}
     \todo[inline]{Change all "recent", "now" and such to dates instead.}
     \todo[inline]{Invoke vs call? Seems to be same word, should settle with one of them.}
+    \todo[inline]{Should check whole thesis so that it is not written "Figures" when there are multiple figures stated.}
 
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
@@ -1672,7 +1673,8 @@
           \todo[inline]{Example of how to register the plugin with an elq instance + options?}
           \todo[inline]{Write that above is inclusive and below is exclusive? Why? Option?}
           \todo[inline]{Write about the interplugin API methods that mirror uses?}
-          \todo[inline]{Write about noclasses option.}
+          \todo[inline]{Write about noclasses option and the use case for it.}
+          \todo[inline]{If postfix=px maybe it should be supported to write elq-breakpoints-width="500px 700px" etc.}
         \subsubsection{Mirror}\label{sec:plugin-mirror}
           % As of the \gls{CSS3} specification, there is no way to select ancestor elements of an element.
           % For instance, \code{p img} is a selector that matches all image elements that are contained by a paragraph.
@@ -1971,44 +1973,42 @@
         \end{minipage}
         \caption{
           The responsive classes of Bootstrap cannot adapt to layout changes as shown with the two-column \gls{CSS} documentation example.
-          Both documentation instances uses media queries, which undesireably styles both columns as if they fill the whole viewport width.
-          Since the columns only fill the half viewport width and are styles as they both fill the whole viewport width, the page appears broken, as shown in the left figure.
-          The example will only behave as desired if the viewport width is large enough so that the width of each column is bigger than the largest media query breakpoint, as shown in the right figure.}
+          Both documentation instances uses media queries, which undesireably styles both columns as if they each fill the whole viewport width.
+          Since the columns only fill half of the viewport width and are styles as they both fill the whole viewport width, the page appears broken as shown in the left figure.
+          The pag only behaves as desired if the viewport width is large enough so that the width of each column is bigger than the largesta media query breakpoint, as shown in the right figure.}
         \label{fig:eval-bootstrap-mq-broken}
       \end{figure}
       \todo{The right image should maybe show how it should look instead.}
+      \todo{Not happy with the formulation "as if they fill the whole viewport width"}
 
-      In order to make Bootstrap behave as desired in any layouts the responsive parts of the framework was modified to use element queries instead of media queries by using \gls{ELQ}.
-      Two Bootstrap classes have been chosen to be treated as a viewports (that will be \code{elq-breakpoint} elements): \code{container} and \code{container-fluid}.
+      In order to make Bootstrap behave as desired in any layouts the responsive parts of the framework were modified to use element queries instead of media queries by using \gls{ELQ}.
+      Two Bootstrap classes have been chosen to be treated as viewports (that will be \code{elq-breakpoints} elements): \code{container} and \code{container-fluid}.
+      \code{Not happy with calling containers as viewports}
       Both classes are used in Bootstrap to define new parts of a page (e.g., a grid is required to have a container ancestor).
       They are also nestable, which makes them suitable to be used as sub-viewports.
       \todo{Not happy with calling containers for viewports. should come up with something better.}
       The \code{container} class centers content with fixed widths by different viewport sizes, and the \code{container-fluid} uses the full available width.
       The idea is to have all responsive classes conditionally styled with element queries by the size of the nearest ancestor container element.
-      This implies that all elements that contains any responsive class will be converted to \code{elq-mirror} elements since they want to mirror the breakpoints of the nearest ancestor \code{elq-breakpoints} element (e.g., the container elements).
-      Since container elements may be nested they will be both \code{elq-mirror} and \code{elq-breakpoints} elemenets.
-      Recall from section~\ref{sec:plugin-mirror} that the responsive elements must be \code{elq-mirror} elements in order to not limit the usage of the classes (i.e., limit how the elements are structured) and to enable nesting.
+      This implies that all elements that has any responsive classes will be converted to \code{elq-mirror} elements since they want to mirror the breakpoints of the nearest ancestor \code{elq-breakpoints} element (i.e., the container elements).
+      Since container elements may be nested they will be both \code{elq-mirror} and \code{elq-breakpoints} elements.
+      Recall from section~\ref{sec:plugin-mirror} that it is beneficial for responsive elements to be \code{elq-mirror} elements in order to not limit the element usage to a specific a \gls{HTML} structure.
 
       \paragraph{Altering the LESS code}
-      Bootstrap uses three width numbers for all responsive breakpoints: 768, 970 and 1170 pixels.
-      Since the Bootstrap \gls{CSS} is generated by the preprocessor \gls{LESS}, they are defined as constants as presented in listing~\ref{code:bootstrap-less-breakpoints}.
-      \begin{lstlisting}[gobble=8,label={code:bootstrap-less-breakpoints},caption={},captionpos=b]]
-        /* LESS */
+      Bootstrap mainly uses three width numbers for responsive breakpoints: 768, 970 and 1170 pixels.
+      Since the Bootstrap \gls{CSS} is generated by the \gls{LESS} preprocessor, they are defined as constants as presented in listing~\ref{code:bootstrap-less-breakpoints}.
+      \begin{lstlisting}[gobble=8,label={code:bootstrap-less-breakpoints},caption={The main breakpoints used by Bootstrap defined as \gls{LESS} constants.},captionpos=b]]
+        /* File "less/variables.less" of Bootstrap. */
         @screen-sm-min: 480px;
         @screen-md-min: 992px;
         @screen-lg-min: 1200px;
-        @screen-xs-max: (@screen-sm-min - 1);
-        @screen-sm-max: (@screen-md-min - 1);
-        @screen-md-max: (@screen-lg-min - 1);
       \end{lstlisting}
-      Notice that the numbers also includes the \code{px} postfix.
-      Recall from Section~\ref{sec:plugin-breakpoints} that the classes added by the \code{elq-breakpoints} plugin do not include the \code{px} postfix by default (e.g., if an element is above 480 pixels the class would be \code{elq-width-above-480} and not \code{elq-width-above-480px}).
-      One would need to parse and remove the postfix when needed or define new constants to be used by the element queries.
-      Fortunately, the \code{elq-breakpoints} postfix option let the user define a postfix to be added to the class numbers.
+      Notice that the numbers also include the \code{px} postfix.
+      Recall from Section~\ref{sec:plugin-breakpoints} that the breakpoint classes added by the \code{elq-breakpoints} plugin do not include the \code{px} postfix by default (i.e., if an element is above 480 pixels the class would be \code{elq-width-above-480} and not \code{elq-width-above-480px}).
+      Fortunately, the \code{elq-breakpoints} plugin may be configured to append a postfix to the breakpoint classes by the \code{postfix} option.
       By configuring the plugin to use \code{px} as postfix, the constants can be used seamlessly in the element queries.
       As shown in listing~\ref{code:bootstrap-less-breakpoints-usage}, media queries are easily replaced by element queries.
-      \begin{lstlisting}[gobble=8,label={code:bootstrap-less-breakpoints-usage},caption={},captionpos=b]]
-        /* LESS */
+      \begin{lstlisting}[gobble=8,label={code:bootstrap-less-breakpoints-usage},caption={Media queries can easily be replaced with element queries. By using the \code{elq-breakpoints} postfix option, the breakpoint constants can be used directly in the selectors.},captionpos=b]]
+        /* File "less/grid.less" of Bootstrap. */
 
         // Original Boostrap using media queries.
         .container {
@@ -2040,30 +2040,33 @@
           }
         }
       \end{lstlisting}
+      \todo{Write how many chars that differ?}
       By using the power of preprocessors, \gls{ELQ} element queries become as pleasent to work with as media queries.
       In fact, only \textasciitilde50 lines out of \textasciitilde8500 lines of Bootstrap \gls{LESS} code needed to be changed.
       Most changes were of the character shown in listing~\ref{code:bootstrap-less-breakpoints-usage}, which basically replaces the media query syntax with the \gls{ELQ} element queries syntax.
+      This is especially desired when keeping a forked project up to date with the original project, as fewer diverged lines implies a lowered risk of merge conflicts.
 
       \paragraph{Adding the \gls{ELQ} library}
-      The rewritten Bootstrap version depends on \gls{ELQ} including two plugins (i.e., \code{elq-breakpoints} and \code{elq-mirror}) and must therefore be included.
-      \gls{ELQ} and the plugins could be bunclded with the javascript of Bootstrap, but it was decided to keep them separated (as Bootstrap's other dependency, jQuery, is as well).
-      Since it is beneficial to keep the original Bootstrap \gls{API}, all \gls{ELQ} element attributes needed are added with \gls{JavaScript}.
-      The attributes could of course be stated in the markup instead; the choice is up to the user.
-      The JavaScript in listing~\ref{code:bootstrap-init-js} is an example of code that dynamically adds the required element attributes and initializes all responsive elements on the page; this code was used in the evaluation.
+      The altered Bootstrap version depends on \gls{ELQ} including two plugins (i.e., \code{elq-breakpoints} and \code{elq-mirror}) and must therefore be included.
+      \gls{ELQ} and the plugins could be bundled with the javascript of Bootstrap, but it was decided to keep them separated.
+      Bootstrap's other dependency, jQuery, is also separated from the project JavaScript.
+      Since it is beneficial to not require changes to existing Bootstrap empowered pages, all \gls{ELQ} element attributes are added with \gls{JavaScript}.
+      The attributes could of course be written directly in the \gls{HTML} instead; the choice is up to the user.
+      Listing~\ref{code:bootstrap-init-js} presents an example of such JavaScript code that dynamically adds the required element attributes and initializes all responsive elements.
       \begin{lstlisting}[gobble=8,label={code:bootstrap-init-js},caption={Example of JavaScript code that adds the required \gls{ELQ} attributes dynamically to all responsive elements and initializes them.},captionpos=b]]
         //Creating the ELQ instance needs to be done once.
         var elq = Elq();
         elq.use(elqBreakpoints, {
-          postfix: "px" // Configures elq to use "px" as postfix.
+          postfix: "px"
         });
         elq.use(elqMirror);
 
-        // This function initiates all responsive elements in the markup.
+        // This function initiates all responsive elements of the document.
         function init(elq) {
           // Find all elements that have responsive classes.
-          var breakpointsElements = [...]; //body, .container-fluid, .navbar, ...
-          var containerElements   = [...]; //.container
-          var mirrorElements      = [...]; //.visible-xs, .col-md-1, .col-md-12, ...
+          var breakpointsElements = [...]; // body, .container-fluid, .navbar, ...
+          var containerElements   = [...]; // .container
+          var mirrorElements      = [...]; // .visible-xs, .col-md-1, .col-md-12, ...
 
           // Add all attributes for the elq-breakpoints elements.
           breakpointsElements.concat(containerElements).forEach(function (element) {
@@ -2095,18 +2098,18 @@
       \end{lstlisting}
 
       \paragraph{The result}
-      The rewriting of the \gls{LESS} code, the addition of the \gls{ELQ} library and the initating JavaScript is all that is required to make the double column documentation page behave as expected.
-      Figure~\ref{fig:eval-bootstrap-mq-eq-header}, \ref{fig:eval-bootstrap-mq-eq-matrix} and \ref{fig:eval-bootstrap-mq-eq-grid} show examples of the double column documentation page empowered by the \gls{ELQ} version of Bootstrap, with the original Bootstrap version as a reference that shows how the page would look like without element queries.
+      Altering the \gls{LESS} code, including the \gls{ELQ} library and the initating JavaScript is all that is required to make the double column documentation page behave as desired.
+      Figure~\ref{fig:eval-bootstrap-mq-eq-header}, \ref{fig:eval-bootstrap-mq-eq-matrix} and \ref{fig:eval-bootstrap-mq-eq-grid} shows different sections of the double column documentation page empowered by \gls{ELQ} Bootstrap.
+      For reference, the same sections using the original Bootstrap are also included that shows how they behave without element queries.
       As shown in the figures, the double column documentation page using the original Bootstrap styles the two columns as if they both had the whole viewport width available.
       Therefore the two columns intersects each other because some content elements are styled wider than a column.
-      Basically, both two half-page columns are styled as they both had the whole viewport width.
-      The double column documentation page using the new \gls{ELQ} Bootstrap on the other hand enables all responsive elements to style themselves according to themselves or a parent container.
-      Therefore, the two half-page columns detects that they only have half the viewport width and styles themselves accordingly.
-      The result is the same as having two documentation sites of the original Bootstrap in two \code{iframe} elements as two columns (since \code{iframe} elements creates a separate viewport).
+      The double column documentation page using \gls{ELQ} Bootstrap on the other hand enables all responsive elements to style themselves according a parent container element.
+      Therefore, the two half-page columns detect that they only have half the viewport width and style themselves accordingly.
+      The visual result is the same as having two documentation sites of the original Bootstrap in two \code{iframe} elements as two columns (since \code{iframe} elements creates a separate viewport).
       \todo[inline]{Write that the original CSS documentation behaves as expected out of the box (not changes to the html)?}
       \todo[inline]{Write that such small code changes (also maybe state the total code changes of the repo) really eases merging of new updates to the upstream repo.}
 
-      \begin{figure}[htbp]
+      \begin{figure}[hp!]
         \centering
         \begin{minipage}{.5\textwidth}
           \centering
@@ -2117,13 +2120,13 @@
           \includegraphics[width=\linewidth]{images/bootstrap-eq-header-small}
         \end{minipage}
         \caption{
-          The left image shows the original media query empowered Bootstrap header, which is broken since the content of both columns are styled as if they had the full viewport width.
-          The right image shows same section of the same page, using the rewritten \gls{ELQ} Bootstrap.
+          The left image shows the original Bootstrap header, which is broken since the content of both columns are styled as if they had the full viewport width.
+          The right image shows same section of the same page, using \gls{ELQ} Bootstrap.
           With element queries, both columns know that they only have half of the viewport width and therefore style themselves accordingly.}
         \label{fig:eval-bootstrap-mq-eq-header}
       \end{figure}
 
-      \begin{figure}[htbp]
+      \begin{figure}[htb!]
         \centering
         \begin{minipage}{.5\textwidth}
           \centering
@@ -2136,13 +2139,13 @@
         \caption{
           The left image shows the original Bootstrap responsive utilities classes matrix.
           Here it is clear that both columns are styled as the have the full viewport width as they display the large utility classes in green, which means that both columns think that they have the full width of the viewport.
-          The right image shows same section of the same page, using the rewritten \gls{ELQ} Bootstrap.
+          The right image shows same section of the same page, using \gls{ELQ} Bootstrap.
           Only the small utility classes are displayed in green as desired, since both columns only have half of the width available.
         }
         \label{fig:eval-bootstrap-mq-eq-matrix}
       \end{figure}
 
-      \begin{figure}[htbp]
+      \begin{figure}[htb!]
         \centering
         \begin{minipage}{.5\textwidth}
           \centering
@@ -2155,18 +2158,20 @@
         \caption{
           The left image shows the original Bootstrap responsive grid.
           It is styled as if both columns have the full viewport width available, and therefore the grids partly intersect each other.
-          The right image shows same section of the same page, using the rewritten \gls{ELQ} Bootstrap.
+          The right image shows same section of the same page, using \gls{ELQ} Bootstrap.
           The grids detects that only the half viewport width is available, and styles themselves accordingly.
         }
         \label{fig:eval-bootstrap-mq-eq-grid}
       \end{figure}
 
+      \todo[inline]{Write that the original Bootstrap CSS documentation page worked out of the box with the ELQ Bootstrap version}
 
+    \pagebreak % TODO: Remove?
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Performance
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Performance}\label{sec:eval-performance}
-      The following tests were performed on a computer with a 2.7 GHz processor and 16GB of memory\footnote{The serial number of the computer is C02N4G9TG3QD and the vendor is Apple Inc. CPU: 2.5 GHz Intel Core i7. Memory: 16 GB 1600 MHz DDR3. GPU: Intel Iris Pro 1536 MB. Storage Disk: 500 GB SSD.}.
+      The following tests were performed on a computer with a 2.7 GHz processor and 16GB of memory\footnote{The serial number of the computer is C02N4G9TG3QD and the vendor is Apple Inc. CPU: 2.5 GHz Intel Core i7. Memory: 16 GB 1600 MHz DDR3. GPU: Intel Iris Pro 1536 MB.}.
       The library has been tested in the following browsers: Chrome 42.0.2311.152, FireFox 37.0.1 and Safari 8.0.6.
       Measurements and graphs show evaluations performed in Chrome unless stated otherwise.
 
