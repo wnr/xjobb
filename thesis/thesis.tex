@@ -252,6 +252,7 @@
     \todo[inline]{Invoke vs call? Seems to be same word, should settle with one of them.}
     \todo[inline]{Should check whole thesis so that it is not written "Figures" when there are multiple figures stated.}
     \todo[inline]{Write a little intro to the reader that "user" is not the "end-user".}
+    \todo[inline]{Write Blink, Gecko and WebKit instead of the browser names. Reason: Now writing that good performance is achieved in Chrome, but I'm sure the same is achived in Opera as it uses Blink. Should double check this though.}
 
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
@@ -612,7 +613,7 @@
       The render process will not be described, as it is not relevant for element queries.
 
       Section~\ref{sec:layout-engine-reference} to Section~\ref{sec:layout-process} describes briefly how layout engines operates and also presents key layout engine concepts.
-      The role of the layout engine and a reference architecture for browsers is also presented, along with the market shares of the major layout engines.
+      The role of the layout engine and a reference architecture for browsers is also presented.
       \todo{Write that the layout queue is described, which will be important to understand for the optimizations done in the library.}
       Section~\ref{sec:layout-thrashing} defines layout thrashing will presents how it can be avoided.
       Section~\ref{sec:parallel} gives insight into the current state of the research of parallelizing the layout process.
@@ -621,7 +622,7 @@
       \todo[inline,color=green]{Marcos: The reference architecture could be outdated since the source is very old. The XML subsystem is hardly interesting anymore.}
       \todo[inline]{Maybe move this content to an own subsection and instead write a text about why this section is here, what the goal is (to understand parallelization and layout thrashing), etc.}
       
-      \subsection{Reference architecture and market shares}\label{sec:layout-engine-reference}
+      \subsection{Reference architecture}\label{sec:layout-engine-reference}
         Browsers are complex applications that consist of many subsystems.
         A reference architecture of \glspl{browser} has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
         \begin{figure}[h]
@@ -2605,7 +2606,7 @@
     As web applications are transitioning from being server generated to entirely living on the client, it is important to write modular components for various positive effects.
     It has been shown that element queries solves the problem of responsive modules, and is therefore an important missing feature of the web as a platform.
 
-    Unrestricted element queries imposes limitations to layout engines, and are therefore infeasible to implement.
+    Unrestricted element queries (i.e., not restricting target elements to special viewport elements) imposes limitations to layout engines, and are therefore infeasible to implement.
     Possible approaches to overcome most limitations are being discussed by participants of the W3C.
     One approach is to define a new element behavior (either as a new element or attribute) so that it acts as an individual viewport that can be targeted by element queries in order to style children of the element.
     Restrictions would be applied to the viewport element so that the layout of the element do not depend on conditionally styled child style properties.
@@ -2622,7 +2623,7 @@
     The \code{elq-breakpoints} plugin is the actual entity that directly enables element queries and defines the \gls{API} to be used.
     A key restriction was made to the \gls{API} in order to satisfy goal \ref{itm:req_valid_syntax}, \ref{itm:natural}, \ref{itm:req_big_rewrite} and \ref{itm:assumption}: it must conform to the current web standard, and must therefore not require invalid syntax.
     This way preprocessors, validators, tools and editors can be embraced and used in tandem with the library instead of shutting them out.
-    This design decision has proved to be very valuable when performing the altering of Bootstrap in Section~\ref{}.
+    This design decision has proved to be very valuable when performing the altering of Bootstrap as described in Section~\ref{sec:eval-bootstrap}.
     If the plugin would require invalid syntax it would not be as easy to alter the Boostrap \gls{LESS} files.
     Further, a lot of performance and compatibility issues have been avoided by not having to parse any \gls{CSS} at runtime.
     Since Bootstrap was successufully altered to use element queries in \textasciitilde50 changed \gls{LESS} lines and a few lines added JavaScript, the technical goals \ref{itm:req_big_rewrite} and \ref{itm:assumption} are considered to be fulfilled.
@@ -2661,29 +2662,49 @@
     One compatibility issue is that browsers generally do not support scripts to access external style sheets served from another domain unless specified by both the server and client.
     Since \gls{ELQ} is plugin-based a plugin could easily be crafted that adds such functionality.
 
-    \todo[inline]{Write that ELQ really is embracing tools such as CSS preprocessors as shown in the bootstrap case study?}
-    \todo[inline]{Philipp: you should try to summarize the performance advantage over other systems (e.g., "in some cases it's so-and-so-many \% faster thanks to our so-and-so-approach"). Maybe in the paragraph "Element resize detection"?}
-    \todo[inline]{Philipp: add 1 or 2 sentences that summarize what ELQ provides, and what its benefits are over other approaches.}
+    \paragraph{ELQ and related work}
+    ELQ and its plugins provides a low level API for building responsive design frameworks and applications by enablind the user to conditionally style elements with valid CSS.
+    By not requiring users to write invalid CSS has proven to be very useful when incorporating the solution to existing projects.
+    Additionally, CSS tools can advantageously be used in tandem with the ELQ syntax --- something that is not possible with related work that requires invalid CSS.
+    The mirror plugin of ELQ enables developers to overcome some CSS limitations, which has been proven to be important when writing responsive modules that are not limited to a predefined \gls{HTML} structure (as shown in Section~\ref{sec:eval-bootstrap}).
+    Related work only supports such feature by using invalid CSS.
+
+    Since ELQ is plugin based, different plugins may be developed for different use cases without bloating the library API or performance.
+    Different related work has different advantages and limitations.
+    For instance, static layout pages may prefer a solution that does not observe element resize events (as it is not needed for static pages).
+    Related work that are limited and not able to detect element resize events are then suitable as the performance penalty of doing so is avoided.
+    Fortunately, since ELQ is plugin based the same behavior as such related work can be achieved with plugins (or options) and may therefore still be the preferred library to use.
+    An advantage of using the same library for multiple use cases is that developers only need to learn one library and that it can easily be extended when application requirements change.
+
+    A major difference to related work is that ELQ is powered by a highly optimized subsystem for detecting element resize events, which provides a significant speedup to related work that also detects element resize events.
+    The subsystem used by ELQ has been showed have the same or better performance as the other subsystems in FireFox and Safari.
+    It has been shown that the optimized subsystem performs X \% or X \% faster than the subsystems used by related work in Chrome when preparing 1000 elements to be detectable.
+    Additionally, some subsystems used by related work suffers from issues that ELQ does not.
+    \todo{Finish this.}
 
     \section{Future work}
       It would be beneficial to further investigate possible use cases in order to evaluate if the current plugins are sufficient.
       Perhaps new plugins would need to be developed, or existing \glspl{API} extended.
       This is needed in order to be sure that goal~\ref{itm:req_flexible} truly is satisfied.
 
-      In order to allow more advanced element query constellations, the mirror element could could be exteneded to target an arbitrary element (instead of just the nearest \code{elq-breakpoints} ancestor element).
+      \paragraph{Exteding the mirror plugin}
+      In order to allow more advanced element query constellations, \code{elq-mirror} could could be extended to enable mirror elements to target arbitrary elements (instead of just the nearest \code{elq-breakpoints} ancestor element).
       This way, it would be possibel to write element queries against children, siblings, etc.
       This would also be a key feature in order to further satisfy goal~\ref{itm:req_flexible}.
 
+      \paragraph{Prolyfill}
       To satisfy goal~\ref{itm:req_prolyfill} an element queries prolyfill plugin could be created that would parse custom at runtime \gls{CSS} to simulate native element queries.
       It would then use an imaginary syntax of element queries, which could only be guessed at this point of time.
       Before any advancements have been made by the RICG regarding the syntax, the pseudo syntax presented in Section is probably a good start.
       \todo{Say in 3.1 that the pseudosyntax is heavily inspired by Tab's syntax?}
 
+      \paragraph{Static layout}
       More research can be done in regarding static pages wish to use element queries, since the main focus of this thesis has been dynamic pages.
       It is highly possible that the best approach to static pages is to parse custom \gls{CSS} at server side in order to generate static media queries.
       Media queries are at the moment the most performant way of applying conditional styles by viewport size, which possibly is the only factor to static page layout.
       However, it is uncertain if the viewport size is the only layout factor to static pages as browser and end-used styles might affect pages in a way that would imply that a layout change is desired without affecting the viewport size.
 
+      \paragraph{Performance}
       As of now, different subsystems of \gls{ELQ} are forced to create their own batch processors, which is favorable in some cases.
       However, it can also be favorable to have a shared instance batch processor in order to avoid unnecessary layouts between subsystems.
       For instance, the element resize detection subsystem and the \code{elq-breakpoints} plugin both uses a batch processor to avoid layout thrashing.
@@ -2691,18 +2712,19 @@
       This means that two layouts are performed, when in theory only one is needed.
       This could in theory be solved by sharing a batch processor between them so that both executes read, write and force operations in sync with each other.
 
+      \paragraph{Flash of invalid layout}
       It would be possible to prevent the flash of invalid layout during page reloads, by saving all element styles states to a persistan local browser storage.
       When the page reloads, a script can be executed that reads the element styles states of the local storage and applies the breakpoint classes to all elements before the first layout.
       This way, all elements would have the right classes before a layout is performed by the layout engine and thus resulting in an instant valid page layout.
       However, this still would not avoid the first invalid layout when the page is loaded for the first time.
 
+      \paragraph{Parsing CSS}
       Event thought there are several issues with runtime parsing of CSS, it is probably beneficial in some cases.
       Recall from Section~\ref{sec:imp_erd} that CSS selectors may unintentionally style the injected elements of the element resize detection subsystem.
       By parsing CSS it would be possible to warn developers of such selectors.
       The feature could be valuable in the development phase of applications, but should probably be disabled in production due to performance reasons.
       Users that value true separation of style and \gls{HTML} could also benefit from parsing CSS, as the breakpoint of all elements then could be deduced by considering the element queries in the CSS.
 
-      \todo[inline]{Philipp: Maybe you could insert named paragraphs that identify different areas for future work. That way section 7.3 would be easier to read.}
       \todo[inline]{Investigate in how the erd system can be further optimized. Maybe DOM MutationObservers, fix layout thrashing in Safari + FireFox, etc.}
       \todo[inline]{Fulfill all technical goals. Which ones?}
       \todo[inline]{ERD could automatically use the best solution based on the layout engine.}
