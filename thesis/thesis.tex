@@ -382,8 +382,7 @@
     Expert readers may want to skip directly to Chapter~\ref{chp:eq} where element queries is described.
 
     Section~\ref{sec:web-dev} presents a brief history of web development and motivate why responsive web design and modular development are both popular and needed concepts in modern web development.
-    As an end, Section~\ref{sec:rwd-modular-problem} describes the problem of having modular responsive modules, which element queries solves.
-    
+    As an end, Section~\ref{sec:rwd-modular-problem} describes the problem of having modular responsive modules, which element queries solves.    
     Section~\ref{sec:layout-engines} describes briefly how layout engines operates, with focus on the layout process, to later present how they can be parallelized in Section~\ref{sec:parallel}.
     As will be later shown in Chapter~\ref{chp:eq}, element queries as a concept hinders parallelization of layout engines.
     Since performance will be a key requirement of the library as presented in Chapter~\ref{chp:library}, Section~\ref{sec:layout-thrashing} defines layout thrashing and shows how it can be avoided in order to improve performance.
@@ -398,11 +397,8 @@
       There even exist computers that only run a \gls{browser}, which is sufficient for many users.
       
       Section~\ref{sec:doc-to-app} describes the transition from \glspl{browser} rendering simple \glspl{document} to being hosts for complex applications, and is aimed for readers not familiar with the rapid development of the \gls{web}.
-
       Section~\ref{sec:rwd} defines and motivates responsive web design, and is needed to understand the problem that element queries solves.
-
       Section~\ref{sec:modularity} similarly defines and motives modular development, which also is needed to understand the problem that element queries solves.
-
       Section~\ref{sec:rwd-modular-problem} presents the problem that element queries solves, which is that it is not possible to construct encapsulated responsive modules.
       This section will be the key motivation to why element queries is needed.
 
@@ -605,7 +601,6 @@
         The \gls{W3C} receives requests and questions about it, and the \gls{RICG} have started writing a draft \cite{ricg_draft} about element queries use cases.
         \todo{Should this really be here? Taken from the intro... Maybe it should stay there.}
 
-      \todo[inline]{Describe general use case here or in 3.1?}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Layout engines
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -619,9 +614,7 @@
       Section~\ref{sec:layout-engine-reference} to Section~\ref{sec:layout-process} describes briefly how layout engines operates and also presents key layout engine concepts.
       The role of the layout engine and a reference architecture for browsers is also presented, along with the market shares of the major layout engines.
       \todo{Write that the layout queue is described, which will be important to understand for the optimizations done in the library.}
-
       Section~\ref{sec:layout-thrashing} defines layout thrashing will presents how it can be avoided.
-
       Section~\ref{sec:parallel} gives insight into the current state of the research of parallelizing the layout process.
 
       \todo[inline]{Have an image about the layout flow somewhere?}
@@ -1012,9 +1005,7 @@
     Section~\ref{sec:eq-definitions} defines element queries, and shows how they can be used to solve the problem.\todo{Should it really be shown how element queries solve the problem?}
     Since no syntax have been defined yet for element queries, a pseudo-syntax is presented in this section to be used throughout this thesis.
     Some element queries terminology is also described, which will be extensively used throughout this thesis.
-
     Section~\ref{sec:eq-problems} presents some of the issues of implementing element queries \glslink{native}{natively} in layout engines.
-    
     Section~\ref{sec:eq-approaches} gives insight into some of the design approaches to element queries, as discussed by the W3C, to overcome some of the problems.
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1337,15 +1328,12 @@
     It should be noted that some of the goals presented in the section are to be fulfilled by future work.
     \todo{Can I write like this?}
     The goals of this section are frequently referred to in this and the following chapter.
-
     Section~\ref{sec:arcithecture} presents the overall architecture of \gls{ELQ}, and key subsystems are described.
     This section also motivates why it is important to develop a library that enables advanced users to alter or remove subsystems of the core.
-
     Section~\ref{sec:elq-api} defines the \gls{API} of the core library and all of the existing plugins.
     This section presents the main outcome of this thesis, as it shows how exactly element queries are realized by the library plugins.
     It is also in this section where it is shown how users can alter subsystems of the core.
     In addition, it is described how limitiations of \gls{CSS} are overcome by library plugins.
-
     Section~\ref{sec:library-imp-details} presents details about key implementation design decisions and algorithms.
     This section will also describe optimizations that has been done.
 
@@ -1415,7 +1403,6 @@
 
       \input{p3-elq-architecture}
       \todo{Change picture so that batch processor comes before the erd system}
-      \todo{Remove prolyfill from picture?}
 
       Figure~\ref{fig:elq_architecture} shows the overall architecture of the library.
       The core consists of fundamental and general subsystems that are utilized by plugins.
@@ -1623,6 +1610,7 @@
         It should be noted that the plugins presented here is the suggested solution to element queries according to the research of this thesis.
         They are designed for adequate performance, good compatibility, and ease of use.
         For extreme requirements or corner cases, custom \gls{ELQ} plugins might be preferred.
+        It should be noted that the development of the prolyfill plugin is left for future work.
 
         \Gls{ELQ} plugins may use custom element attributes as part of their \glspl{API}.
         The \gls{HTML} standard supports custom attributes prefixed with \code{data-}.
@@ -1758,21 +1746,42 @@
 
           By mirroring element breakpoint classes, elements can be styled by criterion of any element (ancestor, sibling, child, etc.).
           The plugin is at the moment restricted to the nearest ancestor \code{elq-breakpoint} element, but could easily be extended to support more advanced mirror constellations.
-        \subsubsection{Prolyfill}
-          \todo[inline]{Have not been done. Should it? Perhaps remove this as it could be out of scope. Low priority.}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Implementation
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Details of subsystems}\label{sec:library-imp-details}
+      In this Section the algorithms and approaches of some subsystems are presented.
+      It should be noted that only the non-trivial subsystems are described.
+
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %%%%%%%%%%%%%%%%%%%%%%%%%%%% Batch processor
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       \subsection{Batch processor}\label{sec:imp_batch_processor}
         % To avoid \gls{layout thrashing} by other scripts it can beneficial to asynchronously postpone the \glslink{batch processing}{batch} until the next layout cycle of the \gls{browser}, which is also handled by the subsystem.
+        Both Section~\ref{sec:layout-process} and \ref{sec:layout-thrashing} is recommended to read in order to understand the optimizations described in this section.
 
+        The batch processor is the foundation for good performace and is therefore used by several subsystems of \gls{ELQ}.
+        It serves two purposes:
+        \begin{enumerate}
+          \item Automatically process a batch asynchronously.
+          \item Process a batch in different levels.
+        \end{enumerate}
 
-        \todo[inline]{Write me?}
-        Both Section~\ref{sec:layout-process} and Section~\ref{sec:layout-thrashing} are recommended to read in order to understand the optimizations described in this section.
+        The idea is that users may register functions via the \code{add} method.
+        The method also accepts an optional level parameter that specified at which level the function should be executed.
+
+        \textbf{Batch processor}: via the \code{elq.BatchProcessor} property that refers to a factory function that creates \glslink{batch processing}{batch processor} instances.
+        Instead of having a single \glslink{batch processing}{batch processor} instance shared among all library entities (i.e., core subsystems and plugins), each entity has to create an own instance.
+        This to avoid entities interfering with each other while processing \glslink{batch processing}{batches}.
+        For example, some entities might want to force the \glslink{batch processing}{batch} to be processed at a point where it would be beneficial for other entities to delay the processing.
+        The \code{createBatchProcessor} accepts an optional options object parameter and returns a \glslink{batch processing}{batch processor} instance
+        Two important options to the \code{createBatchProcessor} are the \code{async} and \code{auto} options.
+        If the \code{async} option is enabled, the \glslink{batch processing}{batch} will be processed asynchronously as soon as possible after that the \code{force} method has been invoked.
+        If the \code{auto} option is enabled, the batch will automatically be processed as soon as possible asynchronously (this implies that \code{async} has to be enabled).
+        The batch processor instance has two methods: \code{add} and \code{force}.
+        The \code{add} method requires a function parameter that will be called when the \glslink{batch processing}{batch} is processed, and accepts an optional level parameter that defines at which level the given functon should be processed.
+        The \code{force} method commence the processing of the \glslink{batch processing}{batch}, which can happen synchronously or asynchronously defined by an optional parameter.
+        \todo[inline]{Finish me!}
 
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element resize detection
@@ -1962,7 +1971,6 @@
     Section~\ref{sec:eval-bootstrap} evaluates the \glspl{API} by a case study that alters the popular \gls{Bootstrap} framework to use element queries.
     \gls{Bootstrap} 3.3.2 uses media queries to provide responsive \gls{CSS} classes that often are desired to use in web applications.
     By using element queries instead, the classes become encapsulated and can be used in responsive modules.
-
     Section~\ref{sec:eval-performance} evaluates the performance by measuring \gls{ELQ} in different configurations.
     Key subsystems are also evaluated independently so that they can be compared to similar subsystems of related work.
 
@@ -2654,6 +2662,8 @@
     Since \gls{ELQ} is plugin-based a plugin could easily be crafted that adds such functionality.
 
     \todo[inline]{Write that ELQ really is embracing tools such as CSS preprocessors as shown in the bootstrap case study?}
+    \todo[inline]{Philipp: you should try to summarize the performance advantage over other systems (e.g., "in some cases it's so-and-so-many \% faster thanks to our so-and-so-approach"). Maybe in the paragraph "Element resize detection"?}
+    \todo[inline]{Philipp: add 1 or 2 sentences that summarize what ELQ provides, and what its benefits are over other approaches.}
 
     \section{Future work}
       It would be beneficial to further investigate possible use cases in order to evaluate if the current plugins are sufficient.
@@ -2692,9 +2702,11 @@
       The feature could be valuable in the development phase of applications, but should probably be disabled in production due to performance reasons.
       Users that value true separation of style and \gls{HTML} could also benefit from parsing CSS, as the breakpoint of all elements then could be deduced by considering the element queries in the CSS.
 
+      \todo[inline]{Philipp: Maybe you could insert named paragraphs that identify different areas for future work. That way section 7.3 would be easier to read.}
       \todo[inline]{Investigate in how the erd system can be further optimized. Maybe DOM MutationObservers, fix layout thrashing in Safari + FireFox, etc.}
       \todo[inline]{Fulfill all technical goals. Which ones?}
       \todo[inline]{ERD could automatically use the best solution based on the layout engine.}
+      \todo[inline]{Write that eq are theoretically not limited to sizes, could be any property of elements!}
 
   \printbibliography
   \clearpage
