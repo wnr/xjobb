@@ -157,7 +157,7 @@
 }
 \newglossaryentry{ELQ}{
   name={ELQ},
-  description={The name of the third-party JavaScript element queries library that is the main result of this thesis. See Chapter~\ref{chp:library}}
+  description={The name of the third-party JavaScript element queries library that is the main result of this thesis. See Chapter~\ref{ch:library}}
 }
 \newglossaryentry{Bootstrap}{
   name={Bootstrap},
@@ -280,10 +280,10 @@
 
       Participants, which include both paying members and the public, of the main international standards organization for the \gls{web}, the \gls{W3C} are interested in solving the problem and possible solutions are being discussed.
       However, they are still at the initial planning stage \cite{ricg_site} so a solution will not be implemented \glslink{native}{natively} in the near future.
-      Additionally, implementing element queries imposes circularity and performance problems, as shown in Chapter~\ref{chp:eq}, which needs to be resolved before writing a standard.
+      Additionally, implementing element queries imposes circularity and performance problems, as shown in Chapter~\ref{ch:eq}, which needs to be resolved before writing a standard.
       While awaiting a \gls{native} solution it is up to the developers to implement this feature as a \gls{third-party} solution.
       \todo[color=red]{Tomas: Maybe not third-party? Third-party refers to something that has not been developer in-house. third-party here should be substituted to the negation of native.}
-      As presented in Chapter~\ref{chp:related-work}, efforts have been made to create a robust \gls{third-party} solution, with moderate success.
+      As presented in Chapter~\ref{ch:related-work}, efforts have been made to create a robust \gls{third-party} solution, with moderate success.
       It should be noted that no effort of implementing a native solution have been made.
       Since all current \gls{third-party} solutions have shortcomings, there is still no de facto solution that developers use and the problem remains unsolved.
       % Some problems with implementing element queries \glslink{native}{natively} in \gls{CSS} are:
@@ -364,13 +364,35 @@
       \item Graphical design of end-user interfaces will not be addressed, other than necessary for understanding the problem.
       \end{itemize}
     \section{Outline}
+      \newcommand{\chref}[1]{Chapter~\ref{#1}, \emph{\nameref{#1}},}
+      \chref{ch:background} presents the background of this thesis and aims to provide sufficient information about web development and layout engines to understand the problem and solution.
+      In Section~\ref{sec:web-dev} the two web development concepts responsive web design and modulairy are presented, and the Section ends describing the problem of responsive modules.
+      Section~\ref{sec:layout-engines} briefly describes how layout engines operates and how JavaScript can be optimized by avoiding layout thrashing.
+      The section ends with presenting the current research of parallelizing layout engines, which is important to understand since element queries affects the parallelization of layout engines.
+      Expert readers may want to skip this chapter.
 
+      \chref{ch:eq} defines element queries and shows how they can be used to solve the problem of encapsulated responsive modules.
+      The chapter also gives insight into the current research of element queries and presents some difficulties that the W3C and are facing with implementing element queries in layout engines.
+      Section~\ref{sec:eq-problems} describes the problems that element queries implies to layout engines in detail and Section~\ref{sec:eq-approaches} presents some approaches discussed by the W3C to overcome some of the problems.
 
-      The background part starts with the history of \glspl{browser} and information about market share between them followed by a brief history of the evolution of \gls{web} development.
-      After that, the \gls{responsive} \gls{web} design concept will be described along with why modularity is important in software development.
+      \chref{ch:library} presents the third-party element queries JavaScript library that enables developers to use element queries today.
+      The chapter identifies possible technical requirements that different use cases may have, which is the main motivation to why the library should be plugin based.
+      The library design and \glspl{API} is presented along with two plugins and their \glspl{API}.
+      Last, some subsystems of the library are presented in detail including a highly optimized solution to observe element resize events using a leveled batch processor subsystem.
 
-      % This thesis is divided into four parts. The first part \emph{\ref{chp:background}~\nameref{chp:background}} presents some history of the \gls{web} platform and describes concepts needed to understand the problem.
+      \chref{ch:eval} presents the empirical evaluation of the library, which includes altering the popular style framework Bootstrap and measuring the performance of subsystems in different browsers.
+      The Bootstrap framework provides many responsive \gls{CSS} classes to make user interfaces responsive by using media queries.
+      By altering Bootstrap to use element queries instead for the responsive classes, some of the technical goals can be evaluated.
+      Similarly, by measuring the performance of the library and different subsystems additional technical goals can be avaluated.
+      The performance measurements are also used to compare the performance of the library to related work.
 
+      \chref{ch:related-work} describes related work to the library and presents advantages and drawbacks to the different approaches.
+      Since many of the libraries presented in this chapter share the same characteristics, they will be classified and each class will be analyzed as a group.
+
+      \chref{ch:discussion-conclusions} discusses the current research state of element queries and the result of the library.
+      The chapter also emphasis the major conclusions of this thesis.
+      Advantages and drawbacks of the library are descibed and it is compared to related work.
+      Possible future work is also presented, which includes many extensions and further improvements to the library.
 
       % The second part \emph{\ref{part:theory}~\nameref{part:theory}} presents theoretizations of the problem.
       % It starts with describing a reference architecture of \glspl{layout engine} and the parts of \glspl{layout engine} that directly affects element queries will be described in detail.
@@ -384,20 +406,18 @@
       % Identified technical requirements will be given in order to motivate the library architecture and \gls{API} design.
       % After that, interesting parts of the implementation will be presented.\todo{Maybe flesh this one out as it has been written.}
 
-      \todo[inline]{Finish the Outline when the other parts have been written.}
-
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Background
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \chapter{Background}\label{chp:background}
+  \chapter{Background}\label{ch:background}
     This chapter aims to present sufficient background to understand why element queries is a desired feature and why it is hard to implement natively in browsers.
-    Expert readers may want to skip directly to Chapter~\ref{chp:eq} where element queries is described.
+    Expert readers may want to skip directly to Chapter~\ref{ch:eq} where element queries is described.
 
     Section~\ref{sec:web-dev} presents a brief history of web development and motivate why responsive web design and modular development are both popular and needed concepts in modern web development.
     As an end, Section~\ref{sec:rwd-modular-problem} describes the problem of having modular responsive modules, which element queries solves.    
     Section~\ref{sec:layout-engines} describes briefly how layout engines operates, with focus on the layout process, to later present how they can be parallelized in Section~\ref{sec:parallel}.
-    As will be later shown in Chapter~\ref{chp:eq}, element queries as a concept hinders parallelization of layout engines.
-    Since performance will be a key requirement of the library as presented in Chapter~\ref{chp:library}, Section~\ref{sec:layout-thrashing} defines layout thrashing and shows how it can be avoided in order to improve performance.
+    As will be later shown in Chapter~\ref{ch:eq}, element queries as a concept hinders parallelization of layout engines.
+    Since performance will be a key requirement of the library as presented in Chapter~\ref{ch:library}, Section~\ref{sec:layout-thrashing} defines layout thrashing and shows how it can be avoided in order to improve performance.
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Web development
@@ -1011,7 +1031,7 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element queries
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \chapter{Element queries}\label{chp:eq}
+  \chapter{Element queries}\label{ch:eq}
     Now that a good understanding of \glspl{browser} (especially the \gls{layout engine}), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- a solution to the modular \gls{responsive} \gls{web} design problem as presented in Section~\ref{sec:rwd-modular-problem}.
     
     Section~\ref{sec:eq-definitions} defines element queries, and shows how they can be used to solve the problem.\todo{Should it really be shown how element queries solve the problem?}
@@ -1330,7 +1350,7 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% The element queries library
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \chapter{ELQ --- The element queries library}\label{chp:library}
+  \chapter{The element queries library}\label{ch:library}
     Now that sufficient knowledge about element queries and layout engines has been acquired it is time to present the actual realization of the solution to responsive modules --- the JavaScript element queries library.
     First of all, a working name of the library needs to be established --- the library will from now on have the working name \gls{ELQ}.
     This name serves as a prefix for many of the library \glspl{API}, and will be frequently used in this thesis from now on.
@@ -1976,7 +1996,7 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Empirical Evaluation
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \chapter{Empirical Evaluation}
+  \chapter{Empirical Evaluation}\label{ch:eval}
     This chapter presents the empirical evaluation that has been done of the \gls{ELQ} library.
     \todo{Write that the techincal goals states of ELQ will be evaluated?}
 
@@ -2462,7 +2482,7 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Related work
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \chapter{Related work}\label{chp:related-work}
+  \chapter{Related work}\label{ch:related-work}
     \todo[inline]{Write meta.}
     \todo[inline]{Write about media query CSS approach as an approach?}
     \todo[inline]{Philipp: Compare performance to the measurements done in Evaluation to the related work.}
@@ -2593,9 +2613,9 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Discussion and Conclusions
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \chapter{Discussion and Conclusions}
+  \chapter{Discussion and Conclusions}\label{ch:discussion-conclusions}
     Recall the problem formulation from Section~\ref{sec:problem}: \problemformulation.
-    The problem was shown in Section~\ref{chp:eq} to be solved by element queries.
+    The problem was shown in Section~\ref{ch:eq} to be solved by element queries.
     Therefore, the goal of this thesis was to develop a third-party JavaScript library that enables developers to use element queries.
     Since no syntax or standard has been specified by the \gls{W3C} yet for element queries, the syntax and usage can be formed in any way as long as it solves the problem of conditionally styling elements by element criterion.
     Since the implementation of the \gls{ELQ} library (that enables element queries) was successful, the thesis goal can be considered fulfilled.
