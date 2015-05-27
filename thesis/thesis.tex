@@ -22,8 +22,9 @@
 \usepackage{pgfplots}
 \pgfplotsset{compat=newest} % Allows to place the legend below plot
 \usepgfplotslibrary{units} % Allows to enter the units nicely
-\usepackage[disable]{todonotes}
+\usepackage{todonotes}
 \usepackage[toc,acronym]{glossaries}
+\usepackage{placeins}
 \makenoidxglossaries
 % \makeglossaries
 
@@ -674,7 +675,7 @@
       \subsection{Reference architecture}\label{sec:layout-engine-reference}
         Browsers are complex applications that consist of many subsystems.
         A reference architecture of \glspl{browser} has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
-        \begin{figure}[h]
+        \begin{figure}[ht]
           \centering
           \begin{tikzpicture}[node distance=1cm, auto, transform shape, scale=0.66]  
           \tiny
@@ -943,7 +944,7 @@
         It is shown in the figure that style computations and layout is performed in each iteration.
         The total time spent on style computations is \textasciitilde40 ms and layout is \textasciitilde600 ms, which leaves \textasciitilde60 ms for the actual script execution.
 
-        \begin{figure}[h]
+        \begin{figure}[ht]
           \centering
           \includegraphics[scale=0.5]{images/layout-thrashing-example-1-big}
           \includegraphics[scale=0.5]{images/layout-thrashing-example-1}
@@ -981,7 +982,7 @@
         Since the script does not read the \gls{DOM} in any way during in the second batch, all \gls{DOM} mutations can be queued by the layout engine to be batch processed.
         See figure~\ref{fig:layout-thrashing-example-1-fixed} for a visualization of the execution of the batched example version.
         In the figure, it is clear that the layout engine is able to first execute the JavaScript, and later perform all style and layout computations in a batch.
-        \begin{figure}[h]
+        \begin{figure}[ht]
           \centering
           \includegraphics[scale=0.5]{images/layout-thrashing-example-1-fixed}
           \caption{A timeline of executing the example code given in listing~\ref{code:thrashing-example-fixed}. It is clear in the figure that layout thrashing does not occur, since all style computations and layout is performed in a batch after that the example code has finished executing.}
@@ -2056,7 +2057,8 @@
           The responsive classes of Bootstrap cannot adapt to layout changes as shown with the two-column \gls{CSS} documentation example.
           Both documentation instances uses media queries, which undesireably styles both columns as if they each fill the whole viewport width.
           Since the columns only fill half of the viewport width and are styles as they both fill the whole viewport width, the page appears broken as shown in the left figure.
-          The pag only behaves as desired if the viewport width is large enough so that the width of each column is bigger than the largesta media query breakpoint, as shown in the right figure.}
+          The pag only behaves as desired if the viewport width is large enough so that the width of each column is bigger than the largesta media query breakpoint, as shown in the right figure.
+          See figure~\ref{fig:appendix-bootstrap-mq-header-small} and~\ref{fig:appendix-bootstrap-mq-header-big} of the appendix for the left and right figure in full scale, respectively.}
         \label{fig:eval-bootstrap-mq-broken}
       \end{figure}
       \todo{The right image should maybe show how it should look instead.}
@@ -2203,7 +2205,8 @@
         \caption{
           The left image shows the original Bootstrap header, which is broken since the content of both columns are styled as if they had the full viewport width.
           The right image shows same section of the same page, using \gls{ELQ} Bootstrap.
-          With element queries, both columns know that they only have half of the viewport width and therefore style themselves accordingly.}
+          With element queries, both columns know that they only have half of the viewport width and therefore style themselves accordingly.
+          See figure~\ref{fig:appendix-bootstrap-mq-header-small} and~\ref{fig:appendix-bootstrap-eq-header-small} of the appendix for the left and right figure in full scale, respectively.}
         \label{fig:eval-bootstrap-mq-eq-header}
       \end{figure}
 
@@ -2222,6 +2225,7 @@
           Here it is clear that both columns are styled as the have the full viewport width as they display the large utility classes in green, which means that both columns think that they have the full width of the viewport.
           The right image shows same section of the same page, using \gls{ELQ} Bootstrap.
           Only the small utility classes are displayed in green as desired, since both columns only have half of the width available.
+          See figure~\ref{fig:appendix-bootstrap-mq-matrix-small} and~\ref{fig:appendix-bootstrap-eq-matrix-small} of the appendix for the left and right figure in full scale, respectively.
         }
         \label{fig:eval-bootstrap-mq-eq-matrix}
       \end{figure}
@@ -2241,6 +2245,7 @@
           It is styled as if both columns have the full viewport width available, and therefore the grids partly intersect each other.
           The right image shows same section of the same page, using \gls{ELQ} Bootstrap.
           The grids detects that only the half viewport width is available, and styles themselves accordingly.
+          See figure~\ref{fig:appendix-bootstrap-mq-grid-small} and~\ref{fig:appendix-bootstrap-eq-grid-small} of the appendix for the left and right figure in full scale, respectively.
         }
         \label{fig:eval-bootstrap-mq-eq-grid}
       \end{figure}
@@ -2278,7 +2283,7 @@
         As shown by the graphs, the injection can be performed with adeqaute performance as long as the number of elements is low.
         The solution does not scale well as the number of element increases.
         \todo{Maybe be less pessimistic as Safari might have to use the object solution?}
-        \begin{figure}[h]
+        \begin{figure}[ht]
           \tiny
           \begin{center}
             \begin{minipage}[t]{.5\textwidth}
@@ -2335,7 +2340,7 @@
         See figure~\ref{fig:erd-original-scroll} for graphs that show how the both solutions perform compared to each other.
         It is clear that the scroll-based solution both performs and scales better than the object-based solution during injection.        
         The amount of memory used by the scroll-based solution is so low that reliable measurements could not be gathered, as the number of elements was not high enough to affect the memory usage noticeably.
-        \begin{figure}[h]
+        \begin{figure}[ht]
           \tiny
           \begin{center}
             \begin{minipage}[t]{.5\textwidth}
@@ -2797,6 +2802,57 @@
         \todo[inline]{Should this be in the real document instead of appendix?}
       \section{CSS terminology}
         \todo[inline]{Write custom or refer to this \url{http://www.impressivewebs.com/css-terms-definitions/}?}
+      \section{Full-scale figures}
+        \subsection{Bootstrap}
+          \begin{figure}[htbp!]
+            \centering
+            \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-header-small}
+            \caption{Double column documentation page powered by Bootstrap showing the header section of the page.}
+            \label{fig:appendix-bootstrap-mq-header-small}
+          \end{figure}
+          \begin{figure}[htbp!]
+            \centering
+            \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-header-big}
+            \caption{Double column documentation page powered by Bootstrap with showing the header section of the page. The viewport is big enough to give each column sufficient space.}
+            \label{fig:appendix-bootstrap-mq-header-big}
+          \end{figure}
+
+          \begin{figure}[htbp!]
+            \centering
+            \includegraphics[width=0.9\linewidth]{images/bootstrap-eq-header-small}
+            \caption{Double column documentation page powered by \gls{ELQ} Bootstrap showing the header section of the page.}
+            \label{fig:appendix-bootstrap-eq-header-small}
+          \end{figure}
+
+          \begin{figure}[htbp!]
+            \centering
+            \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-matrix}
+            \caption{Double column documentation page powered by Bootstrap showing the responsive classes matrix section of the page.}
+            \label{fig:appendix-bootstrap-mq-matrix-small}
+          \end{figure}
+          \begin{figure}[htbp!]
+            \centering
+            \includegraphics[width=0.9\linewidth]{images/bootstrap-eq-matrix}
+            \caption{Double column documentation page powered by \gls{ELQ} Bootstrap showing the responsive classes matrix section of the page.}
+            \label{fig:appendix-bootstrap-eq-matrix-small}
+          \end{figure}
+
+          \begin{figure}[htbp!]
+            \centering
+            \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-grid}
+            \caption{Double column documentation page powered by Bootstrap showing the grid section of the page.}
+            \label{fig:appendix-bootstrap-mq-grid-small}
+          \end{figure}
+          \begin{figure}[htbp!]
+            \centering
+            \includegraphics[width=0.9\linewidth]{images/bootstrap-eq-grid}
+            \caption{Double column documentation page powered by \gls{ELQ} Bootstrap showing the grid section of the page.}
+            \label{fig:appendix-bootstrap-eq-grid-small}
+          \end{figure}
+
+          \FloatBarrier
+
+          \todo[inline]{Make sure that these images are ordered sufficiently and have good descriptions.}
       \section{Layout engine market share statistics}\label{sec:layout_engines_market_share}
         Browser market share was retrieved by \emph{StatCounter}\footnote{StatCounter graph \url{http://gs.statcounter.com/\#all-browser-ww-monthly-201402-201502-bar}}.
         Since the graph only display \gls{browser} market share and not \gls{layout engine}, it is needed to further divide the \glspl{browser} into \gls{layout engine} percentages.
