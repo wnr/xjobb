@@ -22,7 +22,7 @@
 \usepackage{pgfplots}
 \pgfplotsset{compat=newest} % Allows to place the legend below plot
 \usepgfplotslibrary{units} % Allows to enter the units nicely
-\usepackage{todonotes}
+\usepackage[disable]{todonotes}
 \usepackage[toc,acronym]{glossaries}
 \makenoidxglossaries
 % \makeglossaries
@@ -246,12 +246,12 @@
     Sammanfattning ska vara här.
   \end{foreignabstract}
   \clearpage
-  \noindent
-  \large
-  The colored rectangles that appear throughout this thesis are comments and feedback (presented as todos), which mean that they are not part of the actual content.
-  It should be noted that all named todo items are not quotations of the persons that it was received from.
-  Instead, all todo items represent my own interpretation of the feedback given to me.
-  \clearpage
+  % \noindent
+  % \large
+  % The colored rectangles that appear throughout this thesis are comments and feedback (presented as todos), which mean that they are not part of the actual content.
+  % It should be noted that all named todo items are not quotations of the persons that it was received from.
+  % Instead, all todo items represent my own interpretation of the feedback given to me.
+  % \clearpage
   \section*{Acknowledgements}
     I would like to thank my supervisors Tomas Ekholm, Philipp Haller and Stefan Sennerö for their enthusiastic involvement of this thesis.
     They have provided me with great feedback and support throughout the project.
@@ -285,7 +285,7 @@
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
       Heavy use of \gls{web} terminology is being used and intermediate \gls{web} development knowledge is beneficial.
-      For readers that are not familiar with web terminology there is a glossary at the end of the document.
+      For readers that are not familiar with web terminology there is a glossary at the end of this thesis.
       \todo[inline]{Philipp wanted this to be more general.}
     \section{Problem statement}\label{sec:problem}
       By using \gls{CSS} \gls{media queries}, developers can specify different style rules for different \gls{viewport} sizes.
@@ -1810,27 +1810,33 @@
         % To avoid \gls{layout thrashing} by other scripts it can beneficial to asynchronously postpone the \glslink{batch processing}{batch} until the next layout cycle of the \gls{browser}, which is also handled by the subsystem.
         Both Section~\ref{sec:layout-process} and \ref{sec:layout-thrashing} is recommended to read in order to understand the optimizations described in this section.
 
-        The batch processor is the foundation for good performace and is therefore used by several subsystems of \gls{ELQ}.
+        The batch processor is the foundation for good performace of the library, and is therefore used by several subsystems.
         It serves two purposes:
         \begin{enumerate}
           \item Automatically process a batch asynchronously.
           \item Process a batch in different levels.
         \end{enumerate}
 
-        The idea is that users may register functions via the \code{add} method.
-        The method also accepts an optional level parameter that specified at which level the function should be executed.
+        The automated asynchronous processing of batches is important because some subsystems do not know how many operations are to be performed when called.
+        For instance, the public \gls{ELQ} \gls{API} method \code{start} is called with elements to be initiated by the library.
+        As part of the initialization, the element resize detection subsystem may be called that needs to prepare elements to be detectable.
+        This needs to be batch processed, which is possible to do synchronously.
+        However, if the \code{start} method is called mutliple times synchronously layout thrashing occurs since one batch for each method call is created.
+        See listing~\ref{} for example code that invokes the \code{start} method multiple times synchronously.
+        \begin{lstlisting}[gobble=10,label={code:batch-processor-example},caption={Example of multiple synchronous calls to the \gls{ELQ} \code{start} method.},captionpos=b]]
+          elq.start(document.getElementById("..."));
+          elq.start(document.getElementById("..."));
+          elq.start(document.getElementById("..."));
 
-        \textbf{Batch processor}: via the \code{elq.BatchProcessor} property that refers to a factory function that creates \glslink{batch processing}{batch processor} instances.
-        Instead of having a single \glslink{batch processing}{batch processor} instance shared among all library entities (i.e., core subsystems and plugins), each entity has to create an own instance.
-        This to avoid entities interfering with each other while processing \glslink{batch processing}{batches}.
-        For example, some entities might want to force the \glslink{batch processing}{batch} to be processed at a point where it would be beneficial for other entities to delay the processing.
-        The \code{createBatchProcessor} accepts an optional options object parameter and returns a \glslink{batch processing}{batch processor} instance
-        Two important options to the \code{createBatchProcessor} are the \code{async} and \code{auto} options.
+          var elements = document.querySelectorAll("...");
+          elements.forEach(elq.start);
+        \end{lstlisting}
+        Of course, such usage could be warned against in the \gls{API} documentation but to keep the \gls{API} as simple as possible another approach has been taken.
+        By delaying the batch to execute asynchronously, on he next JavaScript event tick on most layout engines, all synchronous calls to the method is grouped to the pending batch.
+        This behavior can be controlled by the \code{async} and \code{auto} options of the factory function.
         If the \code{async} option is enabled, the \glslink{batch processing}{batch} will be processed asynchronously as soon as possible after that the \code{force} method has been invoked.
         If the \code{auto} option is enabled, the batch will automatically be processed as soon as possible asynchronously (this implies that \code{async} has to be enabled).
-        The batch processor instance has two methods: \code{add} and \code{force}.
-        The \code{add} method requires a function parameter that will be called when the \glslink{batch processing}{batch} is processed, and accepts an optional level parameter that defines at which level the given functon should be processed.
-        The \code{force} method commence the processing of the \glslink{batch processing}{batch}, which can happen synchronously or asynchronously defined by an optional parameter.
+
         \todo[inline]{Finish me!}
 
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
