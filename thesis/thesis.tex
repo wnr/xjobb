@@ -1820,10 +1820,10 @@
 
         The automated asynchronous processing of batches is important because some subsystems do not know how many operations are to be performed when called.
         For instance, the public \gls{ELQ} \gls{API} method \code{start} is called with elements to be initiated by the library.
-        As part of the initialization, the element resize detection subsystem may be called that needs to prepare elements to be detectable.
+        As part of the initialization, the element resize detection subsystem may be called so it can prepare elements to be detectable.
         This needs to be batch processed, which is possible to do synchronously.
         However, if the \code{start} method is called mutliple times synchronously layout thrashing occurs since one batch for each method call is created.
-        See listing~\ref{} for example code that invokes the \code{start} method multiple times synchronously.
+        See listing~\ref{code:batch-processor-example} for example code that invokes the \code{start} method multiple times synchronously.
         \begin{lstlisting}[gobble=10,label={code:batch-processor-example},caption={Example of multiple synchronous calls to the \gls{ELQ} \code{start} method.},captionpos=b]]
           elq.start(document.getElementById("..."));
           elq.start(document.getElementById("..."));
@@ -1833,12 +1833,46 @@
           elements.forEach(elq.start);
         \end{lstlisting}
         Of course, such usage could be warned against in the \gls{API} documentation but to keep the \gls{API} as simple as possible another approach has been taken.
-        By delaying the batch to execute asynchronously, on he next JavaScript event tick on most layout engines, all synchronous calls to the method is grouped to the pending batch.
-        This behavior can be controlled by the \code{async} and \code{auto} options of the factory function.
+        By delaying the batch to execute asynchronously, on he next JavaScript event tick in most layout engines, all synchronous calls to the method is grouped into the pending batch.
+        This behavior can be controlled by the \code{async} and \code{auto} options of the batch processor factory function.
         If the \code{async} option is enabled, the \glslink{batch processing}{batch} will be processed asynchronously as soon as possible after that the \code{force} method has been invoked.
         If the \code{auto} option is enabled, the batch will automatically be processed as soon as possible asynchronously (this implies that \code{async} has to be enabled).
 
-        \todo[inline]{Finish me!}
+        Processing batches in different levels is important when multiple operations that interfer with each other needs to be grouped together in a batch.
+        For instance, a function that is to double an element's width and read the new height benefits by being batch processed in three levels: reading the width, mutating the width, and reading the height of an element.
+        Such function could also benefit from automatically process the batch so that the user may call the function multiple times synchronously.
+        See listing~\ref{code:batch-processor-example-2} for an example implementation of such function that uses a leveled batch processor.
+        The leveled function offers a 45-fold speedup compared to the non-leveled version (i.e., changing \code{batchProcessor.add(1, ...} to \code{batchProcessor.add(0, ...}).
+        \begin{lstlisting}[gobble=10,label={code:batch-processor-example-2},caption={Example function that doubles an element's width and returns the new height with a callback. The function uses the leveled batch processor to avoid layout thrashing and thus gains a 45-fold speedup.},captionpos=b]]
+          var batchProcessor = BatchProcessor({
+              auto: true,
+              async: true
+            });
+
+          function doubleWidth(element, callback) {
+            var width = element.offsetWidth;
+            var newWidth = (width * 2) + "px";
+
+            // Implicit level 0 of the batch. Will be processed first.
+            batchProcessor.add(function mutateWidth() {
+              element.style.width = newWidth;
+            });
+
+            // Level 1 of the batch. Will be processed after level 0.
+            // Changing the level number from "1" to "0" results in layout thrashing.
+            batchProcessor.add(1, function readHeight() {
+              var height = element.offsetHeight;
+              callback(height);
+            });
+          }
+
+          var elements = document.querySelectorAll("#container div");
+          forEach(elements, function (element) {
+            doubleWidth(element, function (height) {
+              ...
+            });
+          });
+        \end{lstlisting}
 
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element resize detection
