@@ -282,6 +282,7 @@
     \todo[inline]{Should check whole thesis so that it is not written "Figures" when there are multiple figures stated.}
     \todo[inline]{Write a little intro to the reader that "user" is not the "end-user".}
     \todo[inline]{Write Blink, Gecko and WebKit instead of the browser names. Reason: Now writing that good performance is achieved in Chrome, but I'm sure the same is achived in Opera as it uses Blink. Should double check this though.}
+    \todo[inline]{Fix all percentage speedups to use X-fold. Check all folds to see if they are written correctly.}
 
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
@@ -2514,12 +2515,12 @@
         As shown, great performance can be achieved with the optimized \gls{ELQ} scroll-based solution in Chrome.
         Unfortunately, there is no silver bullet to observing element resize events; as the other browsers behave differently.
         See table~\ref{table:erd-layout-engines} for performance numbers of different browsers.
-        The scroll-based solution is preferred for Chrome, as the injection is 2000 \% faster than the object-based solution while the resize detection performance is the same for both solutions.
-        In FireFox, the object-based solution detects resize events 200 \% faster than the scroll-based solution (still, 100 ms for detecting resize events is acceptable).
-        However, the injection time needed for the object-based solution is 550 \% of the time needed for the \gls{ELQ} scroll-based solution.
+        The scroll-based solution is preferred for Chrome, as the injection is 20-fold faster than the object-based solution while the resize detection performance is the same for both solutions.
+        In FireFox, the object-based solution detects resize events 2-fold faster than the scroll-based solution (still, 100 ms for detecting resize events is acceptable).
+        However, the injection time needed for the object-based solution is 5.5-fold of the time needed for the \gls{ELQ} scroll-based solution.
         The scroll-based solution is therefore probably desired in FireFox for the general use case.
-        In Safari, the \gls{ELQ} scroll-based solution detects resize events in 800 ms while the object-based solution detects them in 25 ms (3200 \% faster).
-        Unfortunately, injection of the object-based solution is 300 \% slower than the \gls{ELQ} scroll-based solution.
+        In Safari, the \gls{ELQ} scroll-based solution detects resize events in 800 ms while the object-based solution detects them in 25 ms (32-fold speedup).
+        Unfortunately, injection of the object-based solution is 3-fold slower than the \gls{ELQ} scroll-based solution.
         Since a delay of 800 ms when detecting resize events is undesired in most use cases, the object-based solution is preferred is Safari.
         \todo{Write that the scroll-based solution probably has a bug that makes it perform so bad? In only perfoms bad when expanding the element, not shrinking it... This however seem to be a bug with Safari, not the implementation.}
         \begin{table}[ht]\center
