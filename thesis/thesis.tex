@@ -222,12 +222,12 @@
   \maketitle
   \selectlanguage{english}
   \begin{abstract}
-    Responsive web design is a popular approach to support devices with varying characteristics (viewport size, input mechanisms, media type, etc.) by conditionally style the content of a document by such criterion using \emph{media queries}.
+    Responsive web design is a popular approach to support devices with varying characteristics (viewport size, input mechanisms, media type, etc.) by conditionally style the content of a document by such criterion using CSS \emph{media queries}.
     % \emph{Bootstrap} is an example of a popular framework that embraces responsive web design.
     To reduce complexity it is also popular to develop web applications by creating reusable modules.
     % There are many frameworks and libraries that facilitates developing web modules: \emph{Angular}, \emph{Backbone}, \emph{Ember}, \emph{Web Components}, \emph{Requirejs}, \emph{Browserify}, \emph{Polymer}, \emph{React}, among others.
     Unfortunately, responsive modules require the users of a module to define the conditional styles since only the user knows the layout of the module.
-    This implies that responsive modules cannot be encapsulated, which is important for reduced complexity and reusability.
+    This implies that responsive modules cannot be encapsulated, which is important for reusability and reduced complexity.
     This is due to the limitation of CSS that elements can only be conditionally styled by the document root and device properties by using media queries.
     In order to create encapsulated responsive modules, elements must be able to be conditionally styled by \emph{element} property criterion, which is known as \emph{element queries}.
 
@@ -239,12 +239,28 @@
     In order to enable developers to create encapsulated responsive modules, while waiting for native support, a third-party element queries JavaScript library has been developed.
     As presented in this thesis, the library provides both performance and usage advantages to other related libraries.
     An optimized subsystem for detecting element resize events has been developed using a leveled batch processor, which is significantly faster than similar systems.
-    As part of the empirical evaluation the Bootstrap framework has been altered to use element queries intead of media queries by altering \textasciitilde50 out of \textasciitilde8500 lines of LESS code, which displays one of the advantages of the library.
+    As part of the empirical evaluation the Bootstrap framework has been altered to use element queries intead of media queries by altering \textasciitilde50 out of \textasciitilde8500 lines of style code, which displays one of the advantages of the developed library.
 
   \end{abstract}
   \clearpage
   \begin{foreignabstract}{swedish}
-    Sammanfattning ska vara här.
+    Responsiv webbutveckling är ett populärt sätt att stödja enheter med varierande egenskaper (storlek av visninsområdet, inmatningsmekanismer, typ av media, etc.) genom att ange olika stilar för ett dokument beroende på enhetens egenskaper med hjälp av CSS \emph{media queries}.
+    Det är också populärt att utveckla webbapplikationer genom att skapa återanvändbara moduler för minskad komplexitet.
+    Tyvärr kräver responsiva moduler att användaren av modulen defininerar de olika responsiva stilarna eftersom endast användaren vet i vilket kontext modulen används (storleken av modulen till exempel).
+    Detta implicerar att responsiva moduler inte är enkapsulerade (alltså att de inte fungerar av sig själva), vilket är viktigt för återanvändning och att reducera komplexitet.
+    Det beror på CSS-språkets begränsningar att det endast går att definiera olika stilar för element bereonde på dokumentets rot och enhetens egenskaper med \emph{media queries}.
+    För att kunna skapa enkapsulerade responsiva moduler måste olika stilar kunna definieras för ett element beroende på ett elements egenskaper, vilket är känt som \emph{element queries}.
+
+    Deltagare av det internationella industrikonsortiumet för webbstandardisering, W3C, är intresserade av att lösa problemet och möjliga lösningar diskuteras.
+    De är dock endast i det initiala planeringsstadiet, så det kommer dröja innan en lösning blir implementerad.
+    Dessutom är det problematiskt att implementera \emph{element queries} eftersom de medför problem gällande cirkuläritet samt prestanda, vilket måste lösas innan en standard skapas.
+
+    Denna rapport presenterar de problem för webbläsares renderingsmoterer som \emph{element queries} medför och visar sätt att övervinna vissa av problemen.
+    För att möjliggöra skapandet av enkapsulerade responsiva moduler, i väntan på webbläsarstöd, har ett tredjepartsbibliotek för \emph{element queries} skapats i \emph{JavaScript}.
+    Som presenterat i denna rapport så erbjuder biblioteket både prestanda- och användningsfördelar jämfört med andra relaterade bibliotek.
+    Ett optimerat delsystem för att detektera förändringar av elements storlekar har utvecklats som använder en nivåuppdelad \emph{batch}-processerare vilket medför att delsystemet erbjuder signifikant bättre prestanda än relaterade system.
+    Som del av den empiriska utvärderingen har det populära ramverket \emph{Bootstrap} modifierats att använda \emph{element queries} istället för \emph{media queries} genom att ändra \textasciitilde50 utav \textasciitilde8500 rader stilkod, vilket visar en av fördelarna med det utvecklade biblioteket.
+
   \end{foreignabstract}
   \clearpage
   % \noindent
@@ -2540,7 +2556,8 @@
         \todo[inline]{Present perf statistics of other browsers? Firefox still seems to favor the scroll solution (but less performant) while Safari semms to favors the object solution.}
         \todo[inline]{Show graph for resize detection also.}
         \todo[inline]{Graphs for FireFox, IE and Safari?}
-      \subsection{Cycle detection system}
+      \subsection{elq-breakpoints plugin}
+        \todo[inline]{Write this one.}
 
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
