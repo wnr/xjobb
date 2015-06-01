@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Modular responsive web design</title>
+    </head>
+    <body>
+        <h1>Lucas Wiener</h1>
+
+        <h2>Modular responsive web design</h2>
+        <span>Allowing responsive web modules to respond to custom criteria instead of only the viewport size by implementing <i>element queries</i></span>
+
+        <h3>Abstract</h3>
+        <p>
+        Responsive web design is a popular approach to support devices with varying characteristics (viewport size, input mechanisms, media type, etc.) by conditionally style the content of a document by such criterion using CSS <i>media queries</i>.
+        To reduce complexity it is also popular to develop web applications by creating reusable modules.
+        Unfortunately, responsive modules require the users of a module to define the conditional styles since only the user knows the layout of the module.
+        This implies that responsive modules cannot be encapsulated, which is important for reusability and reduced complexity.
+        This is due to the limitation of CSS that elements can only be conditionally styled by the document root and device properties by using media queries.
+        In order to create encapsulated responsive modules, elements must be able to be conditionally styled by <i>element</i> property criterion, which is known as <i>element queries</i>.
+        </p>
+        <p>
+        Participants of the main international standards organization for the web, the W3C, are interested in solving the problem and possible solutions are being discussed.
+        However, they are still at the initial planning stage so a solution will not be implemented natively in the near future.
+        Additionally, implementing element queries imposes circularity and performance problems, which needs to be resolved before writing a standard.
+        </p>
+        <p>
+        This thesis presents the issues that element queries imposes to layout engines and shows some approaches to overcome the problems.
+        In order to enable developers to create encapsulated responsive modules, while waiting for native support, a third-party element queries JavaScript library has been developed.
+        As presented in this thesis, the library provides both performance and usage advantages to other related libraries.
+        An optimized subsystem for detecting element resize events has been developed using a leveled batch processor, which is significantly faster than similar systems.
+        As part of the empirical evaluation the Bootstrap framework has been altered to use element queries intead of media queries by altering ~50 out of ~8500 lines of style code, which displays one of the advantages of the developed library.
+        </p>
+
+    </body>
+</html>

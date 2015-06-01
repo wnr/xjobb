@@ -256,7 +256,7 @@
     Dessutom är det problematiskt att implementera \emph{element queries} eftersom de medför problem gällande cirkuläritet samt prestanda, vilket måste lösas innan en standard skapas.
 
     Denna rapport presenterar de problem för webbläsares renderingsmoterer som \emph{element queries} medför och visar sätt att övervinna vissa av problemen.
-    För att möjliggöra skapandet av enkapsulerade responsiva moduler, i väntan på webbläsarstöd, har ett tredjepartsbibliotek för \emph{element queries} skapats i \emph{JavaScript}.
+    För att möjliggöra skapandet av enkapsulerade responsiva moduler, i väntan på webbläsarstöd, har ett tredjepartsbibliotek för \emph{element queries} skapats i JavaScript.
     Som presenterat i denna rapport så erbjuder biblioteket både prestanda- och användningsfördelar jämfört med andra relaterade bibliotek.
     Ett optimerat delsystem för att detektera förändringar av elements storlekar har utvecklats som använder en nivåuppdelad \emph{batch}-processerare vilket medför att delsystemet erbjuder signifikant bättre prestanda än relaterade system.
     Som del av den empiriska utvärderingen har det populära ramverket \emph{Bootstrap} modifierats att använda \emph{element queries} istället för \emph{media queries} genom att ändra \textasciitilde50 utav \textasciitilde8500 rader stilkod, vilket visar en av fördelarna med det utvecklade biblioteket.
