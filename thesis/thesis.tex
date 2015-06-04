@@ -1928,6 +1928,13 @@
             For detecting when the target \gls{element} shrinks, two \glspl{element} are needed; one for handling the scrollbars and one for causing them to scroll.
             Similarly, for detecting when the target \gls{element} expands, two \glspl{element} are needed in the same way.
             A container \gls{element} is injected that contains the four \glspl{element} and make sure that they match the size of the target element.
+          \item\label{itm:erd-approach-flow}
+            \textbf{Flow-based solution}:
+            This solution is similar to the scroll-based solution in the sense that it also injects elements that have overflowing content.
+            Instead of listening to \code{scroll} events, this solution uses several flow events.
+            The idea is to detect when scrollbars disappear (i.e., underflow of content since the target container has increased in size) and when scrollbars appear (i.e., overflow of content since the target container has decreased in size).
+            Unfortunately such events are not standardized but Gecko, WebKit and Blink support them (although by different \glspl{API})\footnote{See \url{https://developer.mozilla.org/en-US/docs/Web/Events/overflow} for Gecko.}.
+            Blink still supports the events but has deprecated them \cite{blink_deprecated_flow_events}.
         \end{enumerate}
         Solution \ref{itm:erd-approach-polling} is appealing because it does not mutate the \gls{DOM}, supports all elements (including void elements), and it provides excellent \gls{browser} compatibility since it does not rely on special \gls{element} behavior or similar.
         However, in order to prevent the \gls{responsive} \glspl{element} lagging behind the size changes of the user interface, polling needs to be performed quite frequently.
@@ -1937,13 +1944,15 @@
         \todo{Should make quick test to see how much CPU it uses when polling frequently}
 
         \paragraph{Injection solutions}
-        The object-based and scroll-based solutions have similar characteristics and have both been presented by \cite{backalley}.
-        The scroll-based solution was presented first, but was rejected in favor of solution the object-based solution as it was discovered.
-        Fortunately, a somewhat reworked version of the scroll-based solution is still provided by \cite{eq_imp_css-element-queries}.        
-        However, it has issues with handling target elements with sides that are zero in length and also with the target element getting removed from the render tree (e.g., by setting the \code{display} style property to \code{none}).
-        It is probably due to these issues that it was rejected.
+        The object-based, scroll-based and flow-based solutions have similar characteristics and have both been presented by \cite{backalley}.
+        The flow-based solution was presented first, but was rejected in favor of the scroll-based solution as it was discovered that in turn was rejected in favor of the object-based solution.
+        Fortunately, somewhat reworked versions of the flow-based and scroll-based solutions are still provided by \cite{eq_imp_prollyfill-min-width} and \cite{eq_imp_css-element-queries} respectively.
+        While not stated officially by \cite{backalley}, the flow-based solution was probably rejected due to the lack of browser compatability.
+        The flow-based solution is not presented in detail, due to the limited browser compatability and similarity with the scroll-based solution.
+        \todo{Not really happy with this sentence.}
+        The scroll-based solution was probably rejected due to issues with handling target elements with sides that are zero in length and also with the target element getting removed from the render tree (e.g., by setting the \code{display} style property to \code{none}).
 
-        Both solutions mutate the \gls{DOM} and relies on special \gls{element} behavior, but they offer many advantages over polling.
+        All three solutions mutate the \gls{DOM} and relies on special \gls{element} behavior, but they offer many advantages over polling.
         Since they are event based, layout engines only need to perform extra work when injecting the solution to the target \glspl{element} and when the target \glspl{element} actually resize.
         Event based resize detection also implies minimal delay between the actual resize event and the detection.
         By positioning the injected elements \code{absolute} with widths and heights set to \code{100\%}, the injected \glspl{element} do not affect the visual representation of the \gls{document}.
@@ -2023,7 +2032,6 @@
 
         \todo[inline]{Write how the bugs were fixed in the scroll approach?}
         \todo[inline]{Write about the MutationObserver approach? Need to know the problems with the approach in order to write about GSS. Perhaps there are no problems, and it really is what should be used for ELQ.}
-        \todo[inline]{Write about the flow-based approach.}
         \todo[inline]{It is stated in Related work that original scroll and flow based approaches have limitations and bugs. Describe them here.}
         \todo[inline]{Have a look at under/over-flow approach: \url{https://github.com/FremyCompany/prollyfill-min-width/blob/master/polyfill-min-width.js} and \url{http://www.backalleycoder.com/2013/03/14/oft-overlooked-overflow-and-underflow-events/}. Might be something for Safari. Could be nice to at least know how it performs/behaves.}
         \todo[inline]{Write that for IE the native resize listener is used.}
