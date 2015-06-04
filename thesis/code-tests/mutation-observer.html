@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <style>
+            #target {
+                background: red;
+                width: 30%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="target">When in doubt, mumble.</div>
+        <script>
+            var observer = new MutationObserver(function (mutations, observer) {
+                var style = getComputedStyle(document.getElementById("target"));
+                console.log(style.width, style.height);
+            });
+
+            observer.observe(document.getElementById("target"), {
+                attributes: true,
+                attributesFilter: ["style"]
+            });
+        </script>
+    </body>
+</html>

@@ -2030,10 +2030,22 @@
         However, it is still beneifical to batch process the algorithm for such layout engines since only pure layouts need to be performed (instead of having to recompute styles and synchronize the \gls{DOM} and render trees before each layout).        
         As step~\ref{itm:erd-algo-original-scroll-6} is performed by the layout engine asynchronously and does not interact with the \gls{DOM}, it does not need to be batch processed.
 
+        \paragraph{MutationObservers}
+        The \code{MutationObserver} \gls{API} defined in the W3C working draft of the DOM level 4 specification \cite{w3c_dom_4} may seem like a good candidate to use for detecting element resize events at a first glance.
+        Although not yet standardized, the \gls{API} is implemented in modern browsers according to the working draft.
+        By using the \gls{API} an element it is possible to observe attribute or subtree changes to an element.
+        By observing the \code{style} attribute of an element and the content of it (if the element size depends on its children), it is possible to detect direct style changes to an element (i.g., changes to the style attribute by JavaScript).
+        The main limitation is that it is not possible to observe the computed style state of an element.
+        For instance, detecting that the width of an element has been set to 50 \% with JavaScript is possible (it would not have been possible to detect the style change if the width style was calculated by a CSS cascade).
+        However, when the parent container change size the observer would not detect that the element width of the element has changed, as the style attribute width still is 50 \%.
+        This could theoretically be resolved by also observing the parent of the element, and so on up to the root of the document.
+        Such solution would probably end up observing most elements of a page, which might be a performance penalty, and it would still not be able to detect all element resize events.
+        Element resize events may occur in numerous ways that do not alter the \gls{DOM} by CSS (.e.g, conditionally styles defined by media queries, pseudo-classes, etc.).
+        Using the \code{MutationObserver} \gls{API} is interesting, but it is only useful if it supports observing computed style changes of an element for detecting element resize events.
+        Due to these limitations, the \gls{API} was not considered to be used in \gls{ELQ}.
+
         \todo[inline]{Write how the bugs were fixed in the scroll approach?}
-        \todo[inline]{Write about the MutationObserver approach? Need to know the problems with the approach in order to write about GSS. Perhaps there are no problems, and it really is what should be used for ELQ.}
         \todo[inline]{It is stated in Related work that original scroll and flow based approaches have limitations and bugs. Describe them here.}
-        \todo[inline]{Have a look at under/over-flow approach: \url{https://github.com/FremyCompany/prollyfill-min-width/blob/master/polyfill-min-width.js} and \url{http://www.backalleycoder.com/2013/03/14/oft-overlooked-overflow-and-underflow-events/}. Might be something for Safari. Could be nice to at least know how it performs/behaves.}
         \todo[inline]{Write that for IE the native resize listener is used.}
 
       % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2674,8 +2686,8 @@
     The libraries \cite{eq_imp_localised-css,eq_imp_selector_queries} uses polling to detect element size changes, and are therefore support arbitrary element resize detection.
     However, as presented in Section~\ref{sec:imp_erd}, polling is undesired.
     \todo{Write why again?}
-    Library \cite{eq_imp_gss} evaluates all elements on \gls{DOM} mutations, which in a sense is an automatic full detection of arbitrary element resizes.
-    The downside to observing \gls{DOM} mutations is that not all events that affects layout are observed, as presented in Section~\ref{sec:imp_erd}.
+    Library \cite{eq_imp_gss} evaluates all elements on \gls{DOM} mutations, using the \code{MutationObserver} \gls{API} as discussed in Section~\ref{sec:imp_erd}, which does not detect all element resize events.
+    \todo{Write more about GSS, how it uses constraints CSS, bad browser support, that it is fairly static, quote from github, etc.}
 
     The three remaining libraries uses three different injection solutions, as described in Section~\ref{sec:imp_erd}, to detect element resize events; \cite{eq_imp_element-queries} uses the object-based solution, \cite{eq_imp_prollyfill-min-width} uses the flow-based solution, and \cite{eq_imp_css-element-queries} uses the scroll-based solution.
     According to the evaluation in Section~\ref{sec:eval-performance}, all three libraries are less performant than the element resize detection system used in \gls{ELQ}.
@@ -2836,7 +2848,6 @@
       The feature could be valuable in the development phase of applications, but should probably be disabled in production due to performance reasons.
       Users that value true separation of style and \gls{HTML} could also benefit from parsing CSS, as the breakpoint of all elements then could be deduced by considering the element queries in the CSS.
 
-      \todo[inline]{Investigate in how the erd system can be further optimized. Maybe DOM MutationObservers, fix layout thrashing in Safari + FireFox, etc.}
       \todo[inline]{Fulfill all technical goals. Which ones?}
       \todo[inline]{ERD could automatically use the best solution based on the layout engine.}
       \todo[inline]{Write that eq are theoretically not limited to sizes, could be any property of elements!}
