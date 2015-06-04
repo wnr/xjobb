@@ -2566,21 +2566,23 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Related work
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{Related work}\label{ch:related-work}
-    There are numerous implementations of third-party element queries libraries. This chapter aims to list and analyze them.
-    Since many of them share the same characteristics, they are classified and analyzed in a groups by characteristics.
+    There are numerous third-party element queries libraries, which this chapter aims to list and analyze.
+    Since many of them share the same characteristics, they are classified and analyzed in groups by characteristics.
 
-    Identified element query third-party libraries that directly or indirectly enables element queries are the ones presented in table~\ref{table:approaches-classifications}.
-    They can be divided into the following classes:
-    \begin{itemize}
-      \item \textbf{Valid syntax}: Approaches that conforms to the \gls{CSS}, \gls{HTML}, and \gls{JavaScript} standards.
-      \item \textbf{Invalid syntax}: Approaches that requires custom (invalid) syntax or in any other way do not conform to the standards described above.
-      \item \textbf{Static}: Approaches that in a compilation step calculates desired element queries and transforms them into valid \gls{CSS} with an element query runtime or media queries. These approaches do not support layout changes at runtime.
-      \item \textbf{Dynamic}: Approaches that handles element queries at runtime (and therefore support pages that changes dynamically).
-      \item \textbf{Automatic}: Approaches that updates affected element queries on viewport and element resize events automatically.
-      \item \textbf{Semi-automatic}: Approaches that partly updates affected element queries. Usually only viewport resize events are handled automatically.
-    \end{itemize}
+    Identified third-party libraries that directly or indirectly enables element queries are presented in table~\ref{table:approaches-classifications} along with a classification of each library.
+    The characteristics that they are classified after are the following:
     It should be noted that most of the current approaches are combinations of different classes.
-    See table~\ref{table:approaches-classifications} for a classification of current approaches.
+    \begin{itemize}
+      \item \textbf{Valid syntax}: Libraries that conforms to the \gls{CSS}, \gls{HTML}, and \gls{JavaScript} standards.
+      \item \textbf{Invalid syntax}: Libraries that requires custom (invalid) syntax or in any other way do not conform to the standards described above.
+      \item \textbf{Static}:  Libraries that only support static layouts. 
+                              There are several approaches to this, such as having a compilation step that calculates desired element queries and transforms them into valid \gls{CSS} with an element query runtime or media queries. 
+                              Another approach is to calculate all element styles once at page load. All approaches have in common that the libraries do not support layout changes at runtime, and are therefore only useful for static pages.
+      \item \textbf{Dynamic}: Libraries that handles element queries at runtime (and therefore support pages that changes dynamically).
+      \item \textbf{Automatic}: Libraries that updates affected element queries on viewport and element resize events automatically.
+      \item \textbf{Semi-automatic}: Libraries that partly updates affected element queries. Usually only viewport resize events are handled automatically.
+    \end{itemize}
+    
     \todo{Not really happy with the dynamic vs static. Need to define this exactly. Is it dynamic because CSS is parsed at runtime or does it need a way to rerun the library on new elements as well?}
     \begin{table}[ht]\center
       \tiny
@@ -2628,45 +2630,47 @@
 
     \todo{Did I miss this one? \url{https://github.com/jonathantneal/hitch-element-queries}}
     
-    The approaches \cite{eq_imp_magichtml,eq_imp_eqcss,eq_imp_prollyfill-min-width,eq_imp_localised-css,eq_imp_gss} have in common that they require developers to write cunstom (invalid) \gls{CSS}.
-    Since they no longer conform to the \gls{CSS} specification, new features can be supported through the custom \gls{CSS} syntax.
+    \paragraph{Invalid syntax}
+    The libraries \cite{eq_imp_magichtml,eq_imp_eqcss,eq_imp_prollyfill-min-width,eq_imp_localised-css,eq_imp_gss} have in common that they require developers to write cunstom (invalid) \gls{CSS}.
+    Since they no longer conform to the \gls{CSS} standard, new features can be supported through the custom \gls{CSS}.
     As shown by \cite{eq_imp_eqcss,eq_imp_gss} quite advanced features can be implemented this way.
-    Additionally, teaching \gls{CSS} new tricks implies that it is possible to implement a solution to element queries that does not require any changes to the \gls{HTML}, which can be preferable since all styling then can be written in \gls{CSS} (which is the purpose of \gls{CSS}).
-    However, there are numerous flaws to the approaches that requires invalid \gls{CSS}.
+    Additionally, adding new \gls{CSS} features implies that it is possible to implement a solution to element queries that does not require any changes to the \gls{HTML}, which can be preferable since all styling then can be written in \gls{CSS} (which is the purpose of \gls{CSS}).
+    However, there are numerous drawbacks with libraries that requires invalid \gls{CSS}.
+    
     First, it requires a compilation step in order to produce valid \gls{CSS} that layout engines understand.
     This can either be done at server side or in the browser at runtime.
-    The advantage of having the compilation step at server side is increased performance since the browser will understand the \gls{CSS} directly when it has been retrieved.
-    However, compiling the \gls{CSS} at server side implies that the layout of the page cannot be changed at runtime and is therefore only useful for static pages.
-    By instead having the compilation step at runtime, dynamic layouts are possible.
-    The performance impact of having the compilation step at runtime can be significant for the following reasons:
+    The advantage of having the compilation step at server side is increased performance since the browser understands the \gls{CSS} directly when it has been retrieved.
+    Server side compilation implies that the layout of the page cannot be changed at runtime and is therefore only useful for static pages.
+    By instead having the compilation step at runtime, dynamic layouts can be used since element queries may be re-evaluated on layout changes.
+    However, the performance impact of having the compilation step at runtime can be significant for the following reasons:
     \begin{itemize}
       \item The received \gls{CSS} cannot be understood by the browser, and therefore all parsing and reasoning about it has to be postponed until the library script executes.
       Note that layout engines could in theory parse the \gls{CSS} and perform speculative selector matching while waiting for other parts of the page to finish (such as executing scripts), which cannot be done with invalid \gls{CSS}.
       \item When the library script executes it has to parse the custom \gls{CSS} --- a process which is most likely slower than native parsing.
-      \item When parsed, the library needs to apply it's logic to the parsed \gls{CSS} and produce valid \gls{CSS}. The produced \gls{CSS} needs to be applied to the document by mutating the \gls{DOM}.
+      \item When parsed, the library needs to apply its logic to the parsed \gls{CSS} and produce valid \gls{CSS}. The produced \gls{CSS} needs to be applied to the document by mutating the \gls{DOM}.
       \todo{Write about reentrant HTML and layout thrashing etc?}
       \item The layout engine needs to parse the \gls{CSS} added to the \gls{DOM}, which means that the styles of the page is parsed twice.
-      \item The custom parser engine will need to be included in the page, which implies a bigger library script size to fetch.
+      \item The custom parser engine needs to be included in the page, which implies a bigger library script size to fetch.
     \end{itemize}
-    Additional problems with custom \gls{CSS}, that also applies to custom \gls{CSS} compiled at server side, are:
-    \begin{itemize}
-      \item 
-        By not conforming to \gls{CSS} standards many tools such as preprocessors, validators and linters will no longer be compatible.
-        Also, editors and other code-displaying tools will not be able to understand the syntax and will therefore not be able to highlight the code properly.
-        It should be noted that it is in some cases possible to create plugins or similar to such tools to extend their capabilities.
-      \item The custom \gls{API} and parser will need to be kept up to date with \gls{CSS} standards in order to make sure new features of \gls{CSS} are supported and that they are not conflicting with the custom \gls{API}.
-    \end{itemize}
+    
+    Second, by not conforming to \gls{CSS} standards many tools such as preprocessors, validators and linters are no longer compatible.
+    Also, editors and other code-displaying tools are not be able to understand the syntax and are therefore not be able to highlight the code properly.
+    It should be noted that it is in some cases possible to create plugins or similar to such tools to extend their capabilities.
 
-    Most approaches just listens to the viewport resize event, which may be enough for static pages.
+    Third, The custom \gls{API} and parser needs to be kept up to date with \gls{CSS} standards in order to make sure new features of \gls{CSS} are supported and that they are not conflicting with the custom \gls{API}.
+
+    \paragraph{Automation}
+    As shown in table~\ref{table:approaches-classifications}, most libraries simply listens to the viewport resize event, which may be enough for static pages.
     However, observing element resize events is desired for pages that change layout during runtime.
-    The approaches \cite{eq_imp_localised-css,eq_imp_selector_queries,eq_imp_prollyfill-min-width,eq_imp_gss,eq_imp_element-queries,eq_imp_css-element-queries} have in common that they observe elements for resize events.
-    Approaches \cite{eq_imp_localised-css,eq_imp_selector_queries} uses polling to detect element size changes, and are therefore support arbitrary element resize detection.
+    The libraries \cite{eq_imp_localised-css,eq_imp_selector_queries,eq_imp_prollyfill-min-width,eq_imp_gss,eq_imp_element-queries,eq_imp_css-element-queries} have in common that they observe elements for resize events.
+    The libraries \cite{eq_imp_localised-css,eq_imp_selector_queries} uses polling to detect element size changes, and are therefore support arbitrary element resize detection.
     However, as presented in Section~\ref{sec:imp_erd}, polling is undesired.
     \todo{Write why again?}
-    Approach \cite{eq_imp_gss} evaluates all elements on \gls{DOM} mutations, which in a sense is an automatic full detection of arbitrary element resizes.
-    The downside to observing \gls{DOM} mutations is that not all events that affects layout are observed, see Section~\ref{sec:imp_erd} for more information.
-    The three remaining approaches uses three different injection solutions, as described in Section~\ref{sec:imp_erd}, to detect element resize events; \cite{eq_imp_element-queries} uses the object-based solution, \cite{eq_imp_prollyfill-min-width} uses the flow-based solution, and \cite{eq_imp_css-element-queries} uses the scroll-based solution.
-    According to the evaluation in Section~\ref{sec:eval-performance}, all three approaches are less performant than the element resize detection system used in \gls{ELQ}.
+    Library \cite{eq_imp_gss} evaluates all elements on \gls{DOM} mutations, which in a sense is an automatic full detection of arbitrary element resizes.
+    The downside to observing \gls{DOM} mutations is that not all events that affects layout are observed, as presented in Section~\ref{sec:imp_erd}.
+
+    The three remaining libraries uses three different injection solutions, as described in Section~\ref{sec:imp_erd}, to detect element resize events; \cite{eq_imp_element-queries} uses the object-based solution, \cite{eq_imp_prollyfill-min-width} uses the flow-based solution, and \cite{eq_imp_css-element-queries} uses the scroll-based solution.
+    According to the evaluation in Section~\ref{sec:eval-performance}, all three libraries are less performant than the element resize detection system used in \gls{ELQ}.
     Also, recall from Section~\ref{sec:imp_erd} that the flow-based and scroll-based solutions both have limitations and bugs.
 
     \todo[inline]{Insight: Custom CSS: If a page has normal CSS present and performs getComputedStyle(), the script will be blocked until the CSS has been resolved so that the valid styles will be returned. If invalid CSS is present (a la Tommy's approach), then does the script wait or does it result in the wrong styles being returned? Probably.}
