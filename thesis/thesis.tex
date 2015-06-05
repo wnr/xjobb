@@ -114,7 +114,7 @@
 }
 \newglossaryentry{media queries}{
   name={media queries},
-  description={The CSS feature of specifying conditional style rules for elements by conditions such as the viewport size}
+  description={The CSS feature of specifying conditional style rules for \glspl{element} by conditions such as the \gls{viewport} size}
 }
 \newglossaryentry{viewport}{
   name={viewport},
@@ -166,7 +166,7 @@
 }
 \newglossaryentry{specificity}{
   name={specificity},
-  description={Is the means by which \glspl{layout engine} decides which \gls{CSS} rule property values are the most relevant to an element, which is based only on the form of the selector. See \url{http://www.w3.org/TR/CSS2/cascade.html\#specificity} for more information}
+  description={Is the means by which \glspl{layout engine} decides which \gls{CSS} rule property values are the most relevant to an \gls{element}, which is based only on the form of the selector. See \url{http://www.w3.org/TR/CSS2/cascade.html\#specificity} for more information}
 }
 \newglossaryentry{ELQ}{
   name={ELQ},
@@ -557,7 +557,7 @@
 
         With the release of \gls{CSS3} \gls{media queries} new possibilities opened up.
         \Gls{media queries} enabled developers to write conditional style declarations by media properties such as the \gls{viewport} size.
-        See listing~\ref{code:mq-example} for an example of how \gls{media queries} can be used to style \glspl{element} differently with relation to the viewport size.
+        See listing~\ref{code:mq-example} for an example of how \gls{media queries} can be used to style \glspl{element} differently with relation to the \gls{viewport} size.
         This can be used to tailor a site for a specific medium or \gls{viewport} size at runtime.
         \gls{RWD} refers to the approach of having a single site being \gls{responsive} to different media properties (mainly the \gls{viewport} size) at runtime to improve the user experience.
         With \gls{RWD} it is no longer needed to maintain several versions of a site, instead the site adapts to the user medium and device.
@@ -651,7 +651,7 @@
         Unfortunately, \gls{media queries} cannot be used to achieve this behavior (with the module still being \gls{encapsulated}).
         See figure~\ref{fig:problem-mq} for the actual behavior of the example page.
         As evident in the figure, the page is broken since either all instances are colored blue or red.
-        This is due to \gls{media queries} only targeting the viewport, and not the actual width given to the instances.
+        This is due to \gls{media queries} only targeting the \gls{viewport}, and not the actual width given to the instances.
         \begin{figure}[ht]
           \centering
           \begin{minipage}{.5\textwidth}
@@ -663,10 +663,10 @@
             \includegraphics[width=\linewidth]{images/mq-small}
           \end{minipage}
           \caption{
-            The module instances of the page do not behave as desired because they are conditionally styled by the viewport width, which does not reflect the individual width of the instances.
-            All instances are always either colored blue or red, depending on the viewport width.
-            In the left figure, the viewport is wide and therefore all instances are colored blue.
-            In the right figue, the viewport is narrow and therefore all instances are colored red.
+            The module instances of the page do not behave as desired because they are conditionally styled by the \gls{viewport} width, which does not reflect the individual width of the instances.
+            All instances are always either colored blue or red, depending on the \gls{viewport} width.
+            In the left figure, the \gls{viewport} is wide and therefore all instances are colored blue.
+            In the right figue, the \gls{viewport} is narrow and therefore all instances are colored red.
           }
           \label{fig:problem-mq}
         \end{figure}
@@ -792,7 +792,7 @@
 
         The \gls{DOM} defines a platform-neutral model for events and node trees, which is used for representing and interacting with \glspl{document}.
         The \gls{DOM} provides an interface for programs (\gls{JavaScript} in the \gls{browser}) to access and mutate the structure, style, and content of \glspl{document}.
-        Elements of the \gls{document} are converted to \gls{DOM} nodes, and therefore the whole \gls{document} is represented as a tree structure of \gls{DOM} nodes which is referred to as the \gls{DOM} tree.
+        \Glspl{element} of the \gls{document} are converted to \gls{DOM} nodes, and therefore the whole \gls{document} is represented as a tree structure of \gls{DOM} nodes which is referred to as the \gls{DOM} tree.
 
         \Glspl{layout engine} construct \gls{DOM} trees by parsing \gls{HTML} with any included \gls{CSS} and \gls{JavaScript}.
         Parsing of \gls{HTML} is not an easy task, partly because it is expected (although not required) of layout engines to be forgiving of errors, such as handling malformed \gls{HTML}.
@@ -962,11 +962,11 @@
           doubleWidths(elements); // ~700 ms
         \end{lstlisting}
         For each element given as parameter to the \code{doubleWidths} function, the \code{readWriteWidth} function is called with an element as argument.
-        In that function, the computed style of the element is requested, which will force a style computation for that element.
-        If any \gls{DOM} node affecting the element is marked as dirty, a layout will also need to be performed before returning the computed style of the element.
-        When the computed style has been acquired, the width of the element is set to a new value, which is a \gls{DOM} mutation that will need to be synchronized with the \gls{render tree}.
+        In that function, the computed style of the element is requested, which will force a style computation for that \gls{element}.
+        If any \gls{DOM} node affecting the element is marked as dirty, a layout will also need to be performed before returning the computed style of the \gls{element}.
+        When the computed style has been acquired, the width of the \gls{element} is set to a new value, which is a \gls{DOM} mutation that will need to be synchronized with the \gls{render tree}.
         Therefore, the element and its ancestors will be marked as dirty.
-        The next time \code{getComputedStyle} is called, which happens when processing the next element in the collection, a layout will be forced since \gls{DOM} nodes that affects the elements has been marked as dirty.
+        The next time \code{getComputedStyle} is called, which happens when processing the next element in the collection, a layout will be forced since \gls{DOM} nodes that affects the \glspl{element} has been marked as dirty.
         See figure~\ref{fig:layout-thrashing-example-1} for a visualization of the execution of the \code{doubleWidths} function.
         It is shown in the figure that style computations and layout is performed in each iteration.
         The total time spent on style computations is \textasciitilde40 ms and layout is \textasciitilde600 ms, which leaves \textasciitilde60 ms for the actual script execution.
@@ -1002,10 +1002,10 @@
           var elements = [...];
           doubleWidths(elements); // ~7 ms
         \end{lstlisting}
-        Now, the \code{doubleWidths} function performs two batches that both iterates over the elements collection.
-        In the first batch, all widths of all elements are acquired and stored in a collection.
+        Now, the \code{doubleWidths} function performs two batches that both iterates over the \glspl{element} collection.
+        In the first batch, all widths of all \glspl{element} are acquired and stored in a collection.
         Since no \gls{DOM} mutation occurs in the first batch, the layout engine does not need to perform any layout while retrieving the styles.
-        In the second batch, all elements are assigned the new widths based on the widths retrieved in the first batch.
+        In the second batch, all \glspl{element} are assigned the new widths based on the widths retrieved in the first batch.
         Since the script does not read the \gls{DOM} in any way during in the second batch, all \gls{DOM} mutations can be queued by the layout engine to be batch processed.
         See figure~\ref{fig:layout-thrashing-example-1-fixed} for a visualization of the execution of the batched example version.
         In the figure, it is clear that the layout engine is able to first execute the JavaScript, and later perform all style and layout computations in a batch.
@@ -1017,21 +1017,21 @@
         \end{figure}
 
         The total time spent on style computations has been reduced to \textasciitilde2 ms, layout to \textasciitilde1.5 ms, and the actual script execution to \textasciitilde3.5 ms.
-        It should be noted that both versions recalculate styles for the same number of elements, from now on denoted by $n$.
+        It should be noted that both versions recalculate styles for the same number of \glspl{element}, from now on denoted by $n$.
         Pausing the JavaScript context and switching the layout engine to style computation mode causes an overhead cost, from now on denoted by the constant $O_{s}$.
-        Let $C_{s}$ denote the time it takes for the layout engine to calculate the style of one element, then the total time needed for style computations in the first version is given by $T(n) = n(O_s + C_s)$.
-        Since the second version enabled the layout engine to calculate the style of all elements in a batch, the total time needed was reduced to $T(n) = nC_s + O_s$.
+        Let $C_{s}$ denote the time it takes for the layout engine to calculate the style of one \gls{element}, then the total time needed for style computations in the first version is given by $T(n) = n(O_s + C_s)$.
+        Since the second version enabled the layout engine to calculate the style of all \glspl{element} in a batch, the total time needed was reduced to $T(n) = nC_s + O_s$.
         The style computation was reduced from \textasciitilde40 ms to \textasciitilde2 ms because the second version avoids $n - 1$ overhead costs.
         However, it should be noted that both versions have time complexity $O(n)$.
         
         The major part of the time reduction is due to the layout time being significantly reduced.
-        The reason why the layout time was significantly reduced is because the two versions do not perform layout on the same amount of elements.
-        When an element and its ancestors has been marked as dirty, a layout will need to be performed on the subtree which contains at least all $n$ elements and possibly some ancestor elements.
-        So the minimum number of nodes that need to be laid out is given by $n + n_{a}$, where $n_a$ is the number of ancestor elements.
-        Since the first version forces the layout engine to perform a layout in each iteration, the minimum number of elements laid out is given by $n(n + n_a)$.
+        The reason why the layout time was significantly reduced is because the two versions do not perform layout on the same amount of \glspl{element}.
+        When an element and its ancestors has been marked as dirty, a layout will need to be performed on the subtree which contains at least all $n$ \glspl{element} and possibly some ancestor \glspl{element}.
+        So the minimum number of nodes that need to be laid out is given by $n + n_{a}$, where $n_a$ is the number of ancestor \glspl{element}.
+        Since the first version forces the layout engine to perform a layout in each iteration, the minimum number of \glspl{element} laid out is given by $n(n + n_a)$.
         Similar to style computation, performing a layout also has an overhead cost $O_{l}$.
-        Let $C_{l}$ denote the time it takes for the layout engine to layout one element, then the total time needed for layout in the first version is given by $T(n) = n(O_{l} + C_{l}(n + n_a))$.
-        The second version enables the layout engine to batch process the \gls{DOM} manipulations, and therefore only one layout of the subtree will need to be performed, which results in the minimum number of elements laid out being $n + n_a$.
+        Let $C_{l}$ denote the time it takes for the layout engine to layout one \gls{element}, then the total time needed for layout in the first version is given by $T(n) = n(O_{l} + C_{l}(n + n_a))$.
+        The second version enables the layout engine to batch process the \gls{DOM} manipulations, and therefore only one layout of the subtree will need to be performed, which results in the minimum number of \glspl{element} laid out being $n + n_a$.
         The total time needed for layout in the second version is then given by $T(n) = O_{l} + C_{l}(n + n_a)$.
         The first version has time complexity $O(n^2)$ while the second version has time complexity $O(n)$, which is a significant optimization.
 
@@ -1098,15 +1098,15 @@
 
       \Gls{media queries} and element queries are similar in the sense that they both enables developers to define conditional style rules that are applied by specified criterion \cite{w3c_css_mq}.
       The main difference is the type of criterion that can be used; in \gls{media queries} device and media criterion is used, while in element criterion is used in element queries.
-      It can somewhat simplified be described as that \gls{media queries} target the document root and up (i.e., the viewport, browser, OS, device, input mechanisms, etc.) while element queries target the document content (i.e., elements of the document).
+      It can somewhat simplified be described as that \gls{media queries} target the document root and up (i.e., the \gls{viewport}, browser, OS, device, input mechanisms, etc.) while element queries target the document content (i.e., \glspl{element} of the document).
 
       \paragraph{Terminology}
       The entity that is evaluated against a query is called the \emph{target} of the query.
-      For \gls{media queries}, the target is usually the device or viewport.
-      For element queries, the target is usually an element.
+      For \gls{media queries}, the target is usually the device or \gls{viewport}.
+      For element queries, the target is usually an \gls{element}.
       It should be noted that the target is the entity that is evaluated against the query, and not the entity that has conditionally styles applied.
       For instance, it is not possible to conditionally style the target of \gls{media queries}, since \gls{CSS} is incapable of altering the device.
-      For element queries, the target entity is sometimes referred to as the \emph{target element}.
+      For element queries, the target entity is sometimes referred to as the \emph{target} \gls{element}.
       In the case of element queries, the target element may also be the element that has conditionally styles applied (but is generally not).
       \gls{CSS} style declarations that are applied conditionally using either element queries or \gls{media queries} are sometimes referred to as \emph{conditional style declarations} or shortened \emph{conditional styles}.
       When the layout engine evaluates a media or element query to determine whether the selectors matches or not is called \emph{query selector matching}.
@@ -1120,8 +1120,8 @@
       \paragraph{Pseudo-syntax}
       As already stated, element queries is not yet standardized and the exact behavior and syntax is still undefined.
       In this thesis, the pseudo-syntax of element queries is defined as a pseudo-class named \code{eq}.
-      Recall from the \gls{CSS} selectors level 3 specification \cite{w3c_css_selectors} that pseudo-classes permits selection based on extended element information, and is often described as performing selection by the state of the element.
-      The \code{eq} pseudo-class takes expressions as input, that will be evaluated against the target element, as shown in the examples given in listing~\ref{code:eq-psuedo-syntax-examples}.
+      Recall from the \gls{CSS} selectors level 3 specification \cite{w3c_css_selectors} that pseudo-classes permits selection based on extended element information, and is often described as performing selection by the state of the \gls{element}.
+      The \code{eq} pseudo-class takes expressions as input, that will be evaluated against the target \gls{element}, as shown in the examples given in listing~\ref{code:eq-psuedo-syntax-examples}.
       \begin{lstlisting}[gobble=8,caption={Examples of the psuedo element queries syntax.}, captionpos=b, label={code:eq-psuedo-syntax-examples}]
         /* Matches all a elements that are wider than 500 pixels. */
         a:eq(width > 500px) {
@@ -1144,12 +1144,12 @@
       \end{lstlisting}
 
       \paragraph{General use case}
-      According to the draft written by the \gls{RICG} the general use case is to conditionally style an element by an ancestor element's width \cite{ricg_draft} to allow \gls{responsive} \gls{web} design for reusable modules.
-      Pages are usually designed to grow in height when content does not fit the viewport and therefore \gls{responsive} \gls{web} design usually targets the viewport width for layout breakpoints \cite{book_rwd,wiki_rwd,mjelde2014performance}.
+      According to the draft written by the \gls{RICG} the general use case is to conditionally style an element by an ancestor \gls{element}'s width \cite{ricg_draft} to allow \gls{responsive} \gls{web} design for reusable modules.
+      Pages are usually designed to grow in height when content does not fit the \gls{viewport} and therefore \gls{responsive} \gls{web} design usually targets the \gls{viewport} width for layout breakpoints \cite{book_rwd,wiki_rwd,mjelde2014performance}.
       This can be verified by viewing the source code of popular \gls{responsive} design frameworks (e.g., \gls{Bootstrap}) where almost exclusively width breakpoints are present.
-      Since element queries are to mainly allow \gls{responsive} \gls{web} design for modules, the same is assumed to apply for element queries (that only the width of elements are of interest).
-      Further, it is assumed that element queries mainly targets ancestor elements of the element to be conditionally styled, and therefore it is not crucial to support element queries on the own element width.
-      This also implies that element queries that targets void elements are also not crucial, and hence are not regarded as a general use case.
+      Since element queries are to mainly allow \gls{responsive} \gls{web} design for modules, the same is assumed to apply for element queries (that only the width of \glspl{element} are of interest).
+      Further, it is assumed that element queries mainly targets ancestor \glspl{element} of the element to be conditionally styled, and therefore it is not crucial to support element queries on the own element width.
+      This also implies that element queries that targets void \glspl{element} are also not crucial, and hence are not regarded as a general use case.
 
       \todo[inline]{Should it really also be discussed in detail how element queries solve the problem?}
       \todo[inline]{If a better example is found to be used in \ref{sec:rwd-modular-problem}, the same example can be used here and shown how element queries make it behave as expected.}
@@ -1257,8 +1257,8 @@
           }
         \end{lstlisting}
         What makes this situation more complex than the previous example is that it is less obvious for developers to identify that there are cyclic rules.
-        First, the problem cannot be found without considering the rule sets of both the module and the \code{\#foo} element.
-        Second, the rules of the module elements and the rules of the \code{\#foo} \gls{element} might be separated into different parts of the stylesheet or different stylesheets.
+        First, the problem cannot be found without considering the rule sets of both the module and the \code{\#foo} \gls{element}.
+        Second, the rules of the module \glspl{element} and the rules of the \code{\#foo} \gls{element} might be separated into different parts of the stylesheet or different stylesheets.
         Third, the user of the module must be aware of how it styles itself in order to understand the limitations it imposes.
         By adding one line to the containing element \code{\#foo} a cycle appears in another part of the application (in the module).
         A \gls{JavaScript} equivalent of this example would perhaps be \code{var bar = true; while(bar);} with the motivation that it is still obvious that it results in an infinite loop but both the loop and the variable both need to be considered.
@@ -1330,17 +1330,17 @@
         % The different solution approaches either limits element queries in some way or solves only a subproblem, so no perfect solution that hinders element queries unlimited with decent performance and low complexity has been found.
         % The section is mainly based on \normalfont{\cite{w3c_eq_mail,ricg_irc_log,ricg_issue_viewport,w3c_css21}}.
 
-      By limiting element queries to a special separated viewport container \glspl{element} (i.e., a sub-viewport of the document) that can only be queried by child \glspl{element}, many of the problems are resolved \cite{w3c_eq_mail,ricg_irc_log,ricg_issue_viewport}.
+      By limiting element queries to a special separated \gls{viewport} container \glspl{element} (i.e., a sub-\gls{viewport} of the document) that can only be queried by child \glspl{element}, many of the problems are resolved \cite{w3c_eq_mail,ricg_irc_log,ricg_issue_viewport}.
       This can be done by either adding a new \gls{HTML} element or attribute.
-      For the sake of simplicity, a \gls{HTML} element named \code{viewport} will be used to define such sub-viewports in all examples throughout this section.
-      In order to avoid cyclic rules, the following limitations to the viewport element is defined:
+      For the sake of simplicity, a \gls{HTML} element named \code{viewport} will be used to define such sub-\glspl{viewport} in all examples throughout this section.
+      In order to avoid cyclic rules, the following limitations to the \gls{viewport} element is defined:
       \begin{enumerate}
-        \item\label{viewport-rule-1} The size of the viewport element may not be dependent on its children. This implies that all \gls{CSS} that causes a viewport \gls{element} to be shrunken to fit its content are invalid.
-        \item\label{viewport-rule-2} The selector may only include the viewport \gls{element} targeted by element queries as a part of the expression of a selector (not the right-most simple selector).
-        \item\label{viewport-rule-3} Only the nearest viewport element ancestor of the right-most simple selector may be targeted by element queries in selectors.
+        \item\label{viewport-rule-1} The size of the \gls{viewport} element may not be dependent on its children. This implies that all \gls{CSS} that causes a \gls{viewport} \gls{element} to be shrunken to fit its content are invalid.
+        \item\label{viewport-rule-2} The selector may only include the \gls{viewport} \gls{element} targeted by element queries as a part of the expression of a selector (not the right-most simple selector).
+        \item\label{viewport-rule-3} Only the nearest \gls{viewport} element ancestor of the right-most simple selector may be targeted by element queries in selectors.
       \end{enumerate}
       See listing~\ref{code:viewport-selectors} for examples of valid and invalid CSS selectors according to the rules defined above.
-      \begin{lstlisting}[gobble=8,caption={Examples of valid and invalid selectors with the viewport element.}, captionpos=b, label={code:viewport-selectors}]
+      \begin{lstlisting}[gobble=8,caption={Examples of valid and invalid selectors with the \gls{viewport} \gls{element}.}, captionpos=b, label={code:viewport-selectors}]
         /* HTML */
         <viewport id="outer">
           <viewport id="inner">
@@ -1370,8 +1370,8 @@
       \end{lstlisting}
       This approach has been discussed by the \gls{W3C} and the initial draft of the \gls{RICG} assumes that this is a prerequisite to a \gls{native} implementation \cite{w3c_eq_mail,ricg_irc_log}.
       \todo{Reference the initial draft?}
-      The reason that the \gls{HTML} declaration of element viewport behavior is proposed instead of a new \gls{CSS} property that defines the behavior is because the \gls{layout engine} in the latter case needs to resolve the styles for all \glspl{element} in order to resolve the viewport \glspl{element}.
-      With the viewport behavior declared in \gls{HTML}, the \gls{layout engine} knows after it has parsed the \gls{HTML} which \glspl{element} are to be treated at separate sub-viewports.
+      The reason that the \gls{HTML} declaration of element \gls{viewport} behavior is proposed instead of a new \gls{CSS} property that defines the behavior is because the \gls{layout engine} in the latter case needs to resolve the styles for all \glspl{element} in order to resolve the \gls{viewport} \glspl{element}.
+      With the \gls{viewport} behavior declared in \gls{HTML}, the \gls{layout engine} knows after it has parsed the \gls{HTML} which \glspl{element} are to be treated at separate sub-\glspl{viewport}.
       This way, parallelizing the selector matching and style computation is possible (as opposed to if the style for each element needs to be resolved in order to know the \code{viewport} \glspl{element}) \cite{w3c_eq_mail}.
       Also, the internal \glspl{API} that request non-layout information for the \glspl{element} using element queries only need to make sure that the containing \gls{viewport} \gls{element} has been laid out before resolving the styles.
       The layout can be done in one pass as long as the \gls{viewport} \glspl{element} are laid out before their children.
@@ -1380,13 +1380,13 @@
 
       Obviously, this approach limits element queries a lot.
       The fact that the size of the \gls{viewport} \gls{element} cannot depend on its children (like normal block \glspl{element} do \cite{w3c_css21}), limits the usability.
-      Viewport \glspl{element} would behave much like the \code{iframe} \gls{element} layout-wise.
-      It should be noted that \code{iframe} \glspl{element} are not suitable as an alternative to the proposed \code{viewport} \gls{element}, since \code{iframe} elements are much more limited by nature (they create a new \gls{document} and script context) \cite{w3c_css21}.
+      \Gls{viewport} \glspl{element} would behave much like the \code{iframe} \gls{element} layout-wise.
+      It should be noted that \code{iframe} \glspl{element} are not suitable as an alternative to the proposed \code{viewport} \gls{element}, since \code{iframe} \glspl{element} are much more limited by nature (they create a new \gls{document} and script context) \cite{w3c_css21}.
       \todo{Write about the seamless mode of iframes?}
-      Recall that the idea is that a viewport element cannot be queried for properties that its children may affect (such as the width and height style properties).
+      Recall that the idea is that a \gls{viewport} element cannot be queried for properties that its children may affect (such as the width and height style properties).
       In order to allow the children to query the properties, they cannot be affected by the children.
-      In theory it should mean that if no child query the height of the viewport for instance, then the height of the viewport may depend on its children.
-      This is a powerful insight, since the general use case would be to write element queries against the width and have the \glspl{element} adapt their heights accordingly (including the viewport \gls{element}) (as described in Section~\ref{sec:eq-definitions}).
+      In theory it should mean that if no child query the height of the \gls{viewport} for instance, then the height of the \gls{viewport} may depend on its children.
+      This is a powerful insight, since the general use case would be to write element queries against the width and have the \glspl{element} adapt their heights accordingly (including the \gls{viewport} \gls{element}) (as described in Section~\ref{sec:eq-definitions}).
 
       \paragraph{JavaScript library}
       Another approach to enable element queries is to provide a \gls{third-party} \gls{JavaScript} library.
@@ -1422,7 +1422,7 @@
     Section~\ref{sec:library-imp-details} presents details about key implementation design decisions and algorithms.
     This section will also describe optimizations that has been done.
 
-    \todo[inline]{Write somewhere that it might be an option to not have a resize detection system, but instead let the user manually check the elements when they may have changed.}
+    \todo[inline]{Write somewhere that it might be an option to not have a resize detection system, but instead let the user manually check the \glspl{element} when they may have changed.}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Technical goals
@@ -1686,7 +1686,7 @@
           \item
             \textbf{\abbr{ID} handler}: via the \code{elq.idHandler} property that refers to the \abbr{ID} handler instance. \todo{Include id handler in section \ref{sec:arcithecture}?}
             The \abbr{ID} handler has a method \code{get} that returns the \abbr{ID} of the required element parameter.
-            If the element does not have any \abbr{ID} one will be assigned to the element.
+            If the element does not have any \abbr{ID} one will be assigned to the \gls{element}.
             It is possible to override the assignment with an option parameter.
         \end{itemize}
       \subsection{Plugins}
@@ -1705,9 +1705,9 @@
         \todo[inline]{Maybe it should be generally explained that the attribute design of both plugins follow the same design. Explain options at element level, plugin level, etc.}
 
         \subsubsection{Breakpoints}\label{sec:plugin-breakpoints}
-          This plugin observes element resize events and updates the elements size states according to defined breakpoints.
+          This plugin observes element resize events and updates the \glspl{element} size states according to defined breakpoints.
           The name of the plugin is \code{elq-breakpoints} and it does not have any dependencies (other than the element resize detector of the \gls{ELQ} core).
-          The main idea of the plugin is to apply classes to target elements that reflects the size states of the elements.
+          The main idea of the plugin is to apply classes to target \glspl{element} that reflects the size states of the \glspl{element}.
           Style states of an element is defined by breakpoints by custom element attributes.
           See listing~\ref{code:elq-breakpoints-example} for an example of breakpoints definition attributes.
           \begin{lstlisting}[gobble=12,caption={Example of an element that has two width breakpoints (300 and 500 pixels) defined by using the \code{elq-breakpoints} plugin.},captionpos=b,label={code:elq-breakpoints-example}]]
@@ -1716,32 +1716,32 @@
             </div>
           \end{lstlisting}
           \todo{Shorten syntax?}
-          The \code{elq} attribute states that it is an \gls{ELQ} element, and the \code{elq-breakpoints} attribute states that the element should be handled by the plugin.
-          The \code{elq-breakpoints\-width="300 500"} defines that the element should have width breakpoints at 300 and 500 pixels.
+          The \code{elq} attribute states that it is an \gls{ELQ} \gls{element}, and the \code{elq-breakpoints} attribute states that the \gls{element} should be handled by the plugin.
+          The \code{elq-breakpoints\-width="300 500"} defines that the \gls{element} should have width breakpoints at 300 and 500 pixels.
           Height breakpoints are defined in the same way with the \code{elq-breakpoints-height} attribute.
-          The possible size states of the element would then be (in pixels):
+          The possible size states of the \gls{element} would then be (in pixels):
           \begin{itemize}
             \item $width < 300$
             \item $300 <= width < 500$
             \item $500 <= width$
           \end{itemize}
           \todo{Explain that low is inclusive, and why.}
-          The plugin appends classes to the element that reflects the size state of the element.
+          The plugin appends classes to the \gls{element} that reflects the size state of the \gls{element}.
           For each breakpoint, one class is present that tells if the size is above or below the breakpoint.
           \todo{Remember that above is inclusive. Maybe this should be an option?}
-          Recall from Section~\ref{sec:eq-definitions} that the number of size states of an element in a dimension is given by $n_{ss}(n_b) = n_b + 1$, where $n_b$ is the number of breakpoints in that dimension.
-          Since the style state can be either above or below each breakpoint, the number of breakpoint classes of an element in a dimension is given by $n_{bc}(n_{b}) = 2n_b$.
-          The number of breakpoint classes active at the same time for an element in a dimension is given by $n_{abc}(n_{b}) = n_{b}$.
+          Recall from Section~\ref{sec:eq-definitions} that the number of size states of an \gls{element} in a dimension is given by $n_{ss}(n_b) = n_b + 1$, where $n_b$ is the number of breakpoints in that dimension.
+          Since the style state can be either above or below each breakpoint, the number of breakpoint classes of an \gls{element} in a dimension is given by $n_{bc}(n_{b}) = 2n_b$.
+          The number of breakpoint classes active at the same time for an \gls{element} in a dimension is given by $n_{abc}(n_{b}) = n_{b}$.
           The format of the classes is: \\*\code{elq-[width|height]-[above|below]-[breakpoint][postfix]}.
           \todo{Format this better.}
-          It is possible to define a postfix to be applied to all breakpoint classes by the \code{postfix} option either at element level (i.e., by adding \code{postfix} as the attribute value of \code{elq-breakpoints}) or as a plugin instance option when registering the plugin with the \code{use} method of \gls{ELQ}.
-          For example, if the width of the element described in listing~\ref{code:elq-breakpoints-example} is narrower than 300 pixels, it will have the following two classes present:
+          It is possible to define a postfix to be applied to all breakpoint classes by the \code{postfix} option either at \gls{element} level (i.e., by adding \code{postfix} as the attribute value of \code{elq-breakpoints}) or as a plugin instance option when registering the plugin with the \code{use} method of \gls{ELQ}.
+          For example, if the width of the \gls{element} described in listing~\ref{code:elq-breakpoints-example} is narrower than 300 pixels, it will have the following two classes present:
           \begin{itemize}
             \item \code{elq-width-below-300}
             \item \code{elq-width-below-500}
           \end{itemize}
           \todo{Motivate this design.}
-          The breakpoint classes are used for applying conditional styles for elements based on the size state of the target element.
+          The breakpoint classes are used for applying conditional styles for \glspl{element} based on the size state of the target \gls{element}.
           See listing~\ref{code:elq-breakpoints-style} for an example of conditional styling the the \code{\#target} element and its children as presented in listing~\ref{code:elq-breakpoints-example}.
           \begin{lstlisting}[gobble=12,caption={Example of conditional styles using the \code{elq-breakpoints} plugin classes.},captionpos=b,label={code:elq-breakpoints-style}]]
             #target {
@@ -1757,7 +1757,7 @@
           \end{lstlisting}
           In this example it is shown that an element can be conditionally styled by their own size.
           Additionally, children can be conditionally styled by adding the child simple selector to the right of the simple selector containing the element breakpoint classes.
-          For instance, in the example all paragraph elements \code{p} will be styled conditionally by the target element size state.
+          For instance, in the example all paragraph \glspl{element} \code{p} will be styled conditionally by the target element size state.
 
           \todo[inline]{Example of how to register the plugin with an elq instance + options?}
           \todo[inline]{Write that above is inclusive and below is exclusive? Why? Option?}
@@ -1770,11 +1770,11 @@
           % However, it is not possible to construct a selector that matches all paragraphs that contains images.
 
           This plugin complements the \code{elq-breakpoints} plugin and is needed in some cases due to limitations of CSS.
-          Suppose that it is desired for an application to style all paragraph elements differently by the size of the nearest element with a \code{container} class.
-          Paragraphs may appear nested in other elements, that may be generated dynamically at runtime.
+          Suppose that it is desired for an application to style all paragraph \glspl{element} differently by the size of the nearest element with a \code{container} class.
+          Paragraphs may appear nested in other \glspl{element}, that may be generated dynamically at runtime.
           Therefore, the structure of the application is not known when writing the \gls{CSS}, so no assumptions can be done about the markup structure.
           Consider the example markup given in listing~\ref{code:elq-mirror-example} for an example \gls{HTML} structure.
-          It should be noted that the \code{container} elements may be styled in any way (e.g., the widths of the inner container elements could be relative to the outer container element).
+          It should be noted that the \code{container} \glspl{element} may be styled in any way (e.g., the widths of the inner container \gls{element} could be relative to the outer container \gls{element}).
           \begin{lstlisting}[gobble=12,caption={Example \gls{HTML} structure where all paragraphs are desired to be conditionally styled by the nearest ancestor container.},captionpos=b,label={code:elq-mirror-example}]
             <div class="container" elq elq-breakpoints elq-breakpoints-width="300 500">
               <div>
@@ -1789,8 +1789,8 @@
               </div>
             </div>
           \end{lstlisting}
-          A naive approach to conditionally style the paragraph elements is using the selector structure given in listing~\ref{code:elq-mirror-example-cont}.
-          \begin{lstlisting}[gobble=12,caption={A naive approach to conditionally style the paragraph elements by the size of the nearest ancestor container element.},captionpos=b,label={code:elq-mirror-example-cont}]
+          A naive approach to conditionally style the paragraph \glspl{element} is using the selector structure given in listing~\ref{code:elq-mirror-example-cont}.
+          \begin{lstlisting}[gobble=12,caption={A naive approach to conditionally style the paragraph \glspl{element} by the size of the nearest ancestor container \gls{element}.},captionpos=b,label={code:elq-mirror-example-cont}]
             .container p                      { background-color: red;    }
             .container.elq-width-above-300 p  { background-color: yellow; }
             .container.elq-width-above-500 p  { background-color: green;  }
@@ -1801,8 +1801,8 @@
           As of the \gls{CSS} selectors level 3 specification, there it is not possible to select the nearest ancestor of an element \cite{w3c_css_selectors}.
           
           The \code{elq-mirror} plugin overcome these limitations by mirroring the breakpoint classes of an \code{elq-breakpoints} element and thus the correct behavior can be achieved.
-          Elements are initialized to mirror such elements by adding attributes in the same way like with the \code{elq-breakpoints} plugin.
-          The mirror elements will then match the breakpoint classes of the nearest ancestor that has the \code{elq-breakpoints} attribute.
+          \Glspl{element} are initialized to mirror such \glspl{element} by adding attributes in the same way like with the \code{elq-breakpoints} plugin.
+          The mirror \glspl{element} will then match the breakpoint classes of the nearest ancestor that has the \code{elq-breakpoints} attribute.
           See listing~\ref{code:elq-mirror-example-cont-2} for how the plugin can be used to achieve the desired behavior of the conditionally styled paragraphs.
           % If no such ancestor is found, the document root will be mirrored instead. //TODO: Have this?
           \begin{lstlisting}[gobble=12,caption={By using the \code{elq-mirror} plugin to overcome the limitations of CSS, the correct behavior can be achieved of the conditionally styled paragraphs.},captionpos=b,label={code:elq-mirror-example-cont-2}]
@@ -1826,10 +1826,10 @@
             .container p.elq-width-above-500  { background-color: green;  }
           \end{lstlisting}
           Notice that the breakpoint classes now are used in conjunction with the paragraph simple selector instead of the container in the CSS selectors.
-          This way, the conditional styles behave as expected since all paragraphs are by the nearest (instead of any) container element.
+          This way, the conditional styles behave as expected since all paragraphs are by the nearest (instead of any) container \gls{element}.
 
-          By mirroring element breakpoint classes, elements can be styled by criterion of any element (ancestor, sibling, child, etc.).
-          The plugin is at the moment restricted to the nearest ancestor \code{elq-breakpoint} element, but could easily be extended to support more advanced mirror constellations.
+          By mirroring element breakpoint classes, \glspl{element} can be styled by criterion of any element (ancestor, sibling, child, etc.).
+          The plugin is at the moment restricted to the nearest ancestor \code{elq-breakpoint} \gls{element}, but could easily be extended to support more advanced mirror constellations.
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Implementation
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1852,8 +1852,8 @@
         \end{enumerate}
 
         The automated asynchronous processing of batches is important because some subsystems do not know how many operations are to be performed when called.
-        For instance, the public \gls{ELQ} \gls{API} method \code{start} is called with elements to be initiated by the library.
-        As part of the initialization, the element resize detection subsystem may be called so it can prepare elements to be detectable.
+        For instance, the public \gls{ELQ} \gls{API} method \code{start} is called with \glspl{element} to be initiated by the library.
+        As part of the initialization, the element resize detection subsystem may be called so it can prepare \glspl{element} to be detectable.
         This needs to be batch processed, which is possible to do synchronously.
         However, if the \code{start} method is called mutliple times synchronously layout thrashing occurs since one batch for each method call is created.
         See listing~\ref{code:batch-processor-example} for example code that invokes the \code{start} method multiple times synchronously.
@@ -1872,11 +1872,11 @@
         If the \code{auto} option is enabled, the batch will automatically be processed as soon as possible asynchronously (this implies that \code{async} has to be enabled).
 
         Processing batches in different levels is important when multiple operations that interfer with each other needs to be grouped together in a batch.
-        For instance, a function that is to double an element's width and read the new height benefits by being batch processed in three levels: reading the width, mutating the width, and reading the height of an element.
+        For instance, a function that is to double an \gls{element}'s width and read the new height benefits by being batch processed in three levels: reading the width, mutating the width, and reading the height of an \gls{element}.
         Such function could also benefit from automatically process the batch so that the user may call the function multiple times synchronously.
         See listing~\ref{code:batch-processor-example-2} for an example implementation of such function that uses a leveled batch processor.
         The leveled function offers a 45-fold speedup compared to the non-leveled version (i.e., changing \code{batchProcessor.add(1, ...} to \code{batchProcessor.add(0, ...}).
-        \begin{lstlisting}[gobble=10,label={code:batch-processor-example-2},caption={Example function that doubles an element's width and returns the new height with a callback. The function uses the leveled batch processor to avoid layout thrashing and thus gains a 45-fold speedup.},captionpos=b]]
+        \begin{lstlisting}[gobble=10,label={code:batch-processor-example-2},caption={Example function that doubles an \gls{element}'s width and returns the new height with a callback. The function uses the leveled batch processor to avoid layout thrashing and thus gains a 45-fold speedup.},captionpos=b]]
           var batchProcessor = BatchProcessor({
               auto: true,
               async: true
@@ -1911,15 +1911,15 @@
       %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element resize detection
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       \subsection{Element resize detection}\label{sec:imp_erd}
-        As described in Section~\ref{sec:arcithecture}, \gls{ELQ} needs a subsystem that is able to detect resize events of elements.
-        As the element resize detection system is a core subsystem of \gls{ELQ}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect element resize events.
+        As described in Section~\ref{sec:arcithecture}, \gls{ELQ} needs a subsystem that is able to detect resize events of \glspl{element}.
+        As the \gls{element} resize detection system is a core subsystem of \gls{ELQ}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect \gls{element} resize events.
 
         Unfortunately, there is no standardized resize event for arbitrary \glspl{element} \cite{w3c_dom2_events}.
-        Only \glspl{document} emit resize events and therefore resize events can only be observed for frame elements (since a frame element has its own document).
+        Only \glspl{document} emit resize events and therefore resize events can only be observed for frame \glspl{element} (since a frame \gls{element} has its own document).
         Legacy versions of Internet Explorer (version 8 and down, but also some later versions depending on the quirks and \gls{document} mode) do support the resize event on arbitrary \glspl{element}.
-        According to the general use case described in Section~\ref{sec:eq-definitions}, a valid limitation is to only support element resize detection for non-void elements (i.e., elements that can contain content).
-        This limitation is important since most approaches depend on injecting elements into the target elemenet.
-        It is a reasonable limitation since void elements can easily be wrapped with a non-void element without affecting the page visually.
+        According to the general use case described in Section~\ref{sec:eq-definitions}, a valid limitation is to only support \gls{element} resize detection for non-void \glspl{element} (i.e., \glspl{element} that can contain content).
+        This limitation is important since most approaches depend on injecting \glspl{element} into the target elemenet.
+        It is a reasonable limitation since void \glspl{element} can easily be wrapped with a non-void element without affecting the page visually.
         Possible solutions to detect element resize events on modern browsers are:
         \begin{enumerate}
           \item\label{itm:erd-approach-polling}
@@ -1929,29 +1929,29 @@
             Short polling intervals (high frequency) would lead to being able to detect resize changes quicker but having worse performance.
             Longer polling intervals (low frequency) would not be able to detect changes as quickly but increases the performance.
             The longest delay between an actual resize event and the detection is given by the polling interval time.
-            This approach is the most robust, as it supports all elements (including void elements) and provides excellent browser compatibility.
+            This approach is the most robust, as it supports all \glspl{element} (including void \glspl{element}) and provides excellent browser compatibility.
           \item\label{itm:erd-approach-object}
             \textbf{Object-based solution}:
             Since frame \glspl{element} are the only ones that support resize events \glslink{native}{natively}, the idea is to inject a frame \gls{element} as a child to the target \gls{element} that is observed instead.
             It has been shown by \cite{backalley} that \code{object} is the most suitable frame \gls{element} to be used for this purpose as they have good \gls{browser} compatibility and adequate performance.
-            By styling the \code{object} element so that it depends on the target \gls{element} and set the size to be 100 percent, the \code{object} will always be the same size as the target element.
+            By styling the \code{object} element so that it depends on the target \gls{element} and set the size to be 100 percent, the \code{object} will always be the same size as the target \gls{element}.
             Then a resize event handler is attached to the \code{object} that emits a \code{resize} event\footnote{See \url{http://www.w3.org/TR/DOM-Level-3-Events/\#event-type-resize} for more information about the resize event.} for every target \gls{element} resize.
           \item\label{itm:erd-approach-scroll}
             \textbf{Scroll-based solution}:
             This solution injects an \gls{element} to the target element that emit events, which can be observed in JavaScript, when the target element is resized.
-            The idea is to inject multiple overflowing elements configured so that they emit \code{scroll} events\footnote{See \url{http://www.w3.org/TR/DOM-Level-3-Events/\#event-type-scroll} for more information about the \code{scroll} event.} when the target element is resized.
+            The idea is to inject multiple overflowing \glspl{element} configured so that they emit \code{scroll} events\footnote{See \url{http://www.w3.org/TR/DOM-Level-3-Events/\#event-type-scroll} for more information about the \code{scroll} event.} when the target element is resized.
             For detecting when the target \gls{element} shrinks, two \glspl{element} are needed; one for handling the scrollbars and one for causing them to scroll.
             Similarly, for detecting when the target \gls{element} expands, two \glspl{element} are needed in the same way.
-            A container \gls{element} is injected that contains the four \glspl{element} and make sure that they match the size of the target element.
+            A container \gls{element} is injected that contains the four \glspl{element} and make sure that they match the size of the target \gls{element}.
           \item\label{itm:erd-approach-flow}
             \textbf{Flow-based solution}:
-            This solution is similar to the scroll-based solution in the sense that it also injects elements that have overflowing content.
+            This solution is similar to the scroll-based solution in the sense that it also injects \glspl{element} that have overflowing content.
             Instead of listening to \code{scroll} events, this solution uses several flow events.
             The idea is to detect when scrollbars disappear (i.e., underflow of content since the target container has increased in size) and when scrollbars appear (i.e., overflow of content since the target container has decreased in size).
             Unfortunately such events are not standardized but \gls{Gecko}, \gls{WebKit} and \gls{Blink} support them (although by different \glspl{API})\footnote{See \url{https://developer.mozilla.org/en-US/docs/Web/Events/overflow} for \gls{Gecko}.}.
             \gls{Blink} still supports the events but has deprecated them \cite{blink_deprecated_flow_events}.
         \end{enumerate}
-        Solution \ref{itm:erd-approach-polling} is appealing because it does not mutate the \gls{DOM}, supports all elements (including void elements), and it provides excellent \gls{browser} compatibility since it does not rely on special \gls{element} behavior or similar.
+        Solution \ref{itm:erd-approach-polling} is appealing because it does not mutate the \gls{DOM}, supports all \glspl{element} (including void \glspl{element}), and it provides excellent \gls{browser} compatibility since it does not rely on special \gls{element} behavior or similar.
         However, in order to prevent the \gls{responsive} \glspl{element} lagging behind the size changes of the user interface, polling needs to be performed quite frequently.
         Recall from Section~\ref{sec:layout-process} that \glspl{layout engine} typically have a layout queue in order to perform layout in \glslink{batch processing}{batches} for increased performance.
         Each poll would force the layout queue to be flushed since the computed style of \glspl{element} needs to be retrieved in order to know if \glspl{element} have resized or not.
@@ -1965,58 +1965,58 @@
         While not stated officially by \cite{backalley}, the flow-based solution was probably rejected due to the lack of browser compatability.
         The flow-based solution is not presented in detail, due to the limited browser compatability and similarity with the scroll-based solution.
         \todo{Not really happy with this sentence.}
-        The scroll-based solution was probably rejected due to issues with handling target elements with sides that are zero in length and also with the target element getting removed from the \gls{render tree} (e.g., by setting the \code{display} style property to \code{none}).
+        The scroll-based solution was probably rejected due to issues with handling target \glspl{element} with sides that are zero in length and also with the target element getting removed from the \gls{render tree} (e.g., by setting the \code{display} style property to \code{none}).
 
         All three solutions mutate the \gls{DOM} and relies on special \gls{element} behavior, but they offer many advantages over polling.
         Since they are event based, layout engines only need to perform extra work when injecting the solution to the target \glspl{element} and when the target \glspl{element} actually resize.
         Event based resize detection also implies minimal delay between the actual resize event and the detection.
-        By positioning the injected elements \code{absolute} with widths and heights set to \code{100\%}, the injected \glspl{element} do not affect the visual representation of the \gls{document}.
-        However, injecting elements into target \glspl{element} has some implications:
+        By positioning the injected \glspl{element} \code{absolute} with widths and heights set to \code{100\%}, the injected \glspl{element} do not affect the visual representation of the \gls{document}.
+        However, injecting \glspl{element} into target \glspl{element} has some implications:
         \begin{itemize}
           \item \textbf{\gls{CSS} selectors may break}:
             Since target \glspl{element} get an extra child, \gls{CSS} selectors may behave differently.
             For instance, the selector \code{\#target~*} selector also matches the injected \glspl{element}, which may result in them being styled in a way that it will be visible or in other way alter the page visually.
-            Especially the scroll-based solution is sensitive to unintentional styles being applied, as the injected elements are finely styled and tuned in order to behave as desired.
+            Especially the scroll-based solution is sensitive to unintentional styles being applied, as the injected \glspl{element} are finely styled and tuned in order to behave as desired.
             Additionally, selectors such as \code{:first-child} and \code{:last-child} may not behave as expected as the target element has an extra child.
           \item \textbf{\gls{JavaScript} may break}:
             Similar to with \gls{CSS} selectors, \gls{JavaScript} \gls{DOM} selectors may break.
             The first node (or last) of the target \gls{element} may not be what developers expect it to be as the target element has an extra child.
-            Also, code that alter the content of \glspl{element} (such as \code{element.InnerHTML = ...}) may undesirably remove the injected \gls{element} of the target element.
+            Also, code that alter the content of \glspl{element} (such as \code{element.InnerHTML = ...}) may undesirably remove the injected \gls{element} of the target \gls{element}.
           \item \textbf{The target \gls{element} must be positioned}:
             \todo{Recall from where? This have not been described.}
             Recall that absolute positioned \glspl{element} are moved up to the first non-static positioned ancestor.
             Since the injected element must be a child of the target \gls{element} (and not moved upwards in the layout tree), the target \gls{element} cannot be positioned \code{static} (i.e., the default positioning for many \glspl{element}).
-            Fortunately, \glspl{element} positioned \code{relative} behave exactly like \code{static}, given they do not have any styles applicable to relative elements (such as \code{top} or \code{bottom}).
+            Fortunately, \glspl{element} positioned \code{relative} behave exactly like \code{static}, given they do not have any styles applicable to relative \glspl{element} (such as \code{top} or \code{bottom}).
             Since the style properties that depend on the \gls{element} being \code{relative} positioned do not affect the \gls{element} if it is positioned \code{static}, the properties can be removed or regarded as developer errors.
             This way target \glspl{element} can be positioned \code{relative} with the special style properties removed, to obtain the same visual representation as being positioned \code{static}.
         \end{itemize}
 
         \paragraph{The object-based solution}
-        For detecting resize events it performs excellent, but injecting many \code{object} elements is quite a heavy task for browsers and it consumes a significant amount of memory as later presented in Section~\ref{sec:eval-perf-erd}.
+        For detecting resize events it performs excellent, but injecting many \code{object} \glspl{element} is quite a heavy task for browsers and it consumes a significant amount of memory as later presented in Section~\ref{sec:eval-perf-erd}.
         The main algorithm that is performed when an element $e$ is to be observed for resize events is the following:
         \begin{enumerate}
           \item\label{itm:erd-algo-original-object-1} Get the computed style of $e$.
           \item                                       If the element is positioned (i.e., \code{position} is not \code{static}) next step is \ref{itm:erd-algo-original-object-4}.
           \item\label{itm:erd-algo-original-object-3} Set the position of $e$ to be \code{relative}. Here additional checks can be performed to warn the developer about unwanted side effects of doing doing this.
           \item\label{itm:erd-algo-original-object-4} Create an \code{object} element and attach an event handler for the \code{load} event\footnote{See \url{http://www.w3.org/TR/DOM-Level-3-Events/\#event-type-load} for more information about the load event.}. When the element has been styled and configured properly, it is injected into $e$.
-          \item                                       The algorithm waits for the \code{load} event handler to be called by the layout engine. When the handler is called, a \code{resize} event handler is attached to the document of the \code{object} element.
+          \item                                       The algorithm waits for the \code{load} event handler to be called by the layout engine. When the handler is called, a \code{resize} event handler is attached to the document of the \code{object} \gls{element}.
         \end{enumerate}
         In the rewriting of the code given by \cite{backalley} to better suite \gls{ELQ}, efforts was made to optimize the solution as the original code suffers from layout thrashing.
         Step \ref{itm:erd-algo-original-object-1} and \ref{itm:erd-algo-original-object-3} could theoretically be executed in different batches to avoid layout thrashing.
         Unfortunately, each \code{object} element creation in step \ref{itm:erd-algo-original-object-4} forces a full layout, which makes the batch processing optimization negligible.
-        Since the creation of \code{object} elements forms the significant time consumption, no further optimization attempts were performed.
+        Since the creation of \code{object} \glspl{element} forms the significant time consumption, no further optimization attempts were performed.
 
         \paragraph{The scroll-based solution}
-        As this solution only injects \code{div} elements, it offers greater opportunities for optimizations.
+        As this solution only injects \code{div} \glspl{element}, it offers greater opportunities for optimizations.
         The algorithm is conceptually similar to the algorithm of the object-based solution.
         The main algorithm that is performed when an element $e$ is to be observed for resize events is the following:
         \begin{enumerate}
           \item\label{itm:erd-algo-original-scroll-1} Get the computed style of $e$.
           \item\label{itm:erd-algo-original-scroll-2} If the element is positioned (i.e., \code{position} is not \code{static}) next step is \ref{itm:erd-algo-original-scroll-4}.
           \item\label{itm:erd-algo-original-scroll-3} Set the position of $e$ to be \code{relative}. Here additional checks can be performed to warn the developer about unwanted side effects of doing this.
-          \item\label{itm:erd-algo-original-scroll-4} Create the four elements needed (two for detecting when $e$ shrinks, and two for detecting when $e$ expands) and attach event handlers for the \code{scroll} event of the elements.
-                                                      When the elements have been styled and configured properly, they are added as children to an additional container element that is injected into $e$.
-          \item\label{itm:erd-algo-original-scroll-5} The current size of $e$ is stored and the scrollbars of the injected elements are positioned correctly.
+          \item\label{itm:erd-algo-original-scroll-4} Create the four \glspl{element} needed (two for detecting when $e$ shrinks, and two for detecting when $e$ expands) and attach event handlers for the \code{scroll} event of the \glspl{element}.
+                                                      When the \glspl{element} have been styled and configured properly, they are added as children to an additional container element that is injected into $e$.
+          \item\label{itm:erd-algo-original-scroll-5} The current size of $e$ is stored and the scrollbars of the injected \glspl{element} are positioned correctly.
           \item\label{itm:erd-algo-original-scroll-6} The algorithm waits for the \code{scroll} event handlers to be called asynchronously by the layout engine (they are called since the previous step repositioned the scrollbars).
                                                       When both handlers have been called, the injection is finished and observers can be notified on resize events of $e$ when \code{scroll} events occur.
         \end{enumerate}
@@ -2046,15 +2046,15 @@
         As step~\ref{itm:erd-algo-original-scroll-6} is performed by the layout engine asynchronously and does not interact with the \gls{DOM}, it does not need to be batch processed.
 
         \paragraph{MutationObservers}
-        The \code{MutationObserver} \gls{API} defined in the W3C working draft of the DOM level 4 specification \cite{w3c_dom_4} may seem like a good candidate to use for detecting element resize events at a first glance.
+        The \code{MutationObserver} \gls{API} defined in the W3C working draft of the DOM level 4 specification \cite{w3c_dom_4} may seem like a good candidate to use for detecting \gls{element} resize events at a first glance.
         Although not yet standardized, the \gls{API} is implemented in modern browsers according to the working draft.
-        By using the \gls{API} an element it is possible to observe attribute or subtree changes to an element.
-        By observing the \code{style} attribute of an element and the content of it (if the element size depends on its children), it is possible to detect direct style changes to an element (i.g., changes to the style attribute by JavaScript).
-        The main limitation is that it is not possible to observe the computed style state of an element.
-        For instance, detecting that the width of an element has been set to 50 \% with JavaScript is possible (it would not have been possible to detect the style change if the width style was calculated by a CSS cascade).
-        However, when the parent container change size the observer would not detect that the element width of the element has changed, as the style attribute width still is 50 \%.
-        This could theoretically be resolved by also observing the parent of the element, and so on up to the root of the document.
-        Such solution would probably end up observing most elements of a page, which might be a performance penalty, and it would still not be able to detect all element resize events.
+        By using the \gls{API} an \gls{element} it is possible to observe attribute or subtree changes to an \gls{element}.
+        By observing the \code{style} attribute of an \gls{element} and the content of it (if the \gls{element} size depends on its children), it is possible to detect direct style changes to an \gls{element} (i.g., changes to the style attribute by JavaScript).
+        The main limitation is that it is not possible to observe the computed style state of an \gls{element}.
+        For instance, detecting that the width of an \gls{element} has been set to 50 \% with JavaScript is possible (it would not have been possible to detect the style change if the width style was calculated by a CSS cascade).
+        However, when the parent container change size the observer would not detect that the \gls{element} width of the \gls{element} has changed, as the style attribute width still is 50 \%.
+        This could theoretically be resolved by also observing the parent of the \gls{element}, and so on up to the root of the document.
+        Such solution would probably end up observing most \glspl{element} of a page, which might be a performance penalty, and it would still not be able to detect all element resize events.
         Element resize events may occur in numerous ways that do not alter the \gls{DOM} by CSS (.e.g, conditionally styles defined by \gls{media queries}, pseudo-classes, etc.).
         Using the \code{MutationObserver} \gls{API} is interesting, but it is only useful if it supports observing computed style changes of an element for detecting element resize events.
         Due to these limitations, the \gls{API} was not considered to be used in \gls{ELQ}.
@@ -2073,10 +2073,10 @@
         Recall from Section~\ref{sec:plugin-api} that the cycle detection subsystem has a function \code{isUpdateCyclic} that tells if the desired update seems to be part of a style cycle or not.
         Further, recall from Section~\ref{sec:cyclic-rules} that factors of a cycle may be multiple (e.g., content, browser behavior, \gls{CSS}, \gls{JavaScript}).
         Due to cycle graphs being non-trivial a simplistic approach to detecting cycles has been taken.
-        The idea is to keep track of all style state changes to elements in order to tell if new state changes are cyclic by examining the state history.
+        The idea is to keep track of all style state changes to \glspl{element} in order to tell if new state changes are cyclic by examining the state history.
         This approach is simple to implement and quite sufficient for detecting cycles.
 
-        It should be noted that all state cycles are not undesired, as some applications might have features that result in elements transitioning between multiple style states (e.g., a menu might be hidden and revealed by user input, which to the cycle detection system seems like the menu element suffers from cyclic rules).
+        It should be noted that all state cycles are not undesired, as some applications might have features that result in \glspl{element} transitioning between multiple style states (e.g., a menu might be hidden and revealed by user input, which to the cycle detection system seems like the menu element suffers from cyclic rules).
         This is perhaps the biggest drawback with such simple approach; a more intelligent cycle detection algorithm might be able to distinguish between desired and undesired cycles.
         To mitigate the false positive detections, two parameters can be tuned by the user of the system: the time parameter $T$ that defines how long the history should be in time, and the parameter $C$ that defined how many cycles should be allowed per element before flagging it as a cycle to the user.
         % This approach will only be able to detect cycles as they are about to happen, which might be 
@@ -2121,9 +2121,9 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Bootstrap
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{ELQ Bootstrap}\label{sec:eval-bootstrap}
-      The \gls{responsive} parts of Bootstrap 3.3.2 (the grid, containers, \gls{responsive} utility classes, forms, etc.) are built with \gls{media queries}, and therefore only behave as desired when the Bootstrap elements can use the full width of the viewport.
+      The \gls{responsive} parts of Bootstrap 3.3.2 (the grid, containers, \gls{responsive} utility classes, forms, etc.) are built with \gls{media queries}, and therefore only behave as desired when the Bootstrap \glspl{element} can use the full width of the \gls{viewport}.
       It should be noted that no height breakpoints are being used by Bootstrap (as also identified by the general use case in Section~\ref{sec:eq-definitions}).
-      This implies that modules that uses any \gls{responsive} Bootstrap classes inherently only behave as desired when the module can use the full width of the viewport, which means that such modules are not \gls{encapsulated} and therefore many of the benefits of modules disappear.
+      This implies that modules that uses any \gls{responsive} Bootstrap classes inherently only behave as desired when the module can use the full width of the \gls{viewport}, which means that such modules are not \gls{encapsulated} and therefore many of the benefits of modules disappear.
       Such modules force applications to use them in a specific layout.
       As an example, the Bootstrap \gls{CSS} documentation page was altered to instead offer a two-column documentation.
       The two-column page presents two instances of the original \gls{CSS} documentation.
@@ -2140,9 +2140,9 @@
         \end{minipage}
         \caption{
           The \gls{responsive} classes of Bootstrap cannot adapt to layout changes as shown with the two-column \gls{CSS} documentation example.
-          Both documentation instances uses \gls{media queries}, which undesireably styles both columns as if they each fill the whole viewport width.
-          Since the columns only fill half of the viewport width and are styles as they both fill the whole viewport width, the page appears broken as shown in the left figure.
-          The pag only behaves as desired if the viewport width is large enough so that the width of each column is bigger than the largest \glslink{media queries}{media query} breakpoint, as shown in the right figure.
+          Both documentation instances uses \gls{media queries}, which undesireably styles both columns as if they each fill the whole \gls{viewport} width.
+          Since the columns only fill half of the \gls{viewport} width and are styles as they both fill the whole \gls{viewport} width, the page appears broken as shown in the left figure.
+          The pag only behaves as desired if the \gls{viewport} width is large enough so that the width of each column is bigger than the largest \glslink{media queries}{media query} breakpoint, as shown in the right figure.
           See figure~\ref{fig:appendix-bootstrap-mq-header-small} and~\ref{fig:appendix-bootstrap-mq-header-big} of the appendix for the left and right figure in full scale, respectively.}
         \label{fig:eval-bootstrap-mq-broken}
       \end{figure}
@@ -2150,16 +2150,16 @@
       \todo{Not happy with the formulation "as if they fill the whole viewport width"}
 
       In order to make Bootstrap behave as desired in any layouts the \gls{responsive} parts of the framework were modified to use element queries instead of \gls{media queries} by using \gls{ELQ}.
-      Two Bootstrap classes have been chosen to be treated as viewports (that will be \code{elq-breakpoints} elements): \code{container} and \code{container-fluid}.
-      \code{Not happy with calling containers as viewports}
+      Two Bootstrap classes have been chosen to be treated as \glspl{viewport} (that will be \code{elq-breakpoints} \glspl{element}): \code{container} and \code{container-fluid}.
+      \code{Not happy with calling containers as \glspl{viewport}}
       Both classes are used in Bootstrap to define new parts of a page (e.g., a grid is required to have a container ancestor).
-      They are also nestable, which makes them suitable to be used as sub-viewports.
-      \todo{Not happy with calling containers for viewports. should come up with something better.}
-      The \code{container} class centers content with fixed widths by different viewport sizes, and the \code{container-fluid} uses the full available width.
-      The idea is to have all \gls{responsive} classes conditionally styled with element queries by the size of the nearest ancestor container element.
-      This implies that all elements that has any \gls{responsive} classes will be converted to \code{elq-mirror} elements since they want to mirror the breakpoints of the nearest ancestor \code{elq-breakpoints} element (i.e., the container elements).
-      Since container elements may be nested they will be both \code{elq-mirror} and \code{elq-breakpoints} elements.
-      Recall from section~\ref{sec:plugin-mirror} that it is beneficial for \gls{responsive} elements to be \code{elq-mirror} elements in order to not limit the element usage to a specific a \gls{HTML} structure.
+      They are also nestable, which makes them suitable to be used as sub-\glspl{viewport}.
+      \todo{Not happy with calling containers for \glspl{viewport}. should come up with something better.}
+      The \code{container} class centers content with fixed widths by different \gls{viewport} sizes, and the \code{container-fluid} uses the full available width.
+      The idea is to have all \gls{responsive} classes conditionally styled with element queries by the size of the nearest ancestor container \gls{element}.
+      This implies that all \glspl{element} that has any \gls{responsive} classes will be converted to \code{elq-mirror} \glspl{element} since they want to mirror the breakpoints of the nearest ancestor \code{elq-breakpoints} element (i.e., the container \glspl{element}).
+      Since container \glspl{element} may be nested they will be both \code{elq-mirror} and \code{elq-breakpoints} \glspl{element}.
+      Recall from section~\ref{sec:plugin-mirror} that it is beneficial for \gls{responsive} \glspl{element} to be \code{elq-mirror} \glspl{element} in order to not limit the element usage to a specific a \gls{HTML} structure.
 
       \paragraph{Altering the LESS code}
       Bootstrap mainly uses three width numbers for \gls{responsive} breakpoints: 768, 970 and 1170 pixels.
@@ -2220,8 +2220,8 @@
       Bootstrap's other dependency, jQuery, is also separated from the project JavaScript.
       Since it is beneficial to not require changes to existing Bootstrap empowered pages, all \gls{ELQ} element attributes are added with \gls{JavaScript}.
       The attributes could of course be written directly in the \gls{HTML} instead; the choice is up to the user.
-      Listing~\ref{code:bootstrap-init-js} presents an example of such JavaScript code that dynamically adds the required element attributes and initializes all \gls{responsive} elements.
-      \begin{lstlisting}[gobble=8,label={code:bootstrap-init-js},caption={Example of JavaScript code that adds the required \gls{ELQ} attributes dynamically to all \gls{responsive} elements and initializes them.},captionpos=b]]
+      Listing~\ref{code:bootstrap-init-js} presents an example of such JavaScript code that dynamically adds the required element attributes and initializes all \gls{responsive} \glspl{element}.
+      \begin{lstlisting}[gobble=8,label={code:bootstrap-init-js},caption={Example of JavaScript code that adds the required \gls{ELQ} attributes dynamically to all \gls{responsive} \glspl{element} and initializes them.},captionpos=b]]
         //Creating the ELQ instance needs to be done once.
         var elq = Elq();
         elq.use(elqBreakpoints, {
@@ -2269,11 +2269,11 @@
       Altering the \gls{LESS} code, including the \gls{ELQ} library and the initating JavaScript is all that is required to make the double column documentation page behave as desired.
       Figure~\ref{fig:eval-bootstrap-mq-eq-header}, \ref{fig:eval-bootstrap-mq-eq-matrix} and \ref{fig:eval-bootstrap-mq-eq-grid} shows different sections of the double column documentation page empowered by \gls{ELQ} Bootstrap.
       For reference, the same sections using the original Bootstrap are also included that shows how they behave without element queries.
-      As shown in the figures, the double column documentation page using the original Bootstrap styles the two columns as if they both had the whole viewport width available.
-      Therefore the two columns intersects each other because some content elements are styled wider than a column.
-      The double column documentation page using \gls{ELQ} Bootstrap on the other hand enables all \gls{responsive} elements to style themselves according a parent container element.
-      Therefore, the two half-page columns detect that they only have half the viewport width and style themselves accordingly.
-      The visual result is the same as having two documentation sites of the original Bootstrap in two \code{iframe} elements as two columns (since \code{iframe} elements creates a separate viewport).
+      As shown in the figures, the double column documentation page using the original Bootstrap styles the two columns as if they both had the whole \gls{viewport} width available.
+      Therefore the two columns intersects each other because some content \glspl{element} are styled wider than a column.
+      The double column documentation page using \gls{ELQ} Bootstrap on the other hand enables all \gls{responsive} \glspl{element} to style themselves according a parent container \gls{element}.
+      Therefore, the two half-page columns detect that they only have half the \gls{viewport} width and style themselves accordingly.
+      The visual result is the same as having two documentation sites of the original Bootstrap in two \code{iframe} \glspl{element} as two columns (since \code{iframe} \glspl{element} creates a separate \gls{viewport}).
       \todo[inline]{Write that the original CSS documentation behaves as expected out of the box (not changes to the html)?}
       \todo[inline]{Write that such small code changes (also maybe state the total code changes of the repo) really eases merging of new updates to the upstream repo.}
 
@@ -2288,9 +2288,9 @@
           \includegraphics[width=\linewidth]{images/bootstrap-eq-header-small}
         \end{minipage}
         \caption{
-          The left image shows the original Bootstrap header, which is broken since the content of both columns are styled as if they had the full viewport width.
+          The left image shows the original Bootstrap header, which is broken since the content of both columns are styled as if they had the full \gls{viewport} width.
           The right image shows same section of the same page, using \gls{ELQ} Bootstrap.
-          With element queries, both columns know that they only have half of the viewport width and therefore style themselves accordingly.
+          With element queries, both columns know that they only have half of the \gls{viewport} width and therefore style themselves accordingly.
           See figure~\ref{fig:appendix-bootstrap-mq-header-small} and~\ref{fig:appendix-bootstrap-eq-header-small} of the appendix for the left and right figure in full scale, respectively.}
         \label{fig:eval-bootstrap-mq-eq-header}
       \end{figure}
@@ -2307,7 +2307,7 @@
         \end{minipage}
         \caption{
           The left image shows the original Bootstrap \gls{responsive} utilities classes matrix.
-          Here it is clear that both columns are styled as the have the full viewport width as they display the large utility classes in green, which means that both columns think that they have the full width of the viewport.
+          Here it is clear that both columns are styled as the have the full \gls{viewport} width as they display the large utility classes in green, which means that both columns think that they have the full width of the \gls{viewport}.
           The right image shows same section of the same page, using \gls{ELQ} Bootstrap.
           Only the small utility classes are displayed in green as desired, since both columns only have half of the width available.
           See figure~\ref{fig:appendix-bootstrap-mq-matrix-small} and~\ref{fig:appendix-bootstrap-eq-matrix-small} of the appendix for the left and right figure in full scale, respectively.
@@ -2327,9 +2327,9 @@
         \end{minipage}
         \caption{
           The left image shows the original Bootstrap \gls{responsive} grid.
-          It is styled as if both columns have the full viewport width available, and therefore the grids partly intersect each other.
+          It is styled as if both columns have the full \gls{viewport} width available, and therefore the grids partly intersect each other.
           The right image shows same section of the same page, using \gls{ELQ} Bootstrap.
-          The grids detects that only the half viewport width is available, and styles themselves accordingly.
+          The grids detects that only the half \gls{viewport} width is available, and styles themselves accordingly.
           See figure~\ref{fig:appendix-bootstrap-mq-grid-small} and~\ref{fig:appendix-bootstrap-eq-grid-small} of the appendix for the left and right figure in full scale, respectively.
         }
         \label{fig:eval-bootstrap-mq-eq-grid}
@@ -2368,9 +2368,9 @@
         \todo{Remove this, and analyze the different subsystems in detail: erd, cycle detector, elq-breakpoints, etc.}
 
         The object-based solution performs well when detecting resize events.
-        However, injecting \code{object} elements is quite a heavy task.
+        However, injecting \code{object} \glspl{element} is quite a heavy task.
         See figure~\ref{fig:erd-original-object} for graphs that show the performance of the object-based solution.
-        As shown by the graphs, the injection can be performed with adeqaute performance as long as the number of elements is low.
+        As shown by the graphs, the injection can be performed with adeqaute performance as long as the number of \glspl{element} is low.
         The solution does not scale well as the number of element increases.
         \todo{Maybe be less pessimistic as Safari might have to use the object solution?}
         \begin{figure}[ht]
@@ -2384,7 +2384,7 @@
                       width=\textwidth, % Scale the plot to \linewidth
                       grid=major, % Display a grid
                       grid style={dashed,gray!30}, % Set the style
-                      xlabel=Number of elements, % Set the labels
+                      xlabel=Number of \glspl{element}, % Set the labels
                       ylabel=Injection time,
                       y unit=s, % Set the respective units
                       legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
@@ -2402,7 +2402,7 @@
                     width=\textwidth, % Scale the plot to \linewidth
                     grid=major, % Display a grid
                     grid style={dashed,gray!30}, % Set the style
-                    xlabel=Number of elements, % Set the labels
+                    xlabel=Number of \glspl{element}, % Set the labels
                     ylabel=Heap memory usage,
                     y unit=MB, % Set the respective units
                     legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
@@ -2415,7 +2415,7 @@
                 \end{axis}
               \end{tikzpicture}
             \end{minipage}
-          \caption{The injection performance of the object-based solution. The left graph shows the injection time. The right graph shows the heap memory used when all \code{object} elements have been injected.}
+          \caption{The injection performance of the object-based solution. The left graph shows the injection time. The right graph shows the heap memory used when all \code{object} \glspl{element} have been injected.}
           \label{fig:erd-original-object}
           \end{center}
         \end{figure}
@@ -2426,10 +2426,10 @@
         % Both scroll-based solutions have the same memory footprint (i.e., too low for reliable measurements).
 
         The scroll-based solution also performs well when detecting resize events.
-        As no \code{object} elements are injected the memory footprint is reduced significantly, which improves the injection performance.
+        As no \code{object} \glspl{element} are injected the memory footprint is reduced significantly, which improves the injection performance.
         See figure~\ref{fig:erd-original-scroll} for graphs that show how the both solutions perform compared to each other.
         It is clear that the scroll-based solution both performs and scales better than the object-based solution during injection.        
-        The amount of memory used by the scroll-based solution is so low that reliable measurements could not be gathered, as the number of elements was not high enough to affect the memory usage noticeably.
+        The amount of memory used by the scroll-based solution is so low that reliable measurements could not be gathered, as the number of \glspl{element} was not high enough to affect the memory usage noticeably.
         \begin{figure}[ht]
           \tiny
           \begin{center}
@@ -2441,7 +2441,7 @@
                       width=\textwidth, % Scale the plot to \linewidth
                       grid=major, % Display a grid
                       grid style={dashed,gray!30}, % Set the style
-                      xlabel=Number of elements, % Set the labels
+                      xlabel=Number of \glspl{element}, % Set the labels
                       ylabel=Injection time,
                       y unit=s, % Set the respective units
                       legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
@@ -2460,7 +2460,7 @@
                     width=\textwidth, % Scale the plot to \linewidth
                     grid=major, % Display a grid
                     grid style={dashed,gray!30}, % Set the style
-                    xlabel=Number of elements, % Set the labels
+                    xlabel=Number of \glspl{element}, % Set the labels
                     ylabel=Injection time,
                     y unit=s, % Set the respective units
                     legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
@@ -2481,7 +2481,7 @@
         By avoiding layout thrashing, the injection performance was imporoved significantly.
         See figure~\ref{fig:erd-elq-scroll} for graphs that show how the it performs compared to the other solutions.
         As evident in the figure, the optimized \gls{ELQ} solution has significantly reduced injection times compared to the other two.
-        It achieves a 32-fold speedup compared to the object-based solution and a 13-fold speedup compared to the original scroll-based solution when preparing 500 elements for resize detection.
+        It achieves a 32-fold speedup compared to the object-based solution and a 13-fold speedup compared to the original scroll-based solution when preparing 500 \glspl{element} for resize detection.
         The \gls{ELQ} solution also scales better, as more clearly shown in figure~\ref{fig:erd-solutions-regressed} that includes polynomial regression graphs for all three solutions.
         Both scroll-based solutions have the same memory footprint (i.e., too low for reliable measurements).
         \begin{figure}[ht!]
@@ -2500,7 +2500,7 @@
                       width=\textwidth, % Scale the plot to \linewidth
                       grid=major, % Display a grid
                       grid style={dashed,gray!30}, % Set the style
-                      xlabel=Number of elements, % Set the labels
+                      xlabel=Number of \glspl{element}, % Set the labels
                       ylabel=Injection time,
                       y unit=s, % Set the respective units
                       legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
@@ -2518,7 +2518,7 @@
                     width=\textwidth, % Scale the plot to \linewidth
                     grid=major, % Display a grid
                     grid style={dashed,gray!30}, % Set the style
-                    xlabel=Number of elements, % Set the labels
+                    xlabel=Number of \glspl{element}, % Set the labels
                     ylabel=Injection time,
                     y unit=s, % Set the respective units
                     legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
@@ -2546,7 +2546,7 @@
                   width=0.6\textwidth, % Scale the plot to \linewidth
                   grid=major, % Display a grid
                   grid style={dashed,gray!30}, % Set the style
-                  xlabel=Number of elements, % Set the labels
+                  xlabel=Number of \glspl{element}, % Set the labels
                   ylabel=Injection time,
                   y unit=s, % Set the respective units
                   legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
@@ -2571,14 +2571,14 @@
         As shown, great performance can be achieved with the optimized \gls{ELQ} scroll-based solution in Chrome.
         Unfortunately, there is no silver bullet to observing element resize events; as the other browsers behave differently.
         See table~\ref{table:erd-layout-engines} for performance numbers of different browsers.
-        The \gls{ELQ} scroll-based solution is preferred for Chrome, as the injection is 32-fold faster (when operating on 500 elements) than the object-based solution while the resize detection performance is the same for both solutions.
+        The \gls{ELQ} scroll-based solution is preferred for Chrome, as the injection is 32-fold faster (when operating on 500 \glspl{element}) than the object-based solution while the resize detection performance is the same for both solutions.
         In FireFox, the object-based solution detects resize events 2-fold faster than the \gls{ELQ} scroll-based solution when operating (still, 100 ms for detecting resize events is acceptable).
         However, the injection time needed for the object-based solution is 5.5-fold of the time needed for the \gls{ELQ} scroll-based solution.
         The \gls{ELQ} scroll-based solution is therefore probably desired in FireFox for the general use case (as described in Section~\ref{sec:eq-definitions}).
         In Safari, the \gls{ELQ} scroll-based solution detects resize events in 800 ms while the object-based solution detects them in 25 ms, which of course is unacceptable.
         Unfortunately, the injection time needed for the object-based solution is 3-fold slower than the \gls{ELQ} scroll-based solution.
         Since a delay of 800 ms when detecting resize events is undesired in most use cases, the object-based solution is preferred is Safari.
-        \todo{Write that the scroll-based solution probably has a bug that makes it perform so bad? In only perfoms bad when expanding the element, not shrinking it... This however seem to be a bug with Safari, not the implementation.}
+        \todo{Write that the scroll-based solution probably has a bug that makes it perform so bad? In only perfoms bad when expanding the \gls{element}, not shrinking it... This however seem to be a bug with Safari, not the implementation.}
         \begin{table}[ht]\center
           \tiny
           \begin{tabular}[t]{ l l l l l l l }
@@ -2589,7 +2589,7 @@
             \gls{Gecko}   & \textbf{200 ms}  & 1100 ms   & 100 ms  & \textbf{50 ms}  \\
             \gls{WebKit}  & \textbf{100 ms}  & 300 ms    & 800 ms  & \textbf{25 ms}  \\
           \end{tabular}
-          \caption{Performance of the two solutions in different layout engines when operating on 100 elements.}
+          \caption{Performance of the two solutions in different layout engines when operating on 100 \glspl{element}.}
           \label{table:erd-layout-engines}
         \end{table}
 
@@ -2614,33 +2614,33 @@
                               There are several approaches to this, such as having a compilation step that calculates desired element queries and transforms them into valid \gls{CSS} with an element query runtime or \gls{media queries}. 
                               Another approach is to calculate all element styles once at page load. All approaches have in common that the libraries do not support layout changes at runtime, and are therefore only useful for static pages.
       \item \textbf{Dynamic}: Libraries that handles element queries at runtime (and therefore support pages that changes dynamically).
-      \item \textbf{Automatic}: Libraries that updates affected element queries on viewport and element resize events automatically.
-      \item \textbf{Semi-automatic}: Libraries that partly updates affected element queries. Usually only viewport resize events are handled automatically.
+      \item \textbf{Automatic}: Libraries that updates affected element queries on \gls{viewport} and element resize events automatically.
+      \item \textbf{Semi-automatic}: Libraries that partly updates affected element queries. Usually only \gls{viewport} resize events are handled automatically.
     \end{itemize}
     
-    \todo{Not really happy with the dynamic vs static. Need to define this exactly. Is it dynamic because CSS is parsed at runtime or does it need a way to rerun the library on new elements as well?}
+    \todo{Not really happy with the dynamic vs static. Need to define this exactly. Is it dynamic because CSS is parsed at runtime or does it need a way to rerun the library on new \glspl{element} as well?}
     \begin{table}[ht]\center
       \tiny
       \begin{tabular}[t]{ l p{3cm} l l l p{3cm} }
         \multicolumn{2}{l}{Implementation} & \gls{CSS} Syntax & Resize detection & Behavior & Comments \\
         \hline
-        \cite{eq_imp_magichtml} &             MagicHTML &                                   Invalid &   Viewport only &       Static &    Compiles invalid CSS to valid CSS at server side. \\
-        \cite{eq_imp_eqcss} &                 EQCSS &                                       Invalid &   Viewport only &       Dynamic     \\
-        \cite{eq_imp_prollyfill-min-width} &  Element Media Queries &                       Invalid &   Non-void elements &   Dynamic &   Flow-based element resize detection. \\
-        \cite{eq_imp_localised-css} &         Localised CSS &                               Invalid &   Arbitrary elements &  Dynamic &   Unfinished. Polling. \\
-        \cite{eq_imp_gss} &                   Grid Style Sheets 2.0 &                       Invalid &   Arbitrary elements &  Dynamic &   Using the Cassowary constraints solver. \\
+        \cite{eq_imp_magichtml} &             MagicHTML &                                   Invalid &   \Gls{viewport} only &       Static &    Compiles invalid CSS to valid CSS at server side. \\
+        \cite{eq_imp_eqcss} &                 EQCSS &                                       Invalid &   \Gls{viewport} only &       Dynamic     \\
+        \cite{eq_imp_prollyfill-min-width} &  Element Media Queries &                       Invalid &   Non-void \glspl{element} &   Dynamic &   Flow-based element resize detection. \\
+        \cite{eq_imp_localised-css} &         Localised CSS &                               Invalid &   Arbitrary \glspl{element} &  Dynamic &   Unfinished. Polling. \\
+        \cite{eq_imp_gss} &                   Grid Style Sheets 2.0 &                       Invalid &   Arbitrary \glspl{element} &  Dynamic &   Using the Cassowary constraints solver. \\
         \cite{eq_imp_classquery} &            Class Query &                                 Valid &     None &                Static &    Writes \gls{media queries} to style on load. \\
-        \cite{eq_imp_breakpointsjs} &         breakpoints.js &                              Valid &     Viewport only &       Dynamic &   JS-centric approach. \\
-        \cite{eq_imp_mediaclass} &            MediaClass &                                  Valid &     Viewport only &       Dynamic &   Custom inline JS syntax. \\
-        \cite{eq_imp_elementquery} &          ElementQuery &                                Valid &     Viewport only &       Dynamic &   \\
-        \cite{eq_imp_responsive-elements} &   Responsive Elements &                         Valid &     Viewport only &       Dynamic &   \\
-        \cite{eq_imp_sickles} &               SickleS &                                     Valid &     Viewport only &       Dynamic &   Part of bootstrap-like library. No JS API, instead parses CSS. \\
-        \cite{eq_imp_responsive-elements-2} & Responsive Elements &                         Valid &     Viewport only &       Dynamic &   \\ 
-        \cite{eq_imp_breaks2000} &            breaks2000 &                                  Valid &     Viewport only &       Dynamic &   \\
-        \cite{eq_imp_eqjs} &                  eq.js &                                       Valid &     Viewport only &       Dynamic &   \\
-        \cite{eq_imp_element-queries} &       Element Queries &                             Valid &     Non-void elements &   Dynamic &   Object-based element resize detection. \\
-        \cite{eq_imp_css-element-queries} &   CSS Element Queries &                         Valid &     Non-void elements &   Dynamic &   Scroll-based element resize detection. \\
-        \cite{eq_imp_selector_queries} &      Selector queries and responsive containers &  Valid &     Arbitrary elements &  Dynamic &   Polling. \\
+        \cite{eq_imp_breakpointsjs} &         breakpoints.js &                              Valid &     \Gls{viewport} only &       Dynamic &   JS-centric approach. \\
+        \cite{eq_imp_mediaclass} &            MediaClass &                                  Valid &     \Gls{viewport} only &       Dynamic &   Custom inline JS syntax. \\
+        \cite{eq_imp_elementquery} &          ElementQuery &                                Valid &     \Gls{viewport} only &       Dynamic &   \\
+        \cite{eq_imp_responsive-elements} &   Responsive Elements &                         Valid &     \Gls{viewport} only &       Dynamic &   \\
+        \cite{eq_imp_sickles} &               SickleS &                                     Valid &     \Gls{viewport} only &       Dynamic &   Part of bootstrap-like library. No JS API, instead parses CSS. \\
+        \cite{eq_imp_responsive-elements-2} & Responsive Elements &                         Valid &     \Gls{viewport} only &       Dynamic &   \\ 
+        \cite{eq_imp_breaks2000} &            breaks2000 &                                  Valid &     \Gls{viewport} only &       Dynamic &   \\
+        \cite{eq_imp_eqjs} &                  eq.js &                                       Valid &     \Gls{viewport} only &       Dynamic &   \\
+        \cite{eq_imp_element-queries} &       Element Queries &                             Valid &     Non-void \glspl{element} &   Dynamic &   Object-based element resize detection. \\
+        \cite{eq_imp_css-element-queries} &   CSS Element Queries &                         Valid &     Non-void \glspl{element} &   Dynamic &   Scroll-based element resize detection. \\
+        \cite{eq_imp_selector_queries} &      Selector queries and responsive containers &  Valid &     Arbitrary \glspl{element} &  Dynamic &   Polling. \\
       \end{tabular}
       \caption{Classification of current approaches.}
       \label{table:approaches-classifications}
@@ -2695,13 +2695,13 @@
     Third, The custom \gls{API} and parser needs to be kept up to date with \gls{CSS} standards in order to make sure new features of \gls{CSS} are supported and that they are not conflicting with the custom \gls{API}.
 
     \paragraph{Automation}
-    As shown in table~\ref{table:approaches-classifications}, most libraries simply listens to the viewport resize event, which may be enough for static pages.
+    As shown in table~\ref{table:approaches-classifications}, most libraries simply listens to the \gls{viewport} resize event, which may be enough for static pages.
     However, observing element resize events is desired for pages that change layout during runtime.
-    The libraries \cite{eq_imp_localised-css,eq_imp_selector_queries,eq_imp_prollyfill-min-width,eq_imp_gss,eq_imp_element-queries,eq_imp_css-element-queries} have in common that they observe elements for resize events.
+    The libraries \cite{eq_imp_localised-css,eq_imp_selector_queries,eq_imp_prollyfill-min-width,eq_imp_gss,eq_imp_element-queries,eq_imp_css-element-queries} have in common that they observe \glspl{element} for resize events.
     The libraries \cite{eq_imp_localised-css,eq_imp_selector_queries} uses polling to detect element size changes, and are therefore support arbitrary element resize detection.
     However, as presented in Section~\ref{sec:imp_erd}, polling is undesired.
     \todo{Write why again?}
-    Library \cite{eq_imp_gss} evaluates all elements on \gls{DOM} mutations, using the \code{MutationObserver} \gls{API} as discussed in Section~\ref{sec:imp_erd}, which does not detect all element resize events.
+    Library \cite{eq_imp_gss} evaluates all \glspl{element} on \gls{DOM} mutations, using the \code{MutationObserver} \gls{API} as discussed in Section~\ref{sec:imp_erd}, which does not detect all element resize events.
     \todo{Write more about GSS, how it uses constraints CSS, bad browser support, that it is fairly static, quote from github, etc.}
 
     The three remaining libraries uses three different injection solutions, as described in Section~\ref{sec:imp_erd}, to detect element resize events; \cite{eq_imp_element-queries} uses the object-based solution, \cite{eq_imp_prollyfill-min-width} uses the flow-based solution, and \cite{eq_imp_css-element-queries} uses the scroll-based solution.
@@ -2710,7 +2710,7 @@
 
     \todo[inline]{Insight: Custom CSS: If a page has normal CSS present and performs getComputedStyle(), the script will be blocked until the CSS has been resolved so that the valid styles will be returned. If invalid CSS is present (a la Tommy's approach), then does the script wait or does it result in the wrong styles being returned? Probably.}
     \todo[inline]{Insight: Is it true that if a approach does not listen to element resizes and does not support layout changes, a static approach is always best?}
-    \todo[inline]{Write somewhere that an extra layout on elements resize is inevitable since it is required in theory.}
+    \todo[inline]{Write somewhere that an extra layout on \glspl{element} resize is inevitable since it is required in theory.}
     \todo[inline]{Write meta.}
     \todo[inline]{Write about media query CSS approach as an approach?}
     \todo[inline]{Philipp: Compare performance to the measurements done in Evaluation to the related work.}
@@ -2724,7 +2724,7 @@
     Recall the problem formulation from Section~\ref{sec:problem}: \problemformulation.
     The problem was shown in Section~\ref{ch:eq} to be solved by element queries.
     Therefore, the goal of this thesis was to develop a third-party JavaScript library that enables developers to use element queries.
-    Since no syntax or standard has been specified by the \gls{W3C} yet for element queries, the syntax and usage can be formed in any way as long as it solves the problem of conditionally styling elements by element criterion.
+    Since no syntax or standard has been specified by the \gls{W3C} yet for element queries, the syntax and usage can be formed in any way as long as it solves the problem of conditionally styling \glspl{element} by element criterion.
     Since the implementation of the \gls{ELQ} library (that enables element queries) was successful, the thesis goal can be considered fulfilled.
 
     % The problem of responsive modules have been described, and the solution has been presented to be element queries.
@@ -2744,10 +2744,10 @@
     As \gls{web} applications are transitioning from being server generated to entirely living on the client, it is important to write modular components for various positive effects.
     It has been shown that element queries solves the problem of \gls{responsive} modules, and is therefore an important missing feature of the \gls{web} as a platform.
 
-    Unrestricted element queries (i.e., not restricting target elements to special viewport elements) imposes limitations to layout engines, and are therefore infeasible to implement.
+    Unrestricted element queries (i.e., not restricting target \glspl{element} to special \gls{viewport} \glspl{element}) imposes limitations to layout engines, and are therefore infeasible to implement.
     Possible approaches to overcome most limitations are being discussed by participants of the W3C.
-    One approach is to define a new element behavior (either as a new element or attribute) so that it acts as an individual viewport that can be targeted by element queries in order to style children of the element.
-    Restrictions would be applied to the viewport element so that the layout of the element do not depend on conditionally styled child style properties.
+    One approach is to define a new element behavior (either as a new element or attribute) so that it acts as an individual \gls{viewport} that can be targeted by element queries in order to style children of the \gls{element}.
+    Restrictions would be applied to the \gls{viewport} element so that the layout of the element do not depend on conditionally styled child style properties.
 
     Unfortunately, there are inherent problems to element queries that seem hard to overcome.
     First, in order to evaluate selectors that contain element queries matches a layout needs to be performed (since the position and size of the target element can only be retrived by performing a layout).
@@ -2787,13 +2787,13 @@
     However, layout engines may halt the parsing and evaluation of script tags in order to perform the speculative renderig.
     One way to guarentee that the element queries are evaluated before the first page render, the script needs to be placed in the document head.
     However, evaluating element queries synchronously in the head of a document is impossible, since the layout engine have yet to parse and cosntruct a \gls{DOM} of the document.
-    Further, element queries requires the layout engine to perform a layout in order to be able to get the final size of an element.
+    Further, element queries requires the layout engine to perform a layout in order to be able to get the final size of an \gls{element}.
     When performing a layout, render engines surely usually take the opportunity to render the new state of the page.
     So, a flash of invalid styles at page load is inevitable (and is also the case with all related work that evaluates element queries at runtime).
     For instance, the \gls{ELQ} Bootstrap example documentation page would on load be rendered as it should be on small screens, since the small layout is the default that it falls back to if no queries match.
-    If such flash could be avoided by rendering a white rectangle over the viewport and remove it until the page has been rendered correctly.
+    If such flash could be avoided by rendering a white rectangle over the \gls{viewport} and remove it until the page has been rendered correctly.
 
-    Another drawback that all element queries libraries that do not parse \gls{CSS} have in common is that the breakpoints of elements are defined in either \gls{JavaScript} or \gls{HTML}.
+    Another drawback that all element queries libraries that do not parse \gls{CSS} have in common is that the breakpoints of \glspl{element} are defined in either \gls{JavaScript} or \gls{HTML}.
     It is desired to define the breakpoints in \gls{CSS}, since they are style related, as with case with \gls{media queries}.
     Due to both performance and compatibility problems, parsing of \gls{CSS} at runtime is not done by \gls{ELQ}.
     It was decided that the negative outcomes of doing that outweights the positive.
@@ -2801,7 +2801,7 @@
     Since \gls{ELQ} is plugin-based a plugin could easily be crafted that adds such functionality.
 
     \paragraph{ELQ and related work}
-    ELQ and its plugins provides a low level API for building \gls{responsive} design frameworks and applications by enablind the user to conditionally style elements with valid CSS.
+    ELQ and its plugins provides a low level API for building \gls{responsive} design frameworks and applications by enablind the user to conditionally style \glspl{element} with valid CSS.
     By not requiring users to write invalid CSS has proven to be very useful when incorporating the solution to existing projects.
     Additionally, CSS tools can advantageously be used in tandem with the ELQ syntax --- something that is not possible with related work that requires invalid CSS.
     The mirror plugin of ELQ enables developers to overcome some CSS limitations, which has been proven to be important when writing \gls{responsive} modules that are not limited to a predefined \gls{HTML} structure (as shown in Section~\ref{sec:eval-bootstrap}).
@@ -2816,7 +2816,7 @@
 
     A major difference to related work is that ELQ is powered by a highly optimized subsystem for detecting element resize events, which provides a significant speedup to related work that also detects element resize events.
     The subsystem used by ELQ has been showed to have the same or better performance as the other subsystems in FireFox and Safari.
-    It has been shown that the optimized subsystem performs 32-fold (for the object-based solution) or 13-fold (for the scroll-based solution) faster than the subsystems used by related work in Chrome when preparing 500 elements to be detectable.
+    It has been shown that the optimized subsystem performs 32-fold (for the object-based solution) or 13-fold (for the scroll-based solution) faster than the subsystems used by related work in Chrome when preparing 500 \glspl{element} to be detectable.
     Additionally, some subsystems used by related work suffers from issues that ELQ does not.
     \todo{Finish this.}
 
@@ -2826,7 +2826,7 @@
       This is needed in order to be sure that goal~\ref{itm:req_flexible} truly is satisfied.
 
       \paragraph{Exteding the mirror plugin}
-      In order to allow more advanced element query constellations, \code{elq-mirror} could could be extended to enable mirror elements to target arbitrary elements (instead of just the nearest \code{elq-breakpoints} ancestor element).
+      In order to allow more advanced element query constellations, \code{elq-mirror} could could be extended to enable mirror \glspl{element} to target arbitrary \glspl{element} (instead of just the nearest \code{elq-breakpoints} ancestor \gls{element}).
       This way, it would be possibel to write element queries against children, siblings, etc.
       This would also be a key feature in order to further satisfy goal~\ref{itm:req_flexible}.
 
@@ -2839,8 +2839,8 @@
       \paragraph{Static layout}
       More research can be done in regarding static pages wish to use element queries, since the main focus of this thesis has been dynamic pages.
       It is highly possible that the best approach to static pages is to parse custom \gls{CSS} at server side in order to generate static \gls{media queries}.
-      \Gls{media queries} are at the moment the most performant way of applying conditional styles by viewport size, which possibly is the only factor to static page layout.
-      However, it is uncertain if the viewport size is the only layout factor to static pages as browser and end-used styles might affect pages in a way that would imply that a layout change is desired without affecting the viewport size.
+      \Gls{media queries} are at the moment the most performant way of applying conditional styles by \gls{viewport} size, which possibly is the only factor to static page layout.
+      However, it is uncertain if the \gls{viewport} size is the only layout factor to static pages as browser and end-used styles might affect pages in a way that would imply that a layout change is desired without affecting the \gls{viewport} size.
 
       \paragraph{Performance}
       As of now, different subsystems of \gls{ELQ} are forced to create their own batch processors, which is favorable in some cases.
@@ -2852,20 +2852,20 @@
 
       \paragraph{Flash of invalid layout}
       It would be possible to prevent the flash of invalid layout during page reloads, by saving all element styles states to a persistan local browser storage.
-      When the page reloads, a script can be executed that reads the element styles states of the local storage and applies the breakpoint classes to all elements before the first layout.
-      This way, all elements would have the right classes before a layout is performed by the layout engine and thus resulting in an instant valid page layout.
+      When the page reloads, a script can be executed that reads the element styles states of the local storage and applies the breakpoint classes to all \glspl{element} before the first layout.
+      This way, all \glspl{element} would have the right classes before a layout is performed by the layout engine and thus resulting in an instant valid page layout.
       However, this still would not avoid the first invalid layout when the page is loaded for the first time.
 
       \paragraph{Parsing CSS}
       Event thought there are several issues with runtime parsing of CSS, it is probably beneficial in some cases.
-      Recall from Section~\ref{sec:imp_erd} that CSS selectors may unintentionally style the injected elements of the element resize detection subsystem.
+      Recall from Section~\ref{sec:imp_erd} that CSS selectors may unintentionally style the injected \glspl{element} of the element resize detection subsystem.
       By parsing CSS it would be possible to warn developers of such selectors.
       The feature could be valuable in the development phase of applications, but should probably be disabled in production due to performance reasons.
-      Users that value true separation of style and \gls{HTML} could also benefit from parsing CSS, as the breakpoint of all elements then could be deduced by considering the element queries in the CSS.
+      Users that value true separation of style and \gls{HTML} could also benefit from parsing CSS, as the breakpoint of all \glspl{element} then could be deduced by considering the element queries in the CSS.
 
       \todo[inline]{Fulfill all technical goals. Which ones?}
       \todo[inline]{ERD could automatically use the best solution based on the layout engine.}
-      \todo[inline]{Write that eq are theoretically not limited to sizes, could be any property of elements!}
+      \todo[inline]{Write that eq are theoretically not limited to sizes, could be any property of \glspl{element}!}
 
   \printbibliography
   \clearpage
@@ -2890,7 +2890,7 @@
           \begin{figure}[htbp!]
             \centering
             \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-header-big}
-            \caption{Double column documentation page powered by Bootstrap with showing the header section of the page. The viewport is big enough to give each column sufficient space.}
+            \caption{Double column documentation page powered by Bootstrap with showing the header section of the page. The \gls{viewport} is big enough to give each column sufficient space.}
             \label{fig:appendix-bootstrap-mq-header-big}
           \end{figure}
 
