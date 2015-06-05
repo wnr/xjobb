@@ -22,7 +22,7 @@
 \usepackage{pgfplots}
 \pgfplotsset{compat=newest} % Allows to place the legend below plot
 \usepgfplotslibrary{units} % Allows to enter the units nicely
-\usepackage[disable]{todonotes}
+\usepackage{todonotes}
 \usepackage[toc,acronym]{glossaries}
 \usepackage{placeins}
 \makenoidxglossaries
@@ -82,7 +82,19 @@
 }
 \newglossaryentry{WebKit}{
   name=WebKit,
-  description={The open source \gls{layout engine} used by Safari. Google's Blink \gls{layout engine} is a recent \gls{fork} of WebKit}
+  description={The open source \gls{layout engine} used by Safari. Google's \gls{Blink} \gls{layout engine} is a recent \gls{fork} of WebKit}
+}
+\newglossaryentry{Blink}{
+  name=Blink,
+  description={The open source \gls{layout engine} used by Chrome and Opera. The engine is a recent \gls{fork} of WebKit}
+}
+\newglossaryentry{Gecko}{
+  name=Gecko,
+  description={The open source \gls{layout engine} used by FireFox}
+}
+\newglossaryentry{Trident}{
+  name=Trident,
+  description={The closed source \gls{layout engine} used by Internet Explorer}
 }
 \newglossaryentry{HTML5}{
   name=HTML5,
@@ -162,7 +174,7 @@
 }
 \newglossaryentry{Bootstrap}{
   name={Bootstrap},
-  description={The most popular HTML, CSS, and JS framework for developing responsive, mobile first projects on the web. See \url{http://getbootstrap.com/about/} for more information}
+  description={The most popular HTML, CSS, and JS framework for developing \gls{responsive}, mobile first projects on the \gls{web}. See \url{http://getbootstrap.com/about/} for more information}
 }
 \newglossaryentry{LESS}{
   name={LESS},
@@ -228,7 +240,7 @@
     % There are many frameworks and libraries that facilitates developing web modules: \emph{Angular}, \emph{Backbone}, \emph{Ember}, \emph{Web Components}, \emph{Requirejs}, \emph{Browserify}, \emph{Polymer}, \emph{React}, among others.
     Unfortunately, responsive modules require the users of a module to define the conditional styles since only the user knows the layout of the module.
     This implies that responsive modules cannot be encapsulated, which is important for reusability and reduced complexity.
-    This is due to the limitation of CSS that elements can only be conditionally styled by the document root and device properties by using media queries.
+    This is due to the limitation of CSS that elements can only be conditionally styled by the document root and device properties by using \gls{media queries}.
     In order to create encapsulated responsive modules, elements must be able to be conditionally styled by \emph{element} property criterion, which is known as \emph{element queries}.
 
     Participants of the main international standards organization for the web, the W3C, are interested in solving the problem and possible solutions are being discussed.
@@ -239,7 +251,7 @@
     In order to enable developers to create encapsulated responsive modules, while waiting for native support, a third-party element queries JavaScript library has been developed.
     As presented in this thesis, the library provides both performance and usage advantages to other related libraries.
     An optimized subsystem for detecting element resize events has been developed using a leveled batch processor, which is significantly faster than similar systems.
-    As part of the empirical evaluation the Bootstrap framework has been altered to use element queries intead of media queries by altering \textasciitilde50 out of \textasciitilde8500 lines of style code, which displays one of the advantages of the developed library.
+    As part of the empirical evaluation the Bootstrap framework has been altered to use element queries intead of \gls{media queries} by altering \textasciitilde50 out of \textasciitilde8500 lines of style code, which displays one of the advantages of the developed library.
 
   \end{abstract}
   \clearpage
@@ -288,13 +300,11 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{Introduction}
     \todo[inline]{Write about the targeted browser compatibility. Started writing about this but put it on hold in the appendix.}
-    \todo[inline,color=red]{Tomas: Show which cite's are used for which parts of the sections better. Could still be done in the metatext by just describing what the cited resource address. Or perhaps just citing the resource again where neccesary in the text.}
     \todo[inline,color=red]{Tomas: Don't think that the intro should be so "selling", write about what "will" be done and hypothesis and such. Write instead what "have" been done, what you have personally done and stuff like that.}
     \todo[inline]{Add note that the thesis is best viewed in color.}
     \todo[inline]{Write that glossary words will be emph on first appearence?}
     \todo[inline]{Should the subtitle be criterion instead of criteria?}
     \todo[inline]{Change all "recent", "now" and such to dates instead.}
-    \todo[inline]{Invoke vs call? Seems to be same word, should settle with one of them.}
     \todo[inline]{Should check whole thesis so that it is not written "Figures" when there are multiple figures stated.}
     \todo[inline]{Write a little intro to the reader that "user" is not the "end-user".}
     \todo[inline]{Write Blink, Gecko and WebKit instead of the browser names. Reason: Now writing that good performance is achieved in Chrome, but I'm sure the same is achived in Opera as it uses Blink. Should double check this though.}
@@ -303,7 +313,7 @@
     \section{Targeted audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how one could solve the problem today.
       Heavy use of \gls{web} terminology is being used and intermediate \gls{web} development knowledge is beneficial.
-      For readers that are not familiar with web terminology there is a glossary at the end of this thesis.
+      For readers that are not familiar with \gls{web} terminology there is a glossary at the end of this thesis.
       \todo[inline]{Philipp wanted this to be more general.}
     \section{Problem statement}\label{sec:problem}
       By using \gls{CSS} \gls{media queries}, developers can specify different style rules for different \gls{viewport} sizes.
@@ -354,7 +364,7 @@
           How can a custom \gls{API} be crafted that will enable element queries and still conform to the language specifications? Is it possible to create an \gls{API} that feels natural to \gls{web} developers and works in tandem with other tools and libraries?
           For instance, if the \gls{API} requires custom \gls{CSS} syntax then \gls{CSS} preprocessors, linters and validators cannot be used anymore.
           Likewise, if the \gls{API} requires a special \gls{element} handling process, it could be hard to use with popular libraries. \todo{Should I give examples like Angular React Backbone Bootstrap?}
-        \item Is it possible to solve the problem with adequate performance for large applications that make heavy use of responsive modules?
+        \item Is it possible to solve the problem with adequate performance for large applications that make heavy use of \gls{responsive} modules?
         \item How can adequate \gls{browser} compatibility with legacy browsers be achieved without \gls{native} support?
       \end{itemize}
       The scientific question to be answered is if it is possible to solve the problem without extending any language specification of the \gls{web}.
@@ -390,7 +400,7 @@
       \begin{itemize}
       \item A \gls{third-party} implementation of element queries will be developed.
       \item The problems of implementing element queries \glslink{native}{natively} will be addressed.
-      \item Theory about \glspl{layout engine}, programming languages of the web, \gls{responsive} \gls{web} design and modularity will be given to fully understand the problem.
+      \item Theory about \glspl{layout engine}, programming languages of the \gls{web}, \gls{responsive} \gls{web} design and modularity will be given to fully understand the problem.
       \end{itemize}
 
       \subsection{What will not be done}
@@ -401,13 +411,13 @@
       \end{itemize}
     \section{Outline}
       \newcommand{\chref}[1]{Chapter~\ref{#1}, \emph{\nameref{#1}},}
-      \chref{ch:background} presents the background of this thesis and aims to provide sufficient information about web development and layout engines to understand the problem and solution.
-      In Section~\ref{sec:web-dev} the two web development concepts responsive web design and modulairy are presented, and the Section ends describing the problem of responsive modules.
+      \chref{ch:background} presents the background of this thesis and aims to provide sufficient information about \gls{web} development and layout engines to understand the problem and solution.
+      In Section~\ref{sec:web-dev} the two \gls{web} development concepts \gls{responsive} \gls{web} design and modulairy are presented, and the Section ends describing the problem of \gls{responsive} modules.
       Section~\ref{sec:layout-engines} briefly describes how layout engines operates and how JavaScript can be optimized by avoiding layout thrashing.
       The section ends with presenting the current research of parallelizing layout engines, which is important to understand since element queries affects the parallelization of layout engines.
       Expert readers may want to skip this chapter.
 
-      \chref{ch:eq} defines element queries and shows how they can be used to solve the problem of encapsulated responsive modules.
+      \chref{ch:eq} defines element queries and shows how they can be used to solve the problem of \gls{encapsulated} \gls{responsive} modules.
       The chapter also gives insight into the current research of element queries and presents some difficulties that the W3C and are facing with implementing element queries in layout engines.
       Section~\ref{sec:eq-problems} describes the problems that element queries implies to layout engines in detail and Section~\ref{sec:eq-approaches} presents some approaches discussed by the W3C to overcome some of the problems.
 
@@ -417,8 +427,8 @@
       Last, some subsystems of the library are presented in detail including a highly optimized solution to observe element resize events using a leveled batch processor subsystem.
 
       \chref{ch:eval} presents the empirical evaluation of the library, which includes altering the popular style framework Bootstrap and measuring the performance of subsystems in different browsers.
-      The Bootstrap framework provides many responsive \gls{CSS} classes to make user interfaces responsive by using media queries.
-      By altering Bootstrap to use element queries instead for the responsive classes, some of the technical goals can be evaluated.
+      The Bootstrap framework provides many \gls{responsive} \gls{CSS} classes to make user interfaces \gls{responsive} by using \gls{media queries}.
+      By altering Bootstrap to use element queries instead for the \gls{responsive} classes, some of the technical goals can be evaluated.
       Similarly, by measuring the performance of the library and different subsystems additional technical goals can be avaluated.
       The performance measurements are also used to compare the performance of the library to related work.
 
@@ -449,8 +459,8 @@
     This chapter aims to present sufficient background to understand why element queries is a desired feature and why it is hard to implement natively in browsers.
     Expert readers may want to skip directly to Chapter~\ref{ch:eq} where element queries is described.
 
-    Section~\ref{sec:web-dev} presents a brief history of web development and motivate why responsive web design and modular development are both popular and needed concepts in modern web development.
-    As an end, Section~\ref{sec:rwd-modular-problem} describes the problem of having modular responsive modules, which element queries solves.    
+    Section~\ref{sec:web-dev} presents a brief history of \gls{web} development and motivate why \gls{responsive} \gls{web} design and modular development are both popular and needed concepts in modern \gls{web} development.
+    As an end, Section~\ref{sec:rwd-modular-problem} describes the problem of having modular \gls{responsive} modules, which element queries solves.    
     Section~\ref{sec:layout-engines} describes briefly how layout engines operates, with focus on the layout process, to later present how they can be parallelized in Section~\ref{sec:parallel}.
     As will be later shown in Chapter~\ref{ch:eq}, element queries as a concept hinders parallelization of layout engines.
     Since performance will be a key requirement of the library as presented in Chapter~\ref{ch:library}, Section~\ref{sec:layout-thrashing} defines layout thrashing and shows how it can be avoided in order to improve performance.
@@ -465,9 +475,9 @@
       There even exist computers that only run a \gls{browser}, which is sufficient for many users.
       
       Section~\ref{sec:doc-to-app} describes the transition from \glspl{browser} rendering simple \glspl{document} to being hosts for complex applications, and is aimed for readers not familiar with the rapid development of the \gls{web}.
-      Section~\ref{sec:rwd} defines and motivates responsive web design, and is needed to understand the problem that element queries solves.
+      Section~\ref{sec:rwd} defines and motivates \gls{responsive} \gls{web} design, and is needed to understand the problem that element queries solves.
       Section~\ref{sec:modularity} similarly defines and motives modular development, which also is needed to understand the problem that element queries solves.
-      Section~\ref{sec:rwd-modular-problem} presents the problem that element queries solves, which is that it is not possible to construct encapsulated responsive modules.
+      Section~\ref{sec:rwd-modular-problem} presents the problem that element queries solves, which is that it is not possible to construct \gls{encapsulated} \gls{responsive} modules.
       This section will be the key motivation to why element queries is needed.
 
       \subsection{From documents to applications}\label{sec:doc-to-app}
@@ -498,7 +508,7 @@
         Some \glspl{OS} and \glspl{browser} ships with preinstalled plugins, while others do not support plugins at all.
 
         With the increase of smart devices (such as phones, televisions, cars, game consoles, etc.) that includes \glspl{browser} with limited \gls{third-party} runtimes, plugins quickly decreased in popularity.
-        Additionally, as the web platform was improved and users being discoraged by browsers from installing plugins due to security issues, the use of plugins decreased further.
+        Additionally, as the \gls{web} platform was improved and users being discoraged by browsers from installing plugins due to security issues, the use of plugins decreased further.
 
         As \gls{JavaScript} and \gls{HTML} supported more features, websites turned into small applications with user sessions and rich \glspl{GUI}.
         Still, parts of the applications were defined as \gls{HTML} pages, fetched from the server when navigating the site.
@@ -515,7 +525,7 @@
         A new era of \glspl{API} and features came along with \gls{HTML5} and \gls{CSS3}, which truly enabled developers to create rich client side applications.
         With the new features developers could utilize advanced graphics programming, geolocation, local and session storage, advanced input, offline mode, and much more.
 
-        \todo[inline]{Write that traditional applications are threatened by web applications, since the reach and availability of the web is superior to any other distribution platform. Also, no installation is required with web applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
+        \todo[inline]{Write that traditional applications are threatened by \gls{web} applications, since the reach and availability of the \gls{web} is superior to any other distribution platform. Also, no installation is required with \gls{web} applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
         \todo[inline,color=red]{Tomas: Maybe write about the difficulties in supporting the standards (fragmented features)}
       \subsection{Responsive web design}\label{sec:rwd}
         A few years ago, \gls{web} developers could make assumptions about the screen size of user devices.
@@ -546,7 +556,7 @@
         Clearly, a better approach was needed.
 
         With the release of \gls{CSS3} \gls{media queries} new possibilities opened up.
-        Media queries enabled developers to write conditional style declarations by media properties such as the \gls{viewport} size.
+        \Gls{media queries} enabled developers to write conditional style declarations by media properties such as the \gls{viewport} size.
         See listing~\ref{code:mq-example} for an example of how \gls{media queries} can be used to style \glspl{element} differently with relation to the viewport size.
         This can be used to tailor a site for a specific medium or \gls{viewport} size at runtime.
         \gls{RWD} refers to the approach of having a single site being \gls{responsive} to different media properties (mainly the \gls{viewport} size) at runtime to improve the user experience.
@@ -566,11 +576,11 @@
           }
         \end{lstlisting}
 
-        \todo[inline]{Perhaps give an example of a responsive module/view so that the reader understands well why responsiveness is important. This module/view could then act as a testbed for the different EQ approaches.}
+        \todo[inline]{Perhaps give an example of a \gls{responsive} module/view so that the reader understands well why \glslink{responsive}{responsiveness} is important. This module/view could then act as a testbed for the different EQ approaches.}
       \subsection{Modularity}\label{sec:modularity}
-        As the web was a platform for \gls{hypertext} \glspl{document} that quickly transitioned to serving complex applications, few techniques existed for writing modular code.
+        As the \gls{web} was a platform for \gls{hypertext} \glspl{document} that quickly transitioned to serving complex applications, few techniques existed for writing modular code.
         In the last couple of years, as client-side applications grew bigger, techniques and libraries have been developed to ease modular development.
-        Modular development is an old concept, but somewhat newborn in the web scene.
+        Modular development is an old concept, but somewhat newborn in the \gls{web} scene.
         This section aims to describe what modular development really is, and why it is such an important success factor to software development.
         This section is partly based on \normalfont{\cite{book_modular_programming,book_eloq_js,rich_hickey}}.
 
@@ -618,14 +628,14 @@
         Recall from Section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} respond to size changes, so that a document may be usable on many screen sizes, resolutions, pixel-densities, and media.
         In Section~\ref{sec:modularity} the desire for building modular \gls{web} components was presented.
         One positive outcome of building applications in a modular way is that general components become reusable and complexity is reduced.
-        Therefore, it is desired to extend the responsive web design concept to also let modules respond to size changes so that a module may be usable in many layouts.
+        Therefore, it is desired to extend the \gls{responsive} \gls{web} design concept to also let modules respond to size changes so that a module may be usable in many layouts.
         Since the only way of conditionally style \glspl{element} is by using \gls{media queries}, all \gls{responsive} styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the application layout).
         The implication of this is that the \gls{HTML} and \gls{JavaScript} can be written in a modular, way but the \gls{CSS} is left for the user of the module to write which somewhat defeats the purpose of writing modules.
         So developers today have two choices: writing modules that are not \gls{responsive} and \gls{encapsulated}, or writing modules that are \gls{responsive} and not \gls{encapsulated} (leaving the styling to the user).        
         \paragraph{Example}
-        Suppose that an encapsulated responsive module is to be developed.
+        Suppose that an \gls{encapsulated} \gls{responsive} module is to be developed.
         The module should be colored red when its width is narrow and blue when its width is wide.
-        Further, suppose that media queries are used to conditionally style the module according to the defined behavior.
+        Further, suppose that \gls{media queries} are used to conditionally style the module according to the defined behavior.
         As an example, four module instances with different widths are used by a page.
         See figure~\ref{fig:problem-eq} for the desired behavior of the module instances on the example page.
         \begin{figure}[ht]
@@ -638,10 +648,10 @@
           \label{fig:problem-eq}
         \end{figure}
 
-        Unfortunately, media queries cannot be used to achieve this behavior (with the module still being encapsulated).
+        Unfortunately, \gls{media queries} cannot be used to achieve this behavior (with the module still being \gls{encapsulated}).
         See figure~\ref{fig:problem-mq} for the actual behavior of the example page.
         As evident in the figure, the page is broken since either all instances are colored blue or red.
-        This is due to media queries only targeting the viewport, and not the actual width given to the instances.
+        This is due to \gls{media queries} only targeting the viewport, and not the actual width given to the instances.
         \begin{figure}[ht]
           \centering
           \begin{minipage}{.5\textwidth}
@@ -737,10 +747,10 @@
         \Glspl{browser} can typically display multiple pages at the same time (by using tabs, multiple windows or frames) where each page has an instance of the \gls{layout engine}.
 
         There are four \glspl{layout engine} that the major \glspl{browser} use, as presented in table~\ref{table:layout_engines}.
-        Since Blink is a recent \gls{fork} of \gls{WebKit} they have been grouped together as \gls{WebKit}-based \glspl{layout engine}.
-        This results in three distinct \glspl{layout engine} to consider: \gls{WebKit}, Gecko and Trident.
-        Due to Trident being closed source, only the \gls{WebKit}-based \glspl{layout engine} and Gecko will be considered in this section.
-        \todo{Maybe not group WebKit and Blink together, as they perform very differently in the erd tests?}
+        Since \gls{Blink} is a recent \gls{fork} of \gls{WebKit} they have been grouped together as \gls{WebKit}-based \glspl{layout engine}.
+        This results in three distinct \glspl{layout engine} to consider: \gls{WebKit}, \gls{Gecko} and \gls{Trident}.
+        Due to \gls{Trident} being closed source, only the \gls{WebKit}-based \glspl{layout engine} and \gls{Gecko} will be considered in this section.
+        \todo{Maybe not group WebKit and \gls{Blink} together, as they perform very differently in the erd tests?}
 
         \begin{table}[ht]\center
           \tiny
@@ -748,10 +758,10 @@
             \begin{tabular}[t]{ l l l }
               \textbf{Engine} & \textbf{Browsers} & \textbf{Share} \\
               \hline
-              Blink & Chrome, Opera & 44.38\% \\
-              WebKit & Safari & 17.64\% \\
-              Trident & Internet Explorer & 14.96\% \\
-              Gecko & Firefox & 12.83\% \\
+              \gls{Blink} & Chrome, Opera & 44.38\% \\
+              \gls{WebKit} & Safari & 17.64\% \\
+              \gls{Trident} & Internet Explorer & 14.96\% \\
+              \gls{Gecko} & Firefox & 12.83\% \\
             \end{tabular}
           \end{minipage}
           \hspace{0.1cm}
@@ -759,14 +769,14 @@
             \begin{tabular}[t]{ l l l }
               \textbf{Engine} & \textbf{Browsers} & \textbf{Share} \\
               \hline
-              WebKit & Safari, Chrome, Opera & 62.02\% \\
-              Trident & Internet Explorer & 14.96\% \\
-              Gecko & Firefox & 12.83\% \\
+              \gls{WebKit} & Safari, Chrome, Opera & 62.02\% \\
+              \gls{Trident} & Internet Explorer & 14.96\% \\
+              \gls{Gecko} & Firefox & 12.83\% \\
             \end{tabular}
           \end{minipage}
           \caption{
             The major \glspl{layout engine} and \glspl{browser} with market shares.
-            The table to the right has grouped together Blink into \gls{WebKit} since it is a recent for of \gls{WebKit}.
+            The table to the right has grouped together \gls{Blink} into \gls{WebKit} since it is a recent for of \gls{WebKit}.
             See Section~\ref{sec:layout_engines_market_share} for more information how the market share data was gathered.}
           \label{table:layout_engines}
         \end{table}
@@ -954,7 +964,7 @@
         For each element given as parameter to the \code{doubleWidths} function, the \code{readWriteWidth} function is called with an element as argument.
         In that function, the computed style of the element is requested, which will force a style computation for that element.
         If any \gls{DOM} node affecting the element is marked as dirty, a layout will also need to be performed before returning the computed style of the element.
-        When the computed style has been acquired, the width of the element is set to a new value, which is a \gls{DOM} mutation that will need to be synchronized with the render tree.
+        When the computed style has been acquired, the width of the element is set to a new value, which is a \gls{DOM} mutation that will need to be synchronized with the \gls{render tree}.
         Therefore, the element and its ancestors will be marked as dirty.
         The next time \code{getComputedStyle} is called, which happens when processing the next element in the collection, a layout will be forced since \gls{DOM} nodes that affects the elements has been marked as dirty.
         See figure~\ref{fig:layout-thrashing-example-1} for a visualization of the execution of the \code{doubleWidths} function.
@@ -1083,28 +1093,28 @@
     \section{Definitions and Usages}\label{sec:eq-definitions}
       \todo[inline]{Might want to change title to Def and syntax, instead of usage.}
       \noindent
-      Element queries is the solution to the problem of responsive modules as described in Section~\ref{sec:rwd-modular-problem}, since it allows modules to conditionally style themselves.
+      Element queries is the solution to the problem of \gls{responsive} modules as described in Section~\ref{sec:rwd-modular-problem}, since it allows modules to conditionally style themselves.
       \todo{Might wanna expand on this.}
 
-      Media queries and element queries are similar in the sense that they both enables developers to define conditional style rules that are applied by specified criterion \cite{w3c_css_mq}.
-      The main difference is the type of criterion that can be used; in media queries device and media criterion is used, while in element criterion is used in element queries.
-      It can somewhat simplified be described as that media queries target the document root and up (i.e., the viewport, browser, OS, device, input mechanisms, etc.) while element queries target the document content (i.e., elements of the document).
+      \Gls{media queries} and element queries are similar in the sense that they both enables developers to define conditional style rules that are applied by specified criterion \cite{w3c_css_mq}.
+      The main difference is the type of criterion that can be used; in \gls{media queries} device and media criterion is used, while in element criterion is used in element queries.
+      It can somewhat simplified be described as that \gls{media queries} target the document root and up (i.e., the viewport, browser, OS, device, input mechanisms, etc.) while element queries target the document content (i.e., elements of the document).
 
       \paragraph{Terminology}
       The entity that is evaluated against a query is called the \emph{target} of the query.
-      For media queries, the target is usually the device or viewport.
+      For \gls{media queries}, the target is usually the device or viewport.
       For element queries, the target is usually an element.
       It should be noted that the target is the entity that is evaluated against the query, and not the entity that has conditionally styles applied.
-      For instance, it is not possible to conditionally style the target of media queries, since \gls{CSS} is incapable of altering the device.
+      For instance, it is not possible to conditionally style the target of \gls{media queries}, since \gls{CSS} is incapable of altering the device.
       For element queries, the target entity is sometimes referred to as the \emph{target element}.
       In the case of element queries, the target element may also be the element that has conditionally styles applied (but is generally not).
-      \gls{CSS} style declarations that are applied conditionally using either element queries or media queries are sometimes referred to as \emph{conditional style declarations} or shortened \emph{conditional styles}.
+      \gls{CSS} style declarations that are applied conditionally using either element queries or \gls{media queries} are sometimes referred to as \emph{conditional style declarations} or shortened \emph{conditional styles}.
       When the layout engine evaluates a media or element query to determine whether the selectors matches or not is called \emph{query selector matching}.
       The expressions that defines when different conditional style declarations should be applied are called \emph{breakpoints}.
-      For instance, the media query \code{@media (max-width: 500px)} selector defines one breakpoint; that the element should be styled differently depending on if it is wider than 500 pixels or not.
+      For instance, the \glslink{media queries}{media query} \code{@media (max-width: 500px)} selector defines one breakpoint; that the element should be styled differently depending on if it is wider than 500 pixels or not.
       There can be multiple breakpoints defined for both media and element queries.
       Element queries also defines an element \emph{style state}, which is in which state the target element of an element query is in (often relative to the breakpoints).
-      For instance, if an element query targets an element \code{\#foo} with a width breakpoint of 500 pixels (similar to the media query example), then the target element \code{\#foo} would have two style states: narrower or wider than 500 pixels.
+      For instance, if an element query targets an element \code{\#foo} with a width breakpoint of 500 pixels (similar to the \glslink{media queries}{media query} example), then the target element \code{\#foo} would have two style states: narrower or wider than 500 pixels.
       The number of style states for an element of a given style property is $n + 1$ where $n$ is the number of breakpoints for that style property.
 
       \paragraph{Pseudo-syntax}
@@ -1134,10 +1144,10 @@
       \end{lstlisting}
 
       \paragraph{General use case}
-      According to the draft written by the \gls{RICG} the general use case is to conditionally style an element by an ancestor element's width \cite{ricg_draft} to allow responsive web design for reusable modules.
-      Pages are usually designed to grow in height when content does not fit the viewport and therefore responsive web design usually targets the viewport width for layout breakpoints \cite{book_rwd,wiki_rwd,mjelde2014performance}.
-      This can be verified by viewing the source code of popular responsive design frameworks (e.g., \gls{Bootstrap}) where almost exclusively width breakpoints are present.
-      Since element queries are to mainly allow responsive web design for modules, the same is assumed to apply for element queries (that only the width of elements are of interest).
+      According to the draft written by the \gls{RICG} the general use case is to conditionally style an element by an ancestor element's width \cite{ricg_draft} to allow \gls{responsive} \gls{web} design for reusable modules.
+      Pages are usually designed to grow in height when content does not fit the viewport and therefore \gls{responsive} \gls{web} design usually targets the viewport width for layout breakpoints \cite{book_rwd,wiki_rwd,mjelde2014performance}.
+      This can be verified by viewing the source code of popular \gls{responsive} design frameworks (e.g., \gls{Bootstrap}) where almost exclusively width breakpoints are present.
+      Since element queries are to mainly allow \gls{responsive} \gls{web} design for modules, the same is assumed to apply for element queries (that only the width of elements are of interest).
       Further, it is assumed that element queries mainly targets ancestor elements of the element to be conditionally styled, and therefore it is not crucial to support element queries on the own element width.
       This also implies that element queries that targets void elements are also not crucial, and hence are not regarded as a general use case.
 
@@ -1394,7 +1404,7 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% The element queries library
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{The element queries library}\label{ch:library}
-    Now that sufficient knowledge about element queries and layout engines has been acquired it is time to present the actual realization of the solution to responsive modules --- the JavaScript element queries library.
+    Now that sufficient knowledge about element queries and layout engines has been acquired it is time to present the actual realization of the solution to \gls{responsive} modules --- the JavaScript element queries library.
     First of all, a working name of the library needs to be established --- the library will from now on have the working name \gls{ELQ}.
     This name serves as a prefix for many of the library \glspl{API}, and will be frequently used in this thesis from now on.
     
@@ -1469,7 +1479,7 @@
       To decide if a subsystem of the solution should be in the library core or a plugin is a difficult task.
       A balance needs to be found between ease of use, performance and extendability.
       All subsystems of the core need to provide a fundamental functionality to the library and also need to be general enough to be used by plugins in different ways.
-      If a plugin needs to write a custom version of a subsystem in the core in order to work, the subsystem is just an extra payload to be loaded (one needs keep it mind that the number of bytes counts on the web as the code is transferred over network).
+      If a plugin needs to write a custom version of a subsystem in the core in order to work, the subsystem is just an extra payload to be loaded (one needs keep it mind that the number of bytes counts on the \gls{web} as the code is transferred over network).
       Each subsystem added to the core will impact the performance negatively (by slower load time in the best case) for all users, so they must impose a real value to existing and future plugins.
       The subsystems of the core always have the risk of being redundant, unnecessary and in other ways unwanted for some use cases.
       Therefore it is important that it is possible for developers to either remove them or change them.
@@ -1938,8 +1948,8 @@
             This solution is similar to the scroll-based solution in the sense that it also injects elements that have overflowing content.
             Instead of listening to \code{scroll} events, this solution uses several flow events.
             The idea is to detect when scrollbars disappear (i.e., underflow of content since the target container has increased in size) and when scrollbars appear (i.e., overflow of content since the target container has decreased in size).
-            Unfortunately such events are not standardized but Gecko, WebKit and Blink support them (although by different \glspl{API})\footnote{See \url{https://developer.mozilla.org/en-US/docs/Web/Events/overflow} for Gecko.}.
-            Blink still supports the events but has deprecated them \cite{blink_deprecated_flow_events}.
+            Unfortunately such events are not standardized but \gls{Gecko}, \gls{WebKit} and \gls{Blink} support them (although by different \glspl{API})\footnote{See \url{https://developer.mozilla.org/en-US/docs/Web/Events/overflow} for \gls{Gecko}.}.
+            \gls{Blink} still supports the events but has deprecated them \cite{blink_deprecated_flow_events}.
         \end{enumerate}
         Solution \ref{itm:erd-approach-polling} is appealing because it does not mutate the \gls{DOM}, supports all elements (including void elements), and it provides excellent \gls{browser} compatibility since it does not rely on special \gls{element} behavior or similar.
         However, in order to prevent the \gls{responsive} \glspl{element} lagging behind the size changes of the user interface, polling needs to be performed quite frequently.
@@ -1955,7 +1965,7 @@
         While not stated officially by \cite{backalley}, the flow-based solution was probably rejected due to the lack of browser compatability.
         The flow-based solution is not presented in detail, due to the limited browser compatability and similarity with the scroll-based solution.
         \todo{Not really happy with this sentence.}
-        The scroll-based solution was probably rejected due to issues with handling target elements with sides that are zero in length and also with the target element getting removed from the render tree (e.g., by setting the \code{display} style property to \code{none}).
+        The scroll-based solution was probably rejected due to issues with handling target elements with sides that are zero in length and also with the target element getting removed from the \gls{render tree} (e.g., by setting the \code{display} style property to \code{none}).
 
         All three solutions mutate the \gls{DOM} and relies on special \gls{element} behavior, but they offer many advantages over polling.
         Since they are event based, layout engines only need to perform extra work when injecting the solution to the target \glspl{element} and when the target \glspl{element} actually resize.
@@ -2030,9 +2040,9 @@
         Since repositioning a scrollbar forces a layout, such operations need to be performed after that all other queueable operations have been executed.
         Therefore, step \ref{itm:erd-algo-original-scroll-5} is performed in level~\ref{itm:erd-algo-scroll-level-3} as the last step.
         Layout engines can theoretically queue the scrollbar repositioning operations too as they do not affect the layout of each other.
-        The Blink layout engine is able to do so, which results in exceptional performance as shown in Section~\ref{sec:eval-perf-erd}.
-        Gecko and WebKit does not yet do so and therefore each iteration in step~\ref{itm:erd-algo-original-scroll-5} forces a layout.
-        However, it is still beneifical to batch process the algorithm for such layout engines since only pure layouts need to be performed (instead of having to recompute styles and synchronize the \gls{DOM} and render trees before each layout).        
+        The \gls{Blink} layout engine is able to do so, which results in exceptional performance as shown in Section~\ref{sec:eval-perf-erd}.
+        \gls{Gecko} and \gls{WebKit} does not yet do so and therefore each iteration in step~\ref{itm:erd-algo-original-scroll-5} forces a layout.
+        However, it is still beneifical to batch process the algorithm for such layout engines since only pure layouts need to be performed (instead of having to recompute styles and synchronize the \gls{DOM} and \glspl{render tree} before each layout).        
         As step~\ref{itm:erd-algo-original-scroll-6} is performed by the layout engine asynchronously and does not interact with the \gls{DOM}, it does not need to be batch processed.
 
         \paragraph{MutationObservers}
@@ -2045,7 +2055,7 @@
         However, when the parent container change size the observer would not detect that the element width of the element has changed, as the style attribute width still is 50 \%.
         This could theoretically be resolved by also observing the parent of the element, and so on up to the root of the document.
         Such solution would probably end up observing most elements of a page, which might be a performance penalty, and it would still not be able to detect all element resize events.
-        Element resize events may occur in numerous ways that do not alter the \gls{DOM} by CSS (.e.g, conditionally styles defined by media queries, pseudo-classes, etc.).
+        Element resize events may occur in numerous ways that do not alter the \gls{DOM} by CSS (.e.g, conditionally styles defined by \gls{media queries}, pseudo-classes, etc.).
         Using the \code{MutationObserver} \gls{API} is interesting, but it is only useful if it supports observing computed style changes of an element for detecting element resize events.
         Due to these limitations, the \gls{API} was not considered to be used in \gls{ELQ}.
 
@@ -2102,8 +2112,8 @@
     \todo{Write that the techincal goals states of ELQ will be evaluated?}
 
     Section~\ref{sec:eval-bootstrap} evaluates the \glspl{API} by a case study that alters the popular \gls{Bootstrap} framework to use element queries.
-    \gls{Bootstrap} 3.3.2 uses media queries to provide responsive \gls{CSS} classes that often are desired to use in web applications.
-    By using element queries instead, the classes become encapsulated and can be used in responsive modules.
+    \gls{Bootstrap} 3.3.2 uses \gls{media queries} to provide \gls{responsive} \gls{CSS} classes that often are desired to use in \gls{web} applications.
+    By using element queries instead, the classes become \gls{encapsulated} and can be used in \gls{responsive} modules.
     Section~\ref{sec:eval-performance} evaluates the performance by measuring \gls{ELQ} in different configurations.
     Key subsystems are also evaluated independently so that they can be compared to similar subsystems of related work.
 
@@ -2111,13 +2121,13 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Bootstrap
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{ELQ Bootstrap}\label{sec:eval-bootstrap}
-      The responsive parts of Bootstrap 3.3.2 (the grid, containers, responsive utility classes, forms, etc.) are built with media queries, and therefore only behave as desired when the Bootstrap elements can use the full width of the viewport.
+      The \gls{responsive} parts of Bootstrap 3.3.2 (the grid, containers, \gls{responsive} utility classes, forms, etc.) are built with \gls{media queries}, and therefore only behave as desired when the Bootstrap elements can use the full width of the viewport.
       It should be noted that no height breakpoints are being used by Bootstrap (as also identified by the general use case in Section~\ref{sec:eq-definitions}).
-      This implies that modules that uses any responsive Bootstrap classes inherently only behave as desired when the module can use the full width of the viewport, which means that such modules are not encapsulated and therefore many of the benefits of modules disappear.
+      This implies that modules that uses any \gls{responsive} Bootstrap classes inherently only behave as desired when the module can use the full width of the viewport, which means that such modules are not \gls{encapsulated} and therefore many of the benefits of modules disappear.
       Such modules force applications to use them in a specific layout.
       As an example, the Bootstrap \gls{CSS} documentation page was altered to instead offer a two-column documentation.
       The two-column page presents two instances of the original \gls{CSS} documentation.
-      It is shown in figure~\ref{fig:eval-bootstrap-mq-broken} that the original version of Bootstrap (that uses media queries) cannot adapt to such layout changes.
+      It is shown in figure~\ref{fig:eval-bootstrap-mq-broken} that the original version of Bootstrap (that uses \gls{media queries}) cannot adapt to such layout changes.
       \begin{figure}[htbp]
         \centering
         \begin{minipage}{.5\textwidth}
@@ -2129,30 +2139,30 @@
           \includegraphics[width=\linewidth]{images/bootstrap-mq-header-big}
         \end{minipage}
         \caption{
-          The responsive classes of Bootstrap cannot adapt to layout changes as shown with the two-column \gls{CSS} documentation example.
-          Both documentation instances uses media queries, which undesireably styles both columns as if they each fill the whole viewport width.
+          The \gls{responsive} classes of Bootstrap cannot adapt to layout changes as shown with the two-column \gls{CSS} documentation example.
+          Both documentation instances uses \gls{media queries}, which undesireably styles both columns as if they each fill the whole viewport width.
           Since the columns only fill half of the viewport width and are styles as they both fill the whole viewport width, the page appears broken as shown in the left figure.
-          The pag only behaves as desired if the viewport width is large enough so that the width of each column is bigger than the largesta media query breakpoint, as shown in the right figure.
+          The pag only behaves as desired if the viewport width is large enough so that the width of each column is bigger than the largest \glslink{media queries}{media query} breakpoint, as shown in the right figure.
           See figure~\ref{fig:appendix-bootstrap-mq-header-small} and~\ref{fig:appendix-bootstrap-mq-header-big} of the appendix for the left and right figure in full scale, respectively.}
         \label{fig:eval-bootstrap-mq-broken}
       \end{figure}
       \todo{The right image should maybe show how it should look instead.}
       \todo{Not happy with the formulation "as if they fill the whole viewport width"}
 
-      In order to make Bootstrap behave as desired in any layouts the responsive parts of the framework were modified to use element queries instead of media queries by using \gls{ELQ}.
+      In order to make Bootstrap behave as desired in any layouts the \gls{responsive} parts of the framework were modified to use element queries instead of \gls{media queries} by using \gls{ELQ}.
       Two Bootstrap classes have been chosen to be treated as viewports (that will be \code{elq-breakpoints} elements): \code{container} and \code{container-fluid}.
       \code{Not happy with calling containers as viewports}
       Both classes are used in Bootstrap to define new parts of a page (e.g., a grid is required to have a container ancestor).
       They are also nestable, which makes them suitable to be used as sub-viewports.
       \todo{Not happy with calling containers for viewports. should come up with something better.}
       The \code{container} class centers content with fixed widths by different viewport sizes, and the \code{container-fluid} uses the full available width.
-      The idea is to have all responsive classes conditionally styled with element queries by the size of the nearest ancestor container element.
-      This implies that all elements that has any responsive classes will be converted to \code{elq-mirror} elements since they want to mirror the breakpoints of the nearest ancestor \code{elq-breakpoints} element (i.e., the container elements).
+      The idea is to have all \gls{responsive} classes conditionally styled with element queries by the size of the nearest ancestor container element.
+      This implies that all elements that has any \gls{responsive} classes will be converted to \code{elq-mirror} elements since they want to mirror the breakpoints of the nearest ancestor \code{elq-breakpoints} element (i.e., the container elements).
       Since container elements may be nested they will be both \code{elq-mirror} and \code{elq-breakpoints} elements.
-      Recall from section~\ref{sec:plugin-mirror} that it is beneficial for responsive elements to be \code{elq-mirror} elements in order to not limit the element usage to a specific a \gls{HTML} structure.
+      Recall from section~\ref{sec:plugin-mirror} that it is beneficial for \gls{responsive} elements to be \code{elq-mirror} elements in order to not limit the element usage to a specific a \gls{HTML} structure.
 
       \paragraph{Altering the LESS code}
-      Bootstrap mainly uses three width numbers for responsive breakpoints: 768, 970 and 1170 pixels.
+      Bootstrap mainly uses three width numbers for \gls{responsive} breakpoints: 768, 970 and 1170 pixels.
       Since the Bootstrap \gls{CSS} is generated by the \gls{LESS} preprocessor, they are defined as constants as presented in listing~\ref{code:bootstrap-less-breakpoints}.
       \begin{lstlisting}[gobble=8,label={code:bootstrap-less-breakpoints},caption={The main breakpoints used by Bootstrap defined as \gls{LESS} constants.},captionpos=b]]
         /* File "less/variables.less" of Bootstrap. */
@@ -2164,7 +2174,7 @@
       Recall from Section~\ref{sec:plugin-breakpoints} that the breakpoint classes added by the \code{elq-breakpoints} plugin do not include the \code{px} postfix by default (i.e., if an element is above 480 pixels the class would be \code{elq-width-above-480} and not \code{elq-width-above-480px}).
       Fortunately, the \code{elq-breakpoints} plugin may be configured to append a postfix to the breakpoint classes by the \code{postfix} option.
       By configuring the plugin to use \code{px} as postfix, the constants can be used seamlessly in the element queries.
-      As shown in listing~\ref{code:bootstrap-less-breakpoints-usage}, media queries are easily replaced by element queries.
+      As shown in listing~\ref{code:bootstrap-less-breakpoints-usage}, \gls{media queries} are easily replaced by element queries.
       \begin{lstlisting}[gobble=8,label={code:bootstrap-less-breakpoints-usage},caption={Media queries can easily be replaced with element queries. By using the \code{elq-breakpoints} postfix option, the breakpoint constants can be used directly in the selectors.},captionpos=b]]
         /* File "less/grid.less" of Bootstrap. */
 
@@ -2199,10 +2209,10 @@
         }
       \end{lstlisting}
       \todo{Write how many chars that differ?}
-      By using the power of preprocessors, \gls{ELQ} element queries become as pleasent to work with as media queries.
+      By using the power of preprocessors, \gls{ELQ} element queries become as pleasent to work with as \gls{media queries}.
       In fact, only \textasciitilde50 lines out of \textasciitilde8500 lines of Bootstrap \gls{LESS} code needed to be changed.
-      Most changes were of the character shown in listing~\ref{code:bootstrap-less-breakpoints-usage}, which basically replaces the media query syntax with the \gls{ELQ} element queries syntax.
-      This is especially desired when keeping a forked project up to date with the original project, as fewer diverged lines implies a lowered risk of merge conflicts.
+      Most changes were of the character shown in listing~\ref{code:bootstrap-less-breakpoints-usage}, which basically replaces the \glslink{media queries}{media query} syntax with the \gls{ELQ} element queries syntax.
+      This is especially desired when keeping a \glslink{fork}{forked} project up to date with the original project, as fewer diverged lines implies a lowered risk of merge conflicts.
 
       \paragraph{Adding the \gls{ELQ} library}
       The altered Bootstrap version depends on \gls{ELQ} including two plugins (i.e., \code{elq-breakpoints} and \code{elq-mirror}) and must therefore be included.
@@ -2210,8 +2220,8 @@
       Bootstrap's other dependency, jQuery, is also separated from the project JavaScript.
       Since it is beneficial to not require changes to existing Bootstrap empowered pages, all \gls{ELQ} element attributes are added with \gls{JavaScript}.
       The attributes could of course be written directly in the \gls{HTML} instead; the choice is up to the user.
-      Listing~\ref{code:bootstrap-init-js} presents an example of such JavaScript code that dynamically adds the required element attributes and initializes all responsive elements.
-      \begin{lstlisting}[gobble=8,label={code:bootstrap-init-js},caption={Example of JavaScript code that adds the required \gls{ELQ} attributes dynamically to all responsive elements and initializes them.},captionpos=b]]
+      Listing~\ref{code:bootstrap-init-js} presents an example of such JavaScript code that dynamically adds the required element attributes and initializes all \gls{responsive} elements.
+      \begin{lstlisting}[gobble=8,label={code:bootstrap-init-js},caption={Example of JavaScript code that adds the required \gls{ELQ} attributes dynamically to all \gls{responsive} elements and initializes them.},captionpos=b]]
         //Creating the ELQ instance needs to be done once.
         var elq = Elq();
         elq.use(elqBreakpoints, {
@@ -2261,7 +2271,7 @@
       For reference, the same sections using the original Bootstrap are also included that shows how they behave without element queries.
       As shown in the figures, the double column documentation page using the original Bootstrap styles the two columns as if they both had the whole viewport width available.
       Therefore the two columns intersects each other because some content elements are styled wider than a column.
-      The double column documentation page using \gls{ELQ} Bootstrap on the other hand enables all responsive elements to style themselves according a parent container element.
+      The double column documentation page using \gls{ELQ} Bootstrap on the other hand enables all \gls{responsive} elements to style themselves according a parent container element.
       Therefore, the two half-page columns detect that they only have half the viewport width and style themselves accordingly.
       The visual result is the same as having two documentation sites of the original Bootstrap in two \code{iframe} elements as two columns (since \code{iframe} elements creates a separate viewport).
       \todo[inline]{Write that the original CSS documentation behaves as expected out of the box (not changes to the html)?}
@@ -2296,7 +2306,7 @@
           \includegraphics[width=\linewidth]{images/bootstrap-eq-matrix}
         \end{minipage}
         \caption{
-          The left image shows the original Bootstrap responsive utilities classes matrix.
+          The left image shows the original Bootstrap \gls{responsive} utilities classes matrix.
           Here it is clear that both columns are styled as the have the full viewport width as they display the large utility classes in green, which means that both columns think that they have the full width of the viewport.
           The right image shows same section of the same page, using \gls{ELQ} Bootstrap.
           Only the small utility classes are displayed in green as desired, since both columns only have half of the width available.
@@ -2316,7 +2326,7 @@
           \includegraphics[width=\linewidth]{images/bootstrap-eq-grid}
         \end{minipage}
         \caption{
-          The left image shows the original Bootstrap responsive grid.
+          The left image shows the original Bootstrap \gls{responsive} grid.
           It is styled as if both columns have the full viewport width available, and therefore the grids partly intersect each other.
           The right image shows same section of the same page, using \gls{ELQ} Bootstrap.
           The grids detects that only the half viewport width is available, and styles themselves accordingly.
@@ -2471,6 +2481,7 @@
         By avoiding layout thrashing, the injection performance was imporoved significantly.
         See figure~\ref{fig:erd-elq-scroll} for graphs that show how the it performs compared to the other solutions.
         As evident in the figure, the optimized \gls{ELQ} solution has significantly reduced injection times compared to the other two.
+        It achieves a 32-fold speedup compared to the object-based solution and a 13-fold speedup compared to the original scroll-based solution when preparing 500 elements for resize detection.
         The \gls{ELQ} solution also scales better, as more clearly shown in figure~\ref{fig:erd-solutions-regressed} that includes polynomial regression graphs for all three solutions.
         Both scroll-based solutions have the same memory footprint (i.e., too low for reliable measurements).
         \begin{figure}[ht!]
@@ -2560,12 +2571,12 @@
         As shown, great performance can be achieved with the optimized \gls{ELQ} scroll-based solution in Chrome.
         Unfortunately, there is no silver bullet to observing element resize events; as the other browsers behave differently.
         See table~\ref{table:erd-layout-engines} for performance numbers of different browsers.
-        The scroll-based solution is preferred for Chrome, as the injection is 20-fold faster than the object-based solution while the resize detection performance is the same for both solutions.
-        In FireFox, the object-based solution detects resize events 2-fold faster than the scroll-based solution (still, 100 ms for detecting resize events is acceptable).
+        The \gls{ELQ} scroll-based solution is preferred for Chrome, as the injection is 32-fold faster (when operating on 500 elements) than the object-based solution while the resize detection performance is the same for both solutions.
+        In FireFox, the object-based solution detects resize events 2-fold faster than the \gls{ELQ} scroll-based solution when operating (still, 100 ms for detecting resize events is acceptable).
         However, the injection time needed for the object-based solution is 5.5-fold of the time needed for the \gls{ELQ} scroll-based solution.
-        The scroll-based solution is therefore probably desired in FireFox for the general use case (as described in Section~\ref{sec:eq-definitions}).
-        In Safari, the \gls{ELQ} scroll-based solution detects resize events in 800 ms while the object-based solution detects them in 25 ms (32-fold speedup).
-        Unfortunately, injection of the object-based solution is 3-fold slower than the \gls{ELQ} scroll-based solution.
+        The \gls{ELQ} scroll-based solution is therefore probably desired in FireFox for the general use case (as described in Section~\ref{sec:eq-definitions}).
+        In Safari, the \gls{ELQ} scroll-based solution detects resize events in 800 ms while the object-based solution detects them in 25 ms, which of course is unacceptable.
+        Unfortunately, the injection time needed for the object-based solution is 3-fold slower than the \gls{ELQ} scroll-based solution.
         Since a delay of 800 ms when detecting resize events is undesired in most use cases, the object-based solution is preferred is Safari.
         \todo{Write that the scroll-based solution probably has a bug that makes it perform so bad? In only perfoms bad when expanding the element, not shrinking it... This however seem to be a bug with Safari, not the implementation.}
         \begin{table}[ht]\center
@@ -2574,11 +2585,11 @@
             \multirow{2}{*}{Layout engine} & \multicolumn{2}{c}{Injection} & \multicolumn{2}{c}{Resize detection} \\
             & scroll & object & scroll & object \\
             \hline
-            Blink   & \textbf{30 ms}   & 600 ms    & 30 ms   & 30 ms           \\
-            Gecko   & \textbf{200 ms}  & 1100 ms   & 100 ms  & \textbf{50 ms}  \\
-            WebKit  & \textbf{100 ms}  & 300 ms    & 800 ms  & \textbf{25 ms}  \\
+            \gls{Blink}   & \textbf{30 ms}   & 600 ms    & 30 ms   & 30 ms           \\
+            \gls{Gecko}   & \textbf{200 ms}  & 1100 ms   & 100 ms  & \textbf{50 ms}  \\
+            \gls{WebKit}  & \textbf{100 ms}  & 300 ms    & 800 ms  & \textbf{25 ms}  \\
           \end{tabular}
-          \caption{Performance of the two solutions in different layout engines.}
+          \caption{Performance of the two solutions in different layout engines when operating on 100 elements.}
           \label{table:erd-layout-engines}
         \end{table}
 
@@ -2600,7 +2611,7 @@
       \item \textbf{Valid syntax}: Libraries that conforms to the \gls{CSS}, \gls{HTML}, and \gls{JavaScript} standards.
       \item \textbf{Invalid syntax}: Libraries that requires custom (invalid) syntax or in any other way do not conform to the standards described above.
       \item \textbf{Static}:  Libraries that only support static layouts. 
-                              There are several approaches to this, such as having a compilation step that calculates desired element queries and transforms them into valid \gls{CSS} with an element query runtime or media queries. 
+                              There are several approaches to this, such as having a compilation step that calculates desired element queries and transforms them into valid \gls{CSS} with an element query runtime or \gls{media queries}. 
                               Another approach is to calculate all element styles once at page load. All approaches have in common that the libraries do not support layout changes at runtime, and are therefore only useful for static pages.
       \item \textbf{Dynamic}: Libraries that handles element queries at runtime (and therefore support pages that changes dynamically).
       \item \textbf{Automatic}: Libraries that updates affected element queries on viewport and element resize events automatically.
@@ -2618,7 +2629,7 @@
         \cite{eq_imp_prollyfill-min-width} &  Element Media Queries &                       Invalid &   Non-void elements &   Dynamic &   Flow-based element resize detection. \\
         \cite{eq_imp_localised-css} &         Localised CSS &                               Invalid &   Arbitrary elements &  Dynamic &   Unfinished. Polling. \\
         \cite{eq_imp_gss} &                   Grid Style Sheets 2.0 &                       Invalid &   Arbitrary elements &  Dynamic &   Using the Cassowary constraints solver. \\
-        \cite{eq_imp_classquery} &            Class Query &                                 Valid &     None &                Static &    Writes media queries to style on load. \\
+        \cite{eq_imp_classquery} &            Class Query &                                 Valid &     None &                Static &    Writes \gls{media queries} to style on load. \\
         \cite{eq_imp_breakpointsjs} &         breakpoints.js &                              Valid &     Viewport only &       Dynamic &   JS-centric approach. \\
         \cite{eq_imp_mediaclass} &            MediaClass &                                  Valid &     Viewport only &       Dynamic &   Custom inline JS syntax. \\
         \cite{eq_imp_elementquery} &          ElementQuery &                                Valid &     Viewport only &       Dynamic &   \\
@@ -2729,9 +2740,9 @@
     \todo[inline]{Write intro better intro?}
 
     \section{Element queries}
-    As the number of combinations of screen sizes, input capabilities, etc., increases it is important to write responsive applications so that it can adapt to all user devices.
-    As web applications are transitioning from being server generated to entirely living on the client, it is important to write modular components for various positive effects.
-    It has been shown that element queries solves the problem of responsive modules, and is therefore an important missing feature of the web as a platform.
+    As the number of combinations of screen sizes, input capabilities, etc., increases it is important to write \gls{responsive} applications so that it can adapt to all user devices.
+    As \gls{web} applications are transitioning from being server generated to entirely living on the client, it is important to write modular components for various positive effects.
+    It has been shown that element queries solves the problem of \gls{responsive} modules, and is therefore an important missing feature of the \gls{web} as a platform.
 
     Unrestricted element queries (i.e., not restricting target elements to special viewport elements) imposes limitations to layout engines, and are therefore infeasible to implement.
     Possible approaches to overcome most limitations are being discussed by participants of the W3C.
@@ -2748,7 +2759,7 @@
     Different parts of the library have also been shown to have different development rates, which also is an argument in favor to having the library plugin-based.
     Two plugins were developed that enables adequately advanced features for the general use case (as described in Section~\ref{sec:eq-definitions}) that satisfies goals \ref{itm:req_conditional_css} and \ref{itm:req_bp_js}.
     The \code{elq-breakpoints} plugin is the actual entity that directly enables element queries and defines the \gls{API} to be used.
-    A key restriction was made to the \gls{API} in order to satisfy goal \ref{itm:req_valid_syntax}, \ref{itm:natural}, \ref{itm:req_big_rewrite} and \ref{itm:assumption}: it must conform to the current web standard, and must therefore not require invalid syntax.
+    A key restriction was made to the \gls{API} in order to satisfy goal \ref{itm:req_valid_syntax}, \ref{itm:natural}, \ref{itm:req_big_rewrite} and \ref{itm:assumption}: it must conform to the current \gls{web} standard, and must therefore not require invalid syntax.
     This way preprocessors, validators, tools and editors can be embraced and used in tandem with the library instead of shutting them out.
     This design decision has proved to be very valuable when performing the altering of Bootstrap as described in Section~\ref{sec:eval-bootstrap}.
     If the plugin would require invalid syntax it would not be as easy to alter the Boostrap \gls{LESS} files.
@@ -2771,7 +2782,7 @@
     \paragraph{Drawbacks}
     Unfortunately, all JavaScript element queries libraries have inherent drawbacks.
     The perhaps most imminent drawback is that element queries have not been evaluated when layout engines render it for the first time, as layout engines usually renders a speculative state of the page before before all content has been downloaded and parsed (e.g., external scripts).
-    Browsers behaves a bit different regarding the speculative rendering, but at least Chrome, FireFox and Safari generally renders the page before all external scripts have been executed.
+    Browsers behaves a bit different regarding the speculative rendering, but at least \gls{Blink}, \gls{Gecko} and \gls{WebKit} generally renders the page before all external scripts have been executed.
     A naive solution to this could be to embed all external scripts inline with the \gls{HTML}, which would keep the layout engine to perform the speculative rendering since no external scripts are not be fetched.
     However, layout engines may halt the parsing and evaluation of script tags in order to perform the speculative renderig.
     One way to guarentee that the element queries are evaluated before the first page render, the script needs to be placed in the document head.
@@ -2783,17 +2794,17 @@
     If such flash could be avoided by rendering a white rectangle over the viewport and remove it until the page has been rendered correctly.
 
     Another drawback that all element queries libraries that do not parse \gls{CSS} have in common is that the breakpoints of elements are defined in either \gls{JavaScript} or \gls{HTML}.
-    It is desired to define the breakpoints in \gls{CSS}, since they are style related, as with case with media queries.
+    It is desired to define the breakpoints in \gls{CSS}, since they are style related, as with case with \gls{media queries}.
     Due to both performance and compatibility problems, parsing of \gls{CSS} at runtime is not done by \gls{ELQ}.
     It was decided that the negative outcomes of doing that outweights the positive.
     One compatibility issue is that browsers generally do not support scripts to access external style sheets served from another domain unless specified by both the server and client.
     Since \gls{ELQ} is plugin-based a plugin could easily be crafted that adds such functionality.
 
     \paragraph{ELQ and related work}
-    ELQ and its plugins provides a low level API for building responsive design frameworks and applications by enablind the user to conditionally style elements with valid CSS.
+    ELQ and its plugins provides a low level API for building \gls{responsive} design frameworks and applications by enablind the user to conditionally style elements with valid CSS.
     By not requiring users to write invalid CSS has proven to be very useful when incorporating the solution to existing projects.
     Additionally, CSS tools can advantageously be used in tandem with the ELQ syntax --- something that is not possible with related work that requires invalid CSS.
-    The mirror plugin of ELQ enables developers to overcome some CSS limitations, which has been proven to be important when writing responsive modules that are not limited to a predefined \gls{HTML} structure (as shown in Section~\ref{sec:eval-bootstrap}).
+    The mirror plugin of ELQ enables developers to overcome some CSS limitations, which has been proven to be important when writing \gls{responsive} modules that are not limited to a predefined \gls{HTML} structure (as shown in Section~\ref{sec:eval-bootstrap}).
     Related work only supports such feature by using invalid CSS.
 
     Since ELQ is plugin based, different plugins may be developed for different use cases without bloating the library API or performance.
@@ -2804,8 +2815,8 @@
     An advantage of using the same library for multiple use cases is that developers only need to learn one library and that it can easily be extended when application requirements change.
 
     A major difference to related work is that ELQ is powered by a highly optimized subsystem for detecting element resize events, which provides a significant speedup to related work that also detects element resize events.
-    The subsystem used by ELQ has been showed have the same or better performance as the other subsystems in FireFox and Safari.
-    It has been shown that the optimized subsystem performs X \% or X \% faster than the subsystems used by related work in Chrome when preparing 1000 elements to be detectable.
+    The subsystem used by ELQ has been showed to have the same or better performance as the other subsystems in FireFox and Safari.
+    It has been shown that the optimized subsystem performs 32-fold (for the object-based solution) or 13-fold (for the scroll-based solution) faster than the subsystems used by related work in Chrome when preparing 500 elements to be detectable.
     Additionally, some subsystems used by related work suffers from issues that ELQ does not.
     \todo{Finish this.}
 
@@ -2827,8 +2838,8 @@
 
       \paragraph{Static layout}
       More research can be done in regarding static pages wish to use element queries, since the main focus of this thesis has been dynamic pages.
-      It is highly possible that the best approach to static pages is to parse custom \gls{CSS} at server side in order to generate static media queries.
-      Media queries are at the moment the most performant way of applying conditional styles by viewport size, which possibly is the only factor to static page layout.
+      It is highly possible that the best approach to static pages is to parse custom \gls{CSS} at server side in order to generate static \gls{media queries}.
+      \Gls{media queries} are at the moment the most performant way of applying conditional styles by viewport size, which possibly is the only factor to static page layout.
       However, it is uncertain if the viewport size is the only layout factor to static pages as browser and end-used styles might affect pages in a way that would imply that a layout change is desired without affecting the viewport size.
 
       \paragraph{Performance}
@@ -2893,13 +2904,13 @@
           \begin{figure}[htbp!]
             \centering
             \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-matrix}
-            \caption{Double column documentation page powered by Bootstrap showing the responsive classes matrix section of the page.}
+            \caption{Double column documentation page powered by Bootstrap showing the \gls{responsive} classes matrix section of the page.}
             \label{fig:appendix-bootstrap-mq-matrix-small}
           \end{figure}
           \begin{figure}[htbp!]
             \centering
             \includegraphics[width=0.9\linewidth]{images/bootstrap-eq-matrix}
-            \caption{Double column documentation page powered by \gls{ELQ} Bootstrap showing the responsive classes matrix section of the page.}
+            \caption{Double column documentation page powered by \gls{ELQ} Bootstrap showing the \gls{responsive} classes matrix section of the page.}
             \label{fig:appendix-bootstrap-eq-matrix-small}
           \end{figure}
 
@@ -2922,22 +2933,22 @@
       \section{Layout engine market share statistics}\label{sec:layout_engines_market_share}
         Browser market share was retrieved by \emph{StatCounter}\footnote{StatCounter graph \url{http://gs.statcounter.com/\#all-browser-ww-monthly-201402-201502-bar}}.
         Since the graph only display \gls{browser} market share and not \gls{layout engine}, it is needed to further divide the \glspl{browser} into \gls{layout engine} percentages.
-        The Blink engine was introduced with Chrome version 28 and Android version 4.4 \cite{wiki_blink}.
-        Since Chrome has very good adoption rate\footnote{According to \url{http://clicky.com/marketshare/global/web-browsers/google-chrome/}} of new versions the Chrome market share percentage of 39.72\% is considered to be Blink based.
+        The \gls{Blink} engine was introduced with Chrome version 28 and Android version 4.4 \cite{wiki_blink}.
+        Since Chrome has very good adoption rate\footnote{According to \url{http://clicky.com/marketshare/global/web-browsers/google-chrome/}} of new versions the Chrome market share percentage of 39.72\% is considered to be \gls{Blink} based.
         However, Android has not as good adoption rate as Chrome with only 44.2\% using Android version 4.4 and up\footnote{According to \url{https://developer.android.com/about/dashboards/index.html}}.
-        Android has a \gls{browser} market share of 7.21\%. 44.2\% of the 7.21\% Android \glspl{browser} is assumed to be Blink based and 55.8\% to be \gls{WebKit} based (since the Android \gls{browser} was \gls{WebKit} based before Blink).
+        Android has a \gls{browser} market share of 7.21\%. 44.2\% of the 7.21\% Android \glspl{browser} is assumed to be \gls{Blink} based and 55.8\% to be \gls{WebKit} based (since the Android \gls{browser} was \gls{WebKit} based before \gls{Blink}).
         Of course, the assumption that users with old versions of Android browse the {\gls{web} as much as users with new versions are probably invalid, but the data source itself is uncertain enough to make such assumptions and the percentages should only be regarded as guidelines.
-        Opera with the lowest market share at 3.97\% started using the Blink engine in late 2013 as of version 15.
-        StatCounter shows that 37\% of the Opera users are using Opera Mini (their mobile \gls{browser}), which does not use the Blink engine (it uses Opera's own Presto \gls{layout engine} which will be ignored).
-        All desktop users of Opera are assumed to be using version 15 or above and hence using the Blink engine.
-        The total market share percentage of the Blink engine is then calculated to $39.72 + 0.442\cdot7.21 + 0.37\cdot3.97 = 44.38\%$.
+        Opera with the lowest market share at 3.97\% started using the \gls{Blink} engine in late 2013 as of version 15.
+        StatCounter shows that 37\% of the Opera users are using Opera Mini (their mobile \gls{browser}), which does not use the \gls{Blink} engine (it uses Opera's own Presto \gls{layout engine} which will be ignored).
+        All desktop users of Opera are assumed to be using version 15 or above and hence using the \gls{Blink} engine.
+        The total market share percentage of the \gls{Blink} engine is then calculated to $39.72 + 0.442\cdot7.21 + 0.37\cdot3.97 = 44.38\%$.
         Safari, with the market share percentage of 7.46\%, has always been \gls{WebKit} based.
         iOS also uses \gls{WebKit} and has the market share percentage of 6.16\%.
         The \gls{WebKit} market share percentage is calculated to $7.46 + 0.558\cdot7.21 + 6.16 = 17.64\%$.
-        FireFox, with the market share percentage of 12.83\%, has always been Gecko based and is the only major \gls{browser} that uses the Gecko engine.
-        The market share percentage of Gecko is therefore 12.83\%.
-        Internet Explorer, with the market share percentage of 14.96\%, has been Trident based since version 4.
-        Since Internet Explorer 4 is no longer in use\footnote{According to \url{http://www.w3schools.com/browsers/browsers_explorer.asp}}, the market share percentage of the Trident engine is 14.96\%.
+        FireFox, with the market share percentage of 12.83\%, has always been \gls{Gecko} based and is the only major \gls{browser} that uses the \gls{Gecko} engine.
+        The market share percentage of \gls{Gecko} is therefore 12.83\%.
+        Internet Explorer, with the market share percentage of 14.96\%, has been \gls{Trident} based since version 4.
+        Since Internet Explorer 4 is no longer in use\footnote{According to \url{http://www.w3schools.com/browsers/browsers_explorer.asp}}, the market share percentage of the \gls{Trident} engine is 14.96\%.
       \section{Usage share of browser versions}
         \todo{Put this somewhere else?}
         For compatability, the library needs to support older \glspl{browser}.
