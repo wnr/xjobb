@@ -1071,6 +1071,7 @@
     Now that a good understanding of \glspl{browser} (especially the \gls{layout engine}), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- a solution to the modular \gls{responsive} \gls{web} design problem as presented in Section~\ref{sec:rwd-modular-problem}.
     
     Section~\ref{sec:eq-definitions} defines element queries, and shows how they can be used to solve the problem.\todo{Should it really be shown how element queries solve the problem?}
+    It also presents the identified general use case for element queries.
     Since no syntax have been defined yet for element queries, a pseudo-syntax is presented in this section to be used throughout this thesis.
     Some element queries terminology is also described, which will be extensively used throughout this thesis.
     Section~\ref{sec:eq-problems} presents some of the issues of implementing element queries \glslink{native}{natively} in layout engines.
@@ -1132,9 +1133,16 @@
         a:hover:eq()
       \end{lstlisting}
 
+      \paragraph{General use case}
+      According to the draft written by the \gls{RICG} the general use case is to conditionally style an element by an ancestor element's width \cite{ricg_draft} to allow responsive web design for reusable modules.
+      Pages are usually designed to grow in height when content does not fit the viewport and therefore responsive web design usually targets the viewport width for layout breakpoints \cite{book_rwd,wiki_rwd,mjelde2014performance}.
+      This can be verified by viewing the source code of popular responsive design frameworks (e.g., \gls{Bootstrap}) where almost exclusively width breakpoints are present.
+      Since element queries are to mainly allow responsive web design for modules, the same is assumed to apply for element queries (that only the width of elements are of interest).
+      Further, it is assumed that element queries mainly targets ancestor elements of the element to be conditionally styled, and therefore it is not crucial to support element queries on the own element width.
+      This also implies that element queries that targets void elements are also not crucial, and hence are not regarded as a general use case.
+
       \todo[inline]{Should it really also be discussed in detail how element queries solve the problem?}
       \todo[inline]{If a better example is found to be used in \ref{sec:rwd-modular-problem}, the same example can be used here and shown how element queries make it behave as expected.}
-      \todo[inline]{Describe common use case. Just really simply that w3c is assuming size eq's and that RICG thinks that width will be the most common. RWD uses almost only width, and etc. Could also point out that Bootstrap (which is the de facto resposnive framework) uses width breakpoints, etc.}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Problems
@@ -1368,8 +1376,7 @@
       Recall that the idea is that a viewport element cannot be queried for properties that its children may affect (such as the width and height style properties).
       In order to allow the children to query the properties, they cannot be affected by the children.
       In theory it should mean that if no child query the height of the viewport for instance, then the height of the viewport may depend on its children.
-      This is a powerful insight, since the general use case would be to write element queries against the width and have the \glspl{element} adapt their heights accordingly (including the viewport \gls{element}).
-      \todo{General use case according to who?}
+      This is a powerful insight, since the general use case would be to write element queries against the width and have the \glspl{element} adapt their heights accordingly (including the viewport \gls{element}) (as described in Section~\ref{sec:eq-definitions}).
 
       \paragraph{JavaScript library}
       Another approach to enable element queries is to provide a \gls{third-party} \gls{JavaScript} library.
@@ -1421,7 +1428,7 @@
         \item \textbf{Features}
           \begin{enumerate}
             \item\label{itm:req_resize_detect}    The library needs to augment \gls{native} element queries in the sense that styles are applied automatically when \glspl{element} change size.
-            \item\label{itm:req_flexible}         The features should be flexible and not limited to only the common use cases.
+            \item\label{itm:req_flexible}         The features should be flexible and not limited to only the general use case.
             \item\label{itm:req_bp_js}            It should be possible to handle element query breakpoints with JavaScript.
             \item\label{itm:req_conditional_css}  It should be possible to specify conditional \gls{CSS} styles to be applied on different element query breakpoints.
           \end{enumerate}
@@ -1466,8 +1473,7 @@
       Each subsystem added to the core will impact the performance negatively (by slower load time in the best case) for all users, so they must impose a real value to existing and future plugins.
       The subsystems of the core always have the risk of being redundant, unnecessary and in other ways unwanted for some use cases.
       Therefore it is important that it is possible for developers to either remove them or change them.
-      This way the more advanced users can choose which subsystems to alter, keeping the library easy to use for the common use case.
-      \todo{Write about common use case?}
+      This way the more advanced users can choose which subsystems to alter, keeping the library easy to use for the general use case described in Section~\ref{sec:eq-definitions}.
 
       \input{p3-elq-architecture}
       \todo{Change picture so that batch processor comes before the erd system}
@@ -1901,8 +1907,7 @@
         Unfortunately, there is no standardized resize event for arbitrary \glspl{element} \cite{w3c_dom2_events}.
         Only \glspl{document} emit resize events and therefore resize events can only be observed for frame elements (since a frame element has its own document).
         Legacy versions of Internet Explorer (version 8 and down, but also some later versions depending on the quirks and \gls{document} mode) do support the resize event on arbitrary \glspl{element}.
-        According to the general use case, a valid limitation is to only support element resize detection for non-void elements (i.e., elements that can contain content).
-        \todo{General use case where?}
+        According to the general use case described in Section~\ref{sec:eq-definitions}, a valid limitation is to only support element resize detection for non-void elements (i.e., elements that can contain content).
         This limitation is important since most approaches depend on injecting elements into the target elemenet.
         It is a reasonable limitation since void elements can easily be wrapped with a non-void element without affecting the page visually.
         Possible solutions to detect element resize events on modern browsers are:
@@ -2107,8 +2112,7 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{ELQ Bootstrap}\label{sec:eval-bootstrap}
       The responsive parts of Bootstrap 3.3.2 (the grid, containers, responsive utility classes, forms, etc.) are built with media queries, and therefore only behave as desired when the Bootstrap elements can use the full width of the viewport.
-      It should be noted that no height breakpoints are being used by Bootstrap (as identified by the general use case).
-      \todo{Remove the identified by the general use case thing? Should write about the general use case somewhere.}
+      It should be noted that no height breakpoints are being used by Bootstrap (as also identified by the general use case in Section~\ref{sec:eq-definitions}).
       This implies that modules that uses any responsive Bootstrap classes inherently only behave as desired when the module can use the full width of the viewport, which means that such modules are not encapsulated and therefore many of the benefits of modules disappear.
       Such modules force applications to use them in a specific layout.
       As an example, the Bootstrap \gls{CSS} documentation page was altered to instead offer a two-column documentation.
@@ -2559,7 +2563,7 @@
         The scroll-based solution is preferred for Chrome, as the injection is 20-fold faster than the object-based solution while the resize detection performance is the same for both solutions.
         In FireFox, the object-based solution detects resize events 2-fold faster than the scroll-based solution (still, 100 ms for detecting resize events is acceptable).
         However, the injection time needed for the object-based solution is 5.5-fold of the time needed for the \gls{ELQ} scroll-based solution.
-        The scroll-based solution is therefore probably desired in FireFox for the general use case.
+        The scroll-based solution is therefore probably desired in FireFox for the general use case (as described in Section~\ref{sec:eq-definitions}).
         In Safari, the \gls{ELQ} scroll-based solution detects resize events in 800 ms while the object-based solution detects them in 25 ms (32-fold speedup).
         Unfortunately, injection of the object-based solution is 3-fold slower than the \gls{ELQ} scroll-based solution.
         Since a delay of 800 ms when detecting resize events is undesired in most use cases, the object-based solution is preferred is Safari.
@@ -2742,7 +2746,7 @@
     \section{ELQ}
     It has been identified that requirements and usages of element queries vary from case to case, and it is therefore beneficial to provide a plugin-based library so that developers can tailor their custom solutions by choosing which plugins to use.
     Different parts of the library have also been shown to have different development rates, which also is an argument in favor to having the library plugin-based.
-    Two plugins were developed that enables adequately advanced features for the general use case that satisfies goals \ref{itm:req_conditional_css} and \ref{itm:req_bp_js}.
+    Two plugins were developed that enables adequately advanced features for the general use case (as described in Section~\ref{sec:eq-definitions}) that satisfies goals \ref{itm:req_conditional_css} and \ref{itm:req_bp_js}.
     The \code{elq-breakpoints} plugin is the actual entity that directly enables element queries and defines the \gls{API} to be used.
     A key restriction was made to the \gls{API} in order to satisfy goal \ref{itm:req_valid_syntax}, \ref{itm:natural}, \ref{itm:req_big_rewrite} and \ref{itm:assumption}: it must conform to the current web standard, and must therefore not require invalid syntax.
     This way preprocessors, validators, tools and editors can be embraced and used in tandem with the library instead of shutting them out.
