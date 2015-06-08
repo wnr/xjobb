@@ -1,0 +1,88 @@
+<html>
+    <head>
+        <style>
+            body {
+                background: black;
+            }
+
+            .row {
+                margin: 15px;
+                text-align: center;
+            }
+
+            .row .col {
+                width: 30%;
+                margin-left: 1%;
+                display: inline-block;
+            }
+
+            .very-simple {
+                padding: 15px;
+                color: #FAFAFA;
+            }
+
+            .very-simple b {
+                color: white;
+            }
+
+             @media (max-width: 500px) { 
+                .very-simple {
+                    background: #DD0000;
+                }
+
+                .show-big {
+                    display: none;
+                }
+
+                .show-small {
+                    display: block;
+                }
+            }
+
+             @media (min-width: 501px) { 
+                .very-simple {
+                    background: #2B476A;
+                }
+
+                .show-big {
+                    display: block;
+                }
+
+                .show-small {
+                    display: none;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div class="very-simple">
+                <h1>Simple module</h1>
+                <h4 class="show-big">This text will only be shown when module is <b>big</b>.</h4>
+                <h4 class="show-small">This text will only be shown when module is <b>small</b>.</h4>
+                <p>Will be colored red when small and blue when big.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col very-simple">
+                <h1>Simple module</h1>
+                <h4 class="show-big">This text will only be shown when module is <b>big</b>.</h4>
+                <h4 class="show-small">This text will only be shown when module is <b>small</b>.</h4>
+                <p>Will be colored red when small and blue when big.</p>
+            </div>
+            <div class="col very-simple">
+                <h1>Simple module</h1>
+                <h4 class="show-big">This text will only be shown when module is <b>big</b>.</h4>
+                <h4 class="show-small">This text will only be shown when module is <b>small</b>.</h4>
+                <p>Will be colored red when small and blue when big.</p>
+            </div>
+            <div class="col very-simple">
+                <h1>Simple module</h1>
+                <h4 class="show-big">This text will only be shown when module is <b>big</b>.</h4>
+                <h4 class="show-small">This text will only be shown when module is <b>small</b>.</h4>
+                <p>Will be colored red when small and blue when big.</p>
+            </div>
+        </div>
+
+    </body>
+</html>
