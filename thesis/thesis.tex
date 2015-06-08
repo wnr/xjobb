@@ -324,7 +324,6 @@
       \todo[color=red]{Tomas: The reader could misundestand this as modular design is about putting all scripts with scripts, styles with styles, etc.}
       Modular \gls{responsive} components should be able to react and change style depending on the size that the component has been given by the application, not the \gls{viewport} size. \todo{Do I need to have a reference for this?}
       The problem can be formulated as: \problemformulation.
-      See the included \gls{document} in Section~\ref{sec:problem-formulation} of the appendix for a more practical problem formulation.
 
       Participants, which include both paying members and the public, of the main international standards organization for the \gls{web}, the \gls{W3C} are interested in solving the problem and possible solutions are being discussed.
       However, they are still at the initial planning stage \cite{ricg_site} so a solution will not be implemented \glslink{native}{natively} in the near future.
@@ -646,7 +645,9 @@
             \centering
             \includegraphics[width=\linewidth]{images/eq-big}
           \end{minipage}%
-          \caption{The desired behavior is that the small module instances should be colored red since their widths are narrow, and the big instance should be blue since its width is wide.}
+          \caption{
+            The desired behavior is that the small module instances should be colored red since their widths are narrow, and the big instance should be blue since its width is wide.
+          }
           \label{fig:problem-eq}
         \end{figure}
 
@@ -975,8 +976,8 @@
 
         \begin{figure}[ht]
           \centering
-          \includegraphics[scale=0.5]{images/layout-thrashing-example-1-big}
-          \includegraphics[scale=0.5]{images/layout-thrashing-example-1}
+          \includegraphics[scale=0.7]{images/layout-thrashing-example-1-big}
+          \includegraphics[scale=0.6]{images/layout-thrashing-example-1}
           \caption{Two timeline figures of executing the example code given in listing~\ref{code:thrashing-example}. Both figures show the same timeline, where the top figure shows the whole execution and the bottom only shows a small section of the execution. Notice that they do not share the same time axis. Here it is clear that \gls{layout thrashing} occurs, since layout is being done repeatedly throughout the whole execution (each iteration in the loop).}
           \label{fig:layout-thrashing-example-1}
         \end{figure}
@@ -1013,7 +1014,7 @@
         In the figure, it is clear that the \gls{layout engine} is able to first execute the \gls{JavaScript}, and later perform all style and layout computations in a \glslink{batch processing}{batch}.
         \begin{figure}[ht]
           \centering
-          \includegraphics[scale=0.5]{images/layout-thrashing-example-1-fixed}
+          \includegraphics[scale=0.7]{images/layout-thrashing-example-1-fixed}
           \caption{A timeline of executing the example code given in listing~\ref{code:thrashing-example-fixed}. It is clear in the figure that \gls{layout thrashing} does not occur, since all style computations and layout is performed in a \glslink{batch processing}{batch} after that the example code has finished executing.}
           \label{fig:layout-thrashing-example-1-fixed}
         \end{figure}
@@ -2891,61 +2892,54 @@
   \addappheadtotoc
     \input{history-of-browsers}
     \chapter{Miscellaneous}
-      \section{Practical problem formulation document}\label{sec:problem-formulation}
-        \todo[inline]{Should this be in the real document instead of appendix?}
-      \section{CSS terminology}
-        \todo[inline]{Write custom or refer to this \url{http://www.impressivewebs.com/css-terms-definitions/}?}
-      \section{Full-scale figures}
-        \subsection{Bootstrap}
-          \begin{figure}[htbp!]
-            \centering
-            \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-header-small}
-            \caption{Double column documentation page powered by \gls{Bootstrap} showing the header section of the page.}
-            \label{fig:appendix-bootstrap-mq-header-small}
-          \end{figure}
-          \begin{figure}[htbp!]
-            \centering
-            \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-header-big}
-            \caption{Double column documentation page powered by \gls{Bootstrap} with showing the header section of the page. The \gls{viewport} is big enough to give each column sufficient space.}
-            \label{fig:appendix-bootstrap-mq-header-big}
-          \end{figure}
+      \section{Full-scale Bootstrap figures}
+        \begin{figure}[htbp!]
+          \centering
+          \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-header-small}
+          \caption{Double column documentation page powered by \gls{Bootstrap} showing the header section of the page.}
+          \label{fig:appendix-bootstrap-mq-header-small}
+        \end{figure}
+        \begin{figure}[htbp!]
+          \centering
+          \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-header-big}
+          \caption{Double column documentation page powered by \gls{Bootstrap} with showing the header section of the page. The \gls{viewport} is big enough to give each column sufficient space.}
+          \label{fig:appendix-bootstrap-mq-header-big}
+        \end{figure}
 
-          \begin{figure}[htbp!]
-            \centering
-            \includegraphics[width=0.9\linewidth]{images/bootstrap-eq-header-small}
-            \caption{Double column documentation page powered by \gls{ELQ} \gls{Bootstrap} showing the header section of the page.}
-            \label{fig:appendix-bootstrap-eq-header-small}
-          \end{figure}
+        \begin{figure}[htbp!]
+          \centering
+          \includegraphics[width=0.9\linewidth]{images/bootstrap-eq-header-small}
+          \caption{Double column documentation page powered by \gls{ELQ} \gls{Bootstrap} showing the header section of the page.}
+          \label{fig:appendix-bootstrap-eq-header-small}
+        \end{figure}
 
-          \begin{figure}[htbp!]
-            \centering
-            \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-matrix}
-            \caption{Double column documentation page powered by \gls{Bootstrap} showing the \gls{responsive} classes matrix section of the page.}
-            \label{fig:appendix-bootstrap-mq-matrix-small}
-          \end{figure}
-          \begin{figure}[htbp!]
-            \centering
-            \includegraphics[width=0.9\linewidth]{images/bootstrap-eq-matrix}
-            \caption{Double column documentation page powered by \gls{ELQ} \gls{Bootstrap} showing the \gls{responsive} classes matrix section of the page.}
-            \label{fig:appendix-bootstrap-eq-matrix-small}
-          \end{figure}
+        \begin{figure}[htbp!]
+          \centering
+          \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-matrix}
+          \caption{Double column documentation page powered by \gls{Bootstrap} showing the \gls{responsive} classes matrix section of the page.}
+          \label{fig:appendix-bootstrap-mq-matrix-small}
+        \end{figure}
+        \begin{figure}[htbp!]
+          \centering
+          \includegraphics[width=0.9\linewidth]{images/bootstrap-eq-matrix}
+          \caption{Double column documentation page powered by \gls{ELQ} \gls{Bootstrap} showing the \gls{responsive} classes matrix section of the page.}
+          \label{fig:appendix-bootstrap-eq-matrix-small}
+        \end{figure}
 
-          \begin{figure}[htbp!]
-            \centering
-            \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-grid}
-            \caption{Double column documentation page powered by \gls{Bootstrap} showing the grid section of the page.}
-            \label{fig:appendix-bootstrap-mq-grid-small}
-          \end{figure}
-          \begin{figure}[htbp!]
-            \centering
-            \includegraphics[width=0.9\linewidth]{images/bootstrap-eq-grid}
-            \caption{Double column documentation page powered by \gls{ELQ} \gls{Bootstrap} showing the grid section of the page.}
-            \label{fig:appendix-bootstrap-eq-grid-small}
-          \end{figure}
+        \begin{figure}[htbp!]
+          \centering
+          \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-grid}
+          \caption{Double column documentation page powered by \gls{Bootstrap} showing the grid section of the page.}
+          \label{fig:appendix-bootstrap-mq-grid-small}
+        \end{figure}
+        \begin{figure}[htbp!]
+          \centering
+          \includegraphics[width=0.9\linewidth]{images/bootstrap-eq-grid}
+          \caption{Double column documentation page powered by \gls{ELQ} \gls{Bootstrap} showing the grid section of the page.}
+          \label{fig:appendix-bootstrap-eq-grid-small}
+        \end{figure}
 
-          \FloatBarrier
-
-          \todo[inline]{Make sure that these images are ordered sufficiently and have good descriptions.}
+        \FloatBarrier
       \section{Layout engine market share statistics}\label{sec:layout_engines_market_share}
         \Gls{browser} market share was retrieved by \gls{StatCounter}\footnote{\gls{StatCounter} graph \url{http://gs.statcounter.com/\#all-browser-ww-monthly-201402-201502-bar}}.
         Since the graph only display \gls{browser} market share and not \gls{layout engine}, it is needed to further divide the \glspl{browser} into \gls{layout engine} percentages.
@@ -2965,12 +2959,13 @@
         The market share percentage of \gls{Gecko} is therefore 12.83\%.
         Internet Explorer, with the market share percentage of 14.96\%, has been \gls{Trident} based since version 4.
         Since Internet Explorer 4 is no longer in use\footnote{According to \url{http://www.w3schools.com/browsers/browsers_explorer.asp}}, the market share percentage of the \gls{Trident} engine is 14.96\%.
-      \section{Usage share of browser versions}
-        \todo{Put this somewhere else?}
-        For compatability, the library needs to support older \glspl{browser}.
-        Most of the end users are using a self updating \gls{browser} (those \glspl{browser} are usually referred to as the \emph{evergreen} \glspl{browser}), which improves the adoption rate of new versions greatly.
-        See figure~\todo{Have a figure or not? If yes, then reference it here.} for the adoption rate of new versions of Chrome for an example of how evergreen \glspl{browser} keep their users updated.
-        Unfortunately, there are some laggards that still use very outdated versions of some \glspl{browser}.
-        Each version of Internet Explorer 8 up to 11 need to be supported since they all still have a significant user share.
-        Opera version 12 does also have
+      % TODO: Write this?
+      % \section{Usage share of browser versions}
+      %   \todo{Put this somewhere else?}
+      %   For compatability, the library needs to support older \glspl{browser}.
+      %   Most of the end users are using a self updating \gls{browser} (those \glspl{browser} are usually referred to as the \emph{evergreen} \glspl{browser}), which improves the adoption rate of new versions greatly.
+      %   See figure~\todo{Have a figure or not? If yes, then reference it here.} for the adoption rate of new versions of Chrome for an example of how evergreen \glspl{browser} keep their users updated.
+      %   Unfortunately, there are some laggards that still use very outdated versions of some \glspl{browser}.
+      %   Each version of Internet Explorer 8 up to 11 need to be supported since they all still have a significant user share.
+      %   Opera version 12 does also have
 \end{document}
