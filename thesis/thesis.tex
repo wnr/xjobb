@@ -236,14 +236,14 @@
   \maketitle
   \selectlanguage{english}
   \begin{abstract}
-    Responsive web design is a popular approach to support devices with varying characteristics (viewport size, input mechanisms, media type, etc.) by conditionally style the content of a document by such criterion using CSS \emph{media queries}.
+    Responsive web design is a popular approach to support devices with varying characteristics (viewport size, input mechanisms, media type, etc.) by conditionally style the content of a document by such criteria using CSS \emph{media queries}.
     % \emph{Bootstrap} is an example of a popular framework that embraces responsive web design.
     To reduce complexity it is also popular to develop web applications by creating reusable modules.
     % There are many frameworks and libraries that facilitates developing web modules: \emph{Angular}, \emph{Backbone}, \emph{Ember}, \emph{Web Components}, \emph{Requirejs}, \emph{Browserify}, \emph{Polymer}, \emph{React}, among others.
     Unfortunately, responsive modules require the users of a module to define the conditional styles since only the user knows the layout of the module.
     This implies that responsive modules cannot be encapsulated, which is important for reusability and reduced complexity.
     This is due to the limitation of CSS that elements can only be conditionally styled by the document root and device properties by using \gls{media queries}.
-    In order to create encapsulated responsive modules, elements must be able to be conditionally styled by \emph{element} property criterion, which is known as \emph{element queries}.
+    In order to create encapsulated responsive modules, elements must be able to be conditionally styled by \emph{element} property criteria, which is known as \emph{element queries}.
 
     Participants of the main international standards organization for the web, the W3C, are interested in solving the problem and possible solutions are being discussed.
     However, they are still at the initial planning stage so a solution will not be implemented natively in the near future.
@@ -305,7 +305,6 @@
     \todo[inline,color=red]{Tomas: Don't think that the intro should be so "selling", write about what "will" be done and hypothesis and such. Write instead what "have" been done, what you have personally done and stuff like that.}
     \todo[inline]{Add note that the thesis is best viewed in color.}
     \todo[inline]{Write that glossary words will be emph on first appearence?}
-    \todo[inline]{Should the subtitle be criterion instead of criteria?}
     \todo[inline]{Change all "recent", "now" and such to dates instead.}
     \todo[inline]{Should check whole thesis so that it is not written "Figures" when there are multiple figures stated.}
     \todo[inline]{Write a little intro to the reader that "user" is not the "end-user".}
@@ -377,7 +376,7 @@
       \todo[inline,color=red]{Tomas: Maybe more general or more specific. If details have to be presented, then the reader has to be able to understand it.}
       Many libraries and techniques are being used in \gls{web} development to keep the code from becoming an entangled mess.
       Creating modules facilitates the development and increases the reusability, as shown in Section~\ref{sec:modularity}.
-      Unfortunately, it is currently impossible to create \gls{encapsulated} \gls{responsive} modules since conditional styles cannot be applied to \glspl{element} by \gls{element} size criterion.
+      Unfortunately, it is currently impossible to create \gls{encapsulated} \gls{responsive} modules since conditional styles cannot be applied to \glspl{element} by \gls{element} size criteria.
       Without element queries, \gls{responsive} modules force the application to style them properly depending on the \gls{viewport} sizes, which defeats the purpose of modules.
       Modules should be \gls{encapsulated} and may not require the user to perform some of the module logic in order to work.
       Another option would be to make modules context-aware so they can style themselves according to the \gls{viewport}, but then they would not be reusable (since they assume a specific context).
@@ -676,7 +675,7 @@
 
         \paragraph{The solution}
         \Gls{responsive} modules should be able to react and change style by the size of their own sizes, not the \gls{viewport} size.
-        An identified solution to this is element queries, which allows conditional styles to be applied based by \gls{element} criterion.
+        An identified solution to this is element queries, which allows conditional styles to be applied based by \gls{element} criteria.
         The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries \cite{eq_article_localised-css,eq_article_backalley,eq_article_mqhack,eq_article_tabatkjr,eq_article_filament,eq_article_tyson,eq_article_neal,eq_article_css-tricks,eq_article_hugo,eq_article_fremycompany,eq_article_discource,eq_article_matt}.
         As stated in Section~\ref{sec:problem}, \gls{third-party} implementation efforts have been made with moderate success.
         The \gls{W3C} receives requests and questions about it, and the \gls{RICG} have started writing a draft \cite{ricg_draft} about element queries use cases.
@@ -1099,8 +1098,8 @@
       Element queries is the solution to the problem of \gls{responsive} modules as described in Section~\ref{sec:rwd-modular-problem}, since it allows modules to conditionally style themselves.
       \todo{Might wanna expand on this.}
 
-      \Gls{media queries} and element queries are similar in the sense that they both enables developers to define conditional style rules that are applied by specified criterion \cite{w3c_css_mq}.
-      The main difference is the type of criterion that can be used; in \gls{media queries} device and media criterion is used, while in element criterion is used in element queries.
+      \Gls{media queries} and element queries are similar in the sense that they both enables developers to define conditional style rules that are applied by specified criteria \cite{w3c_css_mq}.
+      The main difference is the type of criteria that can be used; in \gls{media queries} device and media criteria is used, while in element criteria is used in element queries.
       It can somewhat simplified be described as that \gls{media queries} target the \gls{document} root and up (i.e., the \gls{viewport}, \gls{browser}, OS, device, input mechanisms, etc.) while element queries target the \gls{document} content (i.e., \glspl{element} of the \gls{document}).
 
       \paragraph{Terminology}
@@ -1185,9 +1184,9 @@
         \todo[inline]{Finish this.}
 
       \subsection{Circularity}\label{sec:cyclic-rules}
-        The most obvious occurrences of cyclic rules are when there are conflicting element queries with width criterion and width style declarations for an \gls{element}.
+        The most obvious occurrences of cyclic rules are when there are conflicting element queries with width criteria and width style declarations for an \gls{element}.
         See listing~\ref{code:cyclic-simple} for the perhaps simplest example of cyclic rules.
-        \begin{lstlisting}[gobble=10,caption={Simple example of cyclic rules with directly conflicting width element queries criterion and declarations. Recall the element queries psuedo syntax defined in Section~\ref{sec:eq-definitions}.}, captionpos=b, label={code:cyclic-simple}]
+        \begin{lstlisting}[gobble=10,caption={Simple example of cyclic rules with directly conflicting width element queries criteria and declarations. Recall the element queries psuedo syntax defined in Section~\ref{sec:eq-definitions}.}, captionpos=b, label={code:cyclic-simple}]
           #foo {
             width: 250px;
           }
@@ -1831,7 +1830,7 @@
           Notice that the breakpoint classes now are used in conjunction with the paragraph simple selector instead of the container in the CSS selectors.
           This way, the conditional styles behave as expected since all paragraphs are by the nearest (instead of any) container \gls{element}.
 
-          By mirroring element breakpoint classes, \glspl{element} can be styled by criterion of any element (ancestor, sibling, child, etc.).
+          By mirroring element breakpoint classes, \glspl{element} can be styled by criteria of any element (ancestor, sibling, child, etc.).
           The plugin is at the moment restricted to the nearest ancestor \code{elq-breakpoint} \gls{element}, but could easily be extended to support more advanced mirror constellations.
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Implementation
@@ -2718,7 +2717,7 @@
     Apple's implementation also uses the Cassowary algorithms to solve the constraints.
     The Grid Style Sheets library \cite{eq_imp_gss} builds upon the ideas of \gls{CCSS} and uses a \gls{JavaScript} port\footnote{See \url{https://github.com/slightlyoff/cassowary.js} for the \gls{JavaScript} port of Cassowary that is used by the Grid Style Sheets library.} of Cassowary to solve the constraints at runtime.
     The library also adapted Apple's \gls{VFL} to specify layout constraints.
-    While not directly offering element queries, the library enables the possibility to conditionally style elements by element criterion and thus makes it a good candidate to using \gls{CSS} and element queries.
+    While not directly offering element queries, the library enables the possibility to conditionally style elements by element criteria and thus makes it a good candidate to using \gls{CSS} and element queries.
     However, the library has two major issues: performance and browser compatibility \cite{gss_issue}.
     One approach to resolve both issues is to precompute the layout in a compilation step at the server.
     However, as earlier stated, precompiling styles implies static layouts.
@@ -2741,7 +2740,7 @@
     Recall the problem formulation from Section~\ref{sec:problem}: \problemformulation.
     The problem was shown in Section~\ref{ch:eq} to be solved by element queries.
     Therefore, the goal of this thesis was to develop a \gls{third-party} \gls{JavaScript} library that enables developers to use element queries.
-    Since no syntax or standard has been specified by the \gls{W3C} yet for element queries, the syntax and usage can be formed in any way as long as it solves the problem of conditionally styling \glspl{element} by element criterion.
+    Since no syntax or standard has been specified by the \gls{W3C} yet for element queries, the syntax and usage can be formed in any way as long as it solves the problem of conditionally styling \glspl{element} by element criteria.
     Since the implementation of the \gls{ELQ} library (that enables element queries) was successful, the thesis goal can be considered fulfilled.
 
     % The problem of responsive modules have been described, and the solution has been presented to be element queries.
