@@ -11,24 +11,24 @@
 
         <h3>Sammanfattning</h3>
         <p>
-        Responsiv webbutveckling är ett populärt sätt att stödja enheter med varierande egenskaper (storlek av visninsområdet, inmatningsmekanismer, typ av media, etc.) genom att ange olika stilar för ett dokument beroende på enhetens egenskaper med hjälp av CSS <i>media queries</i>.
+        Responsiv webbutveckling är ett populärt sätt att stödja enheter med varierande egenskaper (storlek av visninsområdet, inmatningsmekanismer, mediumtyp, etc.) genom att ange olika stilar för ett dokument beroende på enhetens egenskaper med hjälp av CSS <i>media queries</i>.
         Det är också populärt att utveckla webbapplikationer genom att skapa återanvändbara moduler för minskad komplexitet.
-        Tyvärr kräver responsiva moduler att användaren av modulen defininerar de olika responsiva stilarna eftersom endast användaren vet i vilket kontext modulen används (storleken av modulen till exempel).
-        Detta implicerar att responsiva moduler inte är enkapsulerade (alltså att de inte fungerar av sig själva), vilket är viktigt för återanvändning och att reducera komplexitet.
-        Det beror på CSS-språkets begränsningar att det endast går att definiera olika stilar för element bereonde på dokumentets rot och enhetens egenskaper med <i>media queries</i>.
+        Tyvärr kräver responsiva moduler att användaren av en modul defininerar de olika responsiva stilarna eftersom endast användaren vet i vilket kontext modulen används (storleken av modulen till exempel).
+        Detta implicerar att responsiva moduler inte är enkapsulerade (alltså att de inte fungerar av sig själva), vilket är viktigt för återanvändning och reduktion av komplexitet.
+        Det beror på CSS media queries begränsningar att det endast går att definiera olika stilar för element bereonde på dokumentets rot och enhetens egenskaper.
         För att kunna skapa enkapsulerade responsiva moduler måste olika stilar kunna definieras för ett element beroende på ett elements egenskaper, vilket är känt som <i>element queries</i>.
         </p>
         <p>
         Deltagare av det internationella industrikonsortiumet för webbstandardisering, W3C, är intresserade av att lösa problemet och möjliga lösningar diskuteras.
         De är dock endast i det initiala planeringsstadiet, så det kommer dröja innan en lösning blir implementerad.
-        Dessutom är det problematiskt att implementera <i>element queries</i> eftersom de medför problem gällande cirkuläritet samt prestanda, vilket måste lösas innan en standard skapas.
+        Dessutom är det problematiskt att implementera element queries eftersom de medför problem gällande cirkuläritet samt prestanda, vilket måste lösas innan en standard skapas.
         </p>
         <p>
-        Denna rapport presenterar de problem för webbläsares renderingsmoterer som <i>element queries</i> medför och visar sätt att övervinna vissa av problemen.
-        För att möjliggöra skapandet av enkapsulerade responsiva moduler, i väntan på webbläsarstöd, har ett tredjepartsbibliotek för <i>element queries</i> skapats i JavaScript.
-        Som presenterat i denna rapport så erbjuder biblioteket både prestanda- och användningsfördelar jämfört med andra relaterade bibliotek.
+        Denna rapport presenterar de problem för webbläsares renderingsmoterer som element queries medför och visar sätt att övervinna vissa av problemen.
+        För att möjliggöra skapandet av enkapsulerade responsiva moduler, i väntan på webbläsarstöd, har ett tredjepartsbibliotek för element queries skapats i JavaScript.
+        Som presenteras i denna rapport så erbjuder biblioteket både prestanda- och användningsfördelar jämfört med andra relaterade bibliotek.
         Ett optimerat delsystem för att detektera förändringar av elements storlekar har utvecklats som använder en nivåuppdelad <i>batch</i>-processerare vilket medför att delsystemet erbjuder signifikant bättre prestanda än relaterade system.
-        Som del av den empiriska utvärderingen har det populära ramverket <i>Bootstrap</i> modifierats att använda <i>element queries</i> istället för <i>media queries</i> genom att ändra ~50 utav ~8500 rader stilkod, vilket visar en av fördelarna med det utvecklade biblioteket.
+        Som del av den empiriska utvärderingen har det populära ramverket Bootstrap modifierats att använda element queries istället för media queries genom att ändra ~50 utav ~8500 rader stilkod, vilket visar en av fördelarna med det utvecklade biblioteket.
         </p>
     </body>
 </html>
