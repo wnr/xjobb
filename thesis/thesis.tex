@@ -319,9 +319,9 @@
     \section{Problem statement}\label{sec:problem}
       By using \gls{CSS} \gls{media queries}, developers can specify different style rules for different \gls{viewport} sizes.
       This is fundamental to creating \gls{responsive} \gls{web} applications, as shown in Section~\ref{sec:rwd}.
-      If developers want to build modular applications by composing the application by smaller components (\glspl{element}, scripts, styles, etc.) \gls{media queries} are no longer applicable.
+      If developers want to build modular applications by composing the application by smaller modules (\glspl{element}, scripts, styles, etc.) \gls{media queries} are no longer applicable.
       \todo[color=red]{Tomas: The reader could misundestand this as modular design is about putting all scripts with scripts, styles with styles, etc.}
-      Modular \gls{responsive} components should be able to react and change style depending on the size that the component has been given by the application, not the \gls{viewport} size. \todo{Do I need to have a reference for this?}
+      \Gls{responsive} modules should be able to react and change style depending on the size that the module has been given by the application, not the \gls{viewport} size. \todo{Do I need to have a reference for this?}
       The problem can be formulated as: \problemformulation.
 
       Participants, which include both paying members and the public, of the main international standards organization for the \gls{web}, the \gls{W3C} are interested in solving the problem and possible solutions are being discussed.
@@ -387,7 +387,7 @@
       As already stated in Section~\ref{sec:problem}, \gls{third-party} implementation efforts have been made with moderate success.
       The \gls{W3C} receives requests and questions about it, and the \gls{RICG} have started writing a draft \cite{ricg_draft} about element queries use cases.
 
-      Solving this problem would be a big advancement to \gls{web} development, enabling developers to create truly modular \gls{responsive} components.
+      Solving this problem would be a big advancement to \gls{web} development, enabling developers to create truly \gls{responsive} modules.
       By studying the problem, identifying approaches and providing a \gls{third-party} solution the community can take a step closer to solve the problem \glslink{native}{natively}.
       If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for the \gls{W3C} standardize a solution. \todo{Would like to reformulate this to not being so confident that a standard will definately be developed}
       \todo[color=red]{Tomas: The hypothesis should be valid or invalid at the time the report is handed in.}
@@ -587,7 +587,7 @@
         By creating modules that can be used in any context with well-defined responsibilities and dependencies, developing applications is reduced to the task of simply configuring modules (to some extent) to work together which forms a bigger application.
         It is today possible to write the \gls{web} client logic in a modular way in \gls{JavaScript}.
         The desire of writing modular code can be shown by the popularity of libraries that helps dividing up the client code into modules.
-        The ever so popular libraries \emph{Angular}, \emph{Backbone}, \emph{Ember}, \emph{Web Components}, \emph{Requirejs}, \emph{Browserify}, \emph{Polymer}, \emph{React} and many more all have in common that they embrace coding modular components.
+        The ever so popular libraries \emph{Angular}, \emph{Backbone}, \emph{Ember}, \emph{Web Components}, \emph{Requirejs}, \emph{Browserify}, \emph{Polymer}, \emph{React} and many more all have in common that they embrace modular development.
         Many of these libraries also help with dividing the \gls{HTML} up into modules, creating small packages of style, markup and code.
 
         A big challenge to software development is to be able to write software that is reliable (i.e., should not have bugs) and easy to change.
@@ -626,8 +626,8 @@
         \todo[inline]{Define some terminology. Write that the "user" of a module is not the end-user. The thesis uses the word "user" of a module quite often, need to define what that is exactly.}
       \subsection{The problem of responsive modules}\label{sec:rwd-modular-problem}
         Recall from Section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} respond to size changes, so that a \gls{document} may be usable on many screen sizes, resolutions, pixel-densities, and media.
-        In Section~\ref{sec:modularity} the desire for building modular \gls{web} components was presented.
-        One positive outcome of building applications in a modular way is that general components become reusable and complexity is reduced.
+        In Section~\ref{sec:modularity} the desire for building \gls{web} modules was presented.
+        One positive outcome of building applications in a modular way is that general modules become reusable and complexity is reduced.
         Therefore, it is desired to extend the \gls{responsive} \gls{web} design concept to also let modules respond to size changes so that a module may be usable in many layouts.
         Since the only way of conditionally style \glspl{element} is by using \gls{media queries}, all \gls{responsive} styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the application layout).
         The implication of this is that the \gls{HTML} and \gls{JavaScript} can be written in a modular, way but the \gls{CSS} is left for the user of the module to write which somewhat defeats the purpose of writing modules.
@@ -2757,7 +2757,7 @@
 
     \section{Element queries}
     As the number of combinations of screen sizes, input capabilities, etc., increases it is important to write \gls{responsive} applications so that it can adapt to all user devices.
-    As \gls{web} applications are transitioning from being server generated to entirely living on the client, it is important to write modular components for various positive effects.
+    As \gls{web} applications are transitioning from being server generated to entirely living on the client, it is important to write modules for various positive effects.
     It has been shown that element queries solves the problem of \gls{responsive} modules, and is therefore an important missing feature of the \gls{web} as a platform.
 
     Unrestricted element queries (i.e., not restricting target \glspl{element} to special \gls{viewport} \glspl{element}) imposes limitations to \glspl{layout engine}, and are therefore infeasible to implement.
