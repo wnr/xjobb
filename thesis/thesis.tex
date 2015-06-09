@@ -349,12 +349,10 @@
       %   \todo{Same here as above.}
       % \end{itemize}
     \section{Objective}
-      The main objective of this thesis is to design and develop a \gls{third-party} non-\gls{native} implementation of element queries.
-      To do this, it is needed to research existing solution approaches in order to understand and analyze the advantages and shortcomings of the approaches.
-      It is also necessary to be aware of the premises, such as \gls{browser} limitations and specifications that one must conform to.
-      \todo[color=green]{Marcos: I will research the problems of.}
-      In addition, research will be done about the problems of implementing element queries \glslink{native}{natively}, to get a deeper understanding of the potential shape of a standardized \gls{API}.
-      Solving the main problem will require research and empirical studies of many subproblems.
+      The main objective of this thesis is to design and develop a \gls{third-party} non-\gls{native} library that enables element queries in current and legacy \glspl{browser}.
+      To do so it is necessary to be aware of the premises, such as \gls{browser} limitations and specifications that one must conform to.
+      Research will be done about the problems of implementing element queries \glslink{native}{natively}, to get a deeper understanding of the potential shape of a standardized \gls{API}.
+      Solving the main problem requires research and empirical studies of many subproblems.
       Examples of such subproblems that needs to be addressed are:
       \begin{itemize}
         \item Should circularity be handled? If yes, should it be detected at runtime or parsetime, and what should happen on detection?
@@ -367,28 +365,28 @@
         \item How can adequate \gls{browser} compatibility with legacy \glspl{browser} be achieved without \gls{native} support?
       \end{itemize}
       The scientific question to be answered is if it is possible to solve the problem without extending any language specification of the \gls{web}.
-      The hypothesis is that the problem can be solved with high reliability and adequate performance by developing a non-\gls{native} implementation.
+      The hypothesis is that the problem can be solved with high reliability and adequate performance by developing a \gls{third-party} non-\gls{native} implementation.
       The goal of this thesis should be considered fulfilled if a solution was successfully implemented or described, or if the problems hindering a solution are thoroughly documented.
       \todo[inline,color=red]{Tomas: Remove this paragraph. Should state what have been done instead.}
 
     \section{Significance}
       \todo[inline,color=red]{Tomas: Maybe more general or more specific. If details have to be presented, then the reader has to be able to understand it.}
       Many libraries and techniques are being used in \gls{web} development to keep the code from becoming an entangled mess.
-      Creating modules facilitates the development and increases the reusability, as shown in Section~\ref{sec:modularity}.
+      Modular development helps reducing complexity and increases the reusability, as shown in Section~\ref{sec:modularity}.
       Unfortunately, it is currently impossible to create \gls{encapsulated} \gls{responsive} modules since conditional styles cannot be applied to \glspl{element} by \gls{element} size criteria.
-      Without element queries, \gls{responsive} modules force the application to style them properly depending on the \gls{viewport} sizes, which defeats the purpose of modules.
+      Without element queries, \gls{responsive} modules force the uyser to style them properly depending on the \gls{viewport} sizes, which defeats the purpose of modules.
       Modules should be \gls{encapsulated} and may not require the user to perform some of the module logic in order to work.
       Another option would be to make modules context-aware so they can style themselves according to the \gls{viewport}, but then they would not be reusable (since they assume a specific context).
-      Also, changes to the application layout would then require to rewrite the \gls{media queries} of the modules to take the new layout into account.
+      Also, changes to the application layout would then require a rewrite of the \gls{media queries} of the modules to take the new layout into account.
       Clearly, no sound option exists for having \gls{responsive} modules.
 
       The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries \cite{eq_article_localised-css,eq_article_backalley,eq_article_mqhack,eq_article_tabatkjr,eq_article_filament,eq_article_tyson,eq_article_neal,eq_article_css-tricks,eq_article_hugo,eq_article_fremycompany,eq_article_discource,eq_article_matt}.
       As already stated in Section~\ref{sec:problem}, non-\gls{native} implementation efforts have been made with moderate success.
-      The \gls{W3C} receives requests and questions about it, and the \gls{RICG} have started writing a draft \cite{ricg_draft} about element queries use cases.
+      The \gls{W3C} receives requests and questions about it, and the \gls{RICG} have started writing a draft about element queries use cases \cite{ricg_draft}.
 
       Solving this problem would be a big advancement to \gls{web} development, enabling developers to create truly \gls{responsive} modules.
       By studying the problem, identifying approaches and providing a \gls{third-party} solution the community can take a step closer to solve the problem \glslink{native}{natively}.
-      If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for the \gls{W3C} standardize a solution. \todo{Would like to reformulate this to not being so confident that a standard will definately be developed}
+      If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for the \gls{W3C} to standardize a solution.
       \todo[color=red]{Tomas: The hypothesis should be valid or invalid at the time the report is handed in.}
       The outcome of this thesis can also be helpful for the \gls{W3C} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
     \section{Scope}
@@ -411,32 +409,34 @@
     \section{Outline}
       \newcommand{\chref}[1]{Chapter~\ref{#1}, \emph{\nameref{#1}},}
       \chref{ch:background} presents the background of this thesis and aims to provide sufficient information about \gls{web} development and \glspl{layout engine} to understand the problem and solution.
-      In Section~\ref{sec:web-dev} the two \gls{web} development concepts \gls{responsive} \gls{web} design and modulairy are presented, and the Section ends describing the problem of \gls{responsive} modules.
-      Section~\ref{sec:layout-engines} briefly describes how \glspl{layout engine} operates and how \gls{JavaScript} can be optimized by avoiding \gls{layout thrashing}.
-      The section ends with presenting the current research of parallelizing \glspl{layout engine}, which is important to understand since element queries affects the parallelization of \glspl{layout engine}.
-      Expert readers may want to skip this chapter.
+      In Section~\ref{sec:web-dev} the two \gls{web} development concepts \gls{responsive} \gls{web} design and modulairy are presented, and ends by describing the problem of \gls{responsive} modules.
+      Section~\ref{sec:layout-engines} briefly describes how \glspl{layout engine} operates and how \gls{JavaScript} code can be optimized by avoiding \gls{layout thrashing}.
+      The section ends with presenting the current research of parallelizing \glspl{layout engine}, which is important to understand since element queries affect the parallelization of \glspl{layout engine}.
+      Expert readers may want to skip Chapter~\ref{ch:background}.
 
       \chref{ch:eq} defines element queries and shows how they can be used to solve the problem of \gls{encapsulated} \gls{responsive} modules.
-      The chapter also gives insight into the current research of element queries and presents some difficulties that the W3C and are facing with implementing element queries in \glspl{layout engine}.
-      Section~\ref{sec:eq-problems} describes the problems that element queries implies to \glspl{layout engine} in detail and Section~\ref{sec:eq-approaches} presents some approaches discussed by the W3C to overcome some of the problems.
+      The chapter also gives insight into the current research of element queries and presents some difficulties that the W3C are facing with implementing element queries in \glspl{layout engine}.
+      Section~\ref{sec:eq-problems} describes the problems that element queries imply to \glspl{layout engine} in detail and Section~\ref{sec:eq-approaches} presents some approaches discussed by the W3C to overcome some of the problems.
 
       \chref{ch:library} presents the \gls{third-party} non-\gls{native} element queries library that enables developers to use element queries today.
       The chapter identifies possible technical requirements that different use cases may have, which is the main motivation to why the library should be plugin based.
       The library design and \glspl{API} is presented along with two plugins and their \glspl{API}.
       Last, some subsystems of the library are presented in detail including a highly optimized solution to observe element resize events using a leveled \glslink{batch processing}{batch processor} subsystem.
 
-      \chref{ch:eval} presents the empirical evaluation of the library, which includes altering the popular style framework \gls{Bootstrap} and measuring the performance of subsystems in different \glspl{browser}.
-      The \gls{Bootstrap} framework provides many \gls{responsive} \gls{CSS} classes to make user interfaces \gls{responsive} by using \gls{media queries}.
+      \chref{ch:eval} presents the empirical evaluation of the library that includes altering the popular style framework \gls{Bootstrap}, and measuring the performance of subsystems in different \glspl{browser}.
+      The \gls{Bootstrap} framework provides \gls{responsive} \gls{CSS} classes to make user interfaces \gls{responsive} by using \gls{media queries}.
       By altering \gls{Bootstrap} to use element queries instead for the \gls{responsive} classes, some of the technical goals can be evaluated.
       Similarly, by measuring the performance of the library and different subsystems additional technical goals can be avaluated.
+      \todo{This is not done, should do this!}
       The performance measurements are also used to compare the performance of the library to related work.
 
-      \chref{ch:related-work} describes related work to the library and presents advantages and drawbacks to the different approaches.
-      Since many of the libraries presented in this chapter share the same characteristics, they will be classified and each class will be analyzed as a group.
+      \chref{ch:related-work} describes related libraries and presents advantages and drawbacks to the different approaches.
+      Since many of the libraries presented in this chapter share the same characteristics they are classified.
+      This way, the different classes can be evaluated instead of evaluating all libraries in detail.
 
-      \chref{ch:discussion-conclusions} discusses the current research state of element queries and the result of the library.
+      \chref{ch:discussion-conclusions} discusses the current research state of element queries and the result of this thesis.
       The chapter also emphasis the major conclusions of this thesis.
-      Advantages and drawbacks of the library are descibed and it is compared to related work.
+      Advantages and drawbacks of non-\gls{native} solutions are discussed, and related work is compared to the developed library.
       Possible future work is also presented, which includes many extensions and further improvements to the library.
 
       % The second part \emph{\ref{part:theory}~\nameref{part:theory}} presents theoretizations of the problem.
