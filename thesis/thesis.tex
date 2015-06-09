@@ -40,7 +40,7 @@
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand\abbr[2][]{\uppercase{#2}\ifthenelse{\equal{#1}{}}%
                      {}{#1}}
-\newcommand{\problemformulation}{\emph{It is not possible to specify conditional style rules for \glspl{element} depending on the size of an element}}
+\newcommand{\problemformulation}{\emph{It is not possible to specify conditional style rules for \glspl{element} by element property criteria}}
 
 \newenvironment{metatext}{%
   \textbf{$\hookrightarrow$}
@@ -326,12 +326,11 @@
 
       Participants, which include both paying members and the public, of the main international standards organization for the \gls{web}, the \gls{W3C} are interested in solving the problem and possible solutions are being discussed.
       However, they are still at the initial planning stage \cite{ricg_site} so a solution will not be implemented \glslink{native}{natively} in the near future.
-      Additionally, implementing element queries imposes circularity and performance problems, as shown in Chapter~\ref{ch:eq}, which needs to be resolved before writing a standard.
-      While awaiting a \gls{native} solution it is up to the developers to implement this feature as a \gls{third-party} solution.
-      \todo[color=red]{Tomas: Maybe not third-party? Third-party refers to something that has not been developer in-house. third-party here should be substituted to the negation of native.}
-      As presented in Chapter~\ref{ch:related-work}, efforts have been made to create a robust \gls{third-party} solution, with moderate success.
+      Additionally, implementing element queries impose circularity and performance problems, as shown in Chapter~\ref{ch:eq}, which needs to be resolved before writing a standard.
+      While awaiting a \gls{native} solution it is up to developers to implement this feature as a non-\gls{native} solution.
+      As presented in Chapter~\ref{ch:related-work}, efforts have been made to create a robust non-\gls{native} solution, with moderate success.
       It should be noted that no effort of implementing a \gls{native} solution have been made.
-      Since all current \gls{third-party} solutions have shortcomings, there is still no de facto solution that developers use and the problem remains unsolved.
+      Since all current non-\gls{native} solutions have shortcomings, there is still no de facto solution that developers use and the problem remains unsolved.
       % Some problems with implementing element queries \glslink{native}{natively} in \gls{CSS} are:
       % \begin{itemize}
       %   \item \textbf{Circularity:}
@@ -368,7 +367,7 @@
         \item How can adequate \gls{browser} compatibility with legacy \glspl{browser} be achieved without \gls{native} support?
       \end{itemize}
       The scientific question to be answered is if it is possible to solve the problem without extending any language specification of the \gls{web}.
-      The hypothesis is that the problem can be solved with high reliability and adequate performance by developing a \gls{third-party} implementation.
+      The hypothesis is that the problem can be solved with high reliability and adequate performance by developing a non-\gls{native} implementation.
       The goal of this thesis should be considered fulfilled if a solution was successfully implemented or described, or if the problems hindering a solution are thoroughly documented.
       \todo[inline,color=red]{Tomas: Remove this paragraph. Should state what have been done instead.}
 
@@ -384,7 +383,7 @@
       Clearly, no sound option exists for having \gls{responsive} modules.
 
       The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries \cite{eq_article_localised-css,eq_article_backalley,eq_article_mqhack,eq_article_tabatkjr,eq_article_filament,eq_article_tyson,eq_article_neal,eq_article_css-tricks,eq_article_hugo,eq_article_fremycompany,eq_article_discource,eq_article_matt}.
-      As already stated in Section~\ref{sec:problem}, \gls{third-party} implementation efforts have been made with moderate success.
+      As already stated in Section~\ref{sec:problem}, non-\gls{native} implementation efforts have been made with moderate success.
       The \gls{W3C} receives requests and questions about it, and the \gls{RICG} have started writing a draft \cite{ricg_draft} about element queries use cases.
 
       Solving this problem would be a big advancement to \gls{web} development, enabling developers to create truly \gls{responsive} modules.
@@ -393,12 +392,12 @@
       \todo[color=red]{Tomas: The hypothesis should be valid or invalid at the time the report is handed in.}
       The outcome of this thesis can also be helpful for the \gls{W3C} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
     \section{Scope}
-      The focus of this thesis lays on developing a \gls{third-party} library that realizes element queries.
+      The focus of this thesis lays on developing a \gls{third-party} non-\gls{native} library that enables developers to use element queries.
       All theoretical studies and work will be performed to support the development of the library.
 
       \subsection{What will be done}
       \begin{itemize}
-      \item A \gls{third-party} implementation of element queries will be developed.
+      \item A \gls{third-party} non-\gls{native} implementation of element queries will be developed.
       \item The problems of implementing element queries \glslink{native}{natively} will be addressed.
       \item Theory about \glspl{layout engine}, programming languages of the \gls{web}, \gls{responsive} \gls{web} design and modularity will be given to fully understand the problem.
       \end{itemize}
@@ -421,7 +420,7 @@
       The chapter also gives insight into the current research of element queries and presents some difficulties that the W3C and are facing with implementing element queries in \glspl{layout engine}.
       Section~\ref{sec:eq-problems} describes the problems that element queries implies to \glspl{layout engine} in detail and Section~\ref{sec:eq-approaches} presents some approaches discussed by the W3C to overcome some of the problems.
 
-      \chref{ch:library} presents the \gls{third-party} element queries \gls{JavaScript} library that enables developers to use element queries today.
+      \chref{ch:library} presents the \gls{third-party} non-\gls{native} element queries library that enables developers to use element queries today.
       The chapter identifies possible technical requirements that different use cases may have, which is the main motivation to why the library should be plugin based.
       The library design and \glspl{API} is presented along with two plugins and their \glspl{API}.
       Last, some subsystems of the library are presented in detail including a highly optimized solution to observe element resize events using a leveled \glslink{batch processing}{batch processor} subsystem.
@@ -677,7 +676,7 @@
         \Gls{responsive} modules should be able to react and change style by the size of their own sizes, not the \gls{viewport} size.
         An identified solution to this is element queries, which allows conditional styles to be applied based by \gls{element} criteria.
         The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries \cite{eq_article_localised-css,eq_article_backalley,eq_article_mqhack,eq_article_tabatkjr,eq_article_filament,eq_article_tyson,eq_article_neal,eq_article_css-tricks,eq_article_hugo,eq_article_fremycompany,eq_article_discource,eq_article_matt}.
-        As stated in Section~\ref{sec:problem}, \gls{third-party} implementation efforts have been made with moderate success.
+        As stated in Section~\ref{sec:problem}, \gls{third-party} non-\gls{native} implementation efforts have been made with moderate success.
         The \gls{W3C} receives requests and questions about it, and the \gls{RICG} have started writing a draft \cite{ricg_draft} about element queries use cases.
         \todo{Should this really be here? Taken from the intro... Maybe it should stay there.}
 
@@ -2603,10 +2602,10 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Related work
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{Related work}\label{ch:related-work}
-    There are numerous \gls{third-party} element queries libraries, which this chapter aims to list and analyze.
+    There are numerous \gls{third-party} element queries \gls{JavaScript} libraries, which this chapter aims to list and analyze.
     Since many of them share the same characteristics, they are classified and analyzed in groups by characteristics.
 
-    Identified \gls{third-party} libraries that directly or indirectly enables element queries are presented in table~\ref{table:approaches-classifications} along with a classification of each library.
+    Identified libraries that directly or indirectly enables element queries are presented in table~\ref{table:approaches-classifications} along with a classification of each library.
     The characteristics that they are classified after are the following:
     It should be noted that most of the current approaches are combinations of different classes.
     \begin{itemize}
