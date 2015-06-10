@@ -1851,10 +1851,9 @@
           \item Automatically process a \glslink{batch processing}{batch} asynchronously.
           \item Process a \glslink{batch processing}{batch} in different levels.
         \end{enumerate}
-
-        The automated asynchronous processing of \glslink{batch processing}{batches} is important because some subsystems do not know how many operations are to be performed when called.
+        The automated asynchronous processing of \glslink{batch processing}{batches} is important because some subsystems do not know how many operations are to be performed when invoked.
         For instance, the public \gls{ELQ} \gls{API} method \code{start} is called with \glspl{element} to be initiated by the library.
-        As part of the initialization, the element resize detection subsystem may be called so it can prepare \glspl{element} to be detectable.
+        As part of the initialization, the element resize detection subsystem may be invoked so it can prepare \glspl{element} to be detectable.
         This needs to be \glslink{batch processing}{batch} processed, which is possible to do synchronously.
         However, if the \code{start} method is called mutliple times synchronously \gls{layout thrashing} occurs since one \glslink{batch processing}{batch} for each method call is created.
         See listing~\ref{code:batch-processor-example} for example code that invokes the \code{start} method multiple times synchronously.
@@ -1863,11 +1862,12 @@
           elq.start(document.getElementById("..."));
           elq.start(document.getElementById("..."));
 
-          var elements = document.querySelectorAll("...");
+          var elements = [...];
           elements.forEach(elq.start);
         \end{lstlisting}
         Of course, such usage could be warned against in the \gls{API} documentation but to keep the \gls{API} as simple as possible another approach has been taken.
-        By delaying the \glslink{batch processing}{batch} to execute asynchronously, on he next \gls{JavaScript} event tick in most \glspl{layout engine}, all synchronous calls to the method is grouped into the pending \glslink{batch processing}{batch}.
+        By delaying the \glslink{batch processing}{batch} to execute asynchronously all synchronous calls of the method is grouped into the pending \glslink{batch processing}{batch}.
+        
         This behavior can be controlled by the \code{async} and \code{auto} options of the \glslink{batch processing}{batch processor} factory function.
         If the \code{async} option is enabled, the \glslink{batch processing}{batch} will be processed asynchronously as soon as possible after that the \code{force} method has been invoked.
         If the \code{auto} option is enabled, the \glslink{batch processing}{batch} will automatically be processed as soon as possible asynchronously (this implies that \code{async} has to be enabled).
