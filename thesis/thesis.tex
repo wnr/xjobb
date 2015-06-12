@@ -2122,19 +2122,20 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{Empirical Evaluation}\label{ch:eval}
     This chapter presents the empirical evaluation that has been done of the \gls{ELQ} library.
-    \todo{Write that the techincal goals states of ELQ will be evaluated?}
+    The main focus of the evaluation has been to evaluate objective concepts of the library in order to achieve comparable results.
+
 
     Section~\ref{sec:eval-bootstrap} evaluates the \glspl{API} by a case study that alters the popular \gls{Bootstrap} framework to use element queries.
-    \gls{Bootstrap} 3.3.2 uses \gls{media queries} to provide \gls{responsive} \gls{CSS} classes that often are desired to use in \gls{web} applications.
+    \gls{Bootstrap} uses \gls{media queries} to provide \gls{responsive} \gls{CSS} classes that often are desired to use in \gls{web} applications.
     By using element queries instead, the classes become \gls{encapsulated} and can be used in \gls{responsive} modules.
-    Section~\ref{sec:eval-performance} evaluates the performance by measuring \gls{ELQ} in different configurations.
-    Key subsystems are also evaluated independently so that they can be compared to similar subsystems of related work.
+    Section~\ref{sec:eval-performance} evaluates the performance of \gls{ELQ} in different browsers.
+    Key subsystems are evaluated independently so that they can be compared to similar subsystems of related work.
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Bootstrap
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{ELQ Bootstrap}\label{sec:eval-bootstrap}
-      The \gls{responsive} parts of \gls{Bootstrap} 3.3.2 (the grid, containers, \gls{responsive} utility classes, forms, etc.) are built with \gls{media queries}, and therefore only behave as desired when the \gls{Bootstrap} \glspl{element} can use the full width of the \gls{viewport}.
+      The \gls{responsive} parts of \gls{Bootstrap} version 3.3.2 (the grid, containers, \gls{responsive} utility classes, forms, etc.) are built with \gls{media queries}, and therefore only behave as desired when the \gls{Bootstrap} \glspl{element} can use the full width of the \gls{viewport}.
       It should be noted that no height breakpoints are being used by \gls{Bootstrap} (as also identified by the general use case in Section~\ref{sec:eq-definitions}).
       This implies that modules that uses any \gls{responsive} \gls{Bootstrap} classes inherently only behave as desired when the module can use the full width of the \gls{viewport}, which means that such modules are not \gls{encapsulated} and therefore many of the benefits of modules disappear.
       Such modules force applications to use them in a specific layout.
@@ -2152,10 +2153,10 @@
           \includegraphics[width=\linewidth]{images/bootstrap-mq-header-big}
         \end{minipage}
         \caption{
-          The \gls{responsive} classes of \gls{Bootstrap} cannot adapt to layout changes as shown with the two-column \gls{CSS} documentation example.
+          The \gls{responsive} classes of \gls{Bootstrap} cannot adapt to layout changes as shown with the two-column \gls{CSS} documentation page example.
           Both documentation instances uses \gls{media queries}, which undesireably styles both columns as if they each fill the whole \gls{viewport} width.
-          Since the columns only fill half of the \gls{viewport} width and are styles as they both fill the whole \gls{viewport} width, the page appears broken as shown in the left figure.
-          The pag only behaves as desired if the \gls{viewport} width is large enough so that the width of each column is bigger than the largest \glslink{media queries}{media query} breakpoint, as shown in the right figure.
+          Since the columns only fill half of the \gls{viewport} width and are styled as they both fill the whole \gls{viewport} width, the page appears broken as shown in the left figure.
+          The page only behaves as desired if the \gls{viewport} width is large enough so that the width of each column is bigger than the largest \glslink{media queries}{media query} breakpoint, as shown in the right figure.
           See figure~\ref{fig:appendix-bootstrap-mq-header-small} and~\ref{fig:appendix-bootstrap-mq-header-big} of the appendix for the left and right figure in full scale, respectively.}
         \label{fig:eval-bootstrap-mq-broken}
       \end{figure}
@@ -2163,18 +2164,18 @@
       \todo{Not happy with the formulation "as if they fill the whole viewport width"}
 
       In order to make \gls{Bootstrap} behave as desired in any layouts the \gls{responsive} parts of the framework were modified to use element queries instead of \gls{media queries} by using \gls{ELQ}.
-      Two \gls{Bootstrap} classes have been chosen to be treated as \glspl{viewport} (that will be \code{elq-breakpoints} \glspl{element}): \code{container} and \code{container-fluid}.
-      \code{Not happy with calling containers as \glspl{viewport}}
+      Two \gls{Bootstrap} classes have been chosen to be treated as sub-\glspl{viewport} that are \code{elq-breakpoints} \glspl{element}: \code{container} and \code{container-fluid}.
+      \todo{Not happy with calling containers as \glspl{viewport}}
       Both classes are used in \gls{Bootstrap} to define new parts of a page (e.g., a grid is required to have a container ancestor).
       They are also nestable, which makes them suitable to be used as sub-\glspl{viewport}.
       \todo{Not happy with calling containers for \glspl{viewport}. should come up with something better.}
       The \code{container} class centers content with fixed widths by different \gls{viewport} sizes, and the \code{container-fluid} uses the full available width.
       The idea is to have all \gls{responsive} classes conditionally styled with element queries by the size of the nearest ancestor container \gls{element}.
-      This implies that all \glspl{element} that has any \gls{responsive} classes will be converted to \code{elq-mirror} \glspl{element} since they want to mirror the breakpoints of the nearest ancestor \code{elq-breakpoints} element (i.e., the container \glspl{element}).
-      Since container \glspl{element} may be nested they will be both \code{elq-mirror} and \code{elq-breakpoints} \glspl{element}.
-      Recall from section~\ref{sec:plugin-mirror} that it is beneficial for \gls{responsive} \glspl{element} to be \code{elq-mirror} \glspl{element} in order to not limit the element usage to a specific a \gls{HTML} structure.
+      This implies that all \glspl{element} with \gls{responsive} classes are converted to \code{elq-mirror} \glspl{element} since they need to mirror the breakpoints of the nearest ancestor \code{elq-breakpoints} element (i.e., a container \gls{element}).
+      Since container \glspl{element} may be nested, \code{container} \glspl{element} are both \code{elq-mirror} and \code{elq-breakpoints} \glspl{element} (because \code{container} \glspl{element} also conditionally style themselves, as opposed to \code{container-fluid} \glspl{element}).
+      Recall from section~\ref{sec:plugin-mirror} that it is beneficial for \gls{responsive} \glspl{element} to be \code{elq-mirror} \glspl{element} in order to not limit the element usage to a specific \gls{HTML} structure.
 
-      \paragraph{Altering the LESS code}
+      \paragraph{Altering the style code}
       \gls{Bootstrap} mainly uses three width numbers for \gls{responsive} breakpoints: 768, 970 and 1170 pixels.
       Since the \gls{Bootstrap} \gls{CSS} is generated by the \gls{LESS} preprocessor, they are defined as constants as presented in listing~\ref{code:bootstrap-less-breakpoints}.
       \begin{lstlisting}[gobble=8,label={code:bootstrap-less-breakpoints},caption={The main breakpoints used by \gls{Bootstrap} defined as \gls{LESS} constants.},captionpos=b]]
@@ -2186,9 +2187,9 @@
       Notice that the numbers also include the \code{px} postfix.
       Recall from Section~\ref{sec:plugin-breakpoints} that the breakpoint classes added by the \code{elq-breakpoints} plugin do not include the \code{px} postfix by default (i.e., if an element is above 480 pixels the class would be \code{elq-width-above-480} and not \code{elq-width-above-480px}).
       Fortunately, the \code{elq-breakpoints} plugin may be configured to append a postfix to the breakpoint classes by the \code{postfix} option.
-      By configuring the plugin to use \code{px} as postfix, the constants can be used seamlessly in the element queries.
+      By configuring the plugin to use \code{px} as postfix, the constants can be used seamlessly in element queries.
       As shown in listing~\ref{code:bootstrap-less-breakpoints-usage}, \gls{media queries} are easily replaced by element queries.
-      \begin{lstlisting}[gobble=8,label={code:bootstrap-less-breakpoints-usage},caption={Media queries can easily be replaced with element queries. By using the \code{elq-breakpoints} postfix option, the breakpoint constants can be used directly in the selectors.},captionpos=b]]
+      \begin{lstlisting}[gobble=8,label={code:bootstrap-less-breakpoints-usage},caption={Media queries can easily be replaced with element queries. By using the \code{elq-breakpoints} postfix option, the breakpoint constants can be used directly in the selectors. Notice that only three lines have been altered.},captionpos=b]]
         /* File "less/grid.less" of Bootstrap. */
 
         // Original Boostrap using media queries.
@@ -2223,19 +2224,19 @@
       \end{lstlisting}
       \todo{Write how many chars that differ?}
       By using the power of preprocessors, \gls{ELQ} element queries become as pleasent to work with as \gls{media queries}.
-      In fact, only \textasciitilde50 lines out of \textasciitilde8500 lines of \gls{Bootstrap} \gls{LESS} code needed to be changed.
+      In fact, only \textasciitilde50 lines out of \textasciitilde8500 lines of \gls{Bootstrap} \gls{LESS} code needed to be altered.
       Most changes were of the character shown in listing~\ref{code:bootstrap-less-breakpoints-usage}, which basically replaces the \glslink{media queries}{media query} syntax with the \gls{ELQ} element queries syntax.
-      This is especially desired when keeping a \glslink{fork}{forked} project up to date with the original project, as fewer diverged lines implies a lowered risk of merge conflicts.
+      This is especially advantageous when keeping a \glslink{fork}{forked} project up to date with the original project, as fewer diverged lines implies a lowered risk of merge conflicts.
 
       \paragraph{Adding the \gls{ELQ} library}
-      The altered \gls{Bootstrap} version depends on \gls{ELQ} including two plugins (i.e., \code{elq-breakpoints} and \code{elq-mirror}) and must therefore be included.
+      The altered \gls{Bootstrap} version depends on \gls{ELQ} including two plugins (\code{elq-breakpoints} and \code{elq-mirror}) and must therefore be included.
       \gls{ELQ} and the plugins could be bundled with the \gls{JavaScript} of \gls{Bootstrap}, but it was decided to keep them separated.
-      \gls{Bootstrap}'s other dependency, jQuery, is also separated from the project \gls{JavaScript}.
+      \gls{Bootstrap}'s other dependency, jQuery, is also separated from the \gls{Bootstrap} \gls{JavaScript}.
       Since it is beneficial to not require changes to existing \gls{Bootstrap} empowered pages, all \gls{ELQ} element attributes are added with \gls{JavaScript}.
       The attributes could of course be written directly in the \gls{HTML} instead; the choice is up to the user.
       Listing~\ref{code:bootstrap-init-js} presents an example of such \gls{JavaScript} code that dynamically adds the required element attributes and initializes all \gls{responsive} \glspl{element}.
       \begin{lstlisting}[gobble=8,label={code:bootstrap-init-js},caption={Example of \gls{JavaScript} code that adds the required \gls{ELQ} attributes dynamically to all \gls{responsive} \glspl{element} and initializes them.},captionpos=b]]
-        //Creating the ELQ instance needs to be done once.
+        // Creating the ELQ instance needs to be done once.
         var elq = Elq();
         elq.use(elqBreakpoints, {
           postfix: "px"
@@ -2262,7 +2263,7 @@
             element.setAttribute("elq-mirror", "");
           });
 
-          // Container elements are both elq-mirror and elq-breakpoints,
+          // .container elements are both elq-mirror and elq-breakpoints,
           // and therefore the noclasses option is added so that the plugins 
           // do not interfere with each other.
           containerElements.forEach(function (element) {
@@ -2279,11 +2280,11 @@
       \end{lstlisting}
 
       \paragraph{The result}
-      Altering the \gls{LESS} code, including the \gls{ELQ} library and the initating \gls{JavaScript} is all that is required to make the double column documentation page behave as desired.
+      Altering the \gls{LESS} code, including the \gls{ELQ} library, and the initating \gls{JavaScript} is all that is required to make the double column documentation page behave as desired.
       Figure~\ref{fig:eval-bootstrap-mq-eq-header}, \ref{fig:eval-bootstrap-mq-eq-matrix} and \ref{fig:eval-bootstrap-mq-eq-grid} shows different sections of the double column documentation page empowered by \gls{ELQ} \gls{Bootstrap}.
       For reference, the same sections using the original \gls{Bootstrap} are also included that shows how they behave without element queries.
       As shown in the figures, the double column documentation page using the original \gls{Bootstrap} styles the two columns as if they both had the whole \gls{viewport} width available.
-      Therefore the two columns intersects each other because some content \glspl{element} are styled wider than a column.
+      Therefore the two columns intersects because some content \glspl{element} are styled wider than a column.
       The double column documentation page using \gls{ELQ} \gls{Bootstrap} on the other hand enables all \gls{responsive} \glspl{element} to style themselves according a parent container \gls{element}.
       Therefore, the two half-page columns detect that they only have half the \gls{viewport} width and style themselves accordingly.
       The visual result is the same as having two documentation sites of the original \gls{Bootstrap} in two \code{iframe} \glspl{element} as two columns (since \code{iframe} \glspl{element} creates a separate \gls{viewport}).
@@ -2320,9 +2321,9 @@
         \end{minipage}
         \caption{
           The left image shows the original \gls{Bootstrap} \gls{responsive} utilities classes matrix.
-          Here it is clear that both columns are styled as the have the full \gls{viewport} width as they display the large utility classes in green, which means that both columns think that they have the full width of the \gls{viewport}.
+          Here it is clear that both columns are styled as if they each have the full \gls{viewport} width, as they display the large utility classes in green.
           The right image shows same section of the same page, using \gls{ELQ} \gls{Bootstrap}.
-          Only the small utility classes are displayed in green as desired, since both columns only have half of the width available.
+          Only the small utility classes are displayed in green as desired, since both columns only have half of the \gls{viewport} width available.
           See figure~\ref{fig:appendix-bootstrap-mq-matrix-small} and~\ref{fig:appendix-bootstrap-eq-matrix-small} of the appendix for the left and right figure in full scale, respectively.
         }
         \label{fig:eval-bootstrap-mq-eq-matrix}
@@ -2340,7 +2341,7 @@
         \end{minipage}
         \caption{
           The left image shows the original \gls{Bootstrap} \gls{responsive} grid.
-          It is styled as if both columns have the full \gls{viewport} width available, and therefore the grids partly intersect each other.
+          It is styled as if both columns have the full \gls{viewport} width available, and therefore the grids intersects.
           The right image shows same section of the same page, using \gls{ELQ} \gls{Bootstrap}.
           The grids detects that only the half \gls{viewport} width is available, and styles themselves accordingly.
           See figure~\ref{fig:appendix-bootstrap-mq-grid-small} and~\ref{fig:appendix-bootstrap-eq-grid-small} of the appendix for the left and right figure in full scale, respectively.
@@ -2355,7 +2356,7 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Performance
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Performance}\label{sec:eval-performance}\label{sec:eval-perf-erd}
-      The following tests were performed on a computer with a 2.7 GHz processor and 16 GB of memory\footnote{The serial number of the computer is C02N4G9TG3QD and the vendor is Apple Inc. CPU: 2.5 GHz Intel Core i7. Memory: 16 GB 1600 MHz DDR3. GPU: Intel Iris Pro 1536 MB.}.
+      The following tests were performed on a computer with a 2.5 GHz processor and 16 GB of memory\footnote{The serial number of the computer is C02N4G9TG3QD and the vendor is Apple Inc. CPU: 2.5 GHz Intel Core i7. Memory: 16 GB 1600 MHz DDR3. GPU: Intel Iris Pro 1536 MB.}.
       The library has been tested in the following \glspl{browser}: Chrome 42.0.2311.152, FireFox 37.0.1 and Safari 8.0.6.
       Measurements and graphs show evaluations performed in Chrome unless stated otherwise.
 
@@ -2371,13 +2372,14 @@
       \todo[inline]{Have to measure how elq-breakpoints handles large amount of elements. It might suffor from layout thrashing since might read/write the DOM at invalid stages of the erd subsystem.}
       \todo[inline]{Actually since elq-breakpoints is batch-processed, no layout thrashing occurs. However, two disjunct layouts are performed (one for the erd system and one for the plugin) which could theoretically be merged.}
       \todo[inline]{Philipp: If possible, show graphs for other browsers than Chrome.}
+      \todo[inline]{Write about Bootstrap performance here.}
 
       
       %\subsection{Element resize detection}\label{sec:eval-perf-erd}
-        This section evaluates the performance of the object-based and scroll-based solutions described in Section~\ref{sec:imp_erd}.
-        The optimized \gls{ELQ} version of the scroll-based solution will also be evaluated.
+        This section evaluates the performance of the object-based and scroll-based solutions to detecting \gls{element} resize events described in Section~\ref{sec:imp_erd}.
+        The optimized \gls{ELQ} version of the scroll-based solution is also be evaluated.
         Since the element resize detection subsystem performs the heaviest tasks, only the performance of that subsystem is evaluated in detail.
-        The other subsystems entails to significant performance penalties.
+        The other subsystems entails no significant performance penalties.
         \todo{Remove this, and analyze the different subsystems in detail: erd, cycle detector, elq-breakpoints, etc.}
 
         The object-based solution performs well when detecting resize events.
@@ -2403,7 +2405,7 @@
                       legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                     ]
                     \addplot+[red, mark options={red}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-object-original.csv};
-                    \legend{Original object-based solution}
+                    \legend{Object-based solution}
                   \end{axis}
                 \end{tikzpicture}
             \end{minipage}%
@@ -2424,7 +2426,7 @@
                   % add a plot from table; you select the columns by using the actual name in
                   % the .csv file (on top)
                   table[x=n elements,y=memory,col sep=comma] {./data/erd-object-original.csv};
-                  \legend{Original object-based solution}
+                  \legend{Object-based solution}
                 \end{axis}
               \end{tikzpicture}
             \end{minipage}
@@ -2459,8 +2461,7 @@
                       y unit=s, % Set the respective units
                       legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                     ]
-                    \addplot+[orange, mark options={orange}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-original.csv};
-                    \addlegendentry{Original object-based solution}
+                    \addplot+[orange, mark=square*, mark options={orange}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-original.csv};
                     \addlegendentry{Scroll-based solution}
                   \end{axis}
                 \end{tikzpicture}
@@ -2478,14 +2479,14 @@
                     y unit=s, % Set the respective units
                     legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                   ]
-                  \addplot+[orange, mark options={orange}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-original.csv};
                   \addplot+[red, mark options={red}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-object-original.csv};
-                  \addlegendentry{Original object-based solution}         
+                  \addplot+[orange, mark options={orange}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-original.csv};
+                  \addlegendentry{Object-based solution}         
                   \addlegendentry{Scroll-based solution}
                 \end{axis}
               \end{tikzpicture}
             \end{minipage}
-          \caption{The injection performance of the original scroll-based element resize detection solution provided by \cite{eq_imp_css-element-queries} and originally created by \cite{backalley}. The left graph shows the injection time of the scroll-based solution. The right graph also includes the original object-based solution for reference. The heap memory usage graph has been omitted as the memory usage for the scroll-based solutions are near constant.}
+          \caption{The injection performance of the scroll-based element resize detection solution provided by \cite{eq_imp_css-element-queries} and originally created by \cite{backalley}. The left graph shows the injection time of the scroll-based solution. The right graph also includes the object-based solution for reference. The heap memory usage graph has been omitted as the memory usage for the scroll-based solution is near constant.}
           \label{fig:erd-original-scroll}
           \end{center}
         \end{figure}
@@ -2494,7 +2495,7 @@
         By avoiding \gls{layout thrashing}, the injection performance was imporoved significantly.
         See figure~\ref{fig:erd-elq-scroll} for graphs that show how the it performs compared to the other solutions.
         As evident in the figure, the optimized \gls{ELQ} solution has significantly reduced injection times compared to the other two.
-        It achieves a 32-fold speedup compared to the object-based solution and a 13-fold speedup compared to the original scroll-based solution when preparing 500 \glspl{element} for resize detection.
+        It achieves a 32-fold speedup compared to the object-based solution and a 13-fold speedup compared to the scroll-based solution when preparing 500 \glspl{element} for resize detection.
         The \gls{ELQ} solution also scales better, as more clearly shown in figure~\ref{fig:erd-solutions-regressed} that includes polynomial regression graphs for all three solutions.
         Both scroll-based solutions have the same memory footprint (i.e., too low for reliable measurements).
         \begin{figure}[ht!]
@@ -2518,7 +2519,7 @@
                       y unit=s, % Set the respective units
                       legend style={at={(0.5,-0.20)},anchor=north} % Put the legend below the plot
                     ]
-                    \addplot+[blue, mark options={blue}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-elq.csv};
+                    \addplot+[blue, mark=diamond*, mark options={blue}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-elq.csv};
                     \addlegendentry{ELQ scroll-based solution}
                   \end{axis}
                 \end{tikzpicture}
@@ -2538,15 +2539,15 @@
                   ]
                   \addplot+[red, mark options={red}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-object-original.csv};
                   \addplot+[orange, mark options={orange}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-original.csv};
-                  \addplot+[blue, mark options={blue}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-elq.csv};
+                  \addplot+[blue, mark=diamond*, mark options={blue}] table[x=n elements,y=injection time,col sep=comma] {./data/erd-scroll-elq.csv};
 
-                  \addlegendentry{Original object-based solution}
+                  \addlegendentry{Object-based solution}
                   \addlegendentry{Scroll-based solution}
                   \addlegendentry{ELQ scroll-based solution}
                 \end{axis}
               \end{tikzpicture}
             \end{minipage}
-          \caption{The injection performance of the optimized \gls{ELQ} scroll-based element resize detection. The left graph shows the injection time with the original scroll-based solution graph included as reference. The right graph shows all three solutions for comparison. The heap memory usage graph has been omitted as the memory usage for the scroll-based solutions are near constant.}
+          \caption{The injection performance of the optimized \gls{ELQ} scroll-based element resize detection solution. The left graph shows the injection time of the \gls{ELQ} scroll-based solution. The right graph shows all three solutions for comparison. The heap memory usage graph has been omitted as the memory usage for the scroll-based solutions are near constant.}
           \label{fig:erd-elq-scroll}
           \end{center}
         \end{figure}
@@ -2583,15 +2584,15 @@
         \paragraph{FireFox and Safari}
         As shown, great performance can be achieved with the optimized \gls{ELQ} scroll-based solution in Chrome.
         Unfortunately, there is no silver bullet to observing element resize events; as the other \glspl{browser} behave differently.
-        See table~\ref{table:erd-layout-engines} for performance numbers of different \glspl{browser}.
+        See table~\ref{table:erd-layout-engines} for the performance of the object-based and scroll-based solutions operating on 100 \glspl{element} in different \glspl{browser}.
         The \gls{ELQ} scroll-based solution is preferred for Chrome, as the injection is 32-fold faster (when operating on 500 \glspl{element}) than the object-based solution while the resize detection performance is the same for both solutions.
-        In FireFox, the object-based solution detects resize events 2-fold faster than the \gls{ELQ} scroll-based solution when operating (still, 100 ms for detecting resize events is acceptable).
+        In FireFox, the object-based solution detects resize events 2-fold faster than the \gls{ELQ} scroll-based solution when operating on 100 \glspl{element} (still, 100 ms for detecting resize events is acceptable).
         However, the injection time needed for the object-based solution is 5.5-fold of the time needed for the \gls{ELQ} scroll-based solution.
         The \gls{ELQ} scroll-based solution is therefore probably desired in FireFox for the general use case (as described in Section~\ref{sec:eq-definitions}).
         In Safari, the \gls{ELQ} scroll-based solution detects resize events in 800 ms while the object-based solution detects them in 25 ms, which of course is unacceptable.
         Unfortunately, the injection time needed for the object-based solution is 3-fold slower than the \gls{ELQ} scroll-based solution.
         Since a delay of 800 ms when detecting resize events is undesired in most use cases, the object-based solution is preferred is Safari.
-        \todo{Write that the scroll-based solution probably has a bug that makes it perform so bad? In only perfoms bad when expanding the \gls{element}, not shrinking it... This however seem to be a bug with Safari, not the implementation.}
+        Recall from Section~\ref{sec:imp_erd} that this is due to WebKit and Gecko not being able to queue the scroll mutation operations as Blink does.
         \begin{table}[ht]\center
           \tiny
           \begin{tabular}[t]{ l l l l l l l }
@@ -2602,7 +2603,7 @@
             \gls{Gecko}   & \textbf{200 ms}  & 1100 ms   & 100 ms  & \textbf{50 ms}  \\
             \gls{WebKit}  & \textbf{100 ms}  & 300 ms    & 800 ms  & \textbf{25 ms}  \\
           \end{tabular}
-          \caption{Performance of the two solutions in different \glspl{layout engine} when operating on 100 \glspl{element}.}
+          \caption{Performance of the object-based and \gls{ELQ} scroll-based solutions in different \glspl{layout engine} when operating on 100 \glspl{element}.}
           \label{table:erd-layout-engines}
         \end{table}
 
