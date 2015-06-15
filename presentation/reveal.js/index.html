@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js - The HTML Presentation Framework</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="bower_components/ionic/release/css/ionic.min.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<style>
+			.gray { color: gray; }
+			.green { color: green; }
+			.orange { color: orange; }
+			.red { color: red; }
+			.verbatim { font-family: monospace, serif; }
+
+			.reveal .slides section .fragment-red.fragment.visible { color: red; }
+			.reveal .slides section .fragment-strikethrough.fragment { visibility: visible; opacity: 1; transition: none; }
+			.reveal .slides section .fragment-strikethrough.fragment:: { visibility: visible; opacity: 1; transition: none; }
+			.reveal .slides section .fragment-strikethrough.fragment.visible { text-decoration: line-through; transition: none; }
+		</style>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section id="title-slide">
+					<!-- <div>
+						<div>
+							<video height="350px" controls muted loop autoplay>
+								<source src="asset/video/microsoft-site.mp4" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+						</div>
+                        <div style="width: 50%; margin-left: 25%; text-align: center;">
+                        </div>
+					</div> -->
+					<h3 id="title-header">Modular responsive web design</h3>
+					<div style="font-size:20px; margin-top:-20px;">By implementing <span class="orange">element queries</span></div>
+
+					<div style="margin-bottom:20px;"></div>
+
+					<h5>Lucas Wiener</h5>
+
+					<small>
+						<style>
+							.title-table {
+								position: relative;
+								left: -20px;
+							}
+
+							.title-table td {
+								border: none !important;
+							}
+						</style>
+						<table class="title-table">
+							<tr>
+								<td style="text-align:right;">Examiner:</td><td>Mads Dam</td>
+							</tr>
+							<tr>
+								<td style="text-align:right;">Sueprvisor at CSC:</td><td>Philipp Haller</td>
+							</tr>
+							<tr>
+								<td style="text-align:right;">Supervisors at EVRY:</td><td>Tomas Ekholm</td>
+							</tr>
+							<tr>
+								<td></td><td>Stefan Sennerö</td>
+							</tr>
+						</table>
+					</small>
+				</section>
+				<section id="themes">
+					<h2>Themes</h2>
+					<p>
+						Are we happy with the theme? <br>
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/black.css'); return false;">Black (default)</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/white.css'); return false;">White</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/league.css'); return false;">League</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/sky.css'); return false;">Sky</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/beige.css'); return false;">Beige</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/simple.css'); return false;">Simple</a> <br>
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/serif.css'); return false;">Serif</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/night.css'); return false;">Night</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/moon.css'); return false;">Moon</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/solarized.css'); return false;">Solarized</a>
+					</p>
+				</section>
+				<section>
+					<h4>Outline</h4>
+					<small>
+					<ol>
+						<li>Responsive web design</li>
+						<li>Modular development</li>
+						<li>The problem of responsive modules</li>
+						<li>Element queries</li>
+						<li>JavaScript library</li>
+						<li>Demo</li>
+					</ol>
+					</small>
+				</section>
+				<section>
+					<section>
+						<h2>Responsive Web Design</h2>
+						<video height="350px" controls muted loop autoplay>
+							<source src="asset/video/microsoft-site.mp4" type="video/mp4">
+							Your browser does not support the video tag.
+						</video>
+					</section>
+					<section>
+						Why?
+						<img class="fragment" src="asset/image/responsive-image.jpg">
+					</section>
+					<section>
+						<h4>Popular frameworks</h4>
+						<ul>
+							<li>Bootstrap</li>
+							<li>Foundation</li>
+							<li>Skeleton</li>
+							<li>HTML5 Boilerplate</li>
+							<li>HTML KickStart</li>
+							<li>Montage HTML5 Framework</li>
+							<li>SproutCore</li>
+							<li>Zebra</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Bootstrap</h4>
+						Most starred project on GitHub.
+						<div>82k stars and 32k forks.</div>
+					</section>
+					<section>
+						<h4>media queries</h4>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h4>Modular web development</h4>
+					</section>
+					<section>
+						<img src="asset/image/github-modules-1.png">
+					</section>
+					<section>
+						<img src="asset/image/github-modules-2.png">
+					</section>
+					<section>
+						<img src="asset/image/github-modules-3.png">
+					</section>
+					<section>
+						<h4>Why?</h4>
+						<p class="fragment">Reusability</p>
+						<p class="fragment">Reduced complexity</p>
+					</section>
+					<section>
+						<h4>Popular frameworks</h4>
+						<ul>
+							<li>Angular</li>
+							<li>Backbone</li>
+							<li>Ember</li>
+							<li>Web components</li>
+							<li>Requirejs</li>
+							<li>Browserify</li>
+							<li>Polymer</li>
+							<li>React</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h4>The problem</h4>
+						<p>Media queries targets the viewport</p>
+						<p>Responsive modules want to target the parent element</p>
+					</section>
+					<section>
+						<video controls muted loop autoplay>
+							<source src="asset/video/problem-mq.mp4" type="video/mp4">
+							Your browser does not support the video tag.
+						</video>
+					</section>
+					<section>
+						<h4>Why is this bad?</h4>
+						<p>It forces modules to either be:</p>
+						<ul>
+							<li>non-encapsulated</li>
+							<li>context-aware</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h4>Element queries</h4>
+						<p>element criteria instead of viewport</p>
+					</section>
+					<section>
+						<h4>Element queries</h4>
+						<div class="fragment roll-in">Discussed by the W3C since ~2013</div>
+						<div class="fragment roll-in">Problems hindering a browser implementation</div>
+						<div class="fragment roll-in">JavaScript libraries needed until browser support</div>
+					</section>
+					<section>
+						<h4>ELQ</h4>
+						<p class="fragment roll-in">Plugin-based</p>
+						<p class="fragment roll-in">Fully automatic</p>
+						<p class="fragment roll-in">Adequate performance</p>
+						<p class="fragment roll-in">Flexible APIs</p>
+						<p class="fragment roll-in">Browser support: IE8+</p>
+					</section>
+					<section>
+						<h4>Performance</h4>
+						<img src="asset/image/erd-graph.png" width="65%">
+					</section>
+				</section>
+				<section>
+					<h4>Teching Bootstrap new tricks</h4>
+					<p class="fragment roll-in">In only <span class="orange">~45 out of ~8500</span> altered lines of LESS code</p>
+
+					<p class="fragment roll-in">DEMO</p>
+				</section>
+				<section>
+					<h4>The future</h4>
+					<ul>
+						<li class="fragment roll-in">Write a specification for the W3C</li>
+						<li class="fragment roll-in">Open source the project</li>
+					</ul>
+				</section>
+				<section>
+					<h4>Questions?</h4>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
