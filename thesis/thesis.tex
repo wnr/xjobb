@@ -412,7 +412,7 @@
       \newcommand{\chref}[1]{Chapter~\ref{#1}, \emph{\nameref{#1}},}
       \chref{ch:background} presents the background of this thesis and aims to provide sufficient information about \gls{web} development and \glspl{layout engine} to understand the problem and solution.
       In Section~\ref{sec:web-dev} the two \gls{web} development concepts \gls{responsive} \gls{web} design and modulairy are presented, and ends by describing the problem of \gls{responsive} modules.
-      Section~\ref{sec:layout-engines} briefly describes how \glspl{layout engine} operates and how \gls{JavaScript} code can be optimized by avoiding \gls{layout thrashing}.
+      Section~\ref{sec:layout-engines} briefly describes how \glspl{layout engine} operate and how \gls{JavaScript} code can be optimized by avoiding \gls{layout thrashing}.
       The section ends with presenting the current research of parallelizing \glspl{layout engine}, which is important to understand since element queries affect the parallelization of \glspl{layout engine}.
       Expert readers may want to skip Chapter~\ref{ch:background}.
 
@@ -462,7 +462,7 @@
 
     Section~\ref{sec:web-dev} presents a brief history of \gls{web} development and motivate why \gls{responsive} \gls{web} design and modular development are both popular and needed concepts in modern \gls{web} development.
     As an end, Section~\ref{sec:rwd-modular-problem} describes the problem of having modular \gls{responsive} modules, which element queries solves.    
-    Section~\ref{sec:layout-engines} describes briefly how \glspl{layout engine} operates, with focus on the layout process, to later present how they can be parallelized in Section~\ref{sec:parallel}.
+    Section~\ref{sec:layout-engines} describes briefly how \glspl{layout engine} operate, with focus on the layout process, to later present how they can be parallelized in Section~\ref{sec:parallel}.
     As will be later shown in Chapter~\ref{ch:eq}, element queries as a concept hinders parallelization of \glspl{layout engine}.
     Since performance will be a key requirement of the library as presented in Chapter~\ref{ch:library}, Section~\ref{sec:layout-thrashing} defines \gls{layout thrashing} and shows how it can be avoided in order to improve performance.
 
@@ -675,7 +675,7 @@
         \end{figure}
 
         \paragraph{The solution}
-        \Gls{responsive} modules should be able to react and change style by the size of their own sizes, not the \gls{viewport} size.
+        \Gls{responsive} modules should be able to react and change style by their own size, not the \gls{viewport} size.
         An identified solution to this is element queries, which allows conditional styles to be applied based by \gls{element} criteria.
         The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries \cite{eq_article_localised-css,eq_article_backalley,eq_article_mqhack,eq_article_tabatkjr,eq_article_filament,eq_article_tyson,eq_article_neal,eq_article_css-tricks,eq_article_hugo,eq_article_fremycompany,eq_article_discource,eq_article_matt}.
         As stated in Section~\ref{sec:problem}, \gls{third-party} non-\gls{native} implementation efforts have been made with moderate success.
@@ -686,13 +686,13 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Layout engines
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Layout engines}\label{sec:layout-engines}
-      In order to understand how element queries affects the \glspl{layout engine}, it is important to understand how \glspl{layout engine} operates.
+      In order to understand how element queries affects the \glspl{layout engine}, it is important to understand how \glspl{layout engine} operate.
       \todo{Also in order to understand how to optimize the library tasks.}
       Only the \gls{layout engine} of the \gls{browser} will be of importance, since element queries do not affect any other \gls{browser} subsystem.
       This section will give a brief explanation of the layout process that the engines generally perform, along with some usual optimizations that are performed to speed up the process.
       The render process will not be described, as it is not relevant for element queries.
 
-      Section~\ref{sec:layout-engine-reference} to Section~\ref{sec:layout-process} describes briefly how \glspl{layout engine} operates and also presents key \gls{layout engine} concepts.
+      Section~\ref{sec:layout-engine-reference} to Section~\ref{sec:layout-process} describes briefly how \glspl{layout engine} operate and also presents key \gls{layout engine} concepts.
       The role of the \gls{layout engine} and a reference architecture for \glspl{browser} is also presented.
       \todo{Write that the layout queue is described, which will be important to understand for the optimizations done in the library.}
       Section~\ref{sec:layout-thrashing} defines \gls{layout thrashing} will presents how it can be avoided.
@@ -1703,16 +1703,16 @@
         \end{itemize}
       \subsection{Plugins}
         Now, it is time to describe the systems and \glspl{API} that actually realizes element queries as \gls{ELQ} plugins.
-        It should be noted that the plugins presented here is the suggested solution to element queries according to the research of this thesis.
+        The plugins presented here is the suggested solution to element queries according to the research of this thesis.
         They are designed for adequate performance, good compatibility, and ease of use.
         For extreme requirements or corner cases, custom \gls{ELQ} plugins might be preferred.
         It should be noted that the development of the prolyfill plugin is left for future work.
 
         \Gls{ELQ} plugins may use custom element attributes as part of their \glspl{API}.
         The \gls{HTML} standard supports custom attributes prefixed with \code{data-}.
-        Modern \glspl{browser} usually permits to discard the \code{data-} prefix for custom attributes.
+        Modern \glspl{browser} usually permit to discard the \code{data-} prefix for custom attributes.
         For visual reasons, custom attributes will be written in the shortest possible way in this thesis (without the \code{data-} prefix).
-        It should be noted that although not written in the examples the library and all plugins support both ways of defining custom elememt attributes, so it is able to conform to the \gls{HTML} standard.
+        Although not written in the examples the library and all plugins support both ways of defining custom elememt attributes, so it is able to conform to the \gls{HTML} standard.
         \todo[inline]{Need to implement this in ELQ.}
         \todo[inline]{Maybe it should be generally explained that the attribute design of both plugins follow the same design. Explain options at element level, plugin level, etc.}
 
@@ -2683,7 +2683,7 @@
     \todo{Did I miss this one? \url{https://github.com/jonathantneal/hitch-element-queries}}
     
     \paragraph{Invalid syntax}
-    The libraries \cite{eq_imp_magichtml,eq_imp_eqcss,eq_imp_prollyfill-min-width,eq_imp_localised-css,eq_imp_gss} have in common that they require developers to write cunstom (invalid) \gls{CSS}.
+    The libraries \cite{eq_imp_magichtml,eq_imp_eqcss,eq_imp_prollyfill-min-width,eq_imp_localised-css,eq_imp_gss} have in common that they require developers to write custom (invalid) \gls{CSS}.
     Since they no longer conform to the \gls{CSS} standard, new features can be supported through the custom \gls{CSS}.
     As shown by \cite{eq_imp_eqcss,eq_imp_gss} quite advanced features can be implemented this way.
     Additionally, adding new \gls{CSS} features implies that it is possible to implement a solution to element queries that does not require any changes to the \gls{HTML}, which may be preferable since all styling then can be written in \gls{CSS} (which is the purpose of \gls{CSS}).
@@ -2864,7 +2864,7 @@
 
       \paragraph{Exteding the mirror plugin}
       In order to allow more advanced element query constellations, \code{elq-mirror} could be extended to enable mirror \glspl{element} to target arbitrary \glspl{element} (instead of just the nearest \code{elq-breakpoints} ancestor \gls{element}).
-      This way, it would be possibel to write element queries against children, siblings, etc.
+      This way, it would be possible to write element queries against children, siblings, etc.
       This would also be a key feature in order to further satisfy goal~\ref{itm:req_flexible}.
 
       \paragraph{Prolyfill}
