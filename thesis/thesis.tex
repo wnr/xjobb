@@ -390,9 +390,24 @@
     \section{Delimitation}
       The focus of this thesis lies on developing a \gls{third-party} non-\gls{native} library that enables developers to use element queries.
       All theoretical studies and work has been performed to support the development of the library.
-      The problems of implementing element queries \glslink{native}{natively} is addressed, but no efforts has been made to solve the problems.
+      The problems of implementing element queries \glslink{native}{natively} are addressed, but no efforts has been made to solve the problems.
       Also, no \gls{API} or similar has been designed for a \gls{native} solution.
       Graphical design of end-user interfaces is not addressed, other than necessary for understanding the problem.
+    \section{Choice of methodology}
+      The results and conclusions of this thesis are based on a scientific study using an iterative development process evaluated by empirical studies.
+      Knowledge about the problem has been gathered by a literature study (that is mostly based on material published by the W3C), and possible approaches to non-native solutions have been evaluated by analyzing related work.
+      The library design is motivated by identified requirements of element queries, which has been gathered partly by the literature study and studies of existing responsive applications.
+
+      The performance and browser compatibility of the library has been evaluated by empirically testing the library in different browsers.
+      Since there are numerous related libraries only the performance of the element resize detection subsystem of the libraries has been evaluated.
+      There are only three different approaches to such subsystem, and therefore the work needed to compare the libraries was reduced significantly.
+      Such delimitation is motivated with that the element resize detection subsystem performs the heaviest task, and therefore forms the largest performance impact.
+      Another delimitation is that only fully functioning automated related libraries has been evaluated, since the others cannot be considered an option to the developed library.
+
+      The \glspl{API} and features of the library have been evaluated empirically by altering the popular \gls{Bootstrap} framework to use element queries instead of media queries.
+      It is hard to objectively evaluate features and \gls{API} designs, but some objective data was gathered by the evaluation.
+      The \gls{Bootstrap} framework was chosen because it consists of a large open source codebase and is widely used as a foundation of many responsive applications.
+      Only the constructed library was evaluated, since it could be concluded by analyzing the related libraries that none would be able to achieve similar results.
     \section{Outline}
       \newcommand{\chref}[1]{Chapter~\ref{#1}, \emph{\nameref{#1}},}
       \chref{ch:background} presents the background of this thesis and aims to provide sufficient information about \gls{web} development and \glspl{layout engine} to understand the problem and solution.
