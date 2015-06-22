@@ -435,10 +435,12 @@
       Since many of the libraries presented in this chapter share the same characteristics they are classified.
       This way, the different classes can be evaluated instead of evaluating all libraries in detail.
 
-      \chref{ch:discussion-conclusions} discusses the current research state of element queries and the result of this thesis.
-      The chapter also emphasis the major conclusions of this thesis.
-      Advantages and drawbacks of non-\gls{native} solutions are discussed, and related work is compared to the developed library.
-      Possible future work is also presented, which includes many extensions and further improvements to the library.
+      \chref{ch:discussion} discusses advantages and drawbacks of non-\gls{native} solutions, and related work is compared to the developed library.
+      The fulfillment of the identified requirements of the developed library are also discussed.
+      
+      \chref{ch:conclusions} summarizes the conclusions of this thesis, and shows how the formulated problem is solved and how the scientific question is answered.
+
+      \chref{ch:future-work} presents possible future work, which includes many extensions and further improvements to the library.
 
       % The second part \emph{\ref{part:theory}~\nameref{part:theory}} presents theoretizations of the problem.
       % It starts with describing a reference architecture of \glspl{layout engine} and the parts of \glspl{layout engine} that directly affects element queries will be described in detail.
@@ -2857,6 +2859,8 @@
     Also, the evaluation shows that the library is easy to integrate into existing projects since only \textasciitilde50 lines out of \textasciitilde8500 lines of style code was needed to be altered for \gls{Bootstrap} to be fully based on element queries.
     Therefore, the scientific question is answered in the affirmative.
 
+    % Developers can now use element queries to create responsive modules, as the \gls{ELQ} library is performant, compatible, flexible, powerful, and extensible.
+
     % \paragraph{Native element queries}
     % Unrestricted element queries (i.e., not restricting target \glspl{element} to special \gls{viewport} \glspl{element}) impose limitations to \glspl{layout engine}, and are therefore infeasible to implement.
     % Possible approaches to overcome most limitations are being discussed by participants of the W3C.
@@ -2868,7 +2872,7 @@
     % Then, the \gls{layout engine} might have to perform another layout since new styles could have been applied due to selectors including element queries matching.
     % This needs to be performed until a stable state has been achieved.
 
-  \chapter{Future work}
+  \chapter{Future work}\label{ch:future-work}
     It would be beneficial to further investigate possible use cases in order to evaluate if the current plugins are sufficient.
     Perhaps new plugins would need to be developed, or existing \glspl{API} extended.
     This is needed in order to be sure that goal~\ref{itm:req_flexible} is satisfied.
