@@ -347,16 +347,16 @@
       %   \todo{Same here as above.}
       % \end{itemize}
     \section{Objective}
-      The main objective of this thesis is to design and develop a \gls{third-party} non-\gls{native} library that enables element queries in modern and legacy \glspl{browser}.
-      The scientific question is if it is possible to construct such library that has high reliability, adequate performance, and enough features to support advanced responsive constellations.
-      The hypothesis is that it is possible to construct such library, which has been shown to be true by the library presented in Chapter~\ref{ch:library}.
+      The main objective of this thesis is to design and develop a \gls{third-party} non-\gls{native} library that enables element queries in both modern and legacy \glspl{browser}.
+      The scientific question is if it is possible to construct such library that has high reliability, adequate performance, and enough features to support advanced compositions of responsive modules.
+      The question is answered in the affirmative by the developed element queries library introduced in Chapter~\ref{ch:library}.
 
       Since modules cannot make any assumptions about the usage context, both static and dynamic pages must be supported.
       Element queries operating in dynamic pages are more complicated, and therefore the focus of this thesis is to enable element queries in dynamic pages.
       To do so it is necessary to be aware of the premises, such as \gls{browser} limitations and specifications that one must conform to.
-      Research has been done about the problems of implementing element queries \glslink{native}{natively}, in order to get a deeper understanding of the potential shape of a standardized \gls{API}.
+      The problems of implementing element queries \glslink{native}{natively} are researched, in order to get a deeper understanding of the potential shape of a standardized \gls{API}.
       Solving the main problem requires research and empirical studies of subproblems.
-      Examples of such subproblems that are addressed in this thesis:
+      Examples of such subproblems that are addressed in this thesis are the following:
       \begin{itemize}
         \item Should circularity be handled? If yes, should it be detected at runtime or parsetime, and what should happen on detection?
         \item How can one observe \gls{element} size changes without any \gls{native} support?
@@ -385,7 +385,7 @@
 
       Solving this problem would be a big advancement to \gls{web} development, enabling developers to create truly \gls{responsive} modules.
       By studying the problem, identifying approaches and providing a \gls{third-party} solution the community can take a step closer to solve the problem \glslink{native}{natively}.
-      Since the hypothesis has been shown to hold, developers are able to use element queries in the near future by using the constructed library, while waiting for the \gls{W3C} to standardize a solution.
+      Since the scientific question has been answered in the affirmitive, developers will be able to use element queries in the near future by using the constructed library, while waiting for the \gls{W3C} to standardize a solution.
       The outcome of this thesis can also be helpful for the \gls{W3C} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
     \section{Delimitation}
       The focus of this thesis lies on developing a \gls{third-party} non-\gls{native} library that enables developers to use element queries.
@@ -395,7 +395,6 @@
       Graphical design of end-user interfaces is not addressed, other than necessary for understanding the problem.
     \section{Choice of methodology}
       The results and conclusions of this thesis are based on a scientific study using an iterative development process evaluated by empirical studies.
-      Knowledge about the problem has been gathered by a literature study (that is mostly based on material published by the W3C), and possible approaches to non-native solutions have been evaluated by analyzing related work.
       The library design is motivated by identified requirements of element queries, which has been gathered partly by the literature study and studies of existing responsive applications.
 
       The performance and browser compatibility of the library has been evaluated by empirically testing the library in different browsers.
