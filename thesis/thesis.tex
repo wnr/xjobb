@@ -223,7 +223,7 @@
 \defglsdisplayfirst[\glsdefaulttype]{\textit{#1}}
 
 \title{Element queries - the solution to modular responsive web design}
-\foreigntitle{Modulär responsiv webbutveckling}
+\foreigntitle{Element queries - lösningen på modulär responsiv webbdesign}
 \subtitle{Allowing responsive web modules to respond to custom criteria instead of only the viewport size by implementing \emph{element queries}}
 \author{Lucas Wiener \\ \lowercase{lwiener@kth.se}}
 \date{June 2015}
@@ -260,7 +260,7 @@
   \begin{foreignabstract}{swedish}
     Responsiv webbutveckling är ett populärt sätt att stödja enheter med varierande egenskaper (storlek av visninsområdet, inmatningsmekanismer, mediumtyp, etc.) genom att ange olika stilar för ett dokument beroende på enhetens egenskaper med hjälp av CSS \emph{media queries}.
     Det är också populärt att utveckla webbapplikationer genom att skapa återanvändbara moduler för minskad komplexitet.
-    Tyvärr kräver responsiva moduler att användaren av en modul defininerar de olika responsiva stilarna eftersom endast användaren vet i vilket kontext modulen används (storleken av modulen till exempel).
+    Tyvärr kräver responsiva moduler att användaren av en modul defininerar de olika responsiva stilarna eftersom endast användaren vet i vilket kontext modulen används.
     Detta implicerar att responsiva moduler inte är enkapsulerade (alltså att de inte fungerar av sig själva), vilket är viktigt för återanvändning och reduktion av komplexitet.
     Det beror på CSS media queries begränsningar att det endast går att definiera olika stilar för element bereonde på dokumentets rot och enhetens egenskaper.
     För att kunna skapa enkapsulerade responsiva moduler måste olika stilar kunna definieras för ett element beroende på ett elements egenskaper, vilket är känt som \emph{element queries}.
@@ -271,7 +271,7 @@
 
     Denna rapport presenterar de problem för webbläsares renderingsmoterer som element queries medför och visar sätt att övervinna vissa av problemen.
     För att möjliggöra skapandet av enkapsulerade responsiva moduler, i väntan på webbläsarstöd, har ett tredjepartsbibliotek för element queries skapats i JavaScript.
-    Som presenteras i denna rapport så erbjuder biblioteket både prestanda- och användningsfördelar jämfört med andra relaterade bibliotek.
+    Biblioteket erbjuder både prestanda- och användningsfördelar jämfört med andra relaterade bibliotek.
     Ett optimerat delsystem för att detektera förändringar av elements storlekar har utvecklats som använder en nivåuppdelad \emph{batch}-processerare vilket medför att delsystemet erbjuder signifikant bättre prestanda än relaterade system.
     Som del av den empiriska utvärderingen har det populära ramverket Bootstrap modifierats att använda element queries istället för media queries genom att ändra \textasciitilde50 utav \textasciitilde8500 rader stilkod, vilket visar en av fördelarna med det utvecklade biblioteket.
 
