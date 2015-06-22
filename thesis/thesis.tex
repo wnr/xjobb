@@ -2843,6 +2843,8 @@
     Additionally, \gls{CSS} tools can advantageously be used in tandem with the \gls{ELQ} syntax --- something that is not possible with related work that require invalid \gls{CSS}.
     The mirror plugin of \gls{ELQ} enables developers to overcome some \gls{CSS} limitations, which has been proven to be important when writing \gls{responsive} modules that should not be limited to a predefined \gls{HTML} structure (as shown in Section~\ref{sec:eval-bootstrap}).
     Related work only supports such feature by using invalid \gls{CSS}.
+    By using related work that requires invalid \gls{CSS}, the \gls{Bootstrap} framework would not be possible to alter with as few altered lines of code as achieved by \gls{ELQ} since the \gls{LESS} preprocessor would not understand the invalid \gls{CSS} syntax.
+    Also, such related work imposes a significant performance impact since the responsive \glspl{element} need to be evaluated at runtime in \gls{Bootstrap}.
 
     Since \gls{ELQ} is plugin based, different plugins may be developed for different use cases without bloating the library \gls{API} or decreasing the overall performance.
     Different related work has different advantages and limitations.
