@@ -2748,43 +2748,21 @@
 
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%% Discussion and Conclusions
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%% Discussion
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \chapter{Discussion and Conclusions}\label{ch:discussion-conclusions}
-
-
-    Recall the problem formulation from Section~\ref{sec:problem}: \problemformulation.
-    The problem was shown in Chapter~\ref{ch:eq} to be solved by element queries.
-    The goal of this thesis was to develop a \gls{third-party} \gls{JavaScript} library that enables developers to use element queries today.
-    Since no syntax or standard has been specified by the \gls{W3C} yet for element queries, the syntax and usage can be formed in any way as long as it solves the problem of conditionally styling \glspl{element} by element criteria.
-    Since the implementation of the \gls{ELQ} library was successful and the library enables element queries in a reliable and performant way, the thesis goal can be considered fulfilled.
+  \chapter{Discussion}\label{ch:discussion}
+    
 
     % The problem of responsive modules have been described, and the solution has been presented to be element queries.
     % The theory of element queries and the current research state has been shown in Section~\ref{}.
-
-
     % All technical goals of \gls{ELQ} have not been fulfilled.
     % However, the technical goals that are important for the general element queries use case have been fulfilled.
-
-
     % The library that enables developers to 
 
     \todo[inline]{Write better intro}
 
     \section{Element queries}
-    As the number of combinations of screen sizes, input mechanisms, etc., increases it is important to develop \gls{responsive} applications so that they can adapt to user devices.
-    As \gls{web} applications are transitioning from being server generated to entirely living on the client, it is also important to develop modules for various positive effects.
-    It has been shown that element queries solve the problem of \gls{responsive} modules, and is therefore an important missing feature of the \gls{web} as a platform.
-
-    Unrestricted element queries (i.e., not restricting target \glspl{element} to special \gls{viewport} \glspl{element}) impose limitations to \glspl{layout engine}, and are therefore infeasible to implement.
-    Possible approaches to overcome most limitations are being discussed by participants of the W3C.
-    One approach is to define a new element behavior (either as a new element or attribute) so that it acts as an individual \gls{viewport} that can be targeted by element queries in order to style children of the \gls{element}.
-    Restrictions would be applied to the \gls{viewport} element so that the layout of the element does not depend on conditionally styled child style properties.
-
-    Unfortunately, there are inherent problems to element queries that seem hard to overcome.
-    First, in order to evaluate selectors that contain element queries matches a layout needs to be performed (since the position and size of the target element can only be retrieved by performing a layout).
-    Then, the \gls{layout engine} might have to perform another layout since new styles could have been applied due to selectors including element queries matching.
-    This needs to be performed until a stable state has been achieved.
+    
     \todo{Are there more inherent issues?}
     \todo{Write about always having to peform at least two layouts?}
 
@@ -2858,57 +2836,93 @@
     Additionally, some solutions used by related work suffer from issues that \gls{ELQ} does not as described in Section~\ref{sec:imp_erd}.
     \todo{Finish this.}
 
-    \section{Future work}
-      It would be beneficial to further investigate possible use cases in order to evaluate if the current plugins are sufficient.
-      Perhaps new plugins would need to be developed, or existing \glspl{API} extended.
-      This is needed in order to be sure that goal~\ref{itm:req_flexible} is satisfied.
+  \chapter{Conclusions}\label{ch:conclusions}
+    As the number of combinations of screen sizes, input mechanisms, etc., increases it is important to develop \gls{responsive} applications so that they can adapt to different end-user devices and usages.
+    Modular development is also desired for various positive effects.
+    The problem is that modules cannot be responsive, due to \gls{CSS} media queries not being able to conditionally style elements by element criteria.
+    It has been shown that element queries solve the problem of \gls{responsive} modules, and is therefore an important missing feature of the \gls{web} as a platform.
+    
+    A plugin-based element queries \gls{JavaScript} library, named \gls{ELQ}, has been developed that contains subsystems to be used by element queries plugins.
+    Examples of such subsystems are a leveled \glslink{batch processing}{batch processor}, an \gls{element} resize detector, and a cycle detector.
+    Two plugins have been developed: \code{elq-breakpoints} that is used to conditionally style elements by element criteria, and \code{elq-mirror} that is used to overcome some limitations of \gls{CSS}.
+    The library and the plugins have been designed to conform to the standards and specifications of the \gls{web} languages, which has been valuable when integrating the solution into existing projects.
 
-      \paragraph{Extending the mirror plugin}
-      In order to allow more advanced element query constellations, \code{elq-mirror} could be extended to enable mirror \glspl{element} to target arbitrary \glspl{element} (instead of just the nearest \code{elq-breakpoints} ancestor \gls{element}).
-      This way, it would be possible to write element queries against children, siblings, etc.
-      This would also be a key feature in order to further satisfy goal~\ref{itm:req_flexible}.
+    Recall that the main objective of this thesis is to design and develop a \gls{third-party} non-\gls{native} library that enables element queries in both modern and legacy \glspl{browser}.
+    The scientific question is if it is possible to construct such library that has high reliability, adequate performance, and enough features to support advanced compositions of responsive modules.
+    The empirical evaluation of \gls{ELQ} shows that it is both reliable and provides enough features for advanced \gls{web} applications such as the \gls{Bootstrap} framework and documentation page.
+    Adequate browser compatibility is also provided, since \gls{ELQ} supports the same set of browsers as the \gls{Bootstrap} framework does.
+    \gls{ELQ} has been shown to have the same or better performance as related work.
+    In Chrome, the speedup is 32-fold when operating on 500 \glspl{element} compared to related work that uses the object-based \gls{element} resize detection subsystem.
+    Also, the evaluation shows that the library is easy to integrate into existing projects since only \textasciitilde50 lines out of \textasciitilde8500 lines of style code was needed to be altered for \gls{Bootstrap} to be fully based on element queries.
+    Therefore, the scientific question is answered in the affirmative.
 
-      \paragraph{Prolyfill}
-      To satisfy goal~\ref{itm:req_prolyfill} an element queries prolyfill plugin could be created that would parse custom at runtime \gls{CSS} to simulate \gls{native} element queries.
-      It would then use an imaginary syntax of element queries, which could only be guessed at this point of time.
-      Before any advancement has been made by the RICG regarding the syntax, the pseudo-syntax presented in Section~\ref{sec:eq-definitions} is a good start.
 
-      \paragraph{Static layout}
-      More research can be done regarding static pages that wish to use element queries, since the main focus of this thesis has been dynamic pages.
-      It is possible that the best approach to static pages is to parse custom \gls{CSS} at server side in order to generate static \gls{media queries}.
-      \Gls{media queries} are at the moment the most performant way of applying conditional styles by \gls{viewport} size, which possibly is the only factor to static page layout.
-      However, it is uncertain if the \gls{viewport} size is the only layout factor to static pages as \gls{browser} and user styles might affect pages in a way that would imply that a layout change is desired without affecting the \gls{viewport} size.
+    % The goal of this thesis was to develop a \gls{third-party} \gls{JavaScript} library that enables developers to use element queries today.
+    % Since no syntax or standard has been specified by the \gls{W3C} yet for element queries, the syntax and usage can be formed in any way as long as it solves the problem of conditionally styling \glspl{element} by element criteria.
+    % Since the implementation of the \gls{ELQ} library was successful and the library enables element queries in a reliable and performant way, the thesis goal can be considered fulfilled.
 
-      \paragraph{Performance}
-      As of now, different subsystems of \gls{ELQ} are forced to create their own \glslink{batch processing}{batch} processor, which is favorable in some cases.
-      However, it can also be favorable to have a shared instance of a \glslink{batch processing}{batch} processor in order to avoid unnecessary layouts between subsystems.
-      For instance, the element resize detection subsystem and the \code{elq-breakpoints} plugin both use a \glslink{batch processing}{batch} processor to avoid \gls{layout thrashing}.
-      However, since they process their \glslink{batch processing}{batches} independent of each other, the element resize detection subsystem forces a layout before the plugin \glslink{batch processing}{batch} processor is invoked.
-      This means that two layouts are performed, when in theory only one is needed.
-      This could be solved by sharing a \glslink{batch processing}{batch} processor between them so that read, write, and force operations are executed synchronized with each other.
 
-      \paragraph{Flash of invalid layout}
-      It would be possible to prevent the flash of invalid layout during page reloads, by saving all element styles states to a persistent local \gls{browser} storage.
-      When the page reloads, a script can be executed that reads the element styles states of the local storage and applies the breakpoint classes to all \glspl{element} before the first layout.
-      This way, all \glspl{element} would have the right classes before a layout is performed by the \gls{layout engine} and thus resulting in an instant valid page layout.
-      However, this still would not avoid the invalid layout when the page is loaded for the first time.
-      Also, it is unclear if such approach would work as it might be hard to control script execution to happen before the first layout.
+    % Unrestricted element queries (i.e., not restricting target \glspl{element} to special \gls{viewport} \glspl{element}) impose limitations to \glspl{layout engine}, and are therefore infeasible to implement.
+    % Possible approaches to overcome most limitations are being discussed by participants of the W3C.
+    % One approach is to define a new element behavior (either as a new element or attribute) so that it acts as an individual \gls{viewport} that can be targeted by element queries in order to style children of the \gls{element}.
+    % Restrictions would be applied to the \gls{viewport} element so that the layout of the element does not depend on conditionally styled child style properties.
 
-      \paragraph{Parsing CSS}
-      Event though there are several issues with runtime parsing of CSS, it is probably beneficial in some cases.
-      Recall from Section~\ref{sec:imp_erd} that CSS selectors may unintentionally style the injected \glspl{element} of the element resize detection subsystem.
-      By parsing CSS it would be possible to warn developers of such selectors.
-      The feature could be valuable in the development phase of applications, but should probably be disabled in production due to performance reasons.
-      Users that value true separation of style and \gls{HTML} could also benefit from parsing CSS, as the breakpoints of all \glspl{element} then could be deduced by considering the element queries in the CSS.
+    % Unfortunately, there are inherent problems to element queries that seem hard to overcome.
+    % First, in order to evaluate selectors that contain element queries matches a layout needs to be performed (since the position and size of the target element can only be retrieved by performing a layout).
+    % Then, the \gls{layout engine} might have to perform another layout since new styles could have been applied due to selectors including element queries matching.
+    % This needs to be performed until a stable state has been achieved.
 
-      \paragraph{Element resize detection}
-      As shown in Section~\ref{sec:eval-perf-erd}, different solutions of detecting \gls{element} resize events are preferred for some \glspl{browser}.
-      The \gls{ELQ} \gls{element} resize detection subsystem could easily be extended to detect the \gls{layout engine} context at runtime and then choose a specific solution for that \glslink{layout engine}{engine}.
-      This way, the best solution could be used for each \gls{layout engine}.
+  \chapter{Future work}
+    It would be beneficial to further investigate possible use cases in order to evaluate if the current plugins are sufficient.
+    Perhaps new plugins would need to be developed, or existing \glspl{API} extended.
+    This is needed in order to be sure that goal~\ref{itm:req_flexible} is satisfied.
 
-      \todo[inline]{Fulfill all technical goals. Which ones?}
-      \todo[inline]{ERD could automatically use the best solution based on the \gls{layout engine}.}
-      \todo[inline]{Write that eq are theoretically not limited to sizes, could be any property of \glspl{element}!}
+    \paragraph{Extending the mirror plugin}
+    In order to allow more advanced element query constellations, \code{elq-mirror} could be extended to enable mirror \glspl{element} to target arbitrary \glspl{element} (instead of just the nearest \code{elq-breakpoints} ancestor \gls{element}).
+    This way, it would be possible to write element queries against children, siblings, etc.
+    This would also be a key feature in order to further satisfy goal~\ref{itm:req_flexible}.
+
+    \paragraph{Prolyfill}
+    To satisfy goal~\ref{itm:req_prolyfill} an element queries prolyfill plugin could be created that would parse custom at runtime \gls{CSS} to simulate \gls{native} element queries.
+    It would then use an imaginary syntax of element queries, which could only be guessed at this point of time.
+    Before any advancement has been made by the RICG regarding the syntax, the pseudo-syntax presented in Section~\ref{sec:eq-definitions} is a good start.
+
+    \paragraph{Static layout}
+    More research can be done regarding static pages that wish to use element queries, since the main focus of this thesis has been dynamic pages.
+    It is possible that the best approach to static pages is to parse custom \gls{CSS} at server side in order to generate static \gls{media queries}.
+    \Gls{media queries} are at the moment the most performant way of applying conditional styles by \gls{viewport} size, which possibly is the only factor to static page layout.
+    However, it is uncertain if the \gls{viewport} size is the only layout factor to static pages as \gls{browser} and user styles might affect pages in a way that would imply that a layout change is desired without affecting the \gls{viewport} size.
+
+    \paragraph{Performance}
+    As of now, different subsystems of \gls{ELQ} are forced to create their own \glslink{batch processing}{batch} processor, which is favorable in some cases.
+    However, it can also be favorable to have a shared instance of a \glslink{batch processing}{batch} processor in order to avoid unnecessary layouts between subsystems.
+    For instance, the element resize detection subsystem and the \code{elq-breakpoints} plugin both use a \glslink{batch processing}{batch} processor to avoid \gls{layout thrashing}.
+    However, since they process their \glslink{batch processing}{batches} independent of each other, the element resize detection subsystem forces a layout before the plugin \glslink{batch processing}{batch} processor is invoked.
+    This means that two layouts are performed, when in theory only one is needed.
+    This could be solved by sharing a \glslink{batch processing}{batch} processor between them so that read, write, and force operations are executed synchronized with each other.
+
+    \paragraph{Flash of invalid layout}
+    It would be possible to prevent the flash of invalid layout during page reloads, by saving all element styles states to a persistent local \gls{browser} storage.
+    When the page reloads, a script can be executed that reads the element styles states of the local storage and applies the breakpoint classes to all \glspl{element} before the first layout.
+    This way, all \glspl{element} would have the right classes before a layout is performed by the \gls{layout engine} and thus resulting in an instant valid page layout.
+    However, this still would not avoid the invalid layout when the page is loaded for the first time.
+    Also, it is unclear if such approach would work as it might be hard to control script execution to happen before the first layout.
+
+    \paragraph{Parsing CSS}
+    Event though there are several issues with runtime parsing of CSS, it is probably beneficial in some cases.
+    Recall from Section~\ref{sec:imp_erd} that CSS selectors may unintentionally style the injected \glspl{element} of the element resize detection subsystem.
+    By parsing CSS it would be possible to warn developers of such selectors.
+    The feature could be valuable in the development phase of applications, but should probably be disabled in production due to performance reasons.
+    Users that value true separation of style and \gls{HTML} could also benefit from parsing CSS, as the breakpoints of all \glspl{element} then could be deduced by considering the element queries in the CSS.
+
+    \paragraph{Element resize detection}
+    As shown in Section~\ref{sec:eval-perf-erd}, different solutions of detecting \gls{element} resize events are preferred for some \glspl{browser}.
+    The \gls{ELQ} \gls{element} resize detection subsystem could easily be extended to detect the \gls{layout engine} context at runtime and then choose a specific solution for that \glslink{layout engine}{engine}.
+    This way, the best solution could be used for each \gls{layout engine}.
+
+    \todo[inline]{Fulfill all technical goals. Which ones?}
+    \todo[inline]{ERD could automatically use the best solution based on the \gls{layout engine}.}
+    \todo[inline]{Write that eq are theoretically not limited to sizes, could be any property of \glspl{element}!}
 
   \printbibliography
   \clearpage
