@@ -2759,14 +2759,15 @@
     % However, the technical goals that are important for the general element queries use case have been fulfilled.
     % The library that enables developers to 
 
+
     \todo[inline]{Write better intro}
 
-    \section{Element queries}
+    % \section{Element queries}
     
     \todo{Are there more inherent issues?}
     \todo{Write about always having to peform at least two layouts?}
 
-    \section{ELQ}
+    % \section{ELQ}
     It has been identified that requirements and usages of element queries vary from case to case, and it is therefore beneficial to provide a plugin-based library so that developers can tailor their custom solutions by choosing which plugins to use.
     Different parts of the library have also been shown to have different development rates, which also is an argument in favor to having the library plugin-based.
     Two plugins were developed that enables adequately advanced features for the general use case (as described in Section~\ref{sec:eq-definitions}) that satisfies goals \ref{itm:req_conditional_css} and \ref{itm:req_bp_js}.
@@ -2856,12 +2857,7 @@
     Also, the evaluation shows that the library is easy to integrate into existing projects since only \textasciitilde50 lines out of \textasciitilde8500 lines of style code was needed to be altered for \gls{Bootstrap} to be fully based on element queries.
     Therefore, the scientific question is answered in the affirmative.
 
-
-    % The goal of this thesis was to develop a \gls{third-party} \gls{JavaScript} library that enables developers to use element queries today.
-    % Since no syntax or standard has been specified by the \gls{W3C} yet for element queries, the syntax and usage can be formed in any way as long as it solves the problem of conditionally styling \glspl{element} by element criteria.
-    % Since the implementation of the \gls{ELQ} library was successful and the library enables element queries in a reliable and performant way, the thesis goal can be considered fulfilled.
-
-
+    % \paragraph{Native element queries}
     % Unrestricted element queries (i.e., not restricting target \glspl{element} to special \gls{viewport} \glspl{element}) impose limitations to \glspl{layout engine}, and are therefore infeasible to implement.
     % Possible approaches to overcome most limitations are being discussed by participants of the W3C.
     % One approach is to define a new element behavior (either as a new element or attribute) so that it acts as an individual \gls{viewport} that can be targeted by element queries in order to style children of the \gls{element}.
