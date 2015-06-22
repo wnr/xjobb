@@ -319,8 +319,7 @@
     \section{Problem statement}\label{sec:problem}
       By using \gls{CSS} \gls{media queries}, developers can specify different style rules for different \gls{viewport} sizes.
       This is fundamental to creating \gls{responsive} \gls{web} applications, as shown in Section~\ref{sec:rwd}.
-      If developers want to build modular applications by composing the application by smaller modules (\glspl{element}, scripts, styles, etc.) \gls{media queries} are no longer applicable.
-      \todo[color=red]{Tomas: The reader could misundestand this as modular design is about putting all scripts with scripts, styles with styles, etc.}
+      If developers want to build modular applications by composing the application by smaller modules \gls{media queries} are no longer applicable.
       \Gls{responsive} modules should be able to react and change style depending on the size that the module has been given by the application, not the \gls{viewport} size. \todo{Do I need to have a reference for this?}
       The problem can be formulated as: \problemformulation.
 
@@ -349,27 +348,26 @@
       %   \todo{Same here as above.}
       % \end{itemize}
     \section{Objective}
-      The main objective of this thesis is to design and develop a \gls{third-party} non-\gls{native} library that enables element queries in current and legacy \glspl{browser}.
+      The main objective of this thesis is to design and develop a \gls{third-party} non-\gls{native} library that enables element queries in modern and legacy \glspl{browser}.
+      The scientific question is if it is possible to construct such library that has high reliability, adequate performance, and enough features to support advanced responsive constellations.
+      The hypothesis is that it is possible to construct such library, which has been shown to be true by the library presented in Chapter~\ref{ch:library}.
+
       Since modules cannot make any assumptions about the usage context, both static and dynamic pages must be supported.
       Element queries operating in dynamic pages are more complicated, and therefore the focus of this thesis is to enable element queries in dynamic pages.
       To do so it is necessary to be aware of the premises, such as \gls{browser} limitations and specifications that one must conform to.
-      Research will be done about the problems of implementing element queries \glslink{native}{natively}, to get a deeper understanding of the potential shape of a standardized \gls{API}.
-      Solving the main problem requires research and empirical studies of many subproblems.
-      Examples of such subproblems that needs to be addressed are:
+      Research has been done about the problems of implementing element queries \glslink{native}{natively}, in order to get a deeper understanding of the potential shape of a standardized \gls{API}.
+      Solving the main problem requires research and empirical studies of subproblems.
+      Examples of such subproblems that are addressed in this thesis:
       \begin{itemize}
         \item Should circularity be handled? If yes, should it be detected at runtime or parsetime, and what should happen on detection?
         \item How can one observe \gls{element} size changes without any \gls{native} support?
+        \item How can compatibility with legacy \glspl{browser} be achieved without \gls{native} support?
         \item
           How can a custom \gls{API} be crafted that will enable element queries and still conform to the language specifications? Is it possible to create an \gls{API} that feels natural to \gls{web} developers and works in tandem with other tools and libraries?
           For instance, if the \gls{API} requires custom \gls{CSS} syntax then \gls{CSS} preprocessors, linters and validators cannot be used anymore.
           Likewise, if the \gls{API} requires a special \gls{element} handling process, it could be hard to use with popular libraries. \todo{Should I give examples like Angular React Backbone Bootstrap?}
         \item Is it possible to solve the problem with adequate performance for large applications that make heavy use of \gls{responsive} modules?
-        \item How can adequate \gls{browser} compatibility with legacy \glspl{browser} be achieved without \gls{native} support?
       \end{itemize}
-      The scientific question to be answered is if it is possible to solve the problem without extending any language specification of the \gls{web}.
-      The hypothesis is that the problem can be solved with high reliability and adequate performance by developing a \gls{third-party} non-\gls{native} implementation.
-      The goal of this thesis should be considered fulfilled if a solution was successfully implemented or described, or if the problems hindering a solution are thoroughly documented.
-      \todo[inline,color=red]{Tomas: Remove this paragraph. Should state what have been done instead.}
 
     \section{Significance}
       \todo[inline,color=red]{Tomas: Maybe more general or more specific. If details have to be presented, then the reader has to be able to understand it.}
@@ -388,26 +386,28 @@
 
       Solving this problem would be a big advancement to \gls{web} development, enabling developers to create truly \gls{responsive} modules.
       By studying the problem, identifying approaches and providing a \gls{third-party} solution the community can take a step closer to solve the problem \glslink{native}{natively}.
-      If the hypothesis holds, developers will be able to use element queries in the near future, while waiting for the \gls{W3C} to standardize a solution.
-      \todo[color=red]{Tomas: The hypothesis should be valid or invalid at the time the report is handed in.}
+      Since the hypothesis has been shown to hold, developers are able to use element queries in the near future by using the constructed library, while waiting for the \gls{W3C} to standardize a solution.
       The outcome of this thesis can also be helpful for the \gls{W3C} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
-    \section{Scope}
+    \section{Delimitation}
       The focus of this thesis lies on developing a \gls{third-party} non-\gls{native} library that enables developers to use element queries.
-      All theoretical studies and work will be performed to support the development of the library.
+      All theoretical studies and work has been performed to support the development of the library.
+      The problems of implementing element queries \glslink{native}{natively} is addressed, but no efforts has been made to solve the problems.
+      Also, no \gls{API} or similar has been designed for a \gls{native} solution.
+      Graphical design of end-user interfaces is not addressed, other than necessary for understanding the problem.
 
-      \subsection{What will be done}
-      \begin{itemize}
-      \item A \gls{third-party} non-\gls{native} implementation of element queries will be developed.
-      \item The problems of implementing element queries \glslink{native}{natively} will be addressed.
-      \item Theory about \glspl{layout engine}, programming languages of the \gls{web}, \gls{responsive} \gls{web} design and modularity will be given to fully understand the problem.
-      \end{itemize}
+      % \paragraph{What has been done}
+      % \begin{itemize}
+      % \item A \gls{third-party} non-\gls{native} implementation of element queries has been developed.
+      % \item 
+      % \item 
+      % \end{itemize}
 
-      \subsection{What will not be done}
-      \begin{itemize}
-      \item No efforts will be made to solve the problems accompanied with a \gls{native} solution.
-      \item No \gls{API} or similar will be designed for a \gls{native} solution.
-      \item Graphical design of end-user interfaces will not be addressed, other than necessary for understanding the problem.
-      \end{itemize}
+      % \paragraph{What has not been done}
+      % \begin{itemize}
+      % \item 
+      % \item 
+      % \item 
+      % \end{itemize}
     \section{Outline}
       \newcommand{\chref}[1]{Chapter~\ref{#1}, \emph{\nameref{#1}},}
       \chref{ch:background} presents the background of this thesis and aims to provide sufficient information about \gls{web} development and \glspl{layout engine} to understand the problem and solution.
