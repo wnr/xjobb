@@ -410,6 +410,8 @@
     \section{Choice of methodology}
       The results and conclusions of this thesis are based on a scientific study using an iterative development process evaluated by empirical studies.
       The library design is motivated by identified requirements of element queries, which has been gathered partly by the literature study and studies of existing responsive applications.
+      To write the non-\gls{native} library in \gls{JavaScript} was chosen because it is the common denominator scripting language of browsers.
+      For increased compatibility and ease of use it was chosen to not write the library in any language that compiles to \gls{JavaScript}.
 
       The performance and browser compatibility of the library has been evaluated by empirically testing the library in different browsers.
       Since there are numerous related libraries only the performance of the element resize detection subsystem of the libraries has been evaluated.
@@ -421,6 +423,11 @@
       It is hard to objectively evaluate features and \gls{API} designs, but some objective data was gathered by the evaluation.
       The \gls{Bootstrap} framework was chosen because it consists of a large open source codebase and is widely used as a foundation of many responsive applications.
       Only the constructed library was evaluated, since it could be concluded by analyzing the related libraries that none would be able to achieve similar results.
+
+      The premises of the library development method are considered valid since a \gls{JavaScript} library is the natural choice when creating a browser extension that are to be used by other developers.
+      The premises of the \gls{Bootstrap} altering method are considered valid since \gls{Bootstrap} is widely used in production, has a large code base, and has sufficiently advanced responsive features that is needed for such evaluation to be sound.
+      The premises of the performance evaluation method are considered valid since it is possible to evaluate different systems in the same configuration in order to achieve comparable results.
+
     \section{Outline}
       \newcommand{\chref}[1]{Chapter~\ref{#1}, \emph{\nameref{#1}},}
       \chref{ch:background} presents the background of this thesis and aims to provide sufficient information about \gls{web} development and \glspl{layout engine} to understand the problem and solution.
