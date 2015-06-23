@@ -11,7 +11,7 @@
 \usepackage{csquotes}
 \usepackage[swedish,english]{babel}
 \usepackage{modifications}
-\usepackage[backend=biber]{biblatex}
+\usepackage[backend=biber,style=numeric,defernumbers=true,sorting=nty]{biblatex}
 \usepackage{multirow}
 \usepackage{hyperref}
 \hypersetup{
@@ -218,6 +218,13 @@
 \newacronym{OS}{OS}{Operating System}
 \newacronym{CCSS}{CCSS}{Constraint Cascading Style Sheets}
 \newacronym{VFL}{VFL}{Visual Format Language}
+
+\DeclareBibliographyCategory{relatedlibraries}
+\addtocategory{relatedlibraries}{eq_imp_localised-css,eq_imp_breakpointsjs,eq_imp_mediaclass,eq_imp_elementquery,eq_imp_element-queries,eq_imp_responsive-elements,eq_imp_magichtml,eq_imp_sickles,eq_imp_css-element-queries,eq_imp_responsive-elements-2,eq_imp_selector_queries,eq_imp_eqjs,eq_imp_breaks2000,eq_imp_classquery,eq_imp_eqcss,eq_imp_gss,eq_imp_prollyfill-min-width}
+\DeclareBibliographyCategory{theses}
+\addtocategory{theses}{mjelde2014performance}
+\DeclareBibliographyCategory{w3cmaterial}
+\addtocategory{w3cmaterial}{w3c_dom,w3c_dom_4,w3c_dom2_events,w3c_css_style_attr,w3c_visuren,w3c_css_mq,w3c_css_selectors,ricg_draft,w3c_www,ricg_site,w3c_eq_mail,ricg_irc_log,ricg_issue_viewport}
 
 % \renewcommand*{\glstextformat}[1]{\textsf{#1}}
 \defglsdisplayfirst[\glsdefaulttype]{\textit{#1}}
@@ -2924,13 +2931,27 @@
     \todo[inline]{ERD could automatically use the best solution based on the \gls{layout engine}.}
     \todo[inline]{Write that eq are theoretically not limited to sizes, could be any property of \glspl{element}!}
 
-  \printbibliography
+  \chapter{Bibliography}
+    \defbibfilter{papers}{
+      type=article or
+      type=inproceedings
+    }
+    
+    \printbibliography[type=book,title={Books},heading=subbibliography]
+    \printbibliography[filter=papers,title={Articles},heading=subbibliography]
+    \printbibliography[category=theses,title={Master's theses},heading=subbibliography]
+    \printbibliography[category=w3cmaterial,title={Material of the W3C},heading=subbibliography]
+    \printbibliography[category=relatedlibraries,title={Related Libraries},heading=subbibliography]
+    \printbibliography[type=online,notcategory=relatedlibraries,notcategory=w3cmaterial,title={Online resources},heading=subbibliography]
+
+  % \printbibliography
   \clearpage
   \printnoidxglossary[sort=standard, type=main]
   \printnoidxglossary[sort=standard, type=\acronymtype]
   \appendix
   \addappheadtotoc
     \input{history-of-browsers}
+
     \chapter{Miscellaneous}
       \section{Full-scale Bootstrap figures}
         \begin{figure}[htbp!]
