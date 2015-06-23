@@ -367,9 +367,8 @@
       \begin{itemize}
         \item Should circularity be handled? If yes, should it be detected at runtime or parsetime, and what should happen on detection?
         \item How can one observe \gls{element} size changes without any \gls{native} support?
-        \item How can compatibility with legacy \glspl{browser} be achieved without \gls{native} support?
         \item
-          How can a custom \gls{API} be crafted that will enable element queries and still conform to the language specifications? Is it possible to create an \gls{API} that feels natural to \gls{web} developers and works in tandem with other tools and libraries?
+          How can a custom \gls{API} be crafted that enables element queries and still conform to the language specifications? Is it possible to create an \gls{API} that feels natural to \gls{web} developers and works in tandem with other tools and libraries?
           For instance, if the \gls{API} requires custom \gls{CSS} syntax then \gls{CSS} preprocessors, linters and validators cannot be used anymore.
           Likewise, if the \gls{API} requires a special \gls{element} handling process, it could be hard to use with popular libraries. \todo{Should I give examples like Angular React Backbone Bootstrap?}
         \item Is it possible to solve the problem with adequate performance for large applications that make heavy use of \gls{responsive} modules?
@@ -410,8 +409,8 @@
     \section{Choice of methodology}
       The results and conclusions of this thesis are based on a scientific study using an iterative development process evaluated by empirical studies.
       The library design is motivated by identified requirements of element queries, which has been gathered partly by the literature study and studies of existing responsive applications.
-      To write the non-\gls{native} library in \gls{JavaScript} was chosen because it is the common denominator scripting language of browsers.
-      For increased compatibility and ease of use it was chosen to not write the library in any language that compiles to \gls{JavaScript}.
+      To write the non-\gls{native} library in \gls{JavaScript} was chosen because it is the common scripting language of browsers.
+      For increased compatibility and ease of use it was chosen to not write the library in a language that compiles to \gls{JavaScript}.
 
       The performance and browser compatibility of the library has been evaluated by empirically testing the library in different browsers.
       Since there are numerous related libraries only the performance of the element resize detection subsystem of the libraries has been evaluated.
@@ -523,8 +522,8 @@
 
         Around 1996, client side scripting was born.
         The term \gls{DHTML} was being used as an umbrella term for a collection of technologies used together to make pages interactive and animated, where client side scripting played a big role.
-        Examples of things that were being done with \gls{DHTML} are; refreshing pages for the user so that new content is loaded, give feedback on user input without involving the server and animating content.
-        Plugins also started to exist during this time that enabled \glspl{browser} to handle and execute embedded programs.
+        Examples of things that were being done with \gls{DHTML} are: refreshing pages for the user so that new content is loaded, give feedback on user input without involving the server, and animating content.
+        Plugins also started to exist during this time that enabled \glspl{browser} to execute embedded programs.
         \emph{Java applet}\footnote{A Java applet is a small application that is written in Java and delivered to users in the form of bytecode. See \url{www.java.com}} and \emph{Flash}\footnote{Flash is a multimedia and software platform for producing cross platform interactive animations. See \url{www.flash.com}} are examples of \gls{browser} embedded programs requiring \gls{browser} plugins to execute.
         In concept, users have to install the plugin runtime in order for the \gls{browser} to be able to execute the plugin programs, which is undesired since it adds a barrier between users and the content.
         However, plugins enabled developers to access some capabilities that were lacking in \glspl{browser} (e.g., video playback, programmable graphics, and interactive animations).
@@ -565,7 +564,7 @@
         Since \gls{web} developers were not ready for this rapid change of device properties, they resorted to using the same approach that they had done before --- making assumptions about the user device based on the server request.
         When a \gls{browser} requests a resource, an \emph{\glslink{browser}{user agent} string} is usually sent with the request to identify what kind of \gls{browser} the user is using. \todo{Explain user agent, that all \glspl{browser} are user agents but not the other way around.}
         By reading the \glslink{browser}{user agent} string on the server-side, a mobile-friendly version of the site could be served if the user was sending mobile \glslink{browser}{user agent} strings and the desktop version could be served otherwise.
-        The mobile version would be designed for a maximum width, and the desktop would be designed for a minimum width.
+        The mobile version would be designed for a maximum width, and the desktop for a minimum width.
         
         This was a natural reaction since no better techniques existed, but the approach has many flaws.
         First, developers now have multiple versions of a site to maintain and develop in parallel.
@@ -600,6 +599,7 @@
         \end{lstlisting}
 
         \todo[inline]{Perhaps give an example of a \gls{responsive} module/view so that the reader understands well why \glslink{responsive}{responsiveness} is important. This module/view could then act as a testbed for the different EQ approaches.}
+        \pagebreak
       \subsection{Modularity}\label{sec:modularity}
         As the \gls{web} was a platform for \gls{hypertext} \glspl{document} that quickly transitioned to serving complex applications, few techniques existed for writing modular code.
         In the last couple of years, as client-side applications grew bigger, techniques and libraries have been developed to ease modular development.
@@ -651,16 +651,20 @@
         Recall from Section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} responding to size changes, so that a \gls{document} may be usable on many screen sizes, resolutions, pixel-densities, and media.
         In Section~\ref{sec:modularity} the desire for building \gls{web} modules was presented.
         One positive outcome of building applications in a modular way is that general modules become reusable and complexity is reduced.
-        Therefore, it is desired to extend the \gls{responsive} \gls{web} design concept to also let modules respond to size changes so that a module may be usable in many layouts.
+        Therefore, it is desired to extend the \gls{responsive} \gls{web} design concept to also let modules respond to size changes of the own working area.
         Since the only way of conditionally style \glspl{element} is by using \gls{media queries}, all \gls{responsive} styles must be defined by the application and not by the modules (because only the application knows how much space each module will be given in the application layout).
         The implication of this is that the \gls{HTML} and \gls{JavaScript} can be written in a modular, way but the \gls{CSS} is left for the user of the module to write which somewhat defeats the purpose of writing modules.
         So developers today have two choices: writing modules that are not \gls{responsive} and \gls{encapsulated}, or writing modules that are \gls{responsive} and not \gls{encapsulated} (leaving the styling to the user).        
-        \paragraph{Example}
+
         Suppose that an \gls{encapsulated} \gls{responsive} module is to be developed.
         The module should be colored red when its width is narrow and blue when its width is wide.
         Further, suppose that \gls{media queries} are used to conditionally style the module according to the defined behavior.
         As an example, a page is created that uses four module instances with different widths.
         See figure~\ref{fig:problem-eq} for the desired behavior of the module instances on the example page.
+        Unfortunately, \gls{media queries} cannot be used to achieve this behavior (with the module still being \gls{encapsulated}).
+        See figure~\ref{fig:problem-mq} for the actual behavior of the example page.
+        As evident in the figure, the page is broken since either all instances are colored blue or red.
+        This is due to \gls{media queries} only targeting the \gls{viewport}, and not the actual width given to the instances.
         \begin{figure}[ht]
           \centering
           \begin{minipage}{.5\textwidth}
@@ -673,10 +677,6 @@
           \label{fig:problem-eq}
         \end{figure}
 
-        Unfortunately, \gls{media queries} cannot be used to achieve this behavior (with the module still being \gls{encapsulated}).
-        See figure~\ref{fig:problem-mq} for the actual behavior of the example page.
-        As evident in the figure, the page is broken since either all instances are colored blue or red.
-        This is due to \gls{media queries} only targeting the \gls{viewport}, and not the actual width given to the instances.
         \begin{figure}[ht]
           \centering
           \begin{minipage}{.5\textwidth}
@@ -685,7 +685,7 @@
           \end{minipage}%
           \begin{minipage}{.5\textwidth}
             \centering
-            \includegraphics[width=\linewidth]{images/mq-small}
+            \includegraphics[width=0.7\linewidth]{images/mq-small}
           \end{minipage}
           \caption{
             The module instances of the page do not behave as desired because they are conditionally styled by the \gls{viewport} width, which does not reflect the individual width of the instances.
@@ -772,14 +772,10 @@
         \Glspl{browser} can typically display multiple pages at the same time (by using tabs, multiple windows or frames) where each page has an instance of the \gls{layout engine}.
 
         There are four \glspl{layout engine} that the major \glspl{browser} use, as presented in table~\ref{table:layout_engines}.
-        Since \gls{Blink} is a recent \gls{fork} of \gls{WebKit} they have been grouped together as \gls{WebKit}-based \glspl{layout engine}.
-        This results in three distinct \glspl{layout engine} to consider: \gls{WebKit}, \gls{Gecko} and \gls{Trident}.
-        Due to \gls{Trident} being closed source, only the \gls{WebKit}-based \glspl{layout engine} and \gls{Gecko} will be considered in this section.
-        \todo{Maybe not group WebKit and \gls{Blink} together, as they perform very differently in the erd tests?}
+        It should be noted that although \gls{Blink} is a recent \gls{fork} of \gls{WebKit}, they do differ quite significantly as shown in Chapter~\ref{ch:eval}.
+        Due to \gls{Trident} being closed source, only the \gls{WebKit}, \gls{Blink}, and \gls{Gecko} is considered in this section.
 
         \begin{table}[ht]\center
-          \tiny
-          \begin{minipage}[t]{0.38\linewidth}
             \begin{tabular}[t]{ l l l }
               \textbf{Engine} & \textbf{Browsers} & \textbf{Share} \\
               \hline
@@ -788,20 +784,8 @@
               \gls{Trident} & Internet Explorer & 14.96\% \\
               \gls{Gecko} & Firefox & 12.83\% \\
             \end{tabular}
-          \end{minipage}
-          \hspace{0.1cm}
-          \begin{minipage}[t]{0.42\linewidth}
-            \begin{tabular}[t]{ l l l }
-              \textbf{Engine} & \textbf{Browsers} & \textbf{Share} \\
-              \hline
-              \gls{WebKit} & Safari, Chrome, Opera & 62.02\% \\
-              \gls{Trident} & Internet Explorer & 14.96\% \\
-              \gls{Gecko} & Firefox & 12.83\% \\
-            \end{tabular}
-          \end{minipage}
           \caption{
             The major \glspl{layout engine} and \glspl{browser} with market shares.
-            The table to the right has grouped together \gls{Blink} into \gls{WebKit} since it is a recent for of \gls{WebKit}.
             See Section~\ref{sec:layout_engines_market_share} for more information how the market share data was gathered.}
           \label{table:layout_engines}
         \end{table}
