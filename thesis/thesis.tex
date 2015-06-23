@@ -796,14 +796,11 @@
         %The construction of 
 
       \subsection{Constructing DOM trees}\label{sec:dom-tree}
-        This section is mainly based on \normalfont{\cite{w3c_dom,garsiel2011browsers,w3c_css21,w3c_html}}.
-        \todo{Should it be like this?}
-
-        The \gls{DOM} defines a platform-neutral model for events and node trees, which is used for representing and interacting with \glspl{document}.
+        The \gls{DOM} defines a platform-neutral model for events and node trees, which is used for representing and interacting with \glspl{document} \cite{w3c_dom,w3c_html}.
         The \gls{DOM} provides an interface for programs (\gls{JavaScript} in the \gls{browser}) to access and mutate the structure, style, and content of \glspl{document}.
         \Glspl{element} of the \gls{document} are converted to \gls{DOM} nodes, and therefore the whole \gls{document} is represented as a tree structure of \gls{DOM} nodes which is referred to as the \gls{DOM} tree.
 
-        \Glspl{layout engine} construct \gls{DOM} trees by parsing \gls{HTML} with any included \gls{CSS} and \gls{JavaScript}.
+        \Glspl{layout engine} construct \gls{DOM} trees by parsing \gls{HTML} with any included \gls{CSS} and \gls{JavaScript} \cite{garsiel2011browsers,w3c_css21}.
         Parsing of \gls{HTML} is not an easy task, partly because it is expected (although not required) of \glspl{layout engine} to be forgiving of errors, such as handling malformed \gls{HTML}.
         As \gls{CSS} and \gls{JavaScript} are stricter, their grammar can be expressed in a formal syntax and can therefore be parsed with a context free grammar parser.
         Another big quirk to parsing \gls{HTML} is that it is reentrant that means that the source may change during parsing, see listing~\ref{code:reentrant-html}.
@@ -902,6 +899,8 @@
         The computed value is either the absolute length, calculated percentage of the containing block or what the \gls{browser} decides (in case of \code{auto}).
         If a property may inherit values, it will inherit the value of the first ancestor that has a value that is not \code{inherited}.
 
+        This process resolves most style properties, but as stated in Section~\ref{sec:render-tree} some properties require a layout in order to be resolved.
+
         \begin{table}[ht]\center
           \tiny
           \begin{tabular}[t]{ r | l }
@@ -917,7 +916,6 @@
           \label{table:css_property_definition}
         \end{table}
 
-        This process will resolve most style properties, but as stated in Section~\ref{sec:render-tree} some properties require a layout in order to be resolved.
 
         \todo[inline]{Explain the syntax of CSS?}
 
@@ -982,12 +980,12 @@
 
         \begin{figure}[ht]
           \centering
-          \includegraphics[scale=0.7]{images/layout-thrashing-example-1-big}
+          \includegraphics[scale=0.6]{images/layout-thrashing-example-1-big}
           \includegraphics[scale=0.6]{images/layout-thrashing-example-1}
           \caption{Two timeline figures of executing the example code given in listing~\ref{code:thrashing-example}. Both figures show the same timeline, where the top figure shows the whole execution and the bottom only shows a small section of the execution. Notice that they do not share the same time axis. Here it is clear that \gls{layout thrashing} occurs, since layout is being done repeatedly throughout the whole execution (each iteration in the loop).}
           \label{fig:layout-thrashing-example-1}
         \end{figure}
-        
+        \pagebreak
         To avoid \gls{layout thrashing}, the computed style requests and \gls{DOM} mutations need to be performed in \glslink{batch processing}{batches}, as presented in listing~\ref{code:thrashing-example-fixed}.
         While it is algorithmically inefficient to iterate over the same collection twice --- the \glslink{batch processing}{batched} approach executes \textasciitilde100 times faster than the original version.
         \begin{lstlisting}[gobble=10,caption={Example of avoiding \gls{layout thrashing} by \gls{batch processing} reads and writes to the \gls{DOM}. The code reads and double the widths of 1000 \glspl{element} in \textasciitilde7 ms.}, captionpos=b, label={code:thrashing-example-fixed}]
@@ -1452,6 +1450,7 @@
       Some projects value simplicity and ease of use, while other projects demand advanced features and high performance.
       The requirements can be grouped into four categories: features, ease of use, performance and compatibility.
       Identified requirements of the library are the following:
+      \pagebreak
       \begin{enumerate}
         \item \textbf{Features}
           \begin{enumerate}
@@ -1497,7 +1496,7 @@
       To decide if a subsystem of the solution should be in the library core or a plugin is a difficult task.
       A balance needs to be found between ease of use, performance and extendibility.
       All subsystems of the core need to provide a fundamental functionality to the library and also need to be general enough to be used by plugins in different ways.
-      If a plugin needs to write a custom version of a subsystem in the core in order to work, the subsystem is just an extra payload to be loaded (one needs keep it mind that the number of bytes counts on the \gls{web} as the code is transferred over network).
+      If a plugin needs to write a custom version of a subsystem in the core in order to work, the subsystem is just an extra payload to be loaded.
       Each subsystem added to the core will impact the performance negatively (by slower load time in the best case) for all users, so they must impose a real value to existing and future plugins.
       The subsystems of the core always have the risk of being redundant, unnecessary and in other ways unwanted for some use cases.
       Therefore it is important that it is possible for developers to either remove them or change them.
