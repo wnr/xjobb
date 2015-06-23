@@ -384,16 +384,23 @@
       Modules should be \gls{encapsulated} and may not require the user to perform some of the module logic in order to work.
       Another option would be to make modules context-aware so they can style themselves according to the \gls{viewport}, but then they would not be reusable (since they assume a specific context).
       Also, changes to the application layout would then require a rewrite of the \gls{media queries} of the modules to take the new layout into account.
-      Clearly, no sound option exists for having \gls{responsive} modules.
+      Clearly, no sound option exists for having \gls{responsive} modules and solving this problem would be a big advancement to \gls{web} development.
 
       The last couple of years a lot of articles have been written about the problem and how badly \gls{web} developers need element queries \cite{eq_article_localised-css,eq_article_backalley,eq_article_mqhack,eq_article_tabatkjr,eq_article_filament,eq_article_tyson,eq_article_neal,eq_article_css-tricks,eq_article_hugo,eq_article_fremycompany,eq_article_discource,eq_article_matt}.
       As already stated in Section~\ref{sec:problem}, non-\gls{native} implementation efforts have been made with moderate success.
       The \gls{W3C} receives requests and questions about it, and the \gls{RICG} have started writing a draft about element queries use cases \cite{ricg_draft}.
+      This thesis may be helpful for the \gls{W3C} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
 
-      Solving this problem would be a big advancement to \gls{web} development, enabling developers to create truly \gls{responsive} modules.
-      By studying the problem, identifying approaches and providing a \gls{third-party} solution the community can take a step closer to solve the problem \glslink{native}{natively}.
-      Since the scientific question has been answered in the affirmitive, developers will be able to use element queries in the near future by using the constructed library, while waiting for the \gls{W3C} to standardize a solution.
-      The outcome of this thesis can also be helpful for the \gls{W3C} and others to get an overview of the problem and possibly get ideas how subproblems can be handled.
+      With the developed element queries library presented in this thesis, developers are enabled to create truly \gls{responsive} modules while waiting for the \gls{W3C} to standardize a solution.
+      The novelty of the library is that it is performant, compatible, flexible, powerful, and extensible.
+      Any other related library does not provide such positive properties.
+      The library provides a unique way to overcome some limitations of \gls{CSS} without requiring invalid syntax or parsing of \gls{CSS}.
+      Related work that overcome similar limitations require invalid syntax, which brings many drawbacks (e.g., reduced performance and development tools incompatibility).
+      It has also been shown that the library has significantly better performance than related work in most configurations.
+      Further, the \glspl{API} of the library makes it easy to integrate into existing projects, which has been shown by altering the \gls{Bootstrap} framework to use element queries instead of \gls{media queries} by only altering \textasciitilde50 lines of style code.
+      No related library is currently capable of such positive results.
+      The library is able to provide such positive properties while still maintaining compatibility with legacy browsers (down to Internet Explorer version 8).
+      
     \section{Delimitation}
       The focus of this thesis lies on developing a \gls{third-party} non-\gls{native} library that enables developers to use element queries.
       All theoretical studies and work have been performed to support the development of the library.
