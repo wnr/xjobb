@@ -2859,14 +2859,17 @@
 
     Recall that the main objective of this thesis is to design and develop a \gls{third-party} non-\gls{native} library that enables element queries in both modern and legacy \glspl{browser}.
     The scientific question is if it is possible to construct such library that has high reliability, adequate performance, and enough features to support advanced compositions of responsive modules.
+
     The empirical evaluation of \gls{ELQ} shows that it is both reliable and provides enough features for advanced \gls{web} applications such as the \gls{Bootstrap} framework and documentation page.
     Adequate browser compatibility is also provided, since \gls{ELQ} supports the same set of browsers as the \gls{Bootstrap} framework does.
-    \gls{ELQ} has been shown to have the same or better performance as related work.
+    \gls{ELQ} has been shown to have overall significantly better performance than related work.
+    Some related work achieve the same performance as \gls{ELQ} in Safari, but not in other \glspl{browser}.
     In Chrome, the speedup is 32-fold when operating on 500 \glspl{element} compared to related work that uses the object-based \gls{element} resize detection subsystem.
     Also, the evaluation shows that the library is easy to integrate into existing projects since only \textasciitilde50 lines out of \textasciitilde8500 lines of style code was needed to be altered for \gls{Bootstrap} to be fully based on element queries.
     Therefore, the scientific question is answered in the affirmative.
 
-    % Developers can now use element queries to create responsive modules, as the \gls{ELQ} library is performant, compatible, flexible, powerful, and extensible.
+    Since \gls{ELQ} is released as open source, developers can now use element queries to create responsive modules as \gls{ELQ} is performant, compatible, flexible, powerful, and extensible.
+    Such positive properties are not provided by any other related library.
 
     % \paragraph{Native element queries}
     % Unrestricted element queries (i.e., not restricting target \glspl{element} to special \gls{viewport} \glspl{element}) impose limitations to \glspl{layout engine}, and are therefore infeasible to implement.
