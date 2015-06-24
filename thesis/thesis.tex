@@ -691,8 +691,8 @@
           \caption{
             The module instances of the page do not behave as desired because they are conditionally styled by the \gls{viewport} width, which does not reflect the individual width of the instances.
             All instances are always either colored blue or red, depending on the \gls{viewport} width.
-            In the left figure, the \gls{viewport} is wide and therefore all instances are colored blue.
-            In the right figure, the \gls{viewport} is narrow and therefore all instances are colored red.
+            In the left image, the \gls{viewport} is wide and therefore all instances are colored blue.
+            In the right image, the \gls{viewport} is narrow and therefore all instances are colored red.
           }
           \label{fig:problem-mq}
         \end{figure}
@@ -984,7 +984,7 @@
           \centering
           \includegraphics[scale=0.6]{images/layout-thrashing-example-1-big}
           \includegraphics[scale=0.6]{images/layout-thrashing-example-1}
-          \caption{Two timeline figures of executing the example code given in listing~\ref{code:thrashing-example}. Both figures show the same timeline, where the top figure shows the whole execution and the bottom only shows a small section of the execution. Notice that they do not share the same time axis. Here it is clear that \gls{layout thrashing} occurs, since layout is being done repeatedly throughout the whole execution (each iteration in the loop).}
+          \caption{Two timeline images of executing the example code given in listing~\ref{code:thrashing-example}. Both images show the same timeline, where the top image shows the whole execution and the bottom only shows a small section of the execution. Notice that they do not share the same time axis. Here it is clear that \gls{layout thrashing} occurs, since layout is being done repeatedly throughout the whole execution (each iteration in the loop).}
           \label{fig:layout-thrashing-example-1}
         \end{figure}
         \pagebreak
@@ -1021,7 +1021,7 @@
         \begin{figure}[ht]
           \centering
           \includegraphics[scale=0.7]{images/layout-thrashing-example-1-fixed}
-          \caption{A timeline of executing the example code given in listing~\ref{code:thrashing-example-fixed}. It is clear in the figure that \gls{layout thrashing} does not occur, since all style computations and layout is performed in a \glslink{batch processing}{batch} after that the example code has finished executing.}
+          \caption{A timeline of executing the example code given in listing~\ref{code:thrashing-example-fixed}. It is clear in the image that \gls{layout thrashing} does not occur, since all style computations and layout is performed in a \glslink{batch processing}{batch} after that the example code has finished executing.}
           \label{fig:layout-thrashing-example-1-fixed}
         \end{figure}
 
@@ -2129,12 +2129,12 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Empirical Evaluation
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{Empirical Evaluation}\label{ch:eval}
-    This chapter presents the empirical evaluation that has been done of the \gls{ELQ} library.
+    This chapter presents the empirical evaluation of the \gls{ELQ} library.
     The main focus of the evaluation has been to evaluate objective concepts of the library in order to achieve comparable results.
 
 
     Section~\ref{sec:eval-bootstrap} evaluates the \glspl{API} by a case study that alters the popular \gls{Bootstrap} framework to use element queries.
-    \gls{Bootstrap} uses \gls{media queries} to provide \gls{responsive} \gls{CSS} classes that often are desired to use in \gls{web} applications.
+    \gls{Bootstrap} uses \gls{media queries} to provide \gls{responsive} \gls{CSS} classes that are often desired to use in \gls{web} applications.
     By using element queries instead, the classes become \gls{encapsulated} and can be used in \gls{responsive} modules.
     Section~\ref{sec:eval-performance} evaluates the performance of \gls{ELQ} in different browsers.
     Key subsystems are evaluated independently so that they can be compared to similar subsystems of related libraries.
@@ -2163,9 +2163,9 @@
         \caption{
           The \gls{responsive} classes of \gls{Bootstrap} cannot adapt to layout changes as shown with the two-column \gls{CSS} documentation page example.
           Both documentation instances use \gls{media queries}, which undesirably style both columns as if they each fill the whole \gls{viewport} width.
-          Since the columns only fill half of the \gls{viewport} width and are styled as they both fill the whole \gls{viewport} width, the page appears broken as shown in the left figure.
-          The page only behaves as desired if the \gls{viewport} width is large enough so that the width of each column is bigger than the largest \glslink{media queries}{media query} breakpoint, as shown in the right figure.
-          See figure~\ref{fig:appendix-bootstrap-mq-header-small} and~\ref{fig:appendix-bootstrap-mq-header-big} in the appendix for the left and right figure in full scale, respectively.}
+          Since the columns only fill half of the \gls{viewport} width and are styled as they both fill the whole \gls{viewport} width, the page appears broken as shown in the left image.
+          The page only behaves as desired if the \gls{viewport} width is large enough so that the width of each column is bigger than the largest \glslink{media queries}{media query} breakpoint, as shown in the right image.
+          See figure~\ref{fig:appendix-bootstrap-mq-header-small} and~\ref{fig:appendix-bootstrap-mq-header-big} in the appendix for full scale images.}
         \label{fig:eval-bootstrap-mq-broken}
       \end{figure}
       \todo{The right image should maybe show how it should look instead.}
@@ -2233,7 +2233,7 @@
       \todo{Write how many chars that differ?}
       By using the power of preprocessors, \gls{ELQ} element queries become as pleasant to work with as \gls{media queries}.
       In fact, only \textasciitilde50 lines out of \textasciitilde8500 lines of \gls{Bootstrap} \gls{LESS} code needed to be altered.
-      Most changes were of the character shown in listing~\ref{code:bootstrap-less-breakpoints-usage}, which basically replaces the \glslink{media queries}{media query} syntax with the \gls{ELQ} element queries syntax.
+      Most changes were similar to the changes shown in listing~\ref{code:bootstrap-less-breakpoints-usage}, which basically replaces the \glslink{media queries}{media query} syntax with the \gls{ELQ} element queries syntax.
       This is especially advantageous when keeping a \glslink{fork}{forked} project up to date with the original project, as fewer diverged lines implies a lowered risk of merge conflicts.
 
       \paragraph{Adding the \gls{ELQ} library}
@@ -2289,8 +2289,8 @@
 
       \paragraph{The result}
       Altering the \gls{LESS} code, including the \gls{ELQ} library, and the initiating \gls{JavaScript} is all that is required to make the double column documentation page behave as desired.
-      Figure~\ref{fig:eval-bootstrap-mq-eq-header}, \ref{fig:eval-bootstrap-mq-eq-matrix} and \ref{fig:eval-bootstrap-mq-eq-grid} shows different sections of the double column documentation page empowered by \gls{ELQ} \gls{Bootstrap}.
-      For reference, the same sections using the original \gls{Bootstrap} is also included that shows how they behave without element queries.
+      Figure~\ref{fig:eval-bootstrap-mq-eq-header}, \ref{fig:eval-bootstrap-mq-eq-matrix} and \ref{fig:eval-bootstrap-mq-eq-grid} show different sections of the double column documentation page empowered by \gls{ELQ} \gls{Bootstrap}.
+      For reference, the same sections using the original \gls{Bootstrap} are also included to show how they behave without element queries.
       As shown in the figures, the double column documentation page using the original \gls{Bootstrap} styles the two columns as if they both had the whole \gls{viewport} width available.
       Therefore the two columns intersect because some content \glspl{element} are styled wider than a column.
       The double column documentation page using \gls{ELQ} \gls{Bootstrap} on the other hand enables all \gls{responsive} \glspl{element} to style themselves according a parent container \gls{element}.
@@ -2310,10 +2310,10 @@
           \includegraphics[width=\linewidth]{images/bootstrap-eq-header-small}
         \end{minipage}
         \caption{
-          The left image shows the original \gls{Bootstrap} header, which is broken since the content of both columns are styled as if they had the full \gls{viewport} width.
+          The left image shows the original \gls{Bootstrap} header, which is broken since both columns are styled as if they have the full \gls{viewport} width.
           The right image shows same section of the same page, using \gls{ELQ} \gls{Bootstrap}.
           With element queries, both columns know that they only have half of the \gls{viewport} width and therefore style themselves accordingly.
-          See figure~\ref{fig:appendix-bootstrap-mq-header-small} and~\ref{fig:appendix-bootstrap-eq-header-small} in the appendix for the left and right figure in full scale, respectively.}
+          See figure~\ref{fig:appendix-bootstrap-mq-header-small} and~\ref{fig:appendix-bootstrap-eq-header-small} in the appendix for full scale images.}
         \label{fig:eval-bootstrap-mq-eq-header}
       \end{figure}
 
@@ -2329,10 +2329,10 @@
         \end{minipage}
         \caption{
           The left image shows the original \gls{Bootstrap} \gls{responsive} utilities classes matrix.
-          Here it is clear that both columns are styled as if they each have the full \gls{viewport} width, as they display the large utility classes in green.
+          Here it is clear that both columns are styled as if each has the full \gls{viewport} width available, as they display the large utility classes in green.
           The right image shows same section of the same page, using \gls{ELQ} \gls{Bootstrap}.
           Only the small utility classes are displayed in green as desired, since both columns only have half of the \gls{viewport} width available.
-          See figure~\ref{fig:appendix-bootstrap-mq-matrix-small} and~\ref{fig:appendix-bootstrap-eq-matrix-small} in the appendix for the left and right figure in full scale, respectively.
+          See figure~\ref{fig:appendix-bootstrap-mq-matrix-small} and~\ref{fig:appendix-bootstrap-eq-matrix-small} in the appendix for full scale images.
         }
         \label{fig:eval-bootstrap-mq-eq-matrix}
       \end{figure}
@@ -2350,9 +2350,9 @@
         \caption{
           The left image shows the original \gls{Bootstrap} \gls{responsive} grid.
           It is styled as if both columns have the full \gls{viewport} width available, and therefore the grids intersect.
-          The right image shows same section of the same page, using \gls{ELQ} \gls{Bootstrap}.
-          The grids detect that only the half \gls{viewport} width is available, and styles themselves accordingly.
-          See figure~\ref{fig:appendix-bootstrap-mq-grid-small} and~\ref{fig:appendix-bootstrap-eq-grid-small} in the appendix for the left and right figure in full scale, respectively.
+          The right image shows the same section of the same page, using \gls{ELQ} \gls{Bootstrap}.
+          The grids detect that only half of the \gls{viewport} width is available, and therefore style themselves accordingly.
+          See figure~\ref{fig:appendix-bootstrap-mq-grid-small} and~\ref{fig:appendix-bootstrap-eq-grid-small} in the appendix for full scale images.
         }
         \label{fig:eval-bootstrap-mq-eq-grid}
       \end{figure}
@@ -2385,7 +2385,7 @@
       
       %\subsection{Element resizing detection}\label{sec:eval-perf-erd}
         This section evaluates the performance of the object-based and scroll-based solutions to detecting \gls{element} resize events described in Section~\ref{sec:imp_erd}.
-        The optimized \gls{ELQ} version of the scroll-based solution is also be evaluated.
+        The optimized \gls{ELQ} version of the scroll-based solution is also evaluated.
         Since the element resizing detection subsystem performs the heaviest tasks, only the performance of that subsystem is evaluated in detail.
         The other subsystems entail no significant performance penalties.
         \todo{Remove this, and analyze the different subsystems in detail: erd, cycle detector, elq-breakpoints, etc.}
@@ -2394,7 +2394,7 @@
         However, injecting \code{object} \glspl{element} is quite a heavy task.
         See figure~\ref{fig:erd-original-object} for graphs that show the performance of the object-based solution.
         As shown by the graphs, the injection can be performed with adequate performance as long as the number of \glspl{element} is low.
-        The solution does not scale well as the number of element increases.
+        The solution does not scale well as the number of \glspl{element} increases.
         \todo{Maybe be less pessimistic as Safari might have to use the object solution?}
         \begin{figure}[ht]
           \tiny
@@ -2450,7 +2450,7 @@
 
         The scroll-based solution also performs well when detecting resize events.
         As no \code{object} \glspl{element} are injected the memory footprint is reduced significantly, which improves the injection performance.
-        See figure~\ref{fig:erd-original-scroll} for graphs that show how the both solutions perform compared to each other.
+        See figure~\ref{fig:erd-original-scroll} for graphs that show how both solutions perform compared to each other.
         It is clear that the scroll-based solution both performs and scales better than the object-based solution during injection.        
         The amount of memory used by the scroll-based solution is so low that reliable measurements could not be gathered, as the number of \glspl{element} was not high enough to affect the memory usage noticeably.
         \begin{figure}[ht]
@@ -2599,7 +2599,7 @@
         The \gls{ELQ} scroll-based solution is therefore probably desired in FireFox for the general use case (as described in Section~\ref{sec:eq-definitions}).
         In Safari, the \gls{ELQ} scroll-based solution detects resize events in 800 ms while the object-based solution detects them in 25 ms, which of course is unacceptable.
         Unfortunately, the injection time needed for the object-based solution is 3-fold slower than the \gls{ELQ} scroll-based solution.
-        Since a delay of 800 ms when detecting resize events is undesired in most use cases, the object-based solution is preferred is Safari.
+        Since a delay of 800 ms when detecting resize events is undesired in most use cases, the object-based solution is preferred for Safari.
         Recall from Section~\ref{sec:imp_erd} that this is due to WebKit and Gecko not being able to queue the scroll mutation operations as Blink does.
         \begin{table}[ht]\center
           \tiny
