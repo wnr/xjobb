@@ -432,7 +432,7 @@
       \newcommand{\chref}[1]{Chapter~\ref{#1}, \emph{\nameref{#1}},}
       \chref{ch:background} presents the background of this thesis and aims to provide sufficient information about \gls{web} development and \glspl{layout engine} to understand the problem and solution.
       In Section~\ref{sec:web-dev} the two \gls{web} development concepts \gls{responsive} \gls{web} design and modularity are presented, and ends by describing the problem of \gls{responsive} modules.
-      Section~\ref{sec:layout-engines} briefly describes how \glspl{layout engine} operate and how avoiding \gls{layout thrashing} can optimize \gls{JavaScript} code.
+      Section~\ref{sec:layout-engines} briefly describes how \glspl{layout engine} operate and how avoiding \gls{layout thrashing} can increase the performance of \gls{JavaScript} code.
       The section ends with presenting the current research about parallelizing \glspl{layout engine}, which is important to understand since element queries affect the parallelization of \glspl{layout engine}.
       Expert readers may want to skip Chapter~\ref{ch:background}.
 
@@ -443,7 +443,7 @@
       \chref{ch:library} presents the \gls{third-party} non-\gls{native} element queries library that enables developers to use element queries today.
       The chapter identifies possible technical requirements that different use cases may have, which is the main motivation to why the library should be plugin based.
       The library design and \glspl{API} are presented along with two plugins and their \glspl{API}.
-      Last, some subsystems of the library are presented in detail including a highly optimized solution to observe element resize events using a leveled \glslink{batch processing}{batch processor} subsystem.
+      Last, some subsystems of the library are presented in detail including a highly optimized solution to observing element resize events using a leveled \glslink{batch processing}{batch processor} subsystem.
 
       \chref{ch:eval} presents the empirical evaluation of the library that includes altering the popular style framework \gls{Bootstrap}, and measuring the performance of subsystems in different \glspl{browser}.
       The \gls{Bootstrap} framework provides \gls{responsive} \gls{CSS} classes to make user interfaces \gls{responsive} by using \gls{media queries}.
@@ -461,7 +461,7 @@
       
       \chref{ch:conclusions} summarizes the conclusions of this thesis, and shows how the formulated problem is solved and how the scientific question is answered.
 
-      \chref{ch:future-work} presents possible future work, which includes many extensions and further improvements to the library.
+      \chref{ch:future-work} presents possible future work, which includes many ideas of extensions and further improvements to the library.
 
       % The second part \emph{\ref{part:theory}~\nameref{part:theory}} presents theoretizations of the problem.
       % It starts with describing a reference architecture of \glspl{layout engine} and the parts of \glspl{layout engine} that directly affects element queries will be described in detail.
@@ -522,8 +522,8 @@
         However, when the content was delivered to the client (\gls{browser}) it was still static.
         There was no way for the server to change the content that the client had received, unless the client requested another \gls{document}.
 
-        Around 1996, client side scripting was born.
-        The term \gls{DHTML} was being used as an umbrella term for a collection of technologies used together to make pages interactive and animated, where client side scripting played a big role.
+        Around 1996, client-side scripting was born.
+        The term \gls{DHTML} was being used as an umbrella term for a collection of technologies used together to make pages interactive and animated, where client-side scripting played a big role.
         Examples of things that were being done with \gls{DHTML} are: refreshing pages for the user so that new content is loaded, giving feedback on user input without involving the server, and animating content.
         Plugins also started to exist during this time, which enabled \glspl{browser} to execute embedded programs.
         \emph{Java applet}\footnote{A Java applet is a small application that is written in Java and delivered to users in the form of bytecode. See \url{www.java.com}} and \emph{Flash}\footnote{Flash is a multimedia and software platform for producing cross platform interactive animations. See \url{www.flash.com}} are examples of \gls{browser} embedded programs requiring \gls{browser} plugins to execute.
@@ -546,7 +546,7 @@
         In 2006, the \gls{W3C} acknowledged that \gls{WHATWG} were on the right track, and decided to start working on their own \gls{HTML5} specification based on the \gls{WHATWG} version.
         \gls{HTML5} is an evolutionary improvement process of \gls{HTML}, which means that \glspl{browser} are adding support as parts of the specification are finished.
 
-        A new era of \glspl{API} and features came along with \gls{HTML5} and \gls{CSS3}, which truly enabled developers to create rich client side applications.
+        A new era of \glspl{API} and features came along with \gls{HTML5} and \gls{CSS3}, which truly enabled developers to create rich client-side applications.
         With the new features developers could utilize advanced graphics programming, geolocation, local and session storage, advanced input, offline mode, and much more.
 
         \todo[inline]{Write that traditional applications are threatened by \gls{web} applications, since the reach and availability of the \gls{web} is superior to any other distribution platform. Also, no installation is required with \gls{web} applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
@@ -565,7 +565,7 @@
         Furthermore, it is understood that sites need to be styled differently if they are visited by touch devices with small screens or mouse-based devices with large screens.
         Since \gls{web} developers were not ready for this rapid change of device properties, they resorted to using the same approach that they had done before --- making assumptions about the user device based on the server request.
         When a \gls{browser} requests a resource, an \emph{\glslink{browser}{user agent} string} is usually sent with the request to identify what kind of \gls{browser} the user is using. \todo{Explain user agent, that all \glspl{browser} are user agents but not the other way around.}
-        By reading the \glslink{browser}{user agent} string on the server-side, a mobile-friendly version of the site could be served if the user was sending mobile \glslink{browser}{user agent} strings and the desktop version could be served otherwise.
+        By reading the \glslink{browser}{user agent} string on the server side, a mobile-friendly version of the site could be served if the user was sending mobile \glslink{browser}{user agent} strings and the desktop version could be served otherwise.
         The mobile version would be designed for a maximum width, and the desktop for a minimum width.
         
         This was a natural reaction since no better techniques existed, but the approach has many flaws.
@@ -1283,7 +1283,7 @@
         \paragraph{Runtime factors}
         The examples given so far have been simple, and can easily be identified as cyclic by reviewing the \gls{CSS} code.
         It would also be possible to detect the cycles by performing a static analysis of the code.
-        \Glspl{browser} could do such analysis during parse time in order to warn about or handle the cycles.
+        \Glspl{browser} could do such analysis during parsetime in order to warn about or handle the cycles.
         However, cycles can occur in a more complex way that cannot be detected by static analysis.
         Consider the code in listing~\ref{code:cyclic-3}.
         \begin{lstlisting}[gobble=10,caption={Example of cyclic rules that cannot be detected by static analysis.}, captionpos=b, label={code:cyclic-3}]
@@ -1485,7 +1485,7 @@
       In the same way, too many advanced features may decrease the ease of use and simplicity of the \gls{API}.
       Some features may also restrict the compatibility.
       Trying to conform to all of the requirements and trying to find a balance would result in a worse solution than a library tailored for specific requirements.
-      Plugin based libraries solves this problem by providing plugins so that developers can compose their own custom tailored solutions for their specific use cases.
+      Plugin-based libraries solves this problem by providing plugins so that developers can compose their own custom tailored solutions for their specific use cases.
       By providing a good library foundation and plugins it is up to developers to choose the right plugins for each project.
       In addition, by letting the plugins satisfy the requirements it is easy to extend the library with new plugins when new requirements arise.
       For instance, the requirement~\ref{itm:req_prolyfill} is beneficial to satisfy with a plugin since the \gls{API} for \gls{native} element queries can only be guessed at this point of time, which will probably lead to frequent changes to the plugin.
@@ -2699,7 +2699,7 @@
     First, it requires a compilation step in order to produce valid \gls{CSS} that \glspl{layout engine} understand.
     This can either be done at server side or in the \gls{browser} at runtime.
     The advantage of having the compilation step at server side is increased performance since the \gls{browser} understands the \gls{CSS} directly when it has been retrieved.
-    Server side compilation implies that the layout of the page cannot be changed at runtime and is therefore only useful for static pages.
+    Server-side compilation implies that the layout of the page cannot be changed at runtime and is therefore only useful for static pages.
     By instead having the compilation step at runtime, dynamic layouts can be used since element queries may be re-evaluated on layout changes.
     However, the performance impact of having the compilation step at runtime can be significant for the following reasons:
     \begin{itemize}
