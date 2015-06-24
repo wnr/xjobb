@@ -254,7 +254,7 @@
 
     Participants of the main international standards organization for the web, the W3C, are interested in solving the problem and possible solutions are being discussed.
     However, they are still at the initial planning stage so a solution will not be implemented natively in the near future.
-    Additionally, implementing element queries impose circularity and performance problems, which need to be resolved before writing a standard.
+    Additionally, implementing element queries imposes circularity and performance problems, which need to be resolved before writing a standard.
 
     This thesis presents the issues that element queries impose to layout engines and shows some approaches to overcome the problems.
     In order to enable developers to create encapsulated responsive modules, while waiting for native support, a third-party element queries JavaScript library named ELQ has been developed.
@@ -265,7 +265,7 @@
   \end{abstract}
   \clearpage
   \begin{foreignabstract}{swedish}
-    Responsiv webbutveckling är ett populärt sätt att stödja enheter med varierande egenskaper (storlek av visninsområdet, inmatningsmekanismer, mediumtyp, etc.) genom att ange olika stilar för ett dokument beroende på enhetens egenskaper med hjälp av CSS \emph{media queries}.
+    Responsiv webbutveckling är ett populärt sätt att stödja enheter med varierande egenskaper (storlek av visninsområdet, inmatningsmekanismer, mediumtyper, etc.) genom att ange olika stilar för ett dokument beroende på enhetens egenskaper med hjälp av CSS \emph{media queries}.
     Det är också populärt att utveckla webbapplikationer genom att skapa återanvändbara moduler för minskad komplexitet.
     Tyvärr kräver responsiva moduler att användaren av en modul definierar de olika responsiva stilarna eftersom endast användaren vet i vilket kontext modulen används.
     Detta implicerar att responsiva moduler inte är enkapsulerade (alltså att de inte fungerar av sig själva), vilket är viktigt för återanvändning och reduktion av komplexitet.
@@ -508,7 +508,7 @@
         This section is a summary of \normalfont{\cite{wiki_web_dev,wiki_cgi,wiki_css,wiki_ajax,wiki_html5,book_html5}}.
         \todo{Feels weird to not have this in another "meta text" style}
 
-        As further described in Section~\ref{sec:www} of the appendix, \glspl{browser} were initially applications that displayed \gls{hypertext} \glspl{document} with the ability to fetch linked \glspl{document} in a user friendly way.
+        As further described in Section~\ref{sec:www} in the appendix, \glspl{browser} were initially applications that displayed \gls{hypertext} \glspl{document} with the ability to fetch linked \glspl{document} in a user friendly way.
         Static content was written in \gls{HTML}, which could include hyperlinks to other \gls{hypertext} \glspl{document} or hypermedia.
         Different stylesheet languages were being developed to enable the possibility of separating content styling with the content.
         In 1996 the \gls{W3C} officially recommended \gls{CSS}, which came to be the preferred way of styling \gls{web} content.
@@ -2165,7 +2165,7 @@
           Both documentation instances use \gls{media queries}, which undesirably style both columns as if they each fill the whole \gls{viewport} width.
           Since the columns only fill half of the \gls{viewport} width and are styled as they both fill the whole \gls{viewport} width, the page appears broken as shown in the left figure.
           The page only behaves as desired if the \gls{viewport} width is large enough so that the width of each column is bigger than the largest \glslink{media queries}{media query} breakpoint, as shown in the right figure.
-          See figure~\ref{fig:appendix-bootstrap-mq-header-small} and~\ref{fig:appendix-bootstrap-mq-header-big} of the appendix for the left and right figure in full scale, respectively.}
+          See figure~\ref{fig:appendix-bootstrap-mq-header-small} and~\ref{fig:appendix-bootstrap-mq-header-big} in the appendix for the left and right figure in full scale, respectively.}
         \label{fig:eval-bootstrap-mq-broken}
       \end{figure}
       \todo{The right image should maybe show how it should look instead.}
@@ -2313,7 +2313,7 @@
           The left image shows the original \gls{Bootstrap} header, which is broken since the content of both columns are styled as if they had the full \gls{viewport} width.
           The right image shows same section of the same page, using \gls{ELQ} \gls{Bootstrap}.
           With element queries, both columns know that they only have half of the \gls{viewport} width and therefore style themselves accordingly.
-          See figure~\ref{fig:appendix-bootstrap-mq-header-small} and~\ref{fig:appendix-bootstrap-eq-header-small} of the appendix for the left and right figure in full scale, respectively.}
+          See figure~\ref{fig:appendix-bootstrap-mq-header-small} and~\ref{fig:appendix-bootstrap-eq-header-small} in the appendix for the left and right figure in full scale, respectively.}
         \label{fig:eval-bootstrap-mq-eq-header}
       \end{figure}
 
@@ -2332,7 +2332,7 @@
           Here it is clear that both columns are styled as if they each have the full \gls{viewport} width, as they display the large utility classes in green.
           The right image shows same section of the same page, using \gls{ELQ} \gls{Bootstrap}.
           Only the small utility classes are displayed in green as desired, since both columns only have half of the \gls{viewport} width available.
-          See figure~\ref{fig:appendix-bootstrap-mq-matrix-small} and~\ref{fig:appendix-bootstrap-eq-matrix-small} of the appendix for the left and right figure in full scale, respectively.
+          See figure~\ref{fig:appendix-bootstrap-mq-matrix-small} and~\ref{fig:appendix-bootstrap-eq-matrix-small} in the appendix for the left and right figure in full scale, respectively.
         }
         \label{fig:eval-bootstrap-mq-eq-matrix}
       \end{figure}
@@ -2352,7 +2352,7 @@
           It is styled as if both columns have the full \gls{viewport} width available, and therefore the grids intersect.
           The right image shows same section of the same page, using \gls{ELQ} \gls{Bootstrap}.
           The grids detect that only the half \gls{viewport} width is available, and styles themselves accordingly.
-          See figure~\ref{fig:appendix-bootstrap-mq-grid-small} and~\ref{fig:appendix-bootstrap-eq-grid-small} of the appendix for the left and right figure in full scale, respectively.
+          See figure~\ref{fig:appendix-bootstrap-mq-grid-small} and~\ref{fig:appendix-bootstrap-eq-grid-small} in the appendix for the left and right figure in full scale, respectively.
         }
         \label{fig:eval-bootstrap-mq-eq-grid}
       \end{figure}
@@ -2931,12 +2931,13 @@
     \todo[inline]{ERD could automatically use the best solution based on the \gls{layout engine}.}
     \todo[inline]{Write that eq are theoretically not limited to sizes, could be any property of \glspl{element}!}
 
-  \chapter{Bibliography}
+  \printbibheading
     \defbibfilter{papers}{
       type=article or
       type=inproceedings
     }
     
+    \nobibintoc
     \printbibliography[type=book,title={Books},heading=subbibliography]
     \printbibliography[filter=papers,title={Articles},heading=subbibliography]
     \printbibliography[category=theses,title={Master's theses},heading=subbibliography]
