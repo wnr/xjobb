@@ -316,14 +316,14 @@
     \todo[inline]{Write Blink, Gecko and WebKit instead of the browser names. Reason: Now writing that good performance is achieved in Chrome, but I'm sure the same is achived in Opera as it uses Blink. Should double check this though.}
     \todo[inline]{Fix all percentage speedups to use X-fold. Check all folds to see if they are written correctly.}
 
-    \section{Targeted audience}
+    \section{Targeted Audience}
       This thesis is targeted for \gls{web} developers that wish to gain a deeper understanding of element queries and how they can be used without \gls{native} support by using the \gls{ELQ} library.
       Heavy use of \gls{web} terminology is being used and intermediate \gls{web} development knowledge is beneficial.
 
       For readers that are not familiar with \gls{web} terminology there is a glossary at page~\pageref{main} of this thesis.
       Unfamiliar readers might also want to notice the distinction between the words ``user'' and ``end-user''.
       For instance, an application is a user of modules while the human interacting with the application is an end-user.
-    \section{Problem statement}\label{sec:problem}
+    \section{Problem Statement}\label{sec:problem}
       By using \gls{CSS} \gls{media queries}, developers can specify different style rules for different \gls{viewport} sizes.
       This is fundamental to creating \gls{responsive} \gls{web} applications, as shown in Section~\ref{sec:rwd}.
       If developers want to build modular applications by composing the application by smaller modules \gls{media queries} are no longer applicable.
@@ -406,7 +406,7 @@
       The problems of implementing element queries \glslink{native}{natively} are addressed, but no effort has been made to solve the problems.
       Also, no \gls{API} or similar has been designed for a \gls{native} solution.
       Graphical design of end-user interfaces are not addressed, other than necessary for understanding the problem.
-    \section{Choice of methodology}
+    \section{Choice of Methodology}
       The results and conclusions of this thesis are based on a scientific study using an iterative development process evaluated by empirical studies.
       The library design is motivated by identified requirements of element queries, which have been gathered partly by the literature study and studies of existing responsive applications.
       The decision to write the non-\gls{native} library in \gls{JavaScript} was made, because \gls{JavaScript} is the common scripting language of \glspl{browser}.
@@ -491,7 +491,7 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Web development
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Web development}\label{sec:web-dev}
+    \section{Web Development}\label{sec:web-dev}
       \Glspl{browser} are the far most popular tools for accessing content on the \gls{web}, which makes them very important in the modern society.
       In the dawn of the \gls{web}, \glspl{browser} were simply applications that fetched and displayed text with embedded links.
       Today, \glspl{browser} act more like an operating system (on top of the host system) executing complex \gls{web} applications.
@@ -503,7 +503,7 @@
       Section~\ref{sec:rwd-modular-problem} presents the problem that element queries solve, which is that it is not possible to construct \gls{encapsulated} \gls{responsive} modules.
       This section is the key motivation to why element queries are needed.
 
-      \subsection{From documents to applications}\label{sec:doc-to-app}
+      \subsection{From Documents to Applications}\label{sec:doc-to-app}
         Since \gls{web} development trends are not easily pinned to exact dates, this section only presents dates as guidance and should not be regarded as exact dates for the events.
         This section is a summary of \normalfont{\cite{wiki_web_dev,wiki_cgi,wiki_css,wiki_ajax,wiki_html5,book_html5}}.
         \todo{Feels weird to not have this in another "meta text" style}
@@ -551,7 +551,7 @@
 
         \todo[inline]{Write that traditional applications are threatened by \gls{web} applications, since the reach and availability of the \gls{web} is superior to any other distribution platform. Also, no installation is required with \gls{web} applications. Also, updates and patches can be applied to all users instantaneously and enforced.}
         \todo[inline,color=red]{Tomas: Maybe write about the difficulties in supporting the standards (fragmented features)}
-      \subsection{Responsive web design}\label{sec:rwd}
+      \subsection{Responsive Web Design}\label{sec:rwd}
         A few years ago, \gls{web} developers could make assumptions about the screen size of user devices.
         Since typically only desktop computers with monitors accessed websites they were designed for a minimum \gls{viewport} size.
         If the size of the \gls{viewport} was smaller than the supported size, the site would look broken.
@@ -647,7 +647,7 @@
         Having a good semantic versioning convention is key to reducing the complexity of managing multiple versions of modules.
 
         \todo[inline]{Philipp: I would add: Ways in which modularity is broken, and why modular development is still an issue today (otherwise, this thesis wouldnt be needed).}
-      \subsection{The problem of responsive modules}\label{sec:rwd-modular-problem}
+      \subsection{The Problem of Responsive Modules}\label{sec:rwd-modular-problem}
         Recall from Section~\ref{sec:rwd} that \gls{responsive} \gls{web} design is the concept of having \glspl{element} responding to size changes, so that a \gls{document} may be usable on many screen sizes, resolutions, pixel-densities, and media.
         In Section~\ref{sec:modularity} the desire for building \gls{web} modules was presented.
         One positive outcome of building applications in a modular way is that general modules become reusable and complexity is reduced.
@@ -708,7 +708,7 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Layout engines
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Layout engines}\label{sec:layout-engines}
+    \section{Layout Engines}\label{sec:layout-engines}
       In order to understand how element queries affect \glspl{layout engine}, it is important to understand how \glspl{layout engine} operate.
       \todo{Also in order to understand how to optimize the library tasks.}
       Only the \gls{layout engine} of the \gls{browser} is of importance, since element queries do not affect any other \gls{browser} subsystem.
@@ -725,7 +725,7 @@
       \todo[inline,color=green]{Marcos: The reference architecture could be outdated since the source is very old. The XML subsystem is hardly interesting anymore.}
       \todo[inline]{Maybe move this content to an own subsection and instead write a text about why this section is here, what the goal is (to understand parallelization and \gls{layout thrashing}), etc.}
       
-      \subsection{Reference architecture}\label{sec:layout-engine-reference}
+      \subsection{Reference Architecture}\label{sec:layout-engine-reference}
         \Glspl{browser} are complex applications that consist of many subsystems.
         A reference architecture of \glspl{browser} has been presented by \cite{browser_architecture}, see figure~\ref{fig:browser_architecture}.
         \begin{figure}[ht]
@@ -797,7 +797,7 @@
         %Also, rendering the final layout with the render backend is not affected by element queries.
         %The construction of 
 
-      \subsection{Constructing DOM trees}\label{sec:dom-tree}
+      \subsection{Constructing DOM Trees}\label{sec:dom-tree}
         The \gls{DOM} defines a platform-neutral model for events and node trees, which is used for representing and interacting with \glspl{document} \cite{w3c_dom,w3c_html}.
         The \gls{DOM} provides an interface for programs (\gls{JavaScript} in the \gls{browser}) to access and mutate the structure, style, and content of \glspl{document}.
         \Glspl{element} of the \gls{document} are converted to \gls{DOM} nodes, and therefore the whole \gls{document} is represented as a tree structure of \gls{DOM} nodes which is referred to as the \gls{DOM} tree.
@@ -836,7 +836,7 @@
         \todo[inline]{Philipp: A picture of the DOM corresponding to some HTML would be good.}
         \todo[inline]{Write about media type, and how the CSS is calculated if it is in this stage?}
 
-      \subsection{Render trees}\label{sec:render-tree}
+      \subsection{Render Trees}\label{sec:render-tree}
         When the \gls{DOM} tree has been constructed and all external \gls{CSS} has been fetched and parsed, it is time for the \gls{layout engine} to create the \gls{render tree}.
         This section is mainly based on \normalfont{\cite{garsiel2011browsers,w3c_css21}}.
 
@@ -857,7 +857,7 @@
         This is because some properties depend on the flow of the \gls{document}, which cannot be resolved by style cascading and instead need to be computed through a layout.
         The layout process resolves the final position and size of all renderers.
 
-      \subsection{Style computation}\label{sec:style-computation}
+      \subsection{Style Computation}\label{sec:style-computation}
         Both the \gls{render tree} and scripts need to be able to get the final style of \glspl{element}.
         In this section a brief explanation of selector matching, style cascading, inheritance and rule set weighting is given.
         \gls{CSS} property definitions is also described.
@@ -921,7 +921,7 @@
 
         \todo[inline]{Explain the syntax of CSS?}
 
-      \subsection{The layout process}\label{sec:layout-process}
+      \subsection{The Layout Process}\label{sec:layout-process}
         When the \gls{render tree} has been constructed, and the style properties have been resolved for all nodes, it is time to perform the actual layout \cite{garsiel2011browsers}.
         The layout process decides the final computed style of all \glspl{element}, and needs to be done before rendering.
         \gls{HTML} is flow based, which means that a \gls{document} layout (also known as a \emph{reflow}) can generally be performed top to bottom and left to right in one pass.
@@ -951,7 +951,7 @@
         A renderer that has decided that it needs to break the content up into multiple renderers propagates to the parent renderer that it needs to perform the breaking.
         When the parent renderer has created the renderers needed to fit the content with the given height, layout is performed on the new renderers and then the final height can be calculated and propagated upwards.
       
-      \subsection{Layout thrashing and how to avoid it}\label{sec:layout-thrashing}
+      \subsection{Layout Thrashing}\label{sec:layout-thrashing}
         Recall from section \ref{sec:layout-process} that \glspl{layout engine} store incremental layout commands in a queue in order to \glslink{batch processing}{batch process} layouts.
         \todo{Perhaps remove this, as the reader is supped to just have read it.}
         The term \gls{layout thrashing} refers to when the layout queue repeatedly is being flushed by scripts; forcing the \gls{layout engine} to perform multiple independent layouts that could have in theory been \glslink{batch processing}{batch processed}.
@@ -1085,7 +1085,7 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element queries
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \chapter{Element queries}\label{ch:eq}
+  \chapter{Element Queries}\label{ch:eq}
     Now that a good understanding of \glspl{browser} (especially the \gls{layout engine}), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- the solution to the modular \gls{responsive} \gls{web} design problem as presented in Section~\ref{sec:rwd-modular-problem}.
     
     Section~\ref{sec:eq-definitions} defines element queries, and shows how they can be used to solve the problem.
@@ -1333,7 +1333,7 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Approaches to overcome the problems
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Approaches to overcome the problems}\label{sec:eq-approaches}
+    \section{Approaches to Overcome the Problems}\label{sec:eq-approaches}
       \todo[inline]{Have the meta text that is commented out, and then have subsections that describes the different approaches?}
       \todo[inline]{Write more about iframes and shadowDOM?}
         % Now that the problems of element queries have been presented, it is time to show two approaches to solve the problems.
@@ -1419,7 +1419,7 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% The element queries library
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \chapter{The element queries library}\label{ch:library}
+  \chapter{The Element Queries Library}\label{ch:library}
     Now that sufficient knowledge about element queries and \glspl{layout engine} has been acquired it is time to present the actual realization of the solution to \gls{responsive} modules --- the \gls{JavaScript} element queries library.
     First of all, a working name of the library needs to be established; the library will from now on have the working name \gls{ELQ}.
     This name serves as a prefix for many of the library \glspl{API}, and will be frequently used in this thesis from now on.
@@ -1443,7 +1443,7 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Technical goals
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Technical goals}\label{sec:techincal-goals}
+    \section{Technical Goals}\label{sec:techincal-goals}
       Expectations and requirements of element queries vary greatly by use cases.
       \todo{Source?}
       As usual in software development, tradeoffs need to be made.
@@ -1554,7 +1554,7 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% API design
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{API design}\label{sec:elq-api}
+    \section{API Design}\label{sec:elq-api}
       \subsection{Public API}\label{sec:public-api}
         As already stated, the bigger part of the public \gls{API} is provided by plugins.
         In Section~\ref{sec:techincal-goals} it was determined that advanced users must be able to change the subsystems of the core.
@@ -1850,14 +1850,14 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Implementation
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \pagebreak
-    \section{Details of subsystems}\label{sec:library-imp-details}
+    \section{Details of Subsystems}\label{sec:library-imp-details}
       In this Section the algorithms and approaches of some subsystems are presented.
       It should be noted that only the non-trivial subsystems are described.
 
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %%%%%%%%%%%%%%%%%%%%%%%%%%%% Batch processor
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      \subsection{Batch processor}\label{sec:imp_batch_processor}
+      \subsection{Batch Processor}\label{sec:imp_batch_processor}
         % To avoid \gls{layout thrashing} by other scripts it can beneficial to asynchronously postpone the \glslink{batch processing}{batch} until the next layout cycle of the \gls{browser}, which is also handled by the subsystem.
         Both Section~\ref{sec:layout-process} and \ref{sec:layout-thrashing} are recommended to read in order to understand the optimizations described in this section.
         The \glslink{batch processing}{batch processor} is the foundation for good performance of the library, and is therefore used by several subsystems.
@@ -1927,7 +1927,7 @@
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element resizing detection
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      \subsection{Element resizing detection}\label{sec:imp_erd}
+      \subsection{Element Resizing Detection}\label{sec:imp_erd}
         As described in Section~\ref{sec:arcithecture}, \gls{ELQ} needs a subsystem that is able to detect resize events of \glspl{element}.
         As the \gls{element} resize detection system is a core subsystem of \gls{ELQ}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect \gls{element} resize events.
 
@@ -2083,7 +2083,7 @@
       % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       % %%%%%%%%%%%%%%%%%%%%%%%%%%%% Detecting runtime cycles
       % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      \subsection{Detecting runtime cycles}\label{sec:imp_cycle_detector}
+      \subsection{Detecting Runtime Cycles}\label{sec:imp_cycle_detector}
         As described in Section~\ref{sec:arcithecture}, \gls{ELQ} needs a subsystem that is able to detect cyclic element style state updates, in order to warn about or handle cyclic rules.
         As the cycle detection system is a core subsystem of \gls{ELQ}, and extensively used by the \code{elq-breakpoints} plugin, it is important to find a both stable and performant approach to detect cyclic updates.
 
@@ -2953,7 +2953,7 @@
     \input{history-of-browsers}
 
     \chapter{Miscellaneous}
-      \section{Full-scale Bootstrap figures}
+      \section{Full-scale Bootstrap Figures}
         \begin{figure}[htbp!]
           \centering
           \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-header-small}
@@ -3001,7 +3001,7 @@
         \end{figure}
 
         \FloatBarrier
-      \section{Layout engine market share statistics}\label{sec:layout_engines_market_share}
+      \section{Layout Engine Market Share Statistics}\label{sec:layout_engines_market_share}
         \Gls{browser} market share was retrieved by \gls{StatCounter}\footnote{\gls{StatCounter} graph \url{http://gs.statcounter.com/\#all-browser-ww-monthly-201402-201502-bar}}.
         Since the graph only display \gls{browser} market share and not \gls{layout engine}, it is needed to further divide the \glspl{browser} into \gls{layout engine} percentages.
         The \gls{Blink} engine was introduced with Chrome version 28 and Android version 4.4 \cite{wiki_blink}.
