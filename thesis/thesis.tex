@@ -876,17 +876,17 @@
         \end{enumerate}
         This can be grouped into author, user and \gls{browser} styles.
         \todo{Clarify this.}
-        The four first items have in common that they are \emph{cascading} their style rules through \emph{selector matching}, and may define rule sets.
+        The four first items have in common that they are cascading their style rules through selector matching, and may define rule sets.
         Selector matching conceptually finds all \glspl{element} in the \gls{DOM} tree that matches a \gls{CSS} selector, to apply style declarations of the rule set.
-        The rule sets are weighted so that if a property is assigned values by multiple rule sets the one with highest weight will be applied.
+        The rule sets are weighted so that if a property is assigned values by multiple rule sets the one with highest weight is applied.
         The weighting process starts with the origin of the style:
         \begin{itemize}
           \item In case of normal rule declarations, the style weighting relation is: $browser < user < author$.
           \item Important rule declarations have the following relation: $author < user$.
         \end{itemize}
-        The weighting process continues by calculating the \gls{specificity} of all rule set selectors, the higher the \gls{specificity} the higher the rule set will be weighted.
-        This will make rule sets with more specific selectors override rule sets with more general selectors.
-        Finally, if two rule declarations have the same weight, origin and \gls{specificity} the rule set specified last will win.
+        The weighting process continues by calculating the \gls{specificity} of all rule set selectors, as the weight is increased by high \gls{specificity}.
+        This makes rule sets with more specific selectors override rule sets with more general selectors.
+        Finally, if two rule declarations have the same weight, origin and \gls{specificity} the rule set specified last wins.
         Inline \gls{CSS} does not cascade since all rules given are automatically matched with the \gls{element} of the style attribute.
         However, inline \gls{CSS} is considered with highest possible \gls{specificity} when performing the style cascade.
         It is important to note that the styling methods number five and six are conceptually the same, since they both alter the style property of the \gls{DOM} representation of the \gls{element}.
@@ -894,12 +894,12 @@
 
         If the cascade results in no value for an \gls{element} style property, then the property can \emph{inherit} a value or have an initial value defined by the \gls{CSS} \emph{property definition}.
         Property definitions describe how the style properties should behave; see table~\ref{table:css_property_definition} for the format of property definitions.
-        For instance, the \code{width} property definition states that legal values are absolute lengths, percentages or \code{auto} (which will let the \gls{browser} decide).
+        For instance, the \code{width} property definition states that legal values are absolute lengths, percentages, and \code{auto} (which lets the \gls{browser} decide).
         The percentages are relative to the containing block.
-        The initial value is \code{auto}, the properties apply to all non-replaced inline \glspl{element}, table rows and row groups.
+        The initial value is \code{auto} and the properties apply to all non-replaced inline \glspl{element}, table rows, and row groups.
         The value may not be inherited, and the media group is \code{visual}.
         The computed value is either the absolute length, calculated percentage of the containing block or what the \gls{browser} decides (in case of \code{auto}).
-        If a property may inherit values, it will inherit the value of the first ancestor that has a value that is not \code{inherited}.
+        If a property may inherit values, it inherits the value of the first ancestor that has a value that is not \code{inherited}.
 
         This process resolves most style properties, but as stated in Section~\ref{sec:render-tree} some properties require a layout in order to be resolved.
 
@@ -907,7 +907,7 @@
           \tiny
           \begin{tabular}[t]{ r | l }
             \textbf{Value} & Defines the legal values and the syntax. \\
-            \textbf{Initial} & The initial value that the property will have. \\
+            \textbf{Initial} & The initial value of the property. \\
             \textbf{Applies to} & The \glspl{element} that the property applies to. \\
             \textbf{Inherited} & Determines if the value should be inherited or not. \\
             \textbf{Percentages} & Defines if percentages are applicable, and how they should be interpreted. \\
@@ -923,32 +923,32 @@
 
       \subsection{The layout process}\label{sec:layout-process}
         When the \gls{render tree} has been constructed, and the style properties have been resolved for all nodes, it is time to perform the actual layout \cite{garsiel2011browsers}.
-        The layout process will decide the final computed style of all \glspl{element}, and needs to be done before rendering.
+        The layout process decides the final computed style of all \glspl{element}, and needs to be done before rendering.
         \gls{HTML} is flow based, which means that a \gls{document} layout (also known as a \emph{reflow}) can generally be performed top to bottom and left to right in one pass.
-        This is possible because the geometry of \glspl{element} typically do not depend on the siblings or children\todo{Seems weird to say that flow is not dependent on children, since the height is propagated upwards.}.
-        Layout is performed recursively by starting at the root of the tree, let the renderer render itself and all of its children which will render themselves and their children and so on.
+        This is possible because the geometry of \glspl{element} typically do not depend on siblings or children\todo{Seems weird to say that flow is not dependent on children, since the height is propagated upwards.}.
+        Layout is performed recursively by starting at the root of the tree, let the renderer render itself and all of its children which render themselves and their children and so on.
         When a layout is performed on the whole \gls{render tree} it is called a \emph{global layout}.
         To avoid global layouts when a renderer has been changed, a dirty bit system is usually implemented.
-        The system marks which renderers in the tree that need a layout, which avoids layout of unaffected \glspl{element}.
+        The system marks the renderers in the tree that need a layout, which avoids layout of unaffected \glspl{element}.
         Layouts that only layout the dirty renderers are called \emph{incremental layouts}.
         A \gls{layout engine} that uses the dirty bit system usually keeps a queue of incremental layout commands.
         The scheduler system later triggers a \glslink{batch processing}{batch execution} of the incremental layout commands asynchronously.
         A global layout is triggered when the \gls{viewport} is resized or when styles that affect the whole \gls{document} is changed (such as \code{font-size}).
-        Because the \gls{API} of \code{getComputedStyle} promises resolved values for all style properties, calling the function forces a full layout (flushing the incremental layout commands queue).
+        Because the \gls{API} of \code{getComputedStyle} promises resolved values for all style properties, calling the function forces a layout of the affected subtree (flushing the incremental layout commands queue).
         When a renderer performs a layout the following usually happens:
         \begin{enumerate}
           \item The own width of the renderer is determined.
           \item The renderer positions all children and requests them to layout themselves (with given position and width).
           \item The heights, margins and paddings of the children are accumulated in order to decide the own height of the renderer.
         \end{enumerate}
-        Of course, only the children that need a layout will be affected (dirty, or global layout) in step 2.
+        Of course, only the children that need a layout are affected (dirty, or global layout) in step 2.
         So, the widths and positions are sent down in the tree and the heights are sent up in the tree in order to construct the final layout.
 
-        The widths are calculated by the \code{width} style of the \glspl{element}, relative to the container \gls{element} width.
+        The widths are calculated by the \code{width} style of the \glspl{element}, relative to the containing \gls{element} width.
         Margins and paddings are also taken into account when calculating the widths.
-        When the width of an \gls{element} is calculated, it needs to be controlled against the \code{min-width} and \code{max-width} style properties and make sure that the width is inside the given range.
-        If the content of an \gls{element} does not fit with the calculated width (text usually needs to perform line break when the width is too small), the \gls{element} needs to break up the content into multiple renderers in order to expand the height.
-        The renderer that has decided that it needs to break the content up into multiple renderers propagates to the parent renderer that it needs to perform the breaking.
+        When the width of an \gls{element} is calculated, it needs to be controlled against the \code{min-width} and \code{max-width} style properties to make sure that the width is inside the given range.
+        If the content of an \gls{element} does not fit to the calculated width the \gls{element} needs to break up the content into multiple renderers in order to expand the height (text usually needs to perform line break when the width is too small).
+        A renderer that has decided that it needs to break the content up into multiple renderers propagates to the parent renderer that it needs to perform the breaking.
         When the parent renderer has created the renderers needed to fit the content with the given height, layout is performed on the new renderers and then the final height can be calculated and propagated upwards.
       
       \subsection{Layout thrashing and how to avoid it}\label{sec:layout-thrashing}
@@ -971,11 +971,11 @@
           doubleWidths(elements); // ~700 ms
         \end{lstlisting}
         For each element given as parameter to the \code{doubleWidths} function, the \code{readWriteWidth} function is called with an element as argument.
-        In that function, the computed style of the element is requested, which will force a style computation for that \gls{element}.
-        If any \gls{DOM} node affecting the element is marked as dirty, a layout will also need to be performed before returning the computed style of the \gls{element}.
-        When the computed style has been acquired, the width of the \gls{element} is set to a new value, which is a \gls{DOM} mutation that will need to be synchronized with the \gls{render tree}.
-        Therefore, the element and its ancestors will be marked as dirty.
-        The next time \code{getComputedStyle} is called, which happens when processing the next element in the collection, a layout will be forced since \gls{DOM} nodes that affects the \glspl{element} has been marked as dirty.
+        In that function, the computed style of the element is requested, which forces a style computation for that \gls{element}.
+        If any \gls{DOM} node affecting the element is marked as dirty, a layout also needs to be performed before returning the computed style of the \gls{element}.
+        When the computed style has been acquired, the width of the \gls{element} is set to a new value, which is a \gls{DOM} mutation that needs to be synchronized with the \gls{render tree}.
+        Therefore, the element and its ancestors are marked as dirty.
+        The next time \code{getComputedStyle} is called, which happens when processing the next element in the collection, a layout is forced since \gls{DOM} nodes that affect the \gls{element} have been marked as dirty.
         See figure~\ref{fig:layout-thrashing-example-1} for a visualization of the execution of the \code{doubleWidths} function.
         It is shown in the figure that style computations and layout is performed in each iteration.
         The total time spent on style computations is \textasciitilde40 ms and layout is \textasciitilde600 ms, which leaves \textasciitilde60 ms for the actual script execution.
@@ -989,7 +989,7 @@
         \end{figure}
         \pagebreak
         To avoid \gls{layout thrashing}, the computed style requests and \gls{DOM} mutations need to be performed in \glslink{batch processing}{batches}, as presented in listing~\ref{code:thrashing-example-fixed}.
-        While it is algorithmically inefficient to iterate over the same collection twice --- the \glslink{batch processing}{batched} approach executes \textasciitilde100 times faster than the original version.
+        While it is algorithmically inefficient to iterate over the same collection twice --- the \glslink{batch processing}{batched} approach executes \textasciitilde100-fold faster than the original version.
         \begin{lstlisting}[gobble=10,caption={Example of avoiding \gls{layout thrashing} by \gls{batch processing} read and write operations to the \gls{DOM}. The code reads and doubles the widths of 1000 \glspl{element} in \textasciitilde7 ms.}, captionpos=b, label={code:thrashing-example-fixed}]
           /* Doubles the width of each element in the elements collection parameter. */
           function doubleWidths(elements) {
@@ -1012,10 +1012,10 @@
           doubleWidths(elements); // ~7 ms
         \end{lstlisting}
         Now, the \code{doubleWidths} function performs two \glslink{batch processing}{batches} that both iterates over the \glspl{element} collection.
-        In the first \glslink{batch processing}{batch}, all widths of all \glspl{element} are acquired and stored in a collection.
+        In the first \glslink{batch processing}{batch}, the width of all \glspl{element} are acquired and stored in a collection.
         Since no \gls{DOM} mutation occurs in the first \glslink{batch processing}{batch}, the \gls{layout engine} does not need to perform any layout while retrieving the styles.
         In the second \glslink{batch processing}{batch}, all \glspl{element} are assigned the new widths based on the widths retrieved in the first \glslink{batch processing}{batch}.
-        Since the script does not read the \gls{DOM} in any way during in the second \glslink{batch processing}{batch}, all \gls{DOM} mutations can be queued by the \gls{layout engine} to be \glslink{batch processing}{batch} processed.
+        Since the script does not read the \gls{DOM} in any way in the second \glslink{batch processing}{batch}, all \gls{DOM} mutations can be queued by the \gls{layout engine} to be \glslink{batch processing}{batch} processed.
         See figure~\ref{fig:layout-thrashing-example-1-fixed} for a visualization of the execution of the \glslink{batch processing}{batched} example version.
         In the figure, it is clear that the \gls{layout engine} is able to first execute the \gls{JavaScript}, and later perform all style and layout computations in a \glslink{batch processing}{batch}.
         \begin{figure}[ht]
@@ -1035,12 +1035,12 @@
         
         The major part of the time reduction is due to the layout time being significantly reduced.
         The reason why the layout time was significantly reduced is because the two versions do not perform layout on the same amount of \glspl{element}.
-        When an element and its ancestors have been marked as dirty, a layout will need to be performed on the subtree which contains at least all $n$ \glspl{element} and possibly some ancestor \glspl{element}.
+        When an element and its ancestors have been marked as dirty, a layout needs to be performed on the subtree that contains at least all $n$ \glspl{element} and possibly some ancestor \glspl{element}.
         So the minimum number of nodes that need to be laid out is given by $n + n_{a}$, where $n_a$ is the number of ancestor \glspl{element}.
         Since the first version forces the \gls{layout engine} to perform a layout in each iteration, the minimum number of \glspl{element} laid out is given by $n(n + n_a)$.
         Similar to style computation, performing a layout also has an overhead cost $O_{l}$.
         Let $C_{l}$ denote the time it takes for the \gls{layout engine} to layout one \gls{element}, then the total time needed for layout in the first version is given by $T(n) = n(O_{l} + C_{l}(n + n_a))$.
-        The second version enables the \gls{layout engine} to \glslink{batch processing}{batch process} the \gls{DOM} manipulations, and therefore only one layout of the subtree will need to be performed, which results in the minimum number of \glspl{element} laid out being $n + n_a$.
+        The second version enables the \gls{layout engine} to \glslink{batch processing}{batch process} the \gls{DOM} manipulations, and therefore only one layout of the subtree needs to be performed, which results in the minimum number of \glspl{element} laid out being $n + n_a$.
         The total time needed for layout in the second version is then given by $T(n) = O_{l} + C_{l}(n + n_a)$.
         The first version has time complexity $O(n^2)$ while the second version has time complexity $O(n)$, which is a significant optimization.
 
