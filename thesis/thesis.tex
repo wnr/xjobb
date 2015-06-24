@@ -1710,7 +1710,7 @@
         \end{itemize}
       \subsection{Plugins}
         Now, it is time to describe the systems and \glspl{API} that actually realizes element queries as \gls{ELQ} plugins.
-        The plugins presented here is the suggested solution to element queries according to the research of this thesis.
+        The plugins presented here are the suggested solution to element queries according to the research of this thesis.
         They are designed for adequate performance, good compatibility, and ease of use.
         For extreme requirements or corner cases, custom \gls{ELQ} plugins might be preferred.
         It should be noted that the development of the prolyfill plugin is left for future work.
@@ -1724,8 +1724,8 @@
         \todo[inline]{Maybe it should be generally explained that the attribute design of both plugins follow the same design. Explain options at element level, plugin level, etc.}
 
         \subsubsection{Breakpoints}\label{sec:plugin-breakpoints}
-          This plugin observes element resize events and updates the \glspl{element} size states according to defined breakpoints.
-          The name of the plugin is \code{elq-breakpoints} and it does not have any dependencies (other than the element resize detector of the \gls{ELQ} core).
+          This plugin is named \code{elq-breakpoints} and it observes element resize events in order to update the size states of \glspl{element} according to defined breakpoints.
+          It does not have any dependencies other than the element resize detector of the \gls{ELQ} core.
           The main idea of the plugin is to apply classes to target \glspl{element} that reflect the size states of the \glspl{element}.
           Style states of an element are defined by breakpoints by custom element attributes.
           See listing~\ref{code:elq-breakpoints-example} for an example of breakpoints definition attributes.
@@ -1741,8 +1741,8 @@
           The possible size states of the \gls{element} would then be (in pixels):
           \begin{itemize}
             \item $width < 300$
-            \item $300 <= width < 500$
-            \item $500 <= width$
+            \item $300 \leq width < 500$
+            \item $500 \leq width$
           \end{itemize}
           \todo{Explain that low is inclusive, and why.}
           The plugin appends classes to the \gls{element} that reflects the size state of the \gls{element}.
@@ -1791,7 +1791,7 @@
           This plugin complements the \code{elq-breakpoints} plugin and is needed in some cases due to limitations of CSS.
           Suppose that it is desired for an application to style all paragraph \glspl{element} differently by the size of the nearest element with a \code{container} class.
           Paragraphs may appear nested in other \glspl{element}, which may be generated dynamically at runtime.
-          Therefore, the structure of the application is not known when writing the \gls{CSS}, so no assumptions can be done about the markup structure.
+          Therefore, the structure of the application is not known when writing the \gls{CSS}, so no assumptions can be made about the markup structure.
           Consider the example markup given in listing~\ref{code:elq-mirror-example} for an example \gls{HTML} structure.
           It should be noted that the \code{container} \glspl{element} might be styled in any way (e.g., the widths of the inner container \gls{element} could be relative to the outer container \gls{element}).
           \begin{lstlisting}[gobble=12,caption={Example \gls{HTML} structure where all paragraphs are desired to be conditionally styled by the nearest ancestor container.},captionpos=b,label={code:elq-mirror-example}]
@@ -1844,7 +1844,7 @@
             .container p.elq-width-above-300  { background-color: yellow; }
             .container p.elq-width-above-500  { background-color: green;  }
           \end{lstlisting}
-          Notice that the breakpoint classes now are used in conjunction with the paragraph simple selector instead of the container in the CSS selectors.
+          Notice that the breakpoint classes are now used in conjunction with the paragraph simple selector instead of the container in the CSS selectors.
           This way, the conditional styles behave as expected since all paragraphs are by the nearest (instead of any) container \gls{element}.
 
           By mirroring element breakpoint classes, \glspl{element} can be styled by criteria of any element (ancestor, sibling, child, etc.).
@@ -1861,7 +1861,7 @@
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       \subsection{Batch processor}\label{sec:imp_batch_processor}
         % To avoid \gls{layout thrashing} by other scripts it can beneficial to asynchronously postpone the \glslink{batch processing}{batch} until the next layout cycle of the \gls{browser}, which is also handled by the subsystem.
-        Both Section~\ref{sec:layout-process} and \ref{sec:layout-thrashing} is recommended to read in order to understand the optimizations described in this section.
+        Both Section~\ref{sec:layout-process} and \ref{sec:layout-thrashing} are recommended to read in order to understand the optimizations described in this section.
         The \glslink{batch processing}{batch processor} is the foundation for good performance of the library, and is therefore used by several subsystems.
         It serves two purposes:
         \begin{enumerate}
@@ -1894,7 +1894,7 @@
 
         \paragraph{Leveled processing}
         Being able to process a \glslink{batch processing}{batch} in levels is important when different types of operations, that are to be processed in a specific order (usually to avoid \gls{layout thrashing}), needs to be grouped together in a \glslink{batch processing}{batch}.
-        For instance, a function that doubles an \gls{element}'s width and read the new calculated height benefits by being \glslink{batch processing}{batch} processed in three levels: reading the width, mutating the width, and reading the new height.
+        For instance, a function that doubles an \gls{element}'s width and reads the new calculated height benefits by being \glslink{batch processing}{batch} processed in three levels: reading the width, mutating the width, and reading the new height.
         Such function could also benefit from automatically process the \glslink{batch processing}{batch} so that the user may call the function multiple times synchronously.
         See listing~\ref{code:batch-processor-example-2} for an example implementation of such function that uses the leveled \glslink{batch processing}{batch processor}.
         The function achieves a 45-fold speedup when applied to 1000 \glspl{element} by processing the \glslink{batch processing}{batch} in levels compared to not doing so in Chrome version 43.
@@ -1948,8 +1948,8 @@
             \textbf{Polling-based solution}:
             To have a script running asynchronously checking \glspl{element} if they have resized.
             This can be achieved by using the \gls{JavaScript} \code{setInterval}\footnote{See \url{http://www.w3.org/html/wg/drafts/html/master/webappapis.html\#timers} for more information about \gls{JavaScript} timer functions.} function.
-            Short polling intervals (high frequency) leads to being able to detect resize events quicker but having worse performance.
-            Longer polling intervals (low frequency) leads to not being able to detect resize events as quickly but having better performance.
+            A short polling interval (high frequency) leads to being able to detect resize events quicker but having worse performance.
+            A long polling interval (low frequency) leads to not being able to detect resize events as quickly but having better performance.
             The longest delay between an actual resize event and the detection is given by the polling interval time.
             This approach is the most robust, as it supports arbitrary \glspl{element} (including void \glspl{element}) and provides excellent \gls{browser} compatibility.
           \item\label{itm:erd-approach-object}
@@ -1960,17 +1960,17 @@
             Then a resize event handler is attached to the \gls{document} of the \code{object} that emits a \code{resize} event\footnote{See \url{http://www.w3.org/TR/DOM-Level-3-Events/\#event-type-resize} for more information about the resize event.} for every target \gls{element} resize.
           \item\label{itm:erd-approach-scroll}
             \textbf{Scroll-based solution}:
-            This solution injects an \gls{element} to the target element that contains multiple overflowing \glspl{element} that listens to \code{scroll} events\footnote{See \url{http://www.w3.org/TR/DOM-Level-3-Events/\#event-type-scroll} for more information about the \code{scroll} event.}.
+            This solution injects an \gls{element} to the target element that contains multiple overflowing \glspl{element} that listen to \code{scroll} events\footnote{See \url{http://www.w3.org/TR/DOM-Level-3-Events/\#event-type-scroll} for more information about the \code{scroll} event.}.
             The overflowing \glspl{element} are styled so that \code{scroll} events are emitted when the target \gls{element} is resized.
             For detecting when the target \gls{element} shrinks, two \glspl{element} are needed; one for handling the scrollbars and one for causing them to scroll.
             Similarly, for detecting when the target \gls{element} expands, two \glspl{element} are needed in the same way.
-            A container \gls{element} is injected that contains the four \glspl{element} and is styled so that it matches the size of the target \gls{element} and so that it does not affect the page visually.
+            A container \gls{element} that contains the four \glspl{element} is injected and styled so that it matches the size of the target \gls{element} and does not affect the page visually.
           \item\label{itm:erd-approach-flow}
             \textbf{Flow-based solution}:
             This solution is similar to the scroll-based solution in the sense that it also injects \glspl{element} that have overflowing content.
             Instead of listening to \code{scroll} events, this solution uses flow events.
             The idea is to detect when scrollbars disappear (i.e., underflow of content since the target container has increased in size) and when scrollbars appear (i.e., overflow of content since the target container has decreased in size).
-            Unfortunately such events are not standardized but \gls{Gecko}, \gls{WebKit} and \gls{Blink} support them (although by different \glspl{API})\footnote{See \url{https://developer.mozilla.org/en-US/docs/Web/Events/overflow} for more information about the \gls{Gecko} flow event \gls{API}.}.
+            Unfortunately such events are not standardized, but \gls{Gecko}, \gls{WebKit} and \gls{Blink} support them (although by different \glspl{API})\footnote{See \url{https://developer.mozilla.org/en-US/docs/Web/Events/overflow} for more information about the \gls{Gecko} flow event \gls{API}.}.
             \gls{Blink} still supports the events but has deprecated them \cite{blink_deprecated_flow_events} since version 34.
         \end{enumerate}
         The polling-based solution is appealing because it does not mutate the \gls{DOM}, supports arbitrary \glspl{element}, and it provides excellent \gls{browser} compatibility since it does not rely on special \gls{element} behavior or similar.
@@ -1981,7 +1981,7 @@
         \todo{Should make quick test to see how much CPU it uses when polling frequently}
 
         \paragraph{Injection solutions}
-        The object-based, scroll-based and flow-based solutions have similar characteristics and have both been originally presented by \cite{backalley}.
+        The object-based, scroll-based and flow-based solutions have similar characteristics and have all been originally presented by \cite{backalley}.
         The flow-based solution was presented first, but was rejected in favor of the scroll-based solution as it was discovered that in turn was rejected in favor of the object-based solution.
         Fortunately, somewhat reworked versions of the flow-based and scroll-based solutions are still provided by \cite{eq_imp_prollyfill-min-width} and \cite{eq_imp_css-element-queries} respectively.
         While not stated officially by \cite{backalley}, the flow-based solution was probably rejected due to the lack of \gls{browser} compatibility.
@@ -2062,12 +2062,12 @@
         Therefore, step~\ref{itm:erd-algo-original-scroll-5} is performed in level~\ref{itm:erd-algo-scroll-level-3} as the last step.
         \Glspl{layout engine} can theoretically queue the scrollbar repositioning operations too as they do not affect the layout of each other.
         The \gls{Blink} \gls{layout engine} is able to do so, which results in exceptional performance as shown in Section~\ref{sec:eval-perf-erd}.
-        \gls{Gecko} and \gls{WebKit} does not yet do so and therefore each iteration in step~\ref{itm:erd-algo-original-scroll-5} forces a layout.
+        \gls{Gecko} and \gls{WebKit} are not able to do so and therefore each iteration in step~\ref{itm:erd-algo-original-scroll-5} forces a layout.
         However, it is still beneficial to \glslink{batch processing}{batch} process the algorithm for such \glspl{layout engine} since only pure layouts need to be performed (instead of having to recompute styles and synchronize the \gls{DOM} and \glspl{render tree} before each layout).        
         As step~\ref{itm:erd-algo-original-scroll-6} is performed by the \gls{layout engine} asynchronously and does not interact with the \gls{DOM}, it does not need to be \glslink{batch processing}{batch} processed.
 
         \paragraph{MutationObservers}
-        The \code{MutationObserver} \gls{API} defined in the W3C working draft of the DOM level 4 specification \cite{w3c_dom_4} may seem like a good candidate to use for detecting \gls{element} resize events at a first glance.
+        The \code{MutationObserver} \gls{API} defined in the W3C working draft of the DOM level 4 specification \cite{w3c_dom_4} may seem like a good candidate to use for detecting \gls{element} resize events at first glance.
         Although not yet standardized, the \gls{API} is implemented in modern \glspl{browser} according to the working draft.
         By using mutation observers it is possible to observe attribute or subtree changes of an \gls{element}.
         By observing the \code{style} attribute of an \gls{element} and the content of it (if the \gls{element} size depends on its children), it is possible to detect direct style changes of an \gls{element} (e.g., changes to the \code{style} attribute by \gls{JavaScript}).
