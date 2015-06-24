@@ -229,9 +229,9 @@
 % \renewcommand*{\glstextformat}[1]{\textsf{#1}}
 \defglsdisplayfirst[\glsdefaulttype]{\textit{#1}}
 
-\title{Element queries - the solution to modular responsive web design}
-\foreigntitle{Element queries - lösningen på modulär responsiv webbdesign}
-\subtitle{Allowing responsive web modules to respond to custom criteria instead of only the viewport size by implementing \emph{element queries}}
+\title{ELQ: extensible element queries for modular responsive web components}
+\foreigntitle{ELQ: utbyggbara element queries för modulära responsiva webbkomponenter}
+\subtitle{Allowing modular responsive web components to respond to custom criteria instead of only the viewport size by implementing an element queries JavaScript library}
 \author{Lucas Wiener \\ \lowercase{lwiener@kth.se}}
 \date{June 2015}
 \blurb{Master's Thesis at \abbr{csc}\\\hfill\\ Supervisors at \abbr{evry ab}: Tomas Ekholm \& Stefan Sennerö\\Supervisor at \abbr{csc}: Philipp Haller\\Examiner: Mads Dam}
@@ -257,7 +257,7 @@
     Additionally, implementing element queries impose circularity and performance problems, which need to be resolved before writing a standard.
 
     This thesis presents the issues that element queries impose to layout engines and shows some approaches to overcome the problems.
-    In order to enable developers to create encapsulated responsive modules, while waiting for native support, a third-party element queries JavaScript library has been developed.
+    In order to enable developers to create encapsulated responsive modules, while waiting for native support, a third-party element queries JavaScript library named ELQ has been developed.
     As presented in this thesis, the library provides both performance and usage advantages to other related libraries.
     An optimized subsystem for detecting resize events of elements has been developed using a leveled batch processor, which is significantly faster than similar systems.
     As part of the empirical evaluation of the developed library the Bootstrap framework has been altered to use element queries instead of media queries by altering \textasciitilde50 out of \textasciitilde8500 lines of style code, which displays one of the advantages of the library.
@@ -277,7 +277,7 @@
     Dessutom är det problematiskt att implementera element queries eftersom de medför problem gällande cirkularitet samt prestanda, vilket måste lösas innan en standard skapas.
 
     Denna rapport presenterar de problem för webbläsares renderingsmoterer som element queries medför och visar sätt att övervinna vissa av problemen.
-    För att möjliggöra skapandet av enkapsulerade responsiva moduler, i väntan på webbläsarstöd, har ett tredjepartsbibliotek för element queries skapats i JavaScript.
+    För att möjliggöra skapandet av enkapsulerade responsiva moduler, i väntan på webbläsarstöd, har ett tredjepartsbibliotek för element queries namngett ELQ skapats i JavaScript.
     Biblioteket erbjuder både prestanda- och användningsfördelar jämfört med andra relaterade bibliotek.
     Ett optimerat delsystem för att detektera förändringar av elements storlekar har utvecklats som använder en nivåuppdelad \emph{batch}-processerare vilket medför att delsystemet erbjuder signifikant bättre prestanda än relaterade system.
     Som del av den empiriska utvärderingen har det populära ramverket Bootstrap modifierats att använda element queries istället för media queries genom att ändra \textasciitilde50 utav \textasciitilde8500 rader stilkod, vilket visar en av fördelarna med det utvecklade biblioteket.
@@ -392,11 +392,11 @@
 
       With the developed element queries library presented in this thesis, developers are enabled to create truly \gls{responsive} modules while waiting for the \gls{W3C} to standardize a solution.
       The novelty of the library is that it is performant, compatible, flexible, powerful, and extensible.
-      Any other related library does not provide such positive properties.
-      The library provides a unique way to overcome some limitations of \gls{CSS} without requiring invalid syntax or parsing of \gls{CSS}.
-      Related work that overcome similar limitations require invalid syntax, which brings many drawbacks (e.g., reduced performance and development tools incompatibility).
-      It has also been shown that the library has significantly better performance than related work in most configurations.
-      Further, the \glspl{API} of the library makes it easy to integrate into existing projects, which has been shown by altering the \gls{Bootstrap} framework to use element queries instead of \gls{media queries} by only altering \textasciitilde50 lines of style code.
+      No other related library simultaneously provides all of these desirable properties.
+      The library provides a unique way to overcome some limitations of \gls{CSS} without requiring currently-invalid syntax or parsing of an extended, incompatible version of \gls{CSS}.
+      Related approaches that overcome similar limitations require invalid syntax, which brings many drawbacks (e.g., reduced performance and development tools incompatibility).
+      It has also been shown that the library has significantly better performance than related approaches in most configurations.
+      Further, the \gls{API} of the library makes it easy to integrate into existing projects, which has been shown by altering the \gls{Bootstrap} framework to use element queries instead of \gls{media queries} by only altering \textasciitilde50 lines of style code.
       No related library is currently capable of such positive results.
       The library is able to provide such positive properties while still maintaining compatibility with legacy browsers (down to Internet Explorer version 8).
       
@@ -409,22 +409,22 @@
     \section{Choice of methodology}
       The results and conclusions of this thesis are based on a scientific study using an iterative development process evaluated by empirical studies.
       The library design is motivated by identified requirements of element queries, which have been gathered partly by the literature study and studies of existing responsive applications.
-      To write the non-\gls{native} library in \gls{JavaScript} was chosen because it is the common scripting language of browsers.
-      For increased compatibility and ease of use it was chosen to not write the library in a language that compiles to \gls{JavaScript}.
+      The decision to write the non-\gls{native} library in \gls{JavaScript} was made, because \gls{JavaScript} is the common scripting language of \glspl{browser}.
+      For increased compatibility and ease of use, the use of other languages compiling to \gls{JavaScript} was avoided.
 
       The performance and browser compatibility of the library have been evaluated by empirically testing the library in different browsers.
       Since there are numerous related libraries only the performance of the element resize detection subsystem of the libraries has been evaluated.
       There are only three different approaches to such a subsystem, and therefore the work needed to compare the libraries was reduced significantly.
-      Such delimitation is motivated with that the element resize detection subsystem performs the heaviest task, and therefore forms the largest performance impact.
-      Another delimitation is that only fully functioning automated related libraries have been evaluated, since the others cannot be considered an option to the developed library.
+      This restriction is motivated by the fact that the element resizing detection subsystem performs the heaviest task by far, and therefore has the largest performance impact.
+      Another restriction is that only fully functioning automated related libraries have been evaluated, since others cannot be considered an equivalent alternative to the developed library.
 
       The \glspl{API} and features of the library have been evaluated empirically by altering the popular \gls{Bootstrap} framework to use element queries instead of media queries.
       It is hard to objectively evaluate features and \gls{API} designs, but some objective data was gathered by the evaluation.
       The \gls{Bootstrap} framework was chosen because it consists of a large open source codebase and is widely used as a foundation of many responsive applications.
-      Only the constructed library was evaluated, since it could be concluded by analyzing the related libraries that none would be able to achieve similar results.
+      Only the constructed library was evaluated, since it can be concluded by analyzing related libraries that none would be able to achieve equivalent results.
 
-      The premises of the library development method are considered valid since a \gls{JavaScript} library is the natural choice when creating a browser extension that are to be used by other developers.
-      The premises of the \gls{Bootstrap} altering method are considered valid since \gls{Bootstrap} has the properties that are needed for such evaluation to be sound (e.g., it is widely used in production, has a large code base, and has sufficiently advanced responsive features).
+      The premises of the library development method are considered valid since a \gls{JavaScript} library is the natural choice when creating a browser extension that is to be used by a large audience of developers.
+      The premises of the \gls{Bootstrap} altering method are considered valid since \gls{Bootstrap} has the properties that are required for such an evaluation to be sound (e.g., it is widely used in production, has a large code base, and has sufficiently advanced responsive features).
       The premises of the performance evaluation method are considered valid since it is possible to evaluate different systems in the same configuration in order to achieve comparable results.
 
     \section{Outline}
@@ -449,13 +449,13 @@
       By altering \gls{Bootstrap} to use element queries instead for the \gls{responsive} classes, some of the technical goals can be evaluated.
       Similarly, by measuring the performance of the library and different subsystems additional technical goals can be evaluated.
       \todo{This is not done, should do this!}
-      The performance measurements are also used to compare the performance of the library to related work.
+      The performance measurements are also used to compare the performance of the library to related approaches.
 
       \chref{ch:related-work} describes related libraries and presents advantages as well as drawbacks to the different approaches.
       Since many of the libraries presented in this chapter share the same characteristics they are classified.
       This way, the different classes can be evaluated instead of evaluating all libraries in detail.
 
-      \chref{ch:discussion} discusses advantages and drawbacks of non-\gls{native} solutions, and related work is compared to the developed library.
+      \chref{ch:discussion} discusses advantages and drawbacks of non-\gls{native} solutions, and related libraries are compared to the developed library.
       The fulfillment of the identified requirements of the developed library are also discussed.
       
       \chref{ch:conclusions} summarizes the conclusions of this thesis, and shows how the formulated problem is solved and how the scientific question is answered.
@@ -2082,7 +2082,6 @@
 
         \todo[inline]{Describe mutation observers in the list of solutions?}
         \todo[inline]{Write how the bugs were fixed in the scroll approach?}
-        \todo[inline]{It is stated in Related work that original scroll and flow based approaches have limitations and bugs. Describe them here.}
         \todo[inline]{Write that for IE the native resize listener is used.}
 
       % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2138,7 +2137,7 @@
     \gls{Bootstrap} uses \gls{media queries} to provide \gls{responsive} \gls{CSS} classes that often are desired to use in \gls{web} applications.
     By using element queries instead, the classes become \gls{encapsulated} and can be used in \gls{responsive} modules.
     Section~\ref{sec:eval-performance} evaluates the performance of \gls{ELQ} in different browsers.
-    Key subsystems are evaluated independently so that they can be compared to similar subsystems of related work.
+    Key subsystems are evaluated independently so that they can be compared to similar subsystems of related libraries.
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Bootstrap
@@ -2751,7 +2750,6 @@
     \todo[inline]{Write somewhere that an extra layout on \glspl{element} resize is inevitable since it is required in theory.}
     \todo[inline]{Write meta.}
     \todo[inline]{Write about media query CSS approach as an approach?}
-    \todo[inline]{Philipp: Compare performance to the measurements done in Evaluation to the related work.}
     \todo[inline]{Write about the GSS, eq.js, etc. more in detail in subsections?}
 
 
@@ -2793,10 +2791,10 @@
     \paragraph{Element resize detection}
     The perhaps most difficult goals to achieve was \ref{itm:req_resize_detect} and \ref{itm:req_performance} that requires the library to be both automatic (i.e., it should evaluate element queries on element resize events) and performant.
     Detecting element resize events in a performant way has been shown to be problematic since there is no standardized way of doing so.
-    All related work do not conform to both goals, as they either do not observe element resize events or do so in a non-performant way.
+    No related library conforms to both goals, as related libraries either do not observe element resize events or do so in a non-performant way.
     A heavily optimized solution to detecting element resize events has been developed in order to enable \gls{ELQ} to support both goals.
     It is of course ambiguous if the solution is performant enough to conform to goal \ref{itm:req_performance}, as the optimized solution still impacts the performance in some \glspl{browser} (e.g., FireFox and Safari).
-    At least, the solution performs significantly better than the existing solutions as used by related work.
+    At least, the solution performs significantly better than the existing solutions as used by related libraries.
     Such good performance was achieved by \gls{batch processing} all \gls{DOM} interactions, by using the leveled \glslink{batch processing}{batch processor} subsystem that has been developed to be used by \gls{ELQ}.
     Both the element resize event detection system and the leveled \glslink{batch processing}{batch processor} was decided to be released as two independent open source projects\footnote{See \url{https://github.com/wnr/element-resize-detector} for the element resize event detector and \url{https://github.com/wnr/batch-processor} for the leveled \glslink{batch processing}{batch} processor.}, since they are general enough to be used in other projects than \gls{ELQ}.
 
@@ -2810,7 +2808,7 @@
     However, evaluating element queries synchronously in the head of a \gls{document} is impossible, since the \gls{layout engine} have yet to parse and construct the document body \gls{DOM}.
     Further, element queries requires the \gls{layout engine} to perform a layout in order to be able to get the final size of \glspl{element}.
     When performing a layout, render engines usually take the opportunity to render the new state of the page.
-    So, a flash of invalid style at page load is inevitable (and is also the case with all related work that evaluate element queries at runtime).
+    So, a flash of invalid style at page load is inevitable (and is also the case with all related libraries that evaluate element queries at runtime).
     For instance, the \gls{ELQ} \gls{Bootstrap} example documentation page would on load be rendered as it should be on small screens, since the small layout is the default that it falls back to if no queries match.
     Such flash could be avoided by rendering a white rectangle over the \gls{viewport} and remove it when the page has been rendered correctly.
 
@@ -2826,23 +2824,23 @@
     \paragraph{ELQ and related work}
     \gls{ELQ} and its plugins provide a low level \gls{API} for building \gls{responsive} design frameworks and applications by enabling the user to conditionally style \glspl{element} with valid \gls{CSS}.
     By not requiring invalid \gls{CSS}, the library can be easily incorporated into existing projects.
-    Additionally, \gls{CSS} tools can advantageously be used in tandem with the \gls{ELQ} syntax --- something that is not possible with related work that require invalid \gls{CSS}.
+    Additionally, \gls{CSS} tools can advantageously be used in tandem with the \gls{ELQ} syntax --- something that is not possible with related libraries that require invalid \gls{CSS}.
     The mirror plugin of \gls{ELQ} enables developers to overcome some \gls{CSS} limitations, which has been proven to be important when writing \gls{responsive} modules that should not be limited to a predefined \gls{HTML} structure (as shown in Section~\ref{sec:eval-bootstrap}).
-    Related work only support such feature by using invalid \gls{CSS}.
-    By using related work that require invalid \gls{CSS}, the \gls{Bootstrap} framework would not be possible to alter with as few altered lines of code as achieved by \gls{ELQ} since the \gls{LESS} preprocessor would not understand the invalid \gls{CSS} syntax.
-    Also, such related work impose a significant performance impact since the responsive \glspl{element} need to be evaluated at runtime in \gls{Bootstrap}.
+    Related libraries only support such feature by using invalid \gls{CSS}.
+    By using related libraries that require invalid \gls{CSS}, the \gls{Bootstrap} framework would not be possible to alter with as few altered lines of code as achieved by \gls{ELQ} since the \gls{LESS} preprocessor would not understand the invalid \gls{CSS} syntax.
+    Also, such related libraries impose a significant performance impact since the responsive \glspl{element} need to be evaluated at runtime in \gls{Bootstrap}.
 
     Since \gls{ELQ} is plugin based, different plugins may be developed for different use cases without bloating the library \gls{API} or decreasing the overall performance.
-    Related work have different advantages and limitations.
+    Related libraries have different advantages and limitations.
     For instance, static pages may prefer a solution that does not observe \gls{element} resize events (as it is not needed for static pages).
-    Related work that are limited and not able to detect element resize events are then suitable as the performance penalty of doing so is avoided.
-    Fortunately, since \gls{ELQ} is plugin based the same behavior as such related work can be achieved with plugins (or options) and may therefore still be the preferred library to use.
+    Related libraries that are limited and not able to detect element resize events are then suitable as the performance penalty of doing so is avoided.
+    Fortunately, since \gls{ELQ} is plugin based the same behavior as such related libraries can be achieved with plugins (or options) and may therefore still be the preferred library to use.
     An advantage of using the same library for multiple use cases is that developers only need to learn one library and that it can easily be extended when application requirements change.
 
-    A major difference to related work is that \gls{ELQ} is powered by a highly optimized subsystem for detecting \gls{element} resize events, which provides a significant speedup to related work that also detect \gls{element} resize events.
+    A major difference to related libraries is that \gls{ELQ} is powered by a highly optimized subsystem for detecting \gls{element} resize events, which provides a significant speedup to related libraries that also detect \gls{element} resize events.
     The subsystem used by \gls{ELQ} has been showed to have the same or better performance as the other subsystems in FireFox and Safari.
-    It has been shown that the optimized subsystem performs 32-fold (for the object-based solution) or 13-fold (for the scroll-based solution) faster than the subsystems used by related work in Chrome when preparing 500 \glspl{element} to be detectable.
-    Additionally, some solutions used by related work suffer from issues that \gls{ELQ} does not as described in Section~\ref{sec:imp_erd}.
+    It has been shown that the optimized subsystem performs 32-fold (for the object-based solution) or 13-fold (for the scroll-based solution) faster than the subsystems used by related libraries in Chrome when preparing 500 \glspl{element} to be detectable.
+    Additionally, some solutions used by related libraries suffer from issues that \gls{ELQ} does not as described in Section~\ref{sec:imp_erd}.
     \todo{Finish this.}
 
   \chapter{Conclusions}\label{ch:conclusions}
@@ -2861,9 +2859,9 @@
 
     The empirical evaluation of \gls{ELQ} shows that it is both reliable and provides enough features for advanced \gls{web} applications such as the \gls{Bootstrap} framework and documentation page.
     Adequate browser compatibility is also provided, since \gls{ELQ} supports the same set of browsers as the \gls{Bootstrap} framework does.
-    \gls{ELQ} has been shown to have overall significantly better performance than related work.
-    Some related work achieve the same performance as \gls{ELQ} in Safari, but not in other \glspl{browser}.
-    In Chrome, the speedup is 32-fold when operating on 500 \glspl{element} compared to related work that uses the object-based \gls{element} resize detection subsystem.
+    \gls{ELQ} has been shown to have overall significantly better performance than related libraries.
+    Some related libraries achieve the same performance as \gls{ELQ} in Safari, but not in other \glspl{browser}.
+    In Chrome, the speedup is 32-fold when operating on 500 \glspl{element} compared to related libraries that use the object-based \gls{element} resize detection subsystem.
     Also, the evaluation shows that the library is easy to integrate into existing projects since only \textasciitilde50 lines out of \textasciitilde8500 lines of style code was needed to be altered for \gls{Bootstrap} to be fully based on element queries.
     Therefore, the scientific question is answered in the affirmative.
 
