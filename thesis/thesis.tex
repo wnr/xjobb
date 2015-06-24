@@ -229,9 +229,8 @@
 % \renewcommand*{\glstextformat}[1]{\textsf{#1}}
 \defglsdisplayfirst[\glsdefaulttype]{\textit{#1}}
 
-\title{ELQ: extensible element queries for modular responsive web components}
-\foreigntitle{ELQ: utbyggbara element queries för modulära responsiva webbkomponenter}
-\subtitle{Allowing modular responsive web components to respond to custom criteria instead of only the viewport size by implementing an element queries JavaScript library}
+\title{ELQ: Extensible Element Queries for Modular Responsive Web Components}
+\foreigntitle{ELQ: Utbyggbara Element Queries för Modulära Responsiva Webbkomponenter}
 \author{Lucas Wiener \\ \lowercase{lwiener@kth.se}}
 \date{June 2015}
 \blurb{Master's Thesis at \abbr{csc}\\\hfill\\ Supervisors at \abbr{evry ab}: Tomas Ekholm \& Stefan Sennerö\\Supervisor at \abbr{csc}: Philipp Haller\\Examiner: Mads Dam}
@@ -2288,10 +2287,10 @@
       Altering the \gls{LESS} code, including the \gls{ELQ} library, and the initiating \gls{JavaScript} is all that is required to make the double column documentation page behave as desired.
       Figure~\ref{fig:eval-bootstrap-mq-eq-header}, \ref{fig:eval-bootstrap-mq-eq-matrix} and \ref{fig:eval-bootstrap-mq-eq-grid} show different sections of the double column documentation page empowered by \gls{ELQ} \gls{Bootstrap}.
       For reference, the same sections using the original \gls{Bootstrap} are also included to show how they behave without element queries.
-      As shown in the figures, the double column documentation page using the original \gls{Bootstrap} styles the two columns as if they both had the whole \gls{viewport} width available.
+      As shown in the figures, the double column documentation page using the original \gls{Bootstrap} styles the two columns as if they both have the whole \gls{viewport} width available.
       Therefore the two columns intersect because some content \glspl{element} are styled wider than a column.
-      The double column documentation page using \gls{ELQ} \gls{Bootstrap} on the other hand enables all \gls{responsive} \glspl{element} to style themselves according a parent container \gls{element}.
-      Therefore, the two half-page columns detect that they only have half the \gls{viewport} width and style themselves accordingly.
+      The double column documentation page using \gls{ELQ} \gls{Bootstrap} on the other hand enables all \gls{responsive} \glspl{element} to style themselves according to a parent container \gls{element}.
+      Therefore, the two half-page columns detect that they only have half of the \gls{viewport} width and style themselves accordingly.
       The visual result is the same as having two documentation sites of the original \gls{Bootstrap} in two \code{iframe} \glspl{element} as two columns (since \code{iframe} \glspl{element} creates a separate \gls{viewport}).
       \todo[inline]{Write that the original CSS documentation behaves as expected out of the box (not changes to the html)?}
       \todo[inline]{Write that such small code changes (also maybe state the total code changes of the repo) really eases merging of new updates to the upstream repo.}
@@ -2383,7 +2382,7 @@
       %\subsection{Element resizing detection}\label{sec:eval-perf-erd}
         This section evaluates the performance of the object-based and scroll-based solutions to detecting \gls{element} resize events described in Section~\ref{sec:imp_erd}.
         The optimized \gls{ELQ} version of the scroll-based solution is also evaluated.
-        Since the element resizing detection subsystem performs the heaviest tasks, only the performance of that subsystem is evaluated in detail.
+        Since the element resizing detection subsystem performs the heaviest tasks, only the performance of that subsystem is evaluated.
         The other subsystems entail no significant performance penalties.
         \todo{Remove this, and analyze the different subsystems in detail: erd, cycle detector, elq-breakpoints, etc.}
 
@@ -2491,12 +2490,12 @@
                 \end{axis}
               \end{tikzpicture}
             \end{minipage}
-          \caption{The injection performance of the scroll-based element resizing detection solution provided by \cite{eq_imp_css-element-queries} and originally created by \cite{backalley}. The left graph shows the injection time of the scroll-based solution. The right graph also includes the object-based solution for reference. The heap memory usage graph has been omitted as the memory usage for the scroll-based solution is near constant.}
+          \caption{The injection performance of the scroll-based element resizing detection solution provided by \cite{eq_imp_css-element-queries}. The left graph shows the injection time of the scroll-based solution. The right graph also includes the object-based solution for reference. The heap memory usage graph has been omitted as the memory usage of the scroll-based solutions is too low for reliable measurements.}
           \label{fig:erd-original-scroll}
           \end{center}
         \end{figure}
 
-        Recall that the scroll-based solution was rewritten and optimized; which is referred to as the \gls{ELQ} version of the scroll-based solution.
+        Recall that the scroll-based solution was rewritten and optimized, which is referred to as the \gls{ELQ} scroll-based solution.
         By avoiding \gls{layout thrashing}, the injection performance was improved significantly.
         See figure~\ref{fig:erd-elq-scroll} for graphs that show how it performs compared to the other solutions.
         As evident in the figure, the optimized \gls{ELQ} solution has significantly reduced injection times compared to the other two.
@@ -2552,7 +2551,7 @@
                 \end{axis}
               \end{tikzpicture}
             \end{minipage}
-          \caption{The injection performance of the optimized \gls{ELQ} scroll-based element resizing detection solution. The left graph shows the injection time of the \gls{ELQ} scroll-based solution. The right graph shows all three solutions for comparison. The heap memory usage graph has been omitted as the memory usage for the scroll-based solutions are near constant.}
+          \caption{The injection performance of the optimized \gls{ELQ} scroll-based element resizing detection solution. The left graph shows the injection time of the \gls{ELQ} scroll-based solution. The right graph shows all three solutions for comparison. The heap memory usage graph has been omitted as the memory usage of the scroll-based solutions is too low for reliable measurements.}
           \label{fig:erd-elq-scroll}
           \end{center}
         \end{figure}
@@ -2660,7 +2659,7 @@
         \cite{eq_imp_eqjs} &                  eq.js &                                       Valid &     \Gls{viewport} only &        Dynamic &   \\
         \cite{eq_imp_element-queries} &       Element Queries &                             Valid &     Non-void \glspl{element} &   Dynamic &   Object-based element resizing detection. \\
         \cite{eq_imp_css-element-queries} &   CSS Element Queries &                         Valid &     Non-void \glspl{element} &   Dynamic &   Scroll-based element resizing detection. \\
-        \cite{eq_imp_selector_queries} &      Selector queries and responsive containers &  Valid &     Arbitrary \glspl{element} &  Dynamic &   Polling. \\
+        \cite{eq_imp_selector_queries} &      Selector queries and responsive containers &  Valid &     Arbitrary \glspl{element} &  Dynamic &   Polling-based element resizing detection. \\
       \end{tabular}
       \caption{Classification of related element queries libraries.}
       \label{table:approaches-classifications}
@@ -2687,7 +2686,7 @@
     
     \paragraph{Invalid syntax}
     The libraries \cite{eq_imp_magichtml,eq_imp_eqcss,eq_imp_prollyfill-min-width,eq_imp_localised-css,eq_imp_gss} have in common that they require developers to write custom (invalid) \gls{CSS}.
-    Since they no longer conform to the \gls{CSS} standard, new features can be supported through the custom \gls{CSS}.
+    Since they do not conform to the \gls{CSS} standard, new features can be supported through the custom \gls{CSS}.
     As shown by \cite{eq_imp_eqcss,eq_imp_gss} quite advanced features can be implemented this way.
     Additionally, adding new \gls{CSS} features implies that it is possible to implement a solution to element queries that does not require any changes to the \gls{HTML}, which may be preferable since all styling then can be written in \gls{CSS} (which is the purpose of \gls{CSS}).
     However, there are numerous drawbacks with libraries that require invalid \gls{CSS}.
@@ -2708,7 +2707,7 @@
       \item The custom parser engine needs to be included in the page, which implies a larger library script size.
     \end{itemize}
     
-    Second, by not conforming to \gls{CSS} standards many tools such as preprocessors, validators and linters are no longer compatible.
+    Second, by not conforming to \gls{CSS} standards many tools such as preprocessors, validators and linters are not compatible.
     Also, editors and other code-displaying tools are not able to understand the syntax and are therefore not able to highlight the code properly.
     It should be noted that it is in some cases possible to create plugins to such tools to extend their capabilities.
 
@@ -2723,7 +2722,7 @@
     \todo{Write why again?}
 
     The three remaining libraries use three different injection solutions, as described in Section~\ref{sec:imp_erd}, to detect element resize events; \cite{eq_imp_element-queries} uses the object-based solution, \cite{eq_imp_prollyfill-min-width} uses the flow-based solution, and \cite{eq_imp_css-element-queries} uses the scroll-based solution.
-    According to the evaluation in Section~\ref{sec:eval-performance}, all three libraries are less performant than the element resizing detection system used in \gls{ELQ}.
+    According to the evaluation in Section~\ref{sec:eval-performance}, all three libraries are generally less performant than the element resizing detection system used in \gls{ELQ}.
     Also, recall from Section~\ref{sec:imp_erd} that the flow-based and scroll-based solutions both have limitations and bugs.
 
     \paragraph{Constraint-based approach}
@@ -2772,17 +2771,17 @@
 
     % \section{ELQ}
     It has been identified that requirements and usages of element queries vary from case to case and it is therefore beneficial to provide a plugin-based library so that developers can tailor their custom solutions by choosing which plugins to use.
-    Different parts of the library have also been shown to have different development rates, which also is an argument in favor to having the library plugin-based.
+    Different parts of the library have been shown to have different development rates, which also is an argument in favor to having the library plugin-based.
     Two plugins were developed that enable adequately advanced features for the general use case (as described in Section~\ref{sec:eq-definitions}) that satisfies goals \ref{itm:req_bp_js} and \ref{itm:req_conditional_css}.
     The \code{elq-breakpoints} plugin is the actual entity that directly enables element queries and defines the \gls{API} to be used.
     A key restriction was made to the \gls{API} in order to satisfy goal \ref{itm:req_big_rewrite}, \ref{itm:natural}, \ref{itm:req_valid_syntax} and \ref{itm:assumption}: it must conform to the current \gls{web} standard and must therefore not require invalid syntax.
     This way preprocessors, validators, tools, and editors can be embraced and used in tandem with the library instead of shutting them out.
-    This design decision has proved to be very valuable when performing the altering of \gls{Bootstrap} as described in Section~\ref{sec:eval-bootstrap}.
+    This design decision has proved to be valuable when performing the altering of \gls{Bootstrap} as described in Section~\ref{sec:eval-bootstrap}.
     If the plugin would require invalid syntax it would not be as easy to alter the \gls{Bootstrap} \gls{LESS} files, since the \gls{LESS} preprocessor would not understand the syntax.
     Further, a lot of performance and compatibility issues have been avoided by not having to parse any \gls{CSS} at runtime.
     Since \gls{Bootstrap} was successfully altered to use element queries in \textasciitilde50 changed \gls{LESS} lines and a few lines added \gls{JavaScript}, the technical goals \ref{itm:req_big_rewrite} and \ref{itm:assumption} are considered to be fulfilled.
     In order to satisfy goal \ref{itm:req_cyclic_rules} a simple runtime cycle detection subsystem was implemented.
-    It is guaranteed to detect cycles, as long as plugins registers element style state changes to the subsystem.
+    It is guaranteed to detect cycles, as long as plugins register element style state changes to the subsystem.
     \todo{Quickly summarize performance}
     
     \paragraph{Element resizing detection}
@@ -2797,7 +2796,7 @@
 
     \paragraph{Drawbacks}
     Unfortunately, all \gls{JavaScript} element queries libraries have inherent drawbacks.
-    The most imminent drawback is perhaps that element queries are not evaluated when \glspl{layout engine} render the page for the first time, as \glspl{layout engine} usually renders a speculative state of the page before all content has been downloaded and parsed (e.g., external scripts).
+    The most imminent drawback is perhaps that element queries are not evaluated when \glspl{layout engine} render the page for the first time, as \glspl{layout engine} usually render a speculative state of the page before all content has been downloaded and parsed (e.g., external scripts).
     \Glspl{browser} behave a bit different regarding the speculative rendering, but at least \gls{Blink}, \gls{Gecko}, and \gls{WebKit} generally render the page before all external scripts have been executed.
     A naive solution to this could be to embed all external scripts inline with the \gls{HTML}, which would keep the \gls{layout engine} to perform the speculative rendering since external scripts are not fetched.
     However, \glspl{layout engine} may halt the parsing and evaluation of script tags in order to perform the speculative rendering.
@@ -2810,7 +2809,7 @@
     This could be avoided by rendering a white rectangle over the \gls{viewport} and remove it when the page has been rendered correctly.
 
     Another drawback that all element queries libraries that do not parse \gls{CSS} have in common is that the breakpoints of \glspl{element} are defined in either \gls{JavaScript} or \gls{HTML}.
-    It is desired to define the breakpoints in \gls{CSS} (since the purpose of \gls{CSS} is to define the style of a document), as with case with \gls{media queries}.
+    It is desired to define the breakpoints in \gls{CSS} (since the purpose of \gls{CSS} is to define the style of a document), as with \gls{media queries}.
     Due to both performance and compatibility problems, parsing of \gls{CSS} at runtime is not done by \gls{ELQ}.
     It was decided that the negative outcomes of doing that outweighs the positive.
     One compatibility issue is that \glspl{browser} generally do not support scripts to access external style sheets served from another domain unless specified by both the server and client.
@@ -2819,7 +2818,7 @@
     \todo[inline]{Write about the erd drawbacks.}
 
     \paragraph{ELQ and related work}
-    \gls{ELQ} and its plugins provide a low level \gls{API} for building \gls{responsive} design frameworks and applications by enabling the user to conditionally style \glspl{element} with valid \gls{CSS}.
+    \gls{ELQ} and its plugins provide a low level \gls{API} for building \gls{responsive} design frameworks and applications by enabling developers to conditionally style \glspl{element} with valid \gls{CSS}.
     By not requiring invalid \gls{CSS}, the library can easily be incorporated into existing projects.
     Additionally, \gls{CSS} tools can advantageously be used in tandem with the \gls{ELQ} syntax --- something that is not possible with related libraries that require invalid \gls{CSS}.
     The mirror plugin of \gls{ELQ} enables developers to overcome some \gls{CSS} limitations, which has been proven to be important when writing \gls{responsive} modules that should not be limited to a predefined \gls{HTML} structure (as shown in Section~\ref{sec:eval-bootstrap}).
@@ -2884,10 +2883,10 @@
     \paragraph{Extending the mirror plugin}
     In order to allow more advanced element query constellations, \code{elq-mirror} could be extended to enable mirror \glspl{element} to target arbitrary \glspl{element} (instead of just the nearest \code{elq-breakpoints} ancestor \gls{element}).
     This way it would be possible to write element queries against children, siblings, etc.
-    This would also be a key feature in order to further satisfy goal~\ref{itm:req_flexible}.
+    This would be a key feature in order to further satisfy goal~\ref{itm:req_flexible}.
 
     \paragraph{Prolyfill}
-    To satisfy goal~\ref{itm:req_prolyfill} an element queries prolyfill plugin could be created that would parse custom at runtime \gls{CSS} to simulate \gls{native} element queries.
+    To satisfy goal~\ref{itm:req_prolyfill} an element queries prolyfill plugin could be created that would parse custom \gls{CSS} at runtime to simulate \gls{native} element queries.
     It would then use an imaginary syntax of element queries, which could only be guessed at this point of time.
     Before any advancement has been made by the RICG regarding the syntax, the pseudo-syntax presented in Section~\ref{sec:eq-definitions} is a good start.
 
@@ -2916,8 +2915,8 @@
     Even though there are several issues with runtime parsing of CSS, it is probably beneficial in some cases.
     Recall from Section~\ref{sec:imp_erd} that CSS selectors may unintentionally style the injected \glspl{element} of the element resizing detection subsystem.
     By parsing CSS it would be possible to warn developers of such selectors.
-    The feature could be valuable in the development phase of applications, but should probably be disabled in production due to performance reasons.
-    Users that value true separation of style and \gls{HTML} could also benefit from parsing CSS, as the breakpoints of all \glspl{element} then could be deduced by considering the element queries in the CSS.
+    The feature could be valuable in the development phase of applications, but should probably be disabled in production due to performance and compatibility reasons.
+    Developers that value true separation of style and \gls{HTML} could also benefit from parsing CSS, as the breakpoints of all \glspl{element} then could be deduced by considering the element queries in the CSS.
 
     \paragraph{Element resizing detection}
     As shown in Section~\ref{sec:eval-perf-erd}, different solutions of detecting \gls{element} resize events are preferred for some \glspl{browser}.
@@ -2961,7 +2960,7 @@
         \begin{figure}[htbp!]
           \centering
           \includegraphics[width=0.9\linewidth]{images/bootstrap-mq-header-big}
-          \caption{Double column documentation page powered by \gls{Bootstrap} with showing the header section of the page. The \gls{viewport} is big enough to give each column sufficient space.}
+          \caption{Double column documentation page powered by \gls{Bootstrap} showing the header section of the page. The \gls{viewport} is big enough to give each column sufficient space.}
           \label{fig:appendix-bootstrap-mq-header-big}
         \end{figure}
 
