@@ -989,7 +989,7 @@
         \end{figure}
         \pagebreak
         To avoid \gls{layout thrashing}, the computed style requests and \gls{DOM} mutations need to be performed in \glslink{batch processing}{batches}, as presented in listing~\ref{code:thrashing-example-fixed}.
-        While it is algorithmically inefficient to iterate over the same collection twice --- the \glslink{batch processing}{batched} approach executes \textasciitilde100-fold faster than the original version.
+        While it is algorithmically inefficient to iterate over the same collection twice --- the \glslink{batch processing}{batched} approach achieves a \textasciitilde100-fold speedup compared to the original version.
         \begin{lstlisting}[gobble=10,caption={Example of avoiding \gls{layout thrashing} by \gls{batch processing} read and write operations to the \gls{DOM}. The code reads and doubles the widths of 1000 \glspl{element} in \textasciitilde7 ms.}, captionpos=b, label={code:thrashing-example-fixed}]
           /* Doubles the width of each element in the elements collection parameter. */
           function doubleWidths(elements) {
@@ -1051,10 +1051,10 @@
         \todo[inline]{Sources?}
 
       \subsection{Parallelization}\label{sec:parallel}
-        No longer can performance of an application increase over time without any code changes (as opposed to the times when the \gls{CPU} clock speeds increased rapidly) \cite{parallelizing_the_web_browser}.
+        No longer can performance of an application increase over time without any code changes (as opposed to the times when clock speeds of the \glspl{CPU} increased rapidly) \cite{parallelizing_the_web_browser}.
         Now, applications need to utilize the multiple cores of the \gls{CPU} instead of relying on high clock speed.
         Parallelization is something \gls{layout engine} vendors are interested in, and research is being done about utilizing multiple cores to increase the performance of the engines.
-        In this section a small summary will be given about the current research front, and how the parallelization of \glspl{layout engine} can be approached.
+        In this section a small summary is given about the current research front, and how the parallelization of \glspl{layout engine} can be approached.
         \todo{Check so that the section actually does what the meta says}
 
         As \gls{web} applications grow bigger and more demanding, \glspl{browser} continuously need to improve the performance on all levels \cite{parallelizing_the_web_browser}.
@@ -1071,7 +1071,6 @@
         \todo{Write that many cores is preferred over high clock speed? Why?}
         It has been shown that the performance of mobile \glspl{browser} is \gls{CPU} bound contrary to the common belief that they are network bandwidth bound \cite{parallelizing_the_web_browser,meyerovich2010fast}.
         This is why many researchers target light devices when trying to parallelize \gls{web} \glspl{browser}.
-        Of course, once the methods have matured and been implemented, desktop \glspl{layout engine} will benefit from parallelization as well.
 
         \gls{CSS} selector matching is a good candidate for parallelization, due to matching nodes to selectors being independent from other selector matches.
         A successful parallelization of selector matching has been achieved with locality-aware task parallelism \cite{parallelizing_the_web_browser}.
@@ -1087,13 +1086,12 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%% Element queries
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{Element queries}\label{ch:eq}
-    Now that a good understanding of \glspl{browser} (especially the \gls{layout engine}), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- a solution to the modular \gls{responsive} \gls{web} design problem as presented in Section~\ref{sec:rwd-modular-problem}.
+    Now that a good understanding of \glspl{browser} (especially the \gls{layout engine}), \gls{responsive} design, and modular development has been acquired it is time to address element queries --- the solution to the modular \gls{responsive} \gls{web} design problem as presented in Section~\ref{sec:rwd-modular-problem}.
     
     Section~\ref{sec:eq-definitions} defines element queries, and shows how they can be used to solve the problem.
     \todo{Should it really be shown how element queries solve the problem?}
-    It also presents the identified general use case for element queries.
-    Since no syntax has been defined yet for element queries, pseudo-syntax is presented in this section to be used throughout this thesis.
-    Some element queries terminology is also described, which is extensively used throughout this thesis.
+    It also presents the identified general use case for element queries and describes some terminology.
+    Since no syntax has been defined yet for element queries, a pseudo-syntax is presented in this section to be used throughout this chapter.
     Section~\ref{sec:eq-problems} presents some of the problems of implementing element queries \glslink{native}{natively} in \glspl{layout engine}.
     Section~\ref{sec:eq-approaches} gives insight into some of the design approaches to element queries, as discussed by the W3C, to overcome some of the problems.
 
@@ -1107,7 +1105,7 @@
       \todo{Might wanna expand on this.}
 
       \Gls{media queries} and element queries are similar in the sense that they both enable developers to define conditional style rules that are applied by specified criteria \cite{w3c_css_mq}.
-      The main difference is the type of criteria that can be used; in \gls{media queries} device and media criteria are used, while element criteria are used in element queries.
+      The main difference is the type of criteria that can be used; in \gls{media queries} device, document, and media criteria are used, while element criteria are used in element queries.
       It can somewhat simplified be described as that \gls{media queries} target the \gls{document} root and up (i.e., the \gls{viewport}, \gls{browser}, OS, device, input mechanisms, etc.) while element queries target the \gls{document} root and down (i.e., \glspl{element} of the \gls{document}).
 
       \paragraph{Terminology}
@@ -1123,14 +1121,14 @@
       The expressions that define when different conditional style declarations should be applied are called \emph{breakpoints}.
       For instance, the \glslink{media queries}{media query} \code{@media (max-width: 500px)} selector defines one breakpoint; that the element should be styled differently depending on if it is wider than 500 pixels or not.
       There can be multiple breakpoints defined for both media and element queries.
-      Element queries also define an element \emph{style state}, which is in which state the target element of an element query is in (often relative to the breakpoints).
+      Element queries also define an element \emph{style state}, that reflects in which state the target element of an element query is in (often relative to the breakpoints).
       For instance, if an element query targets an element \code{\#foo} with a width breakpoint of 500 pixels (similar to the \glslink{media queries}{media query} example), then the target element \code{\#foo} would have two style states: narrower or wider than 500 pixels.
       The number of style states for an element of a given style property is $n + 1$ where $n$ is the number of breakpoints for that style property.
 
       \paragraph{Pseudo-syntax}
-      As already stated, element queries are not yet standardized and the exact behavior and syntax is still undefined.
+      As already stated, element queries are not yet standardized and the exact behavior and syntax are still undefined.
       In this thesis, the pseudo-syntax of element queries is defined as a pseudo-class named \code{eq}.
-      Recall from the \gls{CSS} selectors level 3 specification \cite{w3c_css_selectors} that pseudo-classes permit selection based on extended element information, and is often described as performing selection by the state of the \gls{element}.
+      Recall from the \gls{CSS} selectors level 3 specification \cite{w3c_css_selectors} that pseudo-classes permit selection based on extended element information, and is often described as performing selection by the state of an \gls{element}.
       The \code{eq} pseudo-class takes expressions as input, that is evaluated against the target \gls{element}, as shown in the examples given in listing~\ref{code:eq-pseudo-syntax-examples}.
       \begin{lstlisting}[gobble=8,caption={Examples of the element queries pseudo-syntax.}, captionpos=b, label={code:eq-pseudo-syntax-examples}]
         /* Matches all "a" elements that are wider than 500 pixels. */
@@ -1187,9 +1185,9 @@
         \end{enumerate}
         So, element query selector match changes result in performing another layout that discards at least a subtree of the previous layout \cite{w3c_eq_mail}.
         As already stated, this only occurs when the layout has changed in a way that changes the matches of element query selectors.
-        Unfortunately, this means that if there is any matching element query selector at page load, two layout passes always need to be performed.
+        Unfortunately, this means that if there is any matching element query selector at page load, at least two layout passes need to be performed.
         Also, it is common for internal \glspl{API} in \glspl{layout engine} to request updated \gls{element} styles that do not require a layout to resolve (non-layout properties such as \code{color} and \code{font-family}) \cite{w3c_eq_mail}.
-        Since a layout of the element query selector target is required in order to resolve the correct \gls{element} style, such internal \glspl{API} would need to force a layout in order to obtain the correct \gls{element} style (even for non-layout related properties).
+        Since a layout of the element query selector target is required in order to resolve the correct \gls{element} style, such internal \glspl{API} would need to force a layout to obtain the correct \gls{element} style (even for non-layout related properties).
 
         As shown in Section~\ref{sec:parallel} \gls{layout engine} vendors are interested in parallelizing their engines to increase the page performance.
         Element queries limit the parallelization, as \glspl{layout engine} would not be able to layout subtrees in parallel since an \gls{element} in one subtree might affect an \gls{element} in another subtree.
@@ -1305,7 +1303,7 @@
         When the \code{\#foo} \gls{element} is below 300 pixels wide, the font size of the element is increased to \code{2em} (which is a unit that is relative to the inherited value).
         If a \code{2em} font size results in a computed font size big enough to make the \gls{element} wider than 300 pixels, the \code{\#foo:eq(width < 300px)} does not match and therefore the element has no longer font size \code{2em}.
         Since the element width is decreased below 300 pixels when the font size of \code{2em} no longer is applied, the selector matches again and therefore the rules are cyclic.
-        However, in another scenario the inherited font size might not be big enough to make the \code{\#foo} element wider than 300 pixels and therefore the rules are not cycle.
+        However, in another scenario the inherited font size might not be big enough to make the \code{\#foo} element wider than 300 pixels and therefore the rules are not cyclic.
         The factors that creates the cycle are the following:
         \begin{itemize}
           \item The display type of the \gls{element}
@@ -1352,8 +1350,8 @@
       For the sake of simplicity, a \gls{HTML} element named \code{viewport} will be used to define such sub-\glspl{viewport} in all examples throughout this section.
       In order to avoid cyclic rules, the following limitations to the \gls{viewport} element are defined:
       \begin{enumerate}
-        \item\label{viewport-rule-1} The size of the \gls{viewport} element may not be dependent on its children. This implies that all \gls{CSS} that causes a \gls{viewport} \gls{element} to fit its content are invalid.
-        \item\label{viewport-rule-2} The selector may only include the \gls{viewport} \gls{element} targeted by element queries as a part of the expression of a selector (not the right-most simple selector).
+        \item\label{viewport-rule-1} The size of the \gls{viewport} element may not be dependent on its children. This implies that code that causes a \gls{viewport} \gls{element} to fit its content is invalid.
+        \item\label{viewport-rule-2} A selector may only include the \gls{viewport} \gls{element} targeted by element queries as part of the expression of a selector (not the right-most simple selector).
         \item\label{viewport-rule-3} Only the nearest \gls{viewport} element ancestor of the right-most simple selector may be targeted by element queries in selectors.
       \end{enumerate}
       See listing~\ref{code:viewport-selectors} for examples of valid and invalid CSS selectors according to the rules defined above.
@@ -1393,7 +1391,7 @@
       Also, the internal \glspl{API} that request non-layout information for \glspl{element} using element queries only need to make sure that the containing \gls{viewport} \gls{element} has been laid out before resolving the styles.
       The layout can be done in one pass as long as the \gls{viewport} \glspl{element} are laid out before their children.
       Since element queries may only target the nearest \gls{viewport} \gls{element} ancestor, each \gls{viewport} subtree can be laid out in parallel.
-      However, it is still inconvenient that the \gls{layout engine} needs to evaluate all element query selectors in the middle of a layout pass (after that the \gls{viewport} \glspl{element} has been laid out) in order to resolve the styles for the \gls{viewport} children.
+      However, it is still inconvenient that the \gls{layout engine} needs to evaluate all element query selectors in the middle of a layout pass (after that the \gls{viewport} \glspl{element} have been laid out) in order to resolve the styles for the \gls{viewport} children.
 
       Obviously, this approach limits element queries a lot.
       The fact that the size of the \gls{viewport} \gls{element} cannot depend on its children (like normal block \glspl{element} do \cite{w3c_css21}), limits the usability.
@@ -1423,7 +1421,7 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \chapter{The element queries library}\label{ch:library}
     Now that sufficient knowledge about element queries and \glspl{layout engine} has been acquired it is time to present the actual realization of the solution to \gls{responsive} modules --- the \gls{JavaScript} element queries library.
-    First of all, a working name of the library needs to be established --- the library will from now on have the working name \gls{ELQ}.
+    First of all, a working name of the library needs to be established; the library will from now on have the working name \gls{ELQ}.
     This name serves as a prefix for many of the library \glspl{API}, and will be frequently used in this thesis from now on.
     
     Section~\ref{sec:techincal-goals} states the identified technical goals of \gls{ELQ}.
@@ -1438,7 +1436,7 @@
     It is also in this section where it is shown how users can alter subsystems of the core.
     In addition, it is described how limitations of \gls{CSS} are overcome by library plugins.
     Section~\ref{sec:library-imp-details} presents details about key implementation design decisions and algorithms.
-    This section will also describe optimizations that have been done.
+    This section also describes optimizations that have been done.
 
     \todo[inline]{Write somewhere that it might be an option to not have a resize detection system, but instead let the user manually check the \glspl{element} when they may have changed.}
 
@@ -1456,8 +1454,8 @@
       \begin{enumerate}
         \item \textbf{Features}
           \begin{enumerate}
-            \item\label{itm:req_resize_detect}    The library needs to augment \gls{native} element queries in the sense that styles are applied automatically when \glspl{element} change size.
-            \item\label{itm:req_flexible}         The features should be flexible and not limited to only the general use case.
+            \item\label{itm:req_resize_detect}    The library needs to augment \gls{native} element queries in the sense that styles are applied automatically when \glspl{element} resize.
+            \item\label{itm:req_flexible}         The features should be flexible and not limited to the general use case.
             \item\label{itm:req_bp_js}            It should be possible to handle element query breakpoints with \gls{JavaScript}.
             \item\label{itm:req_conditional_css}  It should be possible to specify conditional \gls{CSS} styles to be applied on different element query breakpoints.
           \end{enumerate}
@@ -1484,10 +1482,10 @@
       In the same way, too many advanced features may decrease the ease of use and simplicity of the \gls{API}.
       Some features may also restrict the compatibility.
       Trying to conform to all of the requirements and trying to find a balance would result in a worse solution than a library tailored for specific requirements.
-      Plugin-based libraries solves this problem by providing plugins so that developers can compose their own custom tailored solutions for their specific use cases.
+      Plugin-based libraries solve this problem by providing plugins so that developers can compose their own custom tailored solutions for their specific use cases.
       By providing a good library foundation and plugins it is up to developers to choose the right plugins for each project.
       In addition, by letting the plugins satisfy the requirements it is easy to extend the library with new plugins when new requirements arise.
-      For instance, the requirement~\ref{itm:req_prolyfill} is beneficial to satisfy with a plugin since the \gls{API} for \gls{native} element queries can only be guessed at this point of time, which will probably lead to frequent changes to the plugin.
+      For instance, the requirement~\ref{itm:req_prolyfill} is beneficial to satisfy with a plugin since the \gls{API} of \gls{native} element queries can only be guessed at this point of time, which will probably lead to frequent changes to the plugin.
       By separating it from the core library (and the other plugins), only developers that really desire the prolyfill behavior must handle the rapid \gls{API} changes.
       Additionally, features may have incompatible \glspl{API} that would result in a bloated library \gls{API} (since it would need to expose both \glspl{API}) if they were not divided into plugins.
 
@@ -1496,13 +1494,12 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Architecture}\label{sec:arcithecture}
       To decide if a subsystem of the solution should be in the library core or a plugin is a difficult task.
-      A balance needs to be found between ease of use, performance and extendibility.
       All subsystems of the core need to provide a fundamental functionality to the library and also need to be general enough to be used by plugins in different ways.
       If a plugin needs to write a custom version of a subsystem in the core in order to work, the subsystem is just an extra payload to be loaded.
-      Each subsystem added to the core will impact the performance negatively (by slower load time in the best case) for all users, so they must impose a real value to existing and future plugins.
+      Each subsystem added to the core impacts the performance negatively (by slower load time in the best case) for all users, so they must impose a real value to existing and future plugins.
       The subsystems of the core always have the risk of being redundant, unnecessary and in other ways unwanted for some use cases.
       Therefore it is important that it is possible for developers to either remove them or change them.
-      This way the more advanced users can choose which subsystems to alter, keeping the library easy to use for the general use case described in Section~\ref{sec:eq-definitions}.
+      This way the more advanced users can choose which subsystems to alter, while keeping the library easy to use for the general use case described in Section~\ref{sec:eq-definitions}.
 
       \input{p3-elq-architecture}
       \todo{Change picture so that batch processor comes before the erd system}
@@ -1520,13 +1517,14 @@
       The core is supposed to have a slow development rate, with few breaking changes to provide good backward compatibility.
       Plugins may be developed in a high rate, with frequent changes to support new features.
       Subsystems that are part of the core are the following:
+      \pagebreak
       \begin{itemize}
         \item \textbf{Reporter:}
           Responsible for reporting information, warnings and errors to the developer.
           By having a centralized reporter, it is possible to decide at a global library level how much plugins are allowed to report.
-          Other options such as throwing exception on errors or warnings could also be set at a global library level.
+          Other options such as throwing exceptions on errors or warnings could also be set at a global library level.
           Also, the library can make sure that all reports are standardized and can provide extra information such as the name and version of the plugin along with its report.
-          To avoid code duplication it is also beneficial to have a centralized reporting system so plugins do not need to perform the same compatibility checks (such as checking if the \gls{browser} actually supports console reporting).
+          To avoid code duplication it is also beneficial to have a centralized reporting system so plugins do not need to perform the same compatibility checks (such as checking if the \gls{browser} actually supports console\footnote{See \url{https://developer.mozilla.org/en-US/docs/Web/API/Console} for more information.} reporting).
         \item \textbf{Batch processor:}
           To avoid \gls{layout thrashing} as described in Section~\ref{sec:layout-thrashing}, it is important to read and mutate the \gls{DOM} in separate \glslink{batch processing}{batches}.
           This subsystem provides an interface for plugins to store functions to later be executed in \glslink{batch processing}{batches}.
@@ -1550,7 +1548,7 @@
           The system is also responsible for retrieving the plugins, and invoking them on different library events.
       \end{itemize}
       Some of the subsystems may be partially accessible through the public \gls{API} such as the plugin handler and the \gls{element} resize detector.
-      It should be noted that some subsystems have been intentionally left out due to being too small or insignificant to understand the overall architecture of the library.
+      It should be noted that some subsystems have been intentionally left out due to being too small or insignificant to list in this section.
 
    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1563,7 +1561,6 @@
         Therefore no global library instance is instantiated automatically on page load.
         Instead, a factory function \code{Elq} that creates \gls{ELQ} instances is provided in order to be able to inject dependencies.
         The function accepts an optional options object parameter, where it is possible to set options and subsystems to be used for the created instance.
-        If no options are given, default options will be used.
         See listing~\ref{code:elq-ctor} of example usages of the \code{Elq} function.
         The function returns an object containing the core public \gls{API} methods of the \gls{ELQ} instance.
         \todo{Write about bare builds, so that the unused default subsystems are not being loaded?}
@@ -1590,7 +1587,7 @@
         Plugin definitions also expose methods that are called by \gls{ELQ} in order to retrieve the name, version and compatibility of a plugin.
         When \code{use} is called, it creates a plugin instance by invoking the \code{make} factory function (with the \code{use} options parameter as argument to \code{make}) and returns the created instance so that the user may store the reference to the plugin instance.
         The \code{using} method requires a \emph{plugin identifier} parameter and tells if the given plugin is being used (i.e., has been registered) by the instance or not.
-        The plugin identifier of a plugin is either the plugin definition or the name of the plugin.
+        The plugin identifier is either the plugin definition, instance, or name.
         See listing~\ref{code:plugin-object} for an example plugin definition and how it is used with the two methods for handling plugins.
 
         \begin{lstlisting}[gobble=10,caption={Example plugin definition and examples of handling plugins.},captionpos=b,label={code:plugin-object}]]
@@ -1643,8 +1640,8 @@
 
         When the desired plugins have been registered to the \gls{ELQ} instance, it is time to initialize the library to the target \glspl{element}.
         This is done with the \code{start} method that requires a collection of \glspl{element} as a parameter.
-        When called, it will invoke the \code{start} methods on all registered plugins that give them the opportunity to initiate the \glspl{element} according to their own mechanisms.
-        To satisfy the requirements \ref{itm:natural} and \ref{itm:assumption} the function is agnostic about the \glspl{element} collection --- all objects that are iterable and contains \glspl{element} are accepted.
+        When called, it invokes the \code{start} methods on all registered plugins that give them the opportunity to initiate the \glspl{element} according to their own mechanisms.
+        To satisfy the requirements \ref{itm:natural} and \ref{itm:assumption} the function is agnostic about the \glspl{element} collection --- all objects that are iterable and contain \glspl{element} are accepted.
         It is also possible to provide a single \gls{element} without a collection.
         The effect of calling the \code{start} method on an element multiple times is defined by the plugins.
         \todo{Rename start?}
@@ -1675,7 +1672,7 @@
         The plugin \gls{API} is a superset of the public \gls{API}.
         Plugins have additional direct access to most core subsystems presented in Section~\ref{sec:arcithecture}.
         Recall that access to the plugin \gls{API} is given to a plugin when it is registered (i.e., when the \gls{ELQ} instance invokes the \code{make} function of the plugin definition).
-        Since the plugin handler and element resize detector subsystems are exposed through to public \glspl{API} they cannot be directly accessed through the plugin \gls{API}.
+        Since the plugin handler and element resize detector subsystems are exposed through the public \gls{API} they cannot be directly accessed through the plugin \gls{API}.
         However, an additional method \code{getPlugin} of the plugin handler system is exposed that returns the registered plugin instance given a plugin identifier parameter.
         This method facilitates interplugin communications.
         Direct access is given to the following core subsystems:
@@ -1683,20 +1680,20 @@
           \item 
             \textbf{Reporter}: via the \code{elq.reporter} property that refers to the reporter instance.
             The reporter has three methods: \code{log}, \code{warn} and \code{error} that are used to report information, warnings and errors respectively.
-            The default behavior of the reporter is to report to the \gls{browser} console\footnote{See \url{https://developer.mozilla.org/en-US/docs/Web/API/Console} for more information.} if possible.
+            The default behavior of the reporter is to report to the \gls{browser} console if possible.
           \item
             \textbf{Cycle detector}: via the \code{elq.cycleDetector} property that refers to the cycle detector instance.
             The cycle detector has a method \code{isUpdateCyclic} that tells if the desired state update of an element seems to be part of a cycle.
             To do so, it requires two parameters; the target \gls{element} and the state update itself.
-            A third update time parameter, which defines when the update was requested, is optional and will default to the time of the method call.
+            A third update time parameter, which defines when the update was requested, is optional and defaults to the time of the method call.
           \item 
             \textbf{Batch processor}: via the \code{elq.BatchProcessor} property that refers to a factory function that creates \glslink{batch processing}{batch processor} instances.
             Instead of having a single \glslink{batch processing}{batch processor} instance shared among all library entities (i.e., core subsystems and plugins), each entity has to create an own instance.
             This to avoid entities interfering with each other while processing \glslink{batch processing}{batches}.
             For example, some entities might want to force the \glslink{batch processing}{batch} to be processed at a point where it would be beneficial for other entities to delay the processing.
             The \code{createBatchProcessor} accepts an optional options object parameter and returns a \glslink{batch processing}{batch processor} instance.
-            Two important options to the \code{createBatchProcessor} are the \code{async} and \code{auto} options.
-            If the \code{async} option is enabled, the \glslink{batch processing}{batch} will be processed asynchronously as soon as possible after that the \code{force} method has been invoked.
+            Two important options of the \code{createBatchProcessor} are the \code{async} and \code{auto} options.
+            If the \code{async} option is enabled, the \glslink{batch processing}{batch} is processed asynchronously as soon as possible after that the \code{force} method has been invoked.
             If the \code{auto} option is enabled, the \glslink{batch processing}{batch} will automatically be processed as soon as possible asynchronously (this implies that \code{async} has to be enabled).
             The \glslink{batch processing}{batch processor} instance has two methods: \code{add} and \code{force}.
             The \code{add} method requires a function parameter that will be called when the \glslink{batch processing}{batch} is processed, and accepts an optional level parameter that defines at which level the given function should be processed.
@@ -1792,7 +1789,7 @@
           Suppose that it is desired for an application to style all paragraph \glspl{element} differently by the size of the nearest element with a \code{container} class.
           Paragraphs may appear nested in other \glspl{element}, which may be generated dynamically at runtime.
           Therefore, the structure of the application is not known when writing the \gls{CSS}, so no assumptions can be made about the markup structure.
-          Consider the example markup given in listing~\ref{code:elq-mirror-example} for an example \gls{HTML} structure.
+          Consider the markup given in listing~\ref{code:elq-mirror-example} for an example \gls{HTML} structure.
           It should be noted that the \code{container} \glspl{element} might be styled in any way (e.g., the widths of the inner container \gls{element} could be relative to the outer container \gls{element}).
           \begin{lstlisting}[gobble=12,caption={Example \gls{HTML} structure where all paragraphs are desired to be conditionally styled by the nearest ancestor container.},captionpos=b,label={code:elq-mirror-example}]
             <div class="container" elq elq-breakpoints elq-breakpoints-width="300 500">
@@ -1817,7 +1814,7 @@
           The problem with this is that the selectors state that all paragraphs that are children of \emph{any} container should be styled in some way.
           So if the outer container element is 600 pixels wide and the inner containers are 200 pixels wide, all paragraphs would be colored green because they have an ancestor container that is wider than 500 pixels (i.e., the outer container).
           The desired behavior is that the first paragraph is colored green and the two inner paragraphs colored red, since the widths of the inner containers are narrower than 300 pixels.
-          As of the \gls{CSS} selectors level 3 specification, there it is not possible to select the nearest ancestor of an element \cite{w3c_css_selectors}.
+          As of the \gls{CSS} selectors level 3 specification, it is not possible to select the nearest ancestor of an element \cite{w3c_css_selectors}.
           
           The \code{elq-mirror} plugin overcome these limitations by mirroring the breakpoint classes of an \code{elq-breakpoints} element and thus the correct behavior can be achieved.
           \Glspl{element} are initialized to mirror such \glspl{element} by adding attributes in the same way like with the \code{elq-breakpoints} plugin.
@@ -1845,10 +1842,10 @@
             .container p.elq-width-above-500  { background-color: green;  }
           \end{lstlisting}
           Notice that the breakpoint classes are now used in conjunction with the paragraph simple selector instead of the container in the CSS selectors.
-          This way, the conditional styles behave as expected since all paragraphs are by the nearest (instead of any) container \gls{element}.
+          This way, the conditional styles behave as expected since all paragraphs are styled by the nearest (instead of any) container \gls{element}.
 
           By mirroring element breakpoint classes, \glspl{element} can be styled by criteria of any element (ancestor, sibling, child, etc.).
-          The plugin is at the moment restricted to the nearest ancestor \code{elq-breakpoint} \gls{element}, but could easily be extended to support more advanced mirror constellations.
+          The plugin is at the moment restricted to the nearest ancestor \code{elq-breakpoint} \gls{element}, but could easily be extended to support more advanced mirroring constellations.
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Implementation
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1887,17 +1884,14 @@
         Of course, such usage could be warned against in the \gls{API} documentation but to keep the \gls{API} as simple as possible another approach has been taken.
         By delaying the \glslink{batch processing}{batch} to execute asynchronously all synchronous calls of the method is grouped into the pending \glslink{batch processing}{batch}.
         Since a single shared \glslink{batch processing}{batch} is used for all method calls \gls{layout thrashing} is avoided.
-        
         This behavior can be controlled by the \code{async} and \code{auto} options of the \glslink{batch processing}{batch processor} factory function.
-        If the \code{async} option is enabled, the \glslink{batch processing}{batch} is processed asynchronously as soon as possible after that the \code{force} method has been invoked.
-        If the \code{auto} option is enabled, the \glslink{batch processing}{batch} is automatically processed as soon as possible asynchronously (this implies that \code{async} has to be enabled).
 
         \paragraph{Leveled processing}
         Being able to process a \glslink{batch processing}{batch} in levels is important when different types of operations, that are to be processed in a specific order (usually to avoid \gls{layout thrashing}), needs to be grouped together in a \glslink{batch processing}{batch}.
         For instance, a function that doubles an \gls{element}'s width and reads the new calculated height benefits by being \glslink{batch processing}{batch} processed in three levels: reading the width, mutating the width, and reading the new height.
         Such function could also benefit from automatically process the \glslink{batch processing}{batch} so that the user may call the function multiple times synchronously.
         See listing~\ref{code:batch-processor-example-2} for an example implementation of such function that uses the leveled \glslink{batch processing}{batch processor}.
-        The function achieves a 45-fold speedup when applied to 1000 \glspl{element} by processing the \glslink{batch processing}{batch} in levels compared to not doing so in Chrome version 43.
+        The function achieves a 45-fold speedup when applied to 1000 \glspl{element} by processing the \glslink{batch processing}{batch} in levels compared to not doing so.
         \begin{lstlisting}[gobble=10,label={code:batch-processor-example-2},caption={Example function that doubles an \gls{element}'s width and returns the new height with a callback. The function uses the leveled \glslink{batch processing}{batch processor} to avoid \gls{layout thrashing} and thus gains a 45-fold speedup.},captionpos=b]]
           var batchProcessor = BatchProcessor({
               auto: true,
@@ -1955,7 +1949,7 @@
           \item\label{itm:erd-approach-object}
             \textbf{Object-based solution}:
             Since frame \glspl{element} are the only \glspl{element} that support resize events \glslink{native}{natively}, the idea is to inject a frame \gls{element} as a child to the target \gls{element} that is observed instead.
-            It has been shown by \cite{backalley} that \code{object} is the most suitable frame \gls{element} to be used for this purpose as they have good \gls{browser} compatibility and adequate performance.
+            It has been shown by \cite{backalley} that \code{object} is the most suitable frame \gls{element} to be used for this purpose as they have good \gls{browser} compatibility and are easy to work with.
             The \code{object} is styled so that it always matches the size of the target \gls{element} and so that it does not affect the page visually.
             Then a resize event handler is attached to the \gls{document} of the \code{object} that emits a \code{resize} event\footnote{See \url{http://www.w3.org/TR/DOM-Level-3-Events/\#event-type-resize} for more information about the resize event.} for every target \gls{element} resize.
           \item\label{itm:erd-approach-scroll}
@@ -1971,18 +1965,18 @@
             Instead of listening to \code{scroll} events, this solution uses flow events.
             The idea is to detect when scrollbars disappear (i.e., underflow of content since the target container has increased in size) and when scrollbars appear (i.e., overflow of content since the target container has decreased in size).
             Unfortunately such events are not standardized, but \gls{Gecko}, \gls{WebKit} and \gls{Blink} support them (although by different \glspl{API})\footnote{See \url{https://developer.mozilla.org/en-US/docs/Web/Events/overflow} for more information about the \gls{Gecko} flow event \gls{API}.}.
-            \gls{Blink} still supports the events but has deprecated them \cite{blink_deprecated_flow_events} since version 34.
+            \gls{Blink} still supports the events but has deprecated them since version 34 \cite{blink_deprecated_flow_events}.
         \end{enumerate}
         The polling-based solution is appealing because it does not mutate the \gls{DOM}, supports arbitrary \glspl{element}, and it provides excellent \gls{browser} compatibility since it does not rely on special \gls{element} behavior or similar.
         However, in order to prevent the \gls{responsive} \glspl{element} lagging behind the size changes of the user interface, polling needs to be performed quite frequently.
-        Recall from Section~\ref{sec:layout-process} that \glspl{layout engine} typically have a layout queue in order to perform layout in \glslink{batch processing}{batches} for increased performance.
+        Recall from Section~\ref{sec:layout-process} that \glspl{layout engine} typically keep a layout queue in order to perform layout in \glslink{batch processing}{batches} for increased performance.
         Each poll would force the layout queue to be flushed since the computed style of \glspl{element} needs to be retrieved in order to know if \glspl{element} have resized or not.
         Since the polling is performed all the time the overall page performance is decreased even if the page is idle, which is undesired especially for devices running on battery.
         \todo{Should make quick test to see how much CPU it uses when polling frequently}
 
         \paragraph{Injection solutions}
         The object-based, scroll-based and flow-based solutions have similar characteristics and have all been originally presented by \cite{backalley}.
-        The flow-based solution was presented first, but was rejected in favor of the scroll-based solution as it was discovered that in turn was rejected in favor of the object-based solution.
+        The flow-based solution was presented first, but was rejected in favor of the scroll-based solution that in turn was rejected in favor of the object-based solution.
         Fortunately, somewhat reworked versions of the flow-based and scroll-based solutions are still provided by \cite{eq_imp_prollyfill-min-width} and \cite{eq_imp_css-element-queries} respectively.
         While not stated officially by \cite{backalley}, the flow-based solution was probably rejected due to the lack of \gls{browser} compatibility.
         The flow-based solution is not presented in detail, due to the limited \gls{browser} compatibility and similarity with the scroll-based solution.
@@ -1991,7 +1985,7 @@
 
         All three solutions mutate the \gls{DOM} and rely on special \gls{element} behavior, but they offer many advantages over polling.
         Since they are event based, \glspl{layout engine} only need to perform extra work when injecting the \glspl{element} to the target \glspl{element} and when the target \glspl{element} actually resize.
-        Event based resize detection also implies minimal delay between the actual resize event and the detection.
+        Event-based resize detection also implies minimal delay between the actual resize event and the detection.
         By positioning the injected \glspl{element} \code{absolute} with widths and heights set to \code{100\%} and the \code{visibility} set to \code{hidden}, the injected \glspl{element} do not affect the visual representation of the \gls{document}.
         However, injecting \glspl{element} into target \glspl{element} has some implications:
         \begin{itemize}
@@ -2006,7 +2000,7 @@
             Also, code that alter the content of a target \gls{element} (such as \code{element.InnerHTML = ...}) may undesirably remove the injected \gls{element}.
           \item \textbf{The target \gls{element} must be positioned}:
             Absolute positioned \glspl{element} cannot be styled relative to \code{static} positioned \glspl{element} and are therefore moved up to the first non-static positioned ancestor in the render tree \cite{w3c_visuren}.
-            Since the injected element must be a child of the target \gls{element} (and not moved upwards in the layout tree), the target \gls{element} cannot be positioned \code{static} (i.e., the default positioning for many \glspl{element}).
+            Since the injected element must be a child of the target \gls{element} (and not moved upwards in the render tree), the target \gls{element} cannot be positioned \code{static} (i.e., the default positioning for many \glspl{element}).
             Fortunately, \glspl{element} positioned \code{relative} behave exactly like \code{static}, given they do not have any styles applicable to relative \glspl{element} (such as \code{top} or \code{bottom}).
             Since the style properties that depend on the \gls{element} being \code{relative} positioned do not affect the \gls{element} if it is positioned \code{static}, the properties can be removed or regarded as developer errors.
             This way target \glspl{element} can be positioned \code{relative} with the special style properties removed, to obtain the same visual representation as being positioned \code{static}.
@@ -2051,8 +2045,8 @@
             The information is stored in a shared state so that all other steps can obtain the information without reading the \gls{DOM}.
           \item\label{itm:erd-algo-scroll-level-2}
             \textbf{The mutation level:}
-            Steps \ref{itm:erd-algo-original-scroll-2}, \ref{itm:erd-algo-original-scroll-3} and \ref{itm:erd-algo-original-scroll-4} are performed, which mutates the \gls{DOM}.
-            All mutations performed in this level can be queued by the \gls{layout engine}.
+            Steps \ref{itm:erd-algo-original-scroll-2}, \ref{itm:erd-algo-original-scroll-3} and \ref{itm:erd-algo-original-scroll-4} are performed, which mutate the \gls{DOM}.
+            All mutations performed in this level can be queued by \glspl{layout engine}.
           \item\label{itm:erd-algo-scroll-level-3}
             \textbf{The forced layout level:}
             \todo{Grammar?}
@@ -2109,7 +2103,7 @@
           \item Construct $L_{states}$ if needed.
           \item Construct an update tuple $u$ that consists of the current time $t$ and the new state $s$.
           \item Set the cycle counter $c$ to zero.
-          \item Iterate $L_{states}$ from beginning to end (starting with the most recent update tuple).
+          \item Iterate $L_{states}$ from beginning to end (starting with the most recent tuple).
           \begin{enumerate}
             \item\label{itm:cycle-detection-step-loop}
               If the time $t_i$ (of the current update tuple $u_i$ of $L_{states}$) and $t$ differs more than the time parameter $T$, then $u_i$ is regarded as too old to consider.
@@ -2136,8 +2130,11 @@
     Section~\ref{sec:eval-bootstrap} evaluates the \glspl{API} by a case study that alters the popular \gls{Bootstrap} framework to use element queries.
     \gls{Bootstrap} uses \gls{media queries} to provide \gls{responsive} \gls{CSS} classes that are often desired to use in \gls{web} applications.
     By using element queries instead, the classes become \gls{encapsulated} and can be used in \gls{responsive} modules.
-    Section~\ref{sec:eval-performance} evaluates the performance of \gls{ELQ} in different browsers.
-    Key subsystems are evaluated independently so that they can be compared to similar subsystems of related libraries.
+    
+    Section~\ref{sec:eval-performance} evaluates the performance of \gls{ELQ} and related libraries in different browsers.
+    Since there are numerous related libraries only the performance of the element resizing detection subsystem of the libraries has been evaluated.
+    This restriction is motivated by the fact that the element resizing detection subsystem performs the heaviest task by far, and therefore has the largest performance impact.
+
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Bootstrap
@@ -2145,8 +2142,8 @@
     \section{ELQ Bootstrap}\label{sec:eval-bootstrap}
       The \gls{responsive} parts of \gls{Bootstrap} version 3.3.2 (the grid, containers, \gls{responsive} utility classes, forms, etc.) are built with \gls{media queries}, and therefore only behave as desired when the \gls{Bootstrap} \glspl{element} can use the full width of the \gls{viewport}.
       It should be noted that no height breakpoints are being used by \gls{Bootstrap} (as also identified by the general use case in Section~\ref{sec:eq-definitions}).
-      This implies that modules that use any \gls{responsive} \gls{Bootstrap} classes inherently only behave as desired when the module can use the full width of the \gls{viewport}, which means that such modules are not \gls{encapsulated} and therefore many of the benefits of modules disappear.
-      Such modules force applications to use them in a specific layout.
+      This implies that modules that use any \gls{responsive} \gls{Bootstrap} classes inherently only behave as desired when the module can use the full width of the \gls{viewport}.
+      Such modules force applications to use them in a specific layout and therefore many of the benefits of modules disappear.
       As an example, the \gls{Bootstrap} \gls{CSS} documentation page was altered to instead offer a two-column documentation.
       The two-column page presents two instances of the original \gls{CSS} documentation.
       It is shown in figure~\ref{fig:eval-bootstrap-mq-broken} that the original version of \gls{Bootstrap} (that uses \gls{media queries}) cannot adapt to such layout changes.
