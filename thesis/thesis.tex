@@ -524,7 +524,7 @@
         Around 1996, client-side scripting was born.
         The term \gls{DHTML} was being used as an umbrella term for a collection of technologies used together to make pages interactive and animated, where client-side scripting played a big role.
         The \gls{JavaScript} language came to be the common client-side scripting language of the \gls{web}.
-        Examples of things that were being done with \gls{DHTML} are: refreshing pages for the user so that new content is loaded, giving feedback on user input without involving the server, and animating content.
+        Examples of things that were being done with \gls{DHTML} are: refreshing pages so that new content was loaded, giving feedback on user input without involving the server, and animating content.
         Plugins also started to exist during this time, which enabled \glspl{browser} to execute embedded programs.
         \emph{Java applet}\footnote{A Java applet is a small application that is written in Java and delivered to users in the form of bytecode. See \url{www.java.com}} and \emph{Flash}\footnote{Flash is a multimedia and software platform for producing cross platform interactive animations. See \url{www.flash.com}} are examples of \gls{browser} embedded programs requiring \gls{browser} plugins to execute.
         In concept, users have to install the plugin runtime in order for the \gls{browser} to be able to execute the plugin programs, which is undesired since it adds a barrier between users and the content.
@@ -696,6 +696,7 @@
           \label{fig:problem-mq}
         \end{figure}
 
+        \pagebreak
         \paragraph{The solution}
         \Gls{responsive} modules should be able to react and change style by their own size, not the \gls{viewport} size.
         An identified solution to this is element queries, which allows conditional styles to be applied by \gls{element} criteria.
@@ -1732,8 +1733,8 @@
           \end{lstlisting}
           \todo{Shorten syntax?}
           The \code{elq} attribute states that it is an \gls{ELQ} \gls{element}, and the \code{elq-breakpoints} attribute states that the \gls{element} should be handled by the plugin.
-          The \code{elq-breakpoints\-width="300 500"} defines that the \gls{element} should have width breakpoints at 300 and 500 pixels.
-          Height breakpoints are defined in the same way with the \code{elq-breakpoints-height} attribute.
+          The attribute \code{elq-breakpoints\-width="300 500"} defines that the \gls{element} should have width breakpoints at 300 and 500 pixels.
+          Height breakpoints are defined in the same way with the attribute \code{elq-breakpoints-height}.
           The possible size states of the \gls{element} would then be (in pixels):
           \begin{itemize}
             \item $width < 300$
@@ -1848,6 +1849,7 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%% Implementation
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \pagebreak
     \section{Details of subsystems}\label{sec:library-imp-details}
       In this Section the algorithms and approaches of some subsystems are presented.
       It should be noted that only the non-trivial subsystems are described.
@@ -1887,10 +1889,10 @@
 
         \paragraph{Leveled processing}
         Being able to process a \glslink{batch processing}{batch} in levels is important when different types of operations, that are to be processed in a specific order (usually to avoid \gls{layout thrashing}), needs to be grouped together in a \glslink{batch processing}{batch}.
-        For instance, a function that doubles an \gls{element}'s width and reads the new calculated height benefits by being \glslink{batch processing}{batch} processed in three levels: reading the width, mutating the width, and reading the new height.
-        Such function could also benefit from automatically process the \glslink{batch processing}{batch} so that the user may call the function multiple times synchronously.
+        For instance, a function that doubles an \gls{element}'s width and reads the new calculated height benefits by being \glslink{batch processing}{batch} processed in three levels: reading the width, mutating the width, and reading the height.
+        Such function could also benefit from automatically processing the \glslink{batch processing}{batch} so that the user may call the function multiple times synchronously.
         See listing~\ref{code:batch-processor-example-2} for an example implementation of such function that uses the leveled \glslink{batch processing}{batch processor}.
-        The function achieves a 45-fold speedup when applied to 1000 \glspl{element} by processing the \glslink{batch processing}{batch} in levels compared to not doing so.
+        The function achieves a 45-fold speedup when applied to 1000 \glspl{element} compared to not processing the \glslink{batch processing}{batch} in levels.
         \begin{lstlisting}[gobble=10,label={code:batch-processor-example-2},caption={Example function that doubles an \gls{element}'s width and returns the new height with a callback. The function uses the leveled \glslink{batch processing}{batch processor} to avoid \gls{layout thrashing} and thus gains a 45-fold speedup.},captionpos=b]]
           var batchProcessor = BatchProcessor({
               auto: true,
@@ -1936,6 +1938,7 @@
         This limitation is important since most approaches depend on injecting \glspl{element} into the target \gls{element}.
         It is a reasonable limitation since void \glspl{element} can easily be wrapped with non-void elements without affecting the page visually.
         Possible solutions to detect element resize events in modern \glspl{browser} are:
+        \pagebreak
         \begin{enumerate}
           \item\label{itm:erd-approach-polling}
             \textbf{Polling-based solution}:
